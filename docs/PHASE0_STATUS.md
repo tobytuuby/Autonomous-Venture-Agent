@@ -59,6 +59,21 @@ Relevant corrective commit:
 
 - 94a8d1d — Enforce stacked CEO certification gates
 
+## Verification closure
+
+The remaining test files were independently read on 2026-09-16:
+
+- tests/test_compliance.py
+- tests/test_compute.py
+- tests/test_execution.py
+- tests/test_finance.py
+- tests/test_kill_switch.py
+- tests/test_lifecycle.py
+- tests/test_provenance.py
+- tests/test_supervisor.py
+
+The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. None of those test modules executes ADV-001 through ADV-049. The only ADV labels in the unit-test tree are string values used by tests/test_ceo_gates.py to validate gate metadata; they are not scenario execution. This closes the open verification item without changing the certification decision.
+
 ## Next implementation work
 
 Build the genuine role-bound red-team harness and its per-ADV-ID evidence output. The harness must be able to generate the pre-model gate record only from its own successful execution; hand-editing a JSON record, copying fixture counts, or relying on generic unittest discovery is not sufficient.
