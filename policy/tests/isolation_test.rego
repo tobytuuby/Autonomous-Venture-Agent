@@ -8,6 +8,6 @@ package phase0.isolation
 default allow := false
 
 allow if {
-    input.authenticated_venture_id != null
-    input.resource_venture_id == input.authenticated_venture_id
+	input.authenticated_venture_id != null
+	input.resource_venture_id == input.authenticated_venture_id
 }

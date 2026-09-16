@@ -1,0 +1,21 @@
+[Unit]
+Description=Open Policy Agent policy kernel
+Wants=network-online.target
+After=network-online.target
+Before=venture-control-broker.service
+
+[Service]
+Type=simple
+User=opa
+Group=opa
+ExecStart=/usr/local/bin/opa run --server --addr=127.0.0.1:8181 --set=decision_logs.console=true /etc/opa/policies
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/opa
+
+[Install]
+WantedBy=multi-user.target
