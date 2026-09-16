@@ -19,18 +19,21 @@ class OpenBaoLeaseClient:
         self.token = token
         self.timeout = timeout
 
-    def issue(self, service: str) -> Lease:
+    def _request(self, path: str, payload: dict) -> dict:
         request = urllib.request.Request(
-            f"{self.address}/v1/auth/token/create",
-            data=json.dumps({"policies": ["synthetic-execution"], "ttl": "60s", "renewable": False}).encode(),
+            f"{self.address}{path}",
+            data=json.dumps(payload).encode(),
             headers={"Content-Type": "application/json", "X-Vault-Token": self.token},
             method="POST",
         )
         try:
             with urllib.request.urlopen(request, timeout=self.timeout) as response:
-                body = json.loads(response.read())
+                return json.loads(response.read() or b"{}")
         except Exception as exc:  # pragma: no cover - exercised by integration certification
-            raise OpenBaoError("OpenBao lease issuance failed") from exc
+            raise OpenBaoError("OpenBao request failed") from exc
+
+    def issue(self, service: str) -> Lease:
+        body = self._request("/v1/auth/token/create", {"policies": ["synthetic-execution"], "ttl": "60s", "renewable": False})
         auth = body.get("auth") or {}
         value = auth.get("client_token")
         lease_id = auth.get("accessor") or auth.get("client_token", "")
@@ -38,3 +41,7 @@ class OpenBaoLeaseClient:
         if not value or not lease_id:
             raise OpenBaoError("OpenBao returned no synthetic lease")
         return Lease(value=value, lease_id=lease_id, expires_at=datetime.now(timezone.utc) + timedelta(seconds=duration))
+
+    def revoke(self, lease_id: str) -> None:
+        # Token accessors are revoked through the token auth method, not the generic lease path.
+        self._request("/v1/auth/token/revoke-accessor", {"accessor": lease_id})
