@@ -1,0 +1,21 @@
+[Unit]
+Description=OpenBao secrets service for venture-control
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=openbao
+Group=openbao
+ExecStart=/usr/bin/bao server -config=/etc/openbao/config.hcl
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+MemorySwapMax=0
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ReadWritePaths=/var/lib/openbao /var/log/openbao
+
+[Install]
+WantedBy=multi-user.target
