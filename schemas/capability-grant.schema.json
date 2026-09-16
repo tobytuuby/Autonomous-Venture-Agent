@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/capability-grant.schema.json",
+  "title": "CapabilityGrant",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["grant_id", "request_id", "agent_id", "venture_id", "capability", "constraints", "issued_at", "expires_at", "revoked_at", "single_use", "issuer"],
+  "properties": {
+    "grant_id": {"type": "string", "format": "uuid"},
+    "request_id": {"type": "string", "format": "uuid"},
+    "agent_id": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "capability": {"type": "string", "minLength": 1},
+    "constraints": {"type": "object"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "revoked_at": {"type": ["string", "null"], "format": "date-time"},
+    "single_use": {"type": "boolean"},
+    "issuer": {"const": "broker"}
+  }
+}

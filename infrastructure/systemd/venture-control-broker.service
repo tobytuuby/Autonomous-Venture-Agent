@@ -1,0 +1,26 @@
+[Unit]
+Description=Venture capability broker
+After=network-online.target opa.service
+Wants=network-online.target
+Requires=opa.service
+
+[Service]
+Type=simple
+User=venture-broker
+Group=venture-broker
+WorkingDirectory=/usr/local/lib/venture-control-broker
+Environment=PYTHONPATH=/usr/local/lib/venture-control-broker
+ExecStart=/usr/bin/python3 /usr/local/lib/venture-control-broker/kernel/broker/server.py
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+LockPersonality=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/capability-request.schema.json",
+  "title": "CapabilityRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["request_id", "agent_id", "venture_id", "capability", "plan_id", "requested_constraints", "provenance", "action_graph", "requested_at", "idempotency_key"],
+  "properties": {
+    "request_id": {"type": "string", "format": "uuid"},
+    "agent_id": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "capability": {"type": "string", "minLength": 1},
+    "plan_id": {"type": "string", "minLength": 1},
+    "requested_constraints": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taint_status", "evidence_ids"],
+      "properties": {
+        "taint_status": {"enum": ["unknown", "trusted", "tainted", "declassified"]},
+        "evidence_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "action_graph": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["action"],
+        "properties": {
+          "action": {"type": "string", "minLength": 1},
+          "counterparty_key": {"type": "string"},
+          "amount": {"type": "number", "minimum": 0}
+        }
+      }
+    },
+    "requested_at": {"type": "string", "format": "date-time"},
+    "idempotency_key": {"type": "string", "minLength": 1}
+  }
+}

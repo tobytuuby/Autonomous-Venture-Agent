@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/capability-decision.schema.json",
+  "title": "CapabilityDecision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["decision_id", "request_id", "decision", "reasons", "risk_score", "evaluated_at", "grant"],
+  "properties": {
+    "decision_id": {"type": "string", "format": "uuid"},
+    "request_id": {"type": "string", "format": "uuid"},
+    "decision": {"enum": ["allow", "deny", "escalate"]},
+    "reasons": {"type": "array", "items": {"type": "string"}},
+    "risk_score": {"type": "number", "minimum": 0, "maximum": 100},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "grant": {"oneOf": [{"$ref": "capability-grant.schema.json"}, {"type": "null"}]}
+  }
+}
