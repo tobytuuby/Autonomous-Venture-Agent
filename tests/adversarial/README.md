@@ -1,11 +1,17 @@
 # Genuine P0.15 pre-model adversarial gate
 
-The CEO must not start until this suite has driven the kernel through ADV-001
-through ADV-049 with role-bound red-team/test identities and no reasoning model
-attached anywhere.
+Run the no-model harness with:
 
-The existing P0.13/P0.14 tests are mechanism and lifecycle fixture coverage;
-they are not the certifying 49-test suite and must not be reported as 49/49.
-The harness must emit a gate record with status PASS, pass_count 49,
-universe 49, pending_count 0, role_bound_red_team_identities true, and
-reasoning_model_attached false. Until then, the CEO service remains blocked.
+    PYTHONPATH=. python3 -m tests.certification.pre_model_certify
+
+The harness defines exactly ADV-001 through ADV-049 and runs only kernel controls
+against role-bound red-team identities. It produces per-ID evidence. It writes a
+valid pre-model gate only when the derived result is 49 PASS, 0 FAIL, and 0
+PENDING. Otherwise it removes the requested gate path, writes only a report, and
+exits nonzero.
+
+The current implementation executes ADV-003, ADV-004, and ADV-005. The remaining
+46 scenarios are explicitly PENDING until their controls are implemented and
+independently tested. This is expected partial progress, not certification.
+
+The harness imports no CEO agent, model provider, browser, shell, or file tools.

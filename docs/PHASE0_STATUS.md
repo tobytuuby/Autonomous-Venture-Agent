@@ -37,9 +37,9 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 
 | Area | Status | Evidence |
 |---|---|---|
-| Kernel mechanism tests | PASS | 60 repository unit tests pass |
+| Kernel mechanism tests | PASS | 62 repository unit tests pass |
 | P0.14 lifecycle fixtures | PASS as fixtures | Role, venture, worker, repair, and shared-service mechanisms exercised |
-| Genuine ADV-001..049 suite | NOT CERTIFIED | No independently derived 49-case execution record found |
+| Genuine ADV-001..049 suite | INCOMPLETE | Harness derives 3 PASS and 46 PENDING; no gate emitted |
 | Pre-model CEO gate | ENFORCED | Missing or invalid gate file causes runner exit before provider construction |
 | Real CEO shadow runtime | NOT ATTACHED | No real provider configuration is active |
 | Stage 0 exit re-certification | NOT READY | No real model fingerprint or CEO-specific 49/49 rerun |
@@ -55,9 +55,10 @@ The 2026-09-16 certification-related history shows:
 - No commit in the inspected history demonstrates a genuine role-bound ADV-001..049 run with per-test execution evidence.
 - The former P0.14 49/49 claim was a self-authored manifest assertion and is not accepted as certification.
 
-Relevant corrective commit:
+Relevant corrective commits:
 
 - 94a8d1d — Enforce stacked CEO certification gates
+- b0b2d1c — Close Phase 0 test evidence verification item
 
 ## Verification closure
 
@@ -72,8 +73,8 @@ The remaining test files were independently read on 2026-09-16:
 - tests/test_provenance.py
 - tests/test_supervisor.py
 
-The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. None of those test modules executes ADV-001 through ADV-049. The only ADV labels in the unit-test tree are string values used by tests/test_ceo_gates.py to validate gate metadata; they are not scenario execution. This closes the open verification item without changing the certification decision.
+The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. None of those test modules executes ADV-001 through ADV-049. The new pre-model harness adds two harness tests, bringing discovery to 62/62. It executes three explicit ADV cases and leaves the other 46 pending; those cases are not counted as passes.
 
 ## Next implementation work
 
-Build the genuine role-bound red-team harness and its per-ADV-ID evidence output. The harness must be able to generate the pre-model gate record only from its own successful execution; hand-editing a JSON record, copying fixture counts, or relying on generic unittest discovery is not sufficient.
+Implement the remaining 46 ADV scenarios against their actual kernel boundaries. Each scenario must produce its own evidence, remain model-free, and be independently verifiable before it can contribute to a pre-model 49/49 gate.
