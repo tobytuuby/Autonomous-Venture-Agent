@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["decision_id", "created_at", "model_family", "ceo_prompt_hash", "opportunity_id", "decision", "executed", "side_effect"],
+  "properties": {
+    "decision_id": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "model_family": {"type": "string"},
+    "ceo_prompt_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "opportunity_id": {"type": "string"},
+    "decision": {"type": "object"},
+    "would_call": {"type": ["object", "null"]},
+    "executed": {"const": false},
+    "side_effect": {"const": false}
+  }
+}
