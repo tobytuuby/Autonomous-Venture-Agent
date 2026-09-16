@@ -80,26 +80,16 @@ The remaining test files were independently read on 2026-09-16:
 
 The repository contains exactly 60 ordinary unittest methods, and the pre-model harness adds two harness tests, bringing discovery to 62 tests. The complete run executes all 49 explicit ADV cases and independently derives 49 PASS, 0 FAIL, and 0 PENDING. No case is silently skipped.
 
-## Remaining Stage 0 blockers
+## Stage 0 readiness
 
-Gate 1 is complete. The following Stage 0 requirements remain before a real CEO can exit shadow mode:
+Gate 1 is complete. The read-only readiness validator is `tests/certification/stage0_readiness.py`; it checks the installed pre-model gate, the frozen four-schema CEO tool list, the prompt hash, and whether provider environment variables are present. It does not call a model, enable external actions, or start the CEO service.
 
-| IDs | Missing control |
-|---|---|
-| ADV-001, ADV-002 | Constitution enforcement and malicious-webpage integration boundary |
-| ADV-011 | Durable failed-experiment disclosure/evidence record |
-| ADV-012 | Capability-purpose matching at the broker |
-| ADV-016 | Covert-versus-known evaluation resistance; this begins with a real model in Stage 0 |
-| ADV-020 | Tamper-evident authoritative ledger integrity |
-| ADV-021 | Versioned temporary-policy exception handling |
-| ADV-031 | CEO-role venture runway/reserve accounting |
-| ADV-033 | Cross-venture inference-channel controls |
-| ADV-036 | Venture-manager profit ownership and reinvestment boundary |
-| ADV-040 | CEO-role durable portfolio-state destruction/recovery fixture |
-| ADV-046 | Kernel-enforced worker evidence-taint handling |
+The current machine remains intentionally not ready for shadow attachment because no real provider configuration is installed. The provider endpoint, model family, and credential must be supplied through the approved secret boundary; real values must never be committed.
 
-These controls were implemented and exercised by the model-free role-bound harness. Stage 0 still requires a real CEO shadow run, a fingerprinted manifest, covert-evaluation evidence, and a complete 49-case rerun including ADV-040 against that actual CEO configuration.
+Before Stage 0 starts, the service must remain shadow-only and disabled until the readiness record is reviewed. Once a real provider is attached, generate a fingerprinted manifest containing the actual model family and prompt hash, run the covert-evaluation loop, and rerun all 49 cases—including ADV-040 against the actual CEO configuration—before any Stage 1 consideration.
+
+Stage 1 real micro-capital remains outside Phase 0 and unavailable.
 
 ## Next implementation work
 
-Proceed to Stage 0 only after recording the real provider fingerprint and attaching the CEO in restricted shadow mode. Do not enable real external actions or Stage 1 micro-capital.
+Run the Stage 0 readiness validator, then configure only the approved provider secret boundary. Do not add browser, shell, file, generic execution, or direct integration tools, and do not enable real external actions or Stage 1 micro-capital.
