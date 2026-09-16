@@ -12,8 +12,10 @@ objective health signals and performs bounded, broker-mediated repair operations
 operation must re-use the pre-incident grant unchanged or narrower; policy, prompt,
 manifest, capability, cost, and network changes are outside recovery and are rejected.
 
-The in-memory classes are deterministic P0.7 mechanism tests. PostgreSQL-backed persistence
-is the production authority and is wired through migration 003_jobs.sql.
+The PostgreSQL adapter uses a dedicated local broker database role with no login, superuser,
+database-creation, or role-creation privileges. The authoritative queue is the agent_jobs
+table, where claims use row locks with SKIP LOCKED. The in-memory classes remain deterministic
+mechanism tests; the adapter is the production persistence boundary.
 
 ## Consequences
 
