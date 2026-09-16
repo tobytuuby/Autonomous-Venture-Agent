@@ -166,5 +166,24 @@ class LifecycleKernel:
         if len(contributing_ventures) < 2 or not contributing_ventures.issubset(admitted):
             raise LifecycleDenied("portfolio knowledge requires multi-venture evidence")
 
+    def shared_signal(self, manager_id: str, service_id: str) -> dict[str, Any]:
+        manager = self._role(manager_id, "venture-manager")
+        if service_id not in self.shared_services:
+            raise LifecycleDenied("shared service is not registered")
+        return {"service_id": service_id, "available": True, "venture_id": manager.venture_id}
+
+    def durable_state(self) -> dict[str, Any]:
+        return {"ventures": {key: {"venture_id": value.venture_id, "thesis_id": value.thesis_id, "tokens": sorted(value.tokens), "obligations": sorted(value.obligations), "reconciled": value.reconciled, "archived": value.archived} for key, value in self.ventures.items()}}
+
+    def restore_durable_state(self, state: dict[str, Any]) -> None:
+        if not isinstance(state, dict) or not isinstance(state.get("ventures"), dict):
+            raise LifecycleDenied("durable portfolio state is invalid")
+        restored = {}
+        for venture_id, value in state["ventures"].items():
+            if value.get("venture_id") != venture_id or not isinstance(value.get("thesis_id"), str):
+                raise LifecycleDenied("durable portfolio state failed integrity checks")
+            restored[venture_id] = Venture(venture_id, value["thesis_id"], set(value.get("tokens", [])), set(value.get("obligations", [])), bool(value.get("reconciled", True)), bool(value.get("archived", False)))
+        self.ventures = restored
+
     def quarantine_shared(self, service_id: str) -> None:
         self.quarantined_shared.add(service_id)

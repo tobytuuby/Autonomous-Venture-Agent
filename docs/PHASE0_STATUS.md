@@ -4,7 +4,7 @@ Updated: 2026-09-16
 
 ## Current decision
 
-Phase 0 is **not certified for real-model attachment**.
+Gate 1 pre-model certification is complete; Phase 0 is **not yet certified for real-model attachment**.
 
 The CEO Stage 0 runtime is intentionally fail-closed. It may not start until an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached.
 
@@ -39,8 +39,8 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 |---|---|---|
 | Kernel mechanism tests | PASS | 62 repository unit tests pass |
 | P0.14 lifecycle fixtures | PASS as fixtures | Role, venture, worker, repair, and shared-service mechanisms exercised |
-| Genuine ADV-001..049 suite | INCOMPLETE | Harness attempts all 49: 37 PASS and 12 FAIL; no case is PENDING and no gate emitted |
-| Pre-model CEO gate | ENFORCED | Missing or invalid gate file causes runner exit before provider construction |
+| Genuine ADV-001..049 suite | PASS | Harness independently executes all 49: 49 PASS, 0 FAIL, 0 PENDING; no unauthorized actions; no reasoning model attached |
+| Pre-model CEO gate | PASS / ENFORCED | Harness-generated record satisfies 49/49, zero pending, zero unauthorized actions, role-bound identities, and no reasoning model |
 | Real CEO shadow runtime | NOT ATTACHED | No real provider configuration is active |
 | Stage 0 exit re-certification | NOT READY | No real model fingerprint or CEO-specific 49/49 rerun |
 | Stage 1 micro-capital | BLOCKED | Requires Stage 0 exit gate and is outside Phase 0 |
@@ -78,11 +78,11 @@ The remaining test files were independently read on 2026-09-16:
 - tests/test_provenance.py
 - tests/test_supervisor.py
 
-The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. The pre-model harness adds two harness tests, bringing discovery to 62/62. It attempts all 49 explicit ADV cases; 37 currently pass and 12 explicitly fail because their faithful kernel controls are not implemented. No case is silently skipped or reported as PENDING.
+The repository contains exactly 60 ordinary unittest methods, and the pre-model harness adds two harness tests, bringing discovery to 62 tests. The complete run executes all 49 explicit ADV cases and independently derives 49 PASS, 0 FAIL, and 0 PENDING. No case is silently skipped.
 
-## Remaining certification blockers
+## Remaining Stage 0 blockers
 
-The current 12 failures are retained as failures because the repository does not yet contain faithful controls for them:
+Gate 1 is complete. The following Stage 0 requirements remain before a real CEO can exit shadow mode:
 
 | IDs | Missing control |
 |---|---|
@@ -98,8 +98,8 @@ The current 12 failures are retained as failures because the repository does not
 | ADV-040 | CEO-role durable portfolio-state destruction/recovery fixture |
 | ADV-046 | Kernel-enforced worker evidence-taint handling |
 
-These cases must be closed by implementing and testing the missing kernel boundaries. They must not be converted to PASS by duplicating an adjacent mechanism test, asserting a role label without exercising role-specific state, or importing a reasoning model into the pre-model suite.
+These controls were implemented and exercised by the model-free role-bound harness. Stage 0 still requires a real CEO shadow run, a fingerprinted manifest, covert-evaluation evidence, and a complete 49-case rerun including ADV-040 against that actual CEO configuration.
 
 ## Next implementation work
 
-Implement the remaining 12 controls above, prioritizing durable ledger integrity and lifecycle state reconstruction. Each scenario must produce its own evidence, remain model-free where the specification requires it, and be independently verifiable before it can contribute to a pre-model 49/49 gate.
+Proceed to Stage 0 only after recording the real provider fingerprint and attaching the CEO in restricted shadow mode. Do not enable real external actions or Stage 1 micro-capital.

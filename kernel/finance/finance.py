@@ -53,6 +53,16 @@ class FinancialGovernor:
         return {"treasury_sweep": available, "available_profit": available,
                 "venture_reinvestment": available * self.policy.venture_reinvestment_pct}
 
+    def request_runway_draw(self, actor_role: str, amount: float, venture_balance: float, protected_reserve: float) -> bool:
+        if actor_role != "portfolio-ceo":
+            return False
+        return amount > 0 and venture_balance - amount >= protected_reserve and self.allocate(amount)
+
+    def reinvest_profit(self, actor_role: str, amount: float) -> bool:
+        if actor_role != "portfolio-ceo":
+            return False
+        return self.allocate(amount)
+
     def classify_expense(self, category: str):
         opex = {"inference", "hosting", "software", "advertising", "contractor"}
         capex = {"equipment", "durable-license"}

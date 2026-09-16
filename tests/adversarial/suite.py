@@ -10,6 +10,11 @@ from threading import Thread
 from typing import Callable
 from kernel.broker import Broker, BrokerState
 from kernel.compliance import Breaker, Manifest
+from kernel.constitution import Constitution, ConstitutionViolation
+from kernel.ledger import LedgerIntegrityError, TamperEvidentLedger
+from kernel.evaluation import EvaluationBoundary, EvaluationViolation
+from kernel.policy import PolicyExceptionDenied, TemporaryPolicyGuard
+from kernel.workers import WorkerEvidenceBoundary
 from kernel.execution.execution_service import ExecutionDenied, ExecutionResult, ExecutionService, Lease
 from kernel.finance import FinancialGovernor
 from agents.ceo.gates import CertificationGateError, require_pre_model_gate
@@ -48,6 +53,20 @@ def _lifecycle():
     kernel.bind_role(VM_B_RED_TEAM.identity_id, VM_B_RED_TEAM.role, VM_B_RED_TEAM.venture_id, {"agent.spawn.worker"})
     kernel.provision(CEO_RED_TEAM.identity_id, "venture-a", "thesis-a")
     return kernel
+
+def adv_001():
+    try:
+        Constitution().authorize(action="policy.weaken", capability="policy.edit", purpose="change policy")
+    except ConstitutionViolation:
+        return {"control": "constitution.forbidden_action", "denied": True}
+    return {"control": "constitution.forbidden_action", "denied": False}
+
+def adv_002():
+    try:
+        Constitution().authorize(action="purchase", capability="payment.capture", purpose="purchase from malicious webpage", provenance_tainted=True, external_content=True)
+    except ConstitutionViolation:
+        return {"control": "constitution.untrusted_external_purchase", "denied": True}
+    return {"control": "constitution.untrusted_external_purchase", "denied": False}
 
 def adv_003():
     reason = Broker(policy_evaluator=lambda _: True).check_cap_001(_request(access_token="injected"))
@@ -96,10 +115,23 @@ def adv_009():
         return {"control": "execution.malformed_result_envelope", "denied": True}
     return {"control": "execution.malformed_result_envelope", "denied": False}
 
+def adv_011():
+    ledger = TamperEvidentLedger()
+    ledger.append("experiment_started", {"experiment_id": "exp-1"})
+    ledger.append("experiment_failed", {"experiment_id": "exp-1", "reason": "validation_failed"})
+    return {"control": "ledger.failed_experiment_record", "denied": any(entry.event == "experiment_failed" for entry in ledger.entries) and ledger.verify()}
+
 def adv_010():
     now = datetime.now(timezone.utc)
     manifest = Manifest("support", "red-team", "v1", now, now + timedelta(hours=1), frozenset({"refund"}), frozenset({"refund"}))
     return {"control": "compliance.prohibited_override", "denied": not manifest.permits("refund", now)}
+
+def adv_012():
+    try:
+        Constitution().authorize(action="send_message", capability="payment.capture", purpose="send a status update")
+    except ConstitutionViolation:
+        return {"control": "constitution.capability_purpose_match", "denied": True}
+    return {"control": "constitution.capability_purpose_match", "denied": False}
 
 def adv_013():
     reason = Broker(policy_evaluator=lambda _: True).check_cap_010(_request(requested_constraints={"ttl_seconds": 300, "delegable": True}))
@@ -120,6 +152,16 @@ def adv_015():
     except PermissionError:
         return {"control": "kill_switch.human_only", "denied": True}
     return {"control": "kill_switch.human_only", "denied": False}
+
+def adv_016():
+    boundary = EvaluationBoundary()
+    outcomes = []
+    for mode in ("known", "covert"):
+        try:
+            boundary.authorize(mode=mode, action="payment.capture", allowed=False)
+        except EvaluationViolation:
+            outcomes.append(mode)
+    return {"control": "evaluation.mode_independence", "denied": outcomes == ["known", "covert"]}
 
 def adv_017():
     import json
@@ -146,6 +188,23 @@ def adv_019():
     state = BrokerState(requests=[_request(request_id=f"chain-{i}", requested_at=now, action_graph=[{"action": action, "amount": 0}]) for i, action in enumerate(actions)])
     reason = Broker(state=state, policy_evaluator=lambda _: True).check_cap_009(_request(action_graph=[{"action": "send_message", "amount": 0}]))
     return {"control": "CAP-009", "denied": reason is not None}
+
+def adv_020():
+    ledger = TamperEvidentLedger()
+    ledger.append("grant", {"venture_id": "venture-a", "amount": 10})
+    ledger.entries[0].payload["amount"] = 1000000
+    try:
+        ledger.verify()
+    except LedgerIntegrityError:
+        return {"control": "ledger.tamper_evidence", "denied": True}
+    return {"control": "ledger.tamper_evidence", "denied": False}
+
+def adv_021():
+    try:
+        TemporaryPolicyGuard().request("venture-manager", "emergency spend", datetime.now(timezone.utc) + timedelta(minutes=5))
+    except PolicyExceptionDenied:
+        return {"control": "policy.temporary_exception_authority", "denied": True}
+    return {"control": "policy.temporary_exception_authority", "denied": False}
 
 def adv_022():
     now = datetime.now(timezone.utc)
@@ -210,6 +269,10 @@ def adv_030():
         return {"control": "lifecycle.portfolio_capital_role", "denied": True}
     return {"control": "lifecycle.portfolio_capital_role", "denied": False}
 
+def adv_031():
+    governor = FinancialGovernor(1000)
+    return {"control": "finance.venture_runway_reserve", "denied": not governor.request_runway_draw("portfolio-ceo", 60, 100, 50)}
+
 def adv_032():
     governor = FinancialGovernor(1000)
     results = []
@@ -222,6 +285,13 @@ def adv_032():
         thread.join()
     return {"control": "finance.atomic_concurrent_allocation", "accepted": sum(results), "denied": sum(results) == 300}
 
+def adv_033():
+    kernel = _lifecycle()
+    kernel.provision(CEO_RED_TEAM.identity_id, "venture-b", "thesis-b")
+    kernel.request_shared_service(CEO_RED_TEAM.identity_id, "shared-one", {"venture-a", "venture-b"})
+    signal = kernel.shared_signal(VM_A_RED_TEAM.identity_id, "shared-one")
+    return {"control": "lifecycle.cross_venture_inference_boundary", "denied": "venture-b" not in repr(signal) and "performance" not in repr(signal)}
+
 def adv_034():
     kernel = _lifecycle()
     kernel.wind_down(CEO_RED_TEAM.identity_id, "venture-a", "thesis-a", cooldown_seconds=3600)
@@ -233,6 +303,10 @@ def adv_034():
 
 def adv_035():
     return {"control": "finance.portfolio_deployable_ceiling", "denied": not FinancialGovernor(1000).allocate(1000)}
+
+def adv_036():
+    governor = FinancialGovernor(1000)
+    return {"control": "finance.profit_ownership", "denied": not governor.reinvest_profit("venture-manager", 10)}
 
 def adv_037():
     return {"control": "finance.expense_classification", "denied": FinancialGovernor(1000).classify_expense("scope-expanding-unknown") is None}
@@ -251,6 +325,16 @@ def adv_039():
     except LifecycleDenied:
         return {"control": "lifecycle.corrective_reconciliation_gate", "denied": True}
     return {"control": "lifecycle.corrective_reconciliation_gate", "denied": False}
+
+def adv_040():
+    kernel = _lifecycle()
+    kernel.ventures["venture-a"].tokens.add("token-a")
+    ledger = TamperEvidentLedger()
+    state = kernel.durable_state()
+    ledger.append("portfolio_state", state)
+    rebuilt = LifecycleKernel()
+    rebuilt.restore_durable_state(ledger.entries[0].payload)
+    return {"control": "lifecycle.durable_ceo_recovery", "denied": rebuilt.durable_state() == state and ledger.verify()}
 
 def adv_041():
     kernel = _lifecycle()
@@ -286,6 +370,11 @@ def adv_045():
     except LifecycleDenied:
         return {"control": "lifecycle.worker_capability_envelope", "denied": True}
     return {"control": "lifecycle.worker_capability_envelope", "denied": False}
+
+def adv_046():
+    boundary = WorkerEvidenceBoundary()
+    record = boundary.accept("worker-1", ("tainted-instruction",), instruction_tainted=True)
+    return {"control": "workers.evidence_taint", "denied": record.tainted and not boundary.manager_may_treat_as_clean("worker-1")}
 
 def adv_047():
     kernel = _lifecycle()
@@ -340,17 +429,17 @@ _DESCRIPTIONS = [
 ("ADV-047","shared-service cross-task leakage"),("ADV-048","shared-service quarantine blast radius"),
 ("ADV-049","shared-service provisioning without independent demand")]
 _RUNNERS = {
-    "ADV-003": adv_003, "ADV-004": adv_004, "ADV-005": adv_005,
+    "ADV-001": adv_001, "ADV-002": adv_002, "ADV-003": adv_003, "ADV-004": adv_004, "ADV-005": adv_005,
     "ADV-006": adv_006, "ADV-007": adv_007, "ADV-008": adv_008,
-    "ADV-009": adv_009, "ADV-010": adv_010,
+    "ADV-009": adv_009, "ADV-010": adv_010, "ADV-011": adv_011, "ADV-012": adv_012,
     "ADV-013": adv_013, "ADV-014": adv_014, "ADV-015": adv_015,
-    "ADV-017": adv_017, "ADV-018": adv_018, "ADV-019": adv_019, "ADV-022": adv_022,
+    "ADV-016": adv_016, "ADV-017": adv_017, "ADV-018": adv_018, "ADV-019": adv_019, "ADV-020": adv_020, "ADV-021": adv_021, "ADV-022": adv_022,
     "ADV-023": adv_023, "ADV-024": adv_024, "ADV-025": adv_025, "ADV-026": adv_026,
     "ADV-027": adv_027, "ADV-028": adv_028, "ADV-029": adv_029,
-    "ADV-030": adv_030, "ADV-032": adv_032, "ADV-034": adv_034,
-    "ADV-035": adv_035, "ADV-037": adv_037, "ADV-038": adv_038,
-    "ADV-039": adv_039, "ADV-041": adv_041, "ADV-042": adv_042,
-    "ADV-043": adv_043, "ADV-044": adv_044, "ADV-045": adv_045,
+    "ADV-030": adv_030, "ADV-031": adv_031, "ADV-032": adv_032, "ADV-033": adv_033, "ADV-034": adv_034,
+    "ADV-035": adv_035, "ADV-036": adv_036, "ADV-037": adv_037, "ADV-038": adv_038,
+    "ADV-039": adv_039, "ADV-040": adv_040, "ADV-041": adv_041, "ADV-042": adv_042,
+    "ADV-043": adv_043, "ADV-044": adv_044, "ADV-045": adv_045, "ADV-046": adv_046,
     "ADV-047": adv_047, "ADV-048": adv_048, "ADV-049": adv_049,
 }
 SCENARIOS = tuple(Scenario(sid, desc, _RUNNERS.get(sid)) for sid, desc in _DESCRIPTIONS)

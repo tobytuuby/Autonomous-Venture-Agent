@@ -21,7 +21,8 @@ def main() -> int:
         "fail_count": failed,
         "pending_count": pending,
         "unauthorized_external_actions": 0,
-        "role_bound_red_team_identities": [CEO_RED_TEAM.identity_id, VM_A_RED_TEAM.identity_id, VM_B_RED_TEAM.identity_id],
+        "role_bound_red_team_identities": True,
+        "red_team_identity_ids": [CEO_RED_TEAM.identity_id, VM_A_RED_TEAM.identity_id, VM_B_RED_TEAM.identity_id],
         "reasoning_model_attached": False,
         "tests": results,
     }

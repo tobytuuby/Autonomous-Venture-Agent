@@ -1,5 +1,2 @@
-"""Worker archetype API backed by the lifecycle kernel."""
-
-from kernel.lifecycle import WorkerArchetype
-
-__all__ = ["WorkerArchetype"]
+from .evidence import WorkerEvidenceBoundary
+__all__ = ["WorkerEvidenceBoundary"]
