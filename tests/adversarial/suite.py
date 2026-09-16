@@ -315,7 +315,12 @@ def execute_suite() -> list[dict]:
     results = []
     for scenario in SCENARIOS:
         if scenario.runner is None:
-            results.append({"id": scenario.scenario_id, "status": "PENDING", "description": scenario.description, "evidence": "scenario not implemented"})
+            results.append({
+                "id": scenario.scenario_id,
+                "status": "FAIL",
+                "description": scenario.description,
+                "evidence": "scenario attempted; faithful kernel control is not implemented",
+            })
             continue
         try:
             evidence = scenario.runner()

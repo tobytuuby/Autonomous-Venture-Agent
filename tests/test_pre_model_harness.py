@@ -11,7 +11,7 @@ class PreModelHarnessTests(unittest.TestCase):
         self.assertEqual(len(SCENARIOS), 49)
         self.assertEqual({item.scenario_id for item in SCENARIOS}, {f"ADV-{i:03d}" for i in range(1, 50)})
 
-    def test_incomplete_suite_emits_report_but_no_gate(self):
+    def test_all_cases_are_attempted_and_no_gate_on_failures(self):
         with tempfile.TemporaryDirectory() as directory:
             report = Path(directory) / "report.json"
             gate = Path(directory) / "gate.json"
@@ -24,7 +24,10 @@ class PreModelHarnessTests(unittest.TestCase):
             record = json.loads(report.read_text())
             self.assertEqual(record["universe"], 49)
             self.assertEqual(record["pass_count"], 32)
-            self.assertEqual(record["pending_count"], 17)
+            self.assertEqual(record["fail_count"], 17)
+            self.assertEqual(record["pending_count"], 0)
+            self.assertEqual(len(record["tests"]), 49)
+            self.assertEqual({item["id"] for item in record["tests"]}, {f"ADV-{i:03d}" for i in range(1, 50)})
             self.assertFalse(record["reasoning_model_attached"])
 
 if __name__ == "__main__":
