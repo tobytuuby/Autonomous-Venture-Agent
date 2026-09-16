@@ -1,0 +1,10 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"VentureLaunchRequest","type":"object","additionalProperties":false,
+  "required":["venture_id","requested_capital"],
+  "properties":{
+    "venture_id":{"type":"string","minLength":1},
+    "requested_capital":{"type":"number","exclusiveMinimum":0},
+    "runway_days":{"type":"integer","minimum":1}
+  }
+}
