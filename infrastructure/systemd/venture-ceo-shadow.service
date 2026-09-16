@@ -1,0 +1,22 @@
+[Unit]
+Description=Portfolio CEO Stage 0 shadow runtime
+After=network-online.target openbao.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=venture-ceo
+Group=venture-ceo
+WorkingDirectory=/opt/venture-platform
+Environment=CEO_MODE=shadow
+Environment=CEO_SHADOW_LOG=/var/lib/venture-ceo/decisions.jsonl
+EnvironmentFile=-/etc/venture-ceo.env
+ExecStart=/usr/bin/python3 -m agents.ceo.runner
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/venture-ceo
+
+[Install]
+WantedBy=multi-user.target
