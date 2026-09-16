@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/compute-request.schema.json",
+  "title": "ComputeRequest", "type": "object", "additionalProperties": false,
+  "required": ["agent_id", "venture_id", "experiment_id", "model_id", "cost_units"],
+  "properties": {
+    "agent_id": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "model_id": {"type": "string", "minLength": 1},
+    "cost_units": {"type": "number", "exclusiveMinimum": 0}
+  }
+}
