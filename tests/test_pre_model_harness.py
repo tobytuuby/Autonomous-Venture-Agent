@@ -23,8 +23,8 @@ class PreModelHarnessTests(unittest.TestCase):
             self.assertFalse(gate.exists())
             record = json.loads(report.read_text())
             self.assertEqual(record["universe"], 49)
-            self.assertEqual(record["pass_count"], 12)
-            self.assertEqual(record["pending_count"], 37)
+            self.assertEqual(record["pass_count"], 32)
+            self.assertEqual(record["pending_count"], 17)
             self.assertFalse(record["reasoning_model_attached"])
 
 if __name__ == "__main__":
