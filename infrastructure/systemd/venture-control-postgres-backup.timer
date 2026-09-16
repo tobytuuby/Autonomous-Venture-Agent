@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily venture-control PostgreSQL backup
+
+[Timer]
+OnCalendar=*-*-* 03:15:00
+Persistent=true
+RandomizedDelaySec=15m
+Unit=venture-control-postgres-backup.service
+
+[Install]
+WantedBy=timers.target

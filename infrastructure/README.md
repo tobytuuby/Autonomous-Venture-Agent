@@ -20,6 +20,16 @@ The current UFW rules enforce the tested control-plane restrictions and permit t
 
 The ChatGPT2LocalBridge and Cloudflare tunnel are management-plane services and remain separate from the future broker API. The venture-agents host currently retains general outbound internet access because the bridge and tunnel require it. Workload-network isolation for agent processes remains a follow-up design item and must not be confused with broker authorization.
 
+## External PostgreSQL backup
+
+TrueNAS is available at 192.168.0.249. Its NFS export is mounted on venture-control at:
+
+- Source: 192.168.0.249:/mnt/Data/epsilon
+- Mount: /var/backups/venture-control
+- Backup subdirectory: /var/backups/venture-control/venture-control
+
+The backup service stages the pg_dump locally as postgres, then copies the completed dump to TrueNAS without requiring postgres to write directly to the NFS export. The current TrueNAS export is permitted to 192.168.0.0/24; narrowing it to 192.168.0.167 is a follow-up hardening action.
+
 ## Validation
 
 The initial P0.0 validation confirmed:
@@ -28,3 +38,4 @@ The initial P0.0 validation confirmed:
 - Noninteractive sudo is available through both bridges.
 - Agents cannot reach control ports 22, 3838, 5432, 6379, or 8080.
 - Control permits inbound 8443/tcp only from 192.168.0.116, pending broker implementation.
+- PostgreSQL backup and restore completed successfully using the TrueNAS NFS mount.

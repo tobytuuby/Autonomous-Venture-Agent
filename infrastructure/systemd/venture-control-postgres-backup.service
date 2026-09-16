@@ -1,0 +1,11 @@
+[Unit]
+Description=Back up venture-control PostgreSQL to TrueNAS
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/var/backups/venture-control
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/epsilon/venture-control-workspace
+Environment=BACKUP_DESTINATION=/var/backups/venture-control/venture-control
+ExecStart=/home/epsilon/venture-control-workspace/infrastructure/backup-postgres.sh

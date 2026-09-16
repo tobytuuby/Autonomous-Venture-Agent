@@ -1,0 +1,2 @@
+# TrueNAS external PostgreSQL backup mount
+192.168.0.249:/mnt/Data/epsilon /var/backups/venture-control nfs4 rw,_netdev,x-systemd.automount,nofail,nfsvers=4.2 0 0
