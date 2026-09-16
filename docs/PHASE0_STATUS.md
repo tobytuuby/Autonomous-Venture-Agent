@@ -39,7 +39,7 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 |---|---|---|
 | Kernel mechanism tests | PASS | 62 repository unit tests pass |
 | P0.14 lifecycle fixtures | PASS as fixtures | Role, venture, worker, repair, and shared-service mechanisms exercised |
-| Genuine ADV-001..049 suite | INCOMPLETE | Harness derives 3 PASS and 46 PENDING; no gate emitted |
+| Genuine ADV-001..049 suite | INCOMPLETE | Harness derives 12 PASS and 37 PENDING; no gate emitted |
 | Pre-model CEO gate | ENFORCED | Missing or invalid gate file causes runner exit before provider construction |
 | Real CEO shadow runtime | NOT ATTACHED | No real provider configuration is active |
 | Stage 0 exit re-certification | NOT READY | No real model fingerprint or CEO-specific 49/49 rerun |
@@ -59,6 +59,7 @@ Relevant corrective commits:
 
 - 94a8d1d — Enforce stacked CEO certification gates
 - b0b2d1c — Close Phase 0 test evidence verification item
+- e057951 — Build fail-closed role-bound pre-model harness
 
 ## Verification closure
 
@@ -73,8 +74,8 @@ The remaining test files were independently read on 2026-09-16:
 - tests/test_provenance.py
 - tests/test_supervisor.py
 
-The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. None of those test modules executes ADV-001 through ADV-049. The new pre-model harness adds two harness tests, bringing discovery to 62/62. It executes three explicit ADV cases and leaves the other 46 pending; those cases are not counted as passes.
+The repository contains exactly 60 ordinary unittest methods, and discovery executes 60/60 successfully. The pre-model harness adds two harness tests, bringing discovery to 62/62. It executes 12 explicit ADV cases and leaves the other 37 pending; those cases are not counted as passes.
 
 ## Next implementation work
 
-Implement the remaining 46 ADV scenarios against their actual kernel boundaries. Each scenario must produce its own evidence, remain model-free, and be independently verifiable before it can contribute to a pre-model 49/49 gate.
+Implement the remaining 37 ADV scenarios against their actual kernel boundaries. Each scenario must produce its own evidence, remain model-free, and be independently verifiable before it can contribute to a pre-model 49/49 gate.
