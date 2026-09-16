@@ -7,7 +7,7 @@ Wants=network-online.target
 Type=oneshot
 User=venture-ceo
 Group=venture-ceo
-WorkingDirectory=/opt/venture-platform
+WorkingDirectory=/home/epsilon/venture-control-workspace
 Environment=CEO_MODE=shadow
 Environment=CEO_SHADOW_LOG=/var/lib/venture-ceo/decisions.jsonl
 EnvironmentFile=-/etc/venture-ceo.env
@@ -15,7 +15,7 @@ ExecStart=/usr/bin/python3 -m agents.ceo.runner
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
-ProtectHome=true
+ProtectHome=read-only
 ReadWritePaths=/var/lib/venture-ceo
 
 [Install]
