@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AgentHealthSignal", "type": "object", "additionalProperties": false,
+  "required": ["agent_id", "heartbeat_at", "error_rate", "guardrail_trip"],
+  "properties": {
+    "agent_id": {"type": "string", "minLength": 1},
+    "heartbeat_at": {"type": "string", "format": "date-time"},
+    "error_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "guardrail_trip": {"type": "boolean"}
+  }
+}

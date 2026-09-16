@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RepairOperation", "type": "object", "additionalProperties": false,
+  "required": ["operation", "agent_id", "preincident_grant", "attempt"],
+  "properties": {
+    "operation": {"enum": ["restart", "restore", "reprovision", "quarantine"]},
+    "agent_id": {"type": "string", "minLength": 1},
+    "preincident_grant": {"type": "object"},
+    "attempt": {"type": "integer", "minimum": 1}
+  }
+}

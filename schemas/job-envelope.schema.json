@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JobEnvelope", "type": "object", "additionalProperties": false,
+  "required": ["job_id", "idempotency_key", "payload"],
+  "properties": {
+    "job_id": {"type": "string", "format": "uuid"},
+    "idempotency_key": {"type": "string", "minLength": 1},
+    "payload": {"type": "object"}
+  }
+}
