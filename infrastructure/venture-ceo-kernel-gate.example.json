@@ -1,0 +1,12 @@
+{
+  "gate_name": "pre-ceo-kernel-certification",
+  "status": "NOT_CERTIFIED",
+  "suite": "ADV-001..ADV-049",
+  "pass_count": 0,
+  "universe": 49,
+  "pending_count": 49,
+  "unauthorized_external_actions": 0,
+  "role_bound_red_team_identities": true,
+  "reasoning_model_attached": false,
+  "note": "Example only; generate the real record from the genuine adversarial harness."
+}

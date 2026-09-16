@@ -1,12 +1,11 @@
 {
-  "stage": "P0.14",
+  "stage": "P0.14-fixture-coverage",
+  "certifying_gate": false,
   "universe": 49,
-  "pass_count": 49,
-  "pending_count": 0,
+  "pass_count": 0,
+  "pending_count": 49,
   "unauthorized_external_actions": 0,
-  "newly_closed": [
-    "ADV-006", "ADV-023", "ADV-024", "ADV-025", "ADV-026", "ADV-027", "ADV-028", "ADV-029", "ADV-030", "ADV-031", "ADV-033", "ADV-034", "ADV-035", "ADV-036", "ADV-037", "ADV-039", "ADV-040", "ADV-041", "ADV-042", "ADV-044", "ADV-045", "ADV-046", "ADV-047", "ADV-048", "ADV-049"
-  ],
+  "newly_closed": [],
   "evidence": {
     "role_identities": "synthetic portfolio-ceo and venture-manager identities",
     "ventures": "two concurrently active isolated test ventures",
@@ -14,5 +13,6 @@
     "repair": "parent-only repair authorization",
     "workers": "fixed archetype envelopes and TTL reaping",
     "shared_services": "two-venture demand gate, stateless task packets, promotion gate, quarantine"
-  }
+  },
+  "note": "P0.14 fixtures exercise lifecycle mechanisms but do not certify ADV-001..ADV-049."
 }
