@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"PlatformManifest","type":"object","additionalProperties":false,
+  "required":["channel","source","policy_version","verified_at","expires_at","permitted_actions","prohibited_actions"],
+  "properties":{
+    "channel":{"type":"string","minLength":1},"source":{"type":"string","minLength":1},
+    "policy_version":{"type":"string","minLength":1},
+    "verified_at":{"type":"string","format":"date-time"},
+    "expires_at":{"type":"string","format":"date-time"},
+    "permitted_actions":{"type":"array","items":{"type":"string"}},
+    "prohibited_actions":{"type":"array","items":{"type":"string"}}
+  }
+}
