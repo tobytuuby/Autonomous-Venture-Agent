@@ -1,0 +1,11 @@
+[Unit]
+Description=Checkpoint venture-control ledgers to TrueNAS
+Wants=network-online.target
+After=network-online.target
+RequiresMountsFor=/var/backups/venture-control
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/epsilon/venture-control-workspace
+Environment=CHECKPOINT_DESTINATION=/var/backups/venture-control/checkpoints
+ExecStart=/home/epsilon/venture-control-workspace/infrastructure/checkpoint-ledger.sh
