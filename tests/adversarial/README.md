@@ -14,4 +14,4 @@ The current implementation passes 32 scenarios and explicitly fails 17 because
 their faithful kernel controls are not implemented yet. No case is skipped or
 marked PENDING. This is expected partial progress, not certification.
 
-The harness imports no CEO agent, model provider, browser, shell, or file tools.
+The harness imports no reasoning model, model provider, browser, shell, or file tools; its certification-integrity check uses only the CEO gate validator.

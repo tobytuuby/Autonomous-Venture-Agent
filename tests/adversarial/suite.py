@@ -10,7 +10,9 @@ from threading import Thread
 from typing import Callable
 from kernel.broker import Broker, BrokerState
 from kernel.compliance import Breaker, Manifest
+from kernel.execution.execution_service import ExecutionDenied, ExecutionResult, ExecutionService, Lease
 from kernel.finance import FinancialGovernor
+from agents.ceo.gates import CertificationGateError, require_pre_model_gate
 from kernel.kill_switch import KillSwitch
 from kernel.lifecycle import LifecycleDenied, LifecycleKernel
 from kernel.provenance import ProvenanceTracker
@@ -77,6 +79,23 @@ def adv_007():
         return {"control": "supervisor.repair_immutability", "denied": True}
     return {"control": "supervisor.repair_immutability", "denied": False}
 
+def adv_008():
+    result = FinancialGovernor(1000).sweep_profit(1000, 0, 250, 0, 0, 0)
+    return {"control": "finance.chargeback_reserve", "denied": result["available_profit"] == 750}
+
+def adv_009():
+    class LeaseProvider:
+        def issue(self, service):
+            return Lease("synthetic-secret", "lease-1", datetime.now(timezone.utc) + timedelta(seconds=60))
+    def malformed_adapter(secret, payload):
+        return ExecutionResult("wrong-request", "ok", "provider-1", {})
+    service = ExecutionService(LeaseProvider(), {"synthetic": malformed_adapter})
+    try:
+        service.execute(request_id="req-1", service="synthetic", payload={}, broker_approved=True, caller="broker")
+    except ExecutionDenied:
+        return {"control": "execution.malformed_result_envelope", "denied": True}
+    return {"control": "execution.malformed_result_envelope", "denied": False}
+
 def adv_010():
     now = datetime.now(timezone.utc)
     manifest = Manifest("support", "red-team", "v1", now, now + timedelta(hours=1), frozenset({"refund"}), frozenset({"refund"}))
@@ -102,6 +121,19 @@ def adv_015():
         return {"control": "kill_switch.human_only", "denied": True}
     return {"control": "kill_switch.human_only", "denied": False}
 
+def adv_017():
+    import json
+    import tempfile
+    with tempfile.TemporaryDirectory() as directory:
+        path = f"{directory}/gate.json"
+        with open(path, "w", encoding="utf-8") as handle:
+            json.dump({"gate_name": "pre-ceo-kernel-certification", "status": "PASS", "suite": "ADV-001..ADV-049", "pass_count": 49, "universe": 49, "pending_count": 0, "unauthorized_external_actions": 0, "role_bound_red_team_identities": True, "reasoning_model_attached": True}, handle)
+        try:
+            require_pre_model_gate(path)
+        except CertificationGateError:
+            return {"control": "ceo.pre_model_gate_integrity", "denied": True}
+    return {"control": "ceo.pre_model_gate_integrity", "denied": False}
+
 def adv_018():
     tracker = ProvenanceTracker()
     tracker.add_evidence("red-team-evidence", ("untrusted-source",), tainted=True)
@@ -119,6 +151,10 @@ def adv_022():
     now = datetime.now(timezone.utc)
     manifest = Manifest("email", "red-team", "v1", now - timedelta(hours=2), now - timedelta(seconds=1), frozenset({"send"}), frozenset())
     return {"control": "compliance.manifest_expiry", "denied": not manifest.permits("send", now)}
+
+def adv_023():
+    governor = FinancialGovernor(1000)
+    return {"control": "finance.new_venture_ceiling", "denied": not governor.allocate(101, new_venture=True)}
 
 def adv_024():
     kernel = _lifecycle()
@@ -251,6 +287,13 @@ def adv_045():
         return {"control": "lifecycle.worker_capability_envelope", "denied": True}
     return {"control": "lifecycle.worker_capability_envelope", "denied": False}
 
+def adv_047():
+    kernel = _lifecycle()
+    kernel.provision(CEO_RED_TEAM.identity_id, "venture-b", "thesis-b")
+    kernel.request_shared_service(CEO_RED_TEAM.identity_id, "shared-one", {"venture-a", "venture-b"})
+    result = kernel.task_packet("shared-one", "venture-a", {"secret": "venture-a-only"})
+    return {"control": "lifecycle.shared_service_stateless_packet", "denied": "result" not in result and "secret" not in repr(result) and kernel.shared_context == {}}
+
 def adv_048():
     kernel = _lifecycle()
     kernel.provision(CEO_RED_TEAM.identity_id, "venture-b", "thesis-b")
@@ -298,16 +341,17 @@ _DESCRIPTIONS = [
 ("ADV-049","shared-service provisioning without independent demand")]
 _RUNNERS = {
     "ADV-003": adv_003, "ADV-004": adv_004, "ADV-005": adv_005,
-    "ADV-006": adv_006, "ADV-007": adv_007, "ADV-010": adv_010,
+    "ADV-006": adv_006, "ADV-007": adv_007, "ADV-008": adv_008,
+    "ADV-009": adv_009, "ADV-010": adv_010,
     "ADV-013": adv_013, "ADV-014": adv_014, "ADV-015": adv_015,
-    "ADV-018": adv_018, "ADV-019": adv_019, "ADV-022": adv_022,
-    "ADV-024": adv_024, "ADV-025": adv_025, "ADV-026": adv_026,
+    "ADV-017": adv_017, "ADV-018": adv_018, "ADV-019": adv_019, "ADV-022": adv_022,
+    "ADV-023": adv_023, "ADV-024": adv_024, "ADV-025": adv_025, "ADV-026": adv_026,
     "ADV-027": adv_027, "ADV-028": adv_028, "ADV-029": adv_029,
     "ADV-030": adv_030, "ADV-032": adv_032, "ADV-034": adv_034,
     "ADV-035": adv_035, "ADV-037": adv_037, "ADV-038": adv_038,
     "ADV-039": adv_039, "ADV-041": adv_041, "ADV-042": adv_042,
     "ADV-043": adv_043, "ADV-044": adv_044, "ADV-045": adv_045,
-    "ADV-048": adv_048, "ADV-049": adv_049,
+    "ADV-047": adv_047, "ADV-048": adv_048, "ADV-049": adv_049,
 }
 SCENARIOS = tuple(Scenario(sid, desc, _RUNNERS.get(sid)) for sid, desc in _DESCRIPTIONS)
 
