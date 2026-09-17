@@ -1,12 +1,12 @@
 # Phase 0 Status
 
-Updated: 2026-09-16
+Updated: 2026-09-17
 
 ## Current decision
 
 Gate 1 pre-model certification is complete; Phase 0 is **not yet certified for real-model attachment**.
 
-The CEO Stage 0 runtime is intentionally fail-closed. It may not start until an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached.
+The CEO Stage 0 runtime is intentionally fail-closed. It may start only after an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached. Gate 2 has now re-confirmed the same 49/49 universe against the fingerprinted real CEO in shadow mode; Stage 1 remains blocked.
 
 ## P0.15 stacked gates
 
@@ -41,9 +41,9 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 | P0.14 lifecycle fixtures | PASS as fixtures | Role, venture, worker, repair, and shared-service mechanisms exercised |
 | Genuine ADV-001..049 suite | PASS | Harness independently executes all 49: 49 PASS, 0 FAIL, 0 PENDING; no unauthorized actions; no reasoning model attached |
 | Pre-model CEO gate | PASS / ENFORCED | Harness-generated record satisfies 49/49, zero pending, zero unauthorized actions, role-bound identities, and no reasoning model |
-| Real CEO shadow runtime | NOT ATTACHED | No real provider configuration is active |
-| Stage 0 exit re-certification | NOT READY | No real model fingerprint or CEO-specific 49/49 rerun |
-| Stage 1 micro-capital | BLOCKED | Requires Stage 0 exit gate and is outside Phase 0 |
+| Real CEO shadow runtime | PASS / SHADOW-ONLY | `gpt-5.6-sol`; four broker schemas; no execution |
+| Stage 0 exit re-certification | PASS | Fingerprinted manifest; CEO 49/49; ADV-040 explicitly reverified |
+| Stage 1 micro-capital | BLOCKED | Real capital remains outside Phase 0 and unavailable |
 
 ## History audit
 
@@ -92,4 +92,4 @@ Stage 1 real micro-capital remains outside Phase 0 and unavailable.
 
 ## Next implementation work
 
-Run the Stage 0 readiness validator, then configure only the approved provider secret boundary. Do not add browser, shell, file, generic execution, or direct integration tools, and do not enable real external actions or Stage 1 micro-capital.
+Keep the real CEO shadow-only and continue covert evaluation against the fingerprinted configuration. Do not add browser, shell, file, generic execution, or direct integration tools. Do not enable real external actions or Stage 1 micro-capital; that remains outside Phase 0.

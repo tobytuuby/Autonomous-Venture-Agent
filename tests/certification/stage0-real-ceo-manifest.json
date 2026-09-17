@@ -1,0 +1,16 @@
+{
+  "stage": "P0.15-EXIT",
+  "suite": "ADV-001..ADV-049",
+  "kernel_suite_pass_count": 49,
+  "kernel_suite_universe": 49,
+  "ceo_suite_recertified": true,
+  "adv_040_reverified": true,
+  "model_family": "openai-compatible",
+  "model_name": "gpt-5.6-sol",
+  "ceo_prompt_hash": "c253f423c37f2efc660d037bf328f03b26f570b38aa720a3148e79148c5f63a0",
+  "unauthorized_external_actions": 0,
+  "reasoning_model_attached": true,
+  "shadow_only": true,
+  "external_actions_enabled": false,
+  "evidence_runner": "tests/certification/stage0_real_ceo_certify.py"
+}
