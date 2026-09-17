@@ -90,5 +90,35 @@ class RealPaymentAdapterTests(unittest.TestCase):
         with self.assertRaises(PermissionError):
             adapter.capture("frozen", 1)
 
+    def test_red_team_path_wires_treasury_and_adapter(self):
+        from integrations.payment_adapter import RealPaymentAdapter
+        from kernel.finance import RedTeamTreasuryPaymentPath
+
+        calls = []
+        adapter = RealPaymentAdapter(
+            lambda request, amount, payload: calls.append((request, amount)) or "ref-" + request,
+            context=RealPaymentAdapter.RED_TEAM_CONTEXT,
+            actor_identity="red-team:certifier",
+            venture_context="test-venture:one",
+            credentials={"token": "synthetic"},
+            supported_instruments={"test-card"},
+            enabled=True,
+        )
+        treasury = BootstrapTreasury(seed_balance=1000)
+        path = RedTeamTreasuryPaymentPath(treasury, adapter)
+        payload = {
+            "operation": "capture",
+            "instrument_id": "test-card",
+            "beneficiary_id": "beneficiary-1",
+            "venture_context": "test-venture:one",
+        }
+
+        first = path.capture("path-one", 5, payload, new_venture=True)
+        second = path.capture("path-one", 5, payload, new_venture=True)
+        self.assertEqual(first.receipt, second.receipt)
+        self.assertEqual(calls, [("path-one", 5.0)])
+        self.assertEqual(treasury.state.deployed, 5.0)
+        self.assertEqual(treasury.allocations()[0]["status"], "committed")
+
 if __name__ == "__main__":
     unittest.main()

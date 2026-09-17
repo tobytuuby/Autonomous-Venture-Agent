@@ -6,7 +6,7 @@ Updated: 2026-09-17
 
 Gate 1 pre-model certification is complete; Phase 0 is **not yet certified for real-model attachment**.
 
-The CEO Stage 0 runtime is intentionally fail-closed. It may start only after an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached. Gate 2 has now re-confirmed the same 49/49 universe against the fingerprinted real CEO in shadow mode; Stage 1 remains blocked.
+The CEO Stage 0 runtime is intentionally fail-closed. It may start only after an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached. Gate 2 has a committed 49-entry shadow report and a configured provider fingerprint, but the external model-call claim is **not independently confirmed from repository evidence**; Stage 1 remains blocked.
 
 ## P0.15 stacked gates
 
@@ -37,12 +37,13 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 
 | Area | Status | Evidence |
 |---|---|---|
-| Kernel mechanism tests | PASS | 62 repository unit tests pass |
+| Kernel and integration tests | PASS | 73 repository unittest methods pass, including BOOT-001–BOOT-006, adapter coverage, manifest integrity, and the composed treasury/payment path |
 | P0.14 lifecycle fixtures | PASS as fixtures | Role, venture, worker, repair, and shared-service mechanisms exercised |
 | Genuine ADV-001..049 suite | PASS | Harness independently executes all 49: 49 PASS, 0 FAIL, 0 PENDING; no unauthorized actions; no reasoning model attached |
 | Pre-model CEO gate | PASS / ENFORCED | Harness-generated record satisfies 49/49, zero pending, zero unauthorized actions, role-bound identities, and no reasoning model |
 | Real CEO shadow runtime | PASS / SHADOW-ONLY | `gpt-5.6-sol`; four broker schemas; no execution |
-| Stage 0 exit re-certification | PASS | Fingerprinted manifest; CEO 49/49; ADV-040 explicitly reverified |
+| Stage 0 exit re-certification | CLAIMED / NOT INDEPENDENTLY CONFIRMED | Committed 49-entry report and configured `https://api.openai.com/v1` fingerprint; repository evidence cannot prove the external calls occurred |
+| P0.16 treasury/payment path | PASS / SYNTHETIC RED-TEAM ONLY | BootstrapTreasury → RealPaymentAdapter composition passes idempotent retry, commit-after-adapter-success, ratchet preservation, and zero live external actions |
 | Stage 1 micro-capital | BLOCKED | Real capital remains outside Phase 0 and unavailable |
 
 ## History audit
@@ -78,18 +79,18 @@ The remaining test files were independently read on 2026-09-16:
 - tests/test_provenance.py
 - tests/test_supervisor.py
 
-The repository contains exactly 60 ordinary unittest methods, and the pre-model harness adds two harness tests, bringing discovery to 62 tests. The complete run executes all 49 explicit ADV cases and independently derives 49 PASS, 0 FAIL, and 0 PENDING. No case is silently skipped.
+The repository currently contains 73 discovered unittest methods. The complete run executes all 49 explicit ADV cases and independently derives 49 PASS, 0 FAIL, and 0 PENDING. Supplemental BOOT, adapter, manifest-integrity, and synthetic treasury/payment-path tests are separate from the ADV denominator. No case is silently skipped.
 
 ## Stage 0 readiness
 
 Gate 1 is complete. The read-only readiness validator is `tests/certification/stage0_readiness.py`; it checks the installed pre-model gate, the frozen four-schema CEO tool list, the prompt hash, and whether provider environment variables are present. It does not call a model, enable external actions, or start the CEO service.
 
-The current machine remains intentionally not ready for shadow attachment because no real provider configuration is installed. The provider endpoint, model family, and credential must be supplied through the approved secret boundary; real values must never be committed.
+The current machine has a provider configuration in the approved secret boundary, but that configuration is not itself repository-verifiable evidence that the Gate 2 calls occurred. The endpoint is `https://api.openai.com/v1`, the configured model name is `gpt-5.6-sol`, and the token is not committed. Real values must never be committed.
 
-Before Stage 0 starts, the service must remain shadow-only and disabled until the readiness record is reviewed. Once a real provider is attached, generate a fingerprinted manifest containing the actual model family and prompt hash, run the covert-evaluation loop, and rerun all 49 cases—including ADV-040 against the actual CEO configuration—before any Stage 1 consideration.
+The service must remain shadow-only and disabled until the readiness record is reviewed. The committed raw report and manifest record the configured fingerprint and 49 scenario results, but the Gate 2 status remains claimed/not independently confirmed because the certifier does not preserve independently verifiable HTTP evidence.
 
 Stage 1 real micro-capital remains outside Phase 0 and unavailable.
 
 ## Next implementation work
 
-Keep the real CEO shadow-only and continue covert evaluation against the fingerprinted configuration. Do not add browser, shell, file, generic execution, or direct integration tools. Do not enable real external actions or Stage 1 micro-capital; that remains outside Phase 0.
+Keep the real CEO shadow-only and do not treat Gate 2 as independently confirmed without verifiable external-call evidence. Do not add browser, shell, file, generic execution, or direct integration tools. The P0.16 treasury-to-payment composition is wired only through the synthetic red-team certification path; do not enable a live provider, real external actions, or Stage 1 micro-capital. Real capital remains outside Phase 0.
