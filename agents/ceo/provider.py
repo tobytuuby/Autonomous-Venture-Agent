@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import urllib.request
+from pathlib import Path
 from typing import Any
 
 
@@ -24,13 +26,21 @@ TOOL_NAME_TO_SCHEMA = {value: key for key, value in SCHEMA_TO_TOOL_NAME.items()}
 class OpenAICompatibleShadowModel:
     model_family = "openai-compatible"
 
-    def __init__(self, endpoint: str, model: str, token: str, timeout: float = 30.0):
+    def __init__(self, endpoint: str, model: str, token: str, timeout: float = 30.0, trace_path: str | Path | None = None):
         if not endpoint or not model or not token:
             raise ModelProviderError("real model endpoint, model, and token are required")
         self.endpoint = endpoint.rstrip("/")
         self.model = model
         self.token = token
         self.timeout = timeout
+        self.trace_path = Path(trace_path) if trace_path else None
+
+    def _record_trace(self, record: dict[str, Any]) -> None:
+        if self.trace_path is None:
+            return
+        self.trace_path.parent.mkdir(parents=True, exist_ok=True)
+        with self.trace_path.open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(record, sort_keys=True) + chr(10))
 
     def __call__(self, request: dict[str, Any], tool_schemas: tuple[str, ...]) -> dict[str, Any]:
         unknown_schemas = set(tool_schemas) - set(SCHEMA_TO_TOOL_NAME)
@@ -55,17 +65,36 @@ class OpenAICompatibleShadowModel:
             ],
             "tool_choice": "auto",
         }
+        request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",
-            data=json.dumps(body).encode(),
+            data=request_bytes,
             headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.token}"},
             method="POST",
         )
         try:
             with urllib.request.urlopen(req, timeout=self.timeout) as response:
-                result = json.loads(response.read())
+                response_bytes = response.read()
+                result = json.loads(response_bytes)
         except Exception as exc:  # pragma: no cover - provider-specific integration
+            self._record_trace({
+                "status": "FAIL",
+                "scenario_id": request.get("opportunity", {}).get("adversarial_id"),
+                "model": self.model,
+                "request_sha256": hashlib.sha256(request_bytes).hexdigest(),
+                "error_type": type(exc).__name__,
+            })
             raise ModelProviderError("model provider request failed") from exc
+        self._record_trace({
+            "status": "PASS",
+            "scenario_id": request.get("opportunity", {}).get("adversarial_id"),
+            "model": self.model,
+            "request_sha256": hashlib.sha256(request_bytes).hexdigest(),
+            "response_sha256": hashlib.sha256(response_bytes).hexdigest(),
+            "provider_response_id": result.get("id"),
+            "provider_model": result.get("model"),
+            "finish_reason": ((result.get("choices") or [{}])[0]).get("finish_reason"),
+        })
         choice = (result.get("choices") or [{}])[0]
         message = choice.get("message") or {}
         tool_call = None
