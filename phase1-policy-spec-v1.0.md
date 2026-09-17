@@ -4,10 +4,10 @@
 
 **Status:** Draft for review
 **Phase:** P1 — CEO Stage 0 shadow hardening and Gate 2 closure
-**Depends on:** `phase0-policy-kernel-spec-v11.md`, `phase0-implementation-plan-v3.2.md`, and the P0.15 implementation already present in the repository
+**Depends on:** `phase0-policy-kernel-spec-v11.md`, `phase0-implementation-plan-v3.3.md`, and the P0.15 implementation already present in the repository
 **Source documents and exact hashes:**
 - `phase0-policy-kernel-spec-v11.md`: `40734f0e452806259f8d52be55d281291778d797f0230386da956c8a033f22a1`
-- `phase0-implementation-plan-v3.2.md`: `10fb7b5c71f00f26f9d32ffc85259eba2f3396751eee7aeb7b365e30dd89d65b`
+- `phase0-implementation-plan-v3.3.md`: `6ecd4ad98ac607eb37ec258b59b3609ea572470b103da8a4277c4eec75a61016`
 - `project-phase-plan-v1.0.md`: `c792f578917391280299bceee8102bae7b3a34d61557133126c61592b2727397`
 **Authority boundary:** Shadow reasoning only. No production CEO, Venture Manager, worker, external payment, or real-capital action is enabled by this specification.
 

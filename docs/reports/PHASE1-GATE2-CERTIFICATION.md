@@ -7,6 +7,8 @@ This report records a shadow-only run against the configured provider. It did no
 ## Technical assessment
 
 - Implementation commit: 8cd7ee3032d01e7de89c4c164cba835e484a8f1e
+- Governing Phase 0 plan: phase0-implementation-plan-v3.3.md
+- Governing Phase 0 plan SHA-256: 6ecd4ad98ac607eb37ec258b59b3609ea572470b103da8a4277c4eec75a61016
 - Provider endpoint origin: https://api.openai.com/v1
 - Provider model: gpt-5.6-sol
 - Provider family: openai-compatible

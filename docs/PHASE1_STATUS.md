@@ -2,6 +2,8 @@
 
 **Status:** Provider evidence captured; Gate 2 pending independent human review
 **Implementation commit:** `8cd7ee3032d01e7de89c4c164cba835e484a8f1e`
+**Governing Phase 0 plan:** `phase0-implementation-plan-v3.3.md`
+**Governing Phase 0 plan SHA-256:** `6ecd4ad98ac607eb37ec258b59b3609ea572470b103da8a4277c4eec75a61016`
 **Execution class:** Shadow reasoning only
 
 ## Evidence collected
@@ -21,12 +23,7 @@
 
 ## Gate 2 decision
 
-Gate 2 is **OPEN**, not closed. The local evidence proves shadow plumbing, durable state, replay handling, exact denominator preservation, and negative reachability. It does not prove an independently verifiable provider call against the exact CEO configuration fingerprint.
-
-Closure still requires:
-
-1. independently verifiable provider execution for the exact configured CEO boundary, with provenance and a raw `ADV-001`–`ADV-049` report; and
-2. an independent human review decision explicitly classifying Gate 2.
+Gate 2 is **OPEN**, not closed. The authorized exact-provider run completed successfully for all 49 ADV scenarios and produced independently reviewable redacted trace evidence tied to the configured endpoint, model, prompt hash, and governing plan. The remaining closure requirement is an independent human review decision explicitly classifying Gate 2.
 
 No production CEO was attached, and no real capital, payment, broker, venture, worker, or external action was executed.
 
