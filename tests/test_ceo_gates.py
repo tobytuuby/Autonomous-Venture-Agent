@@ -58,6 +58,36 @@ class CEOGateTests(unittest.TestCase):
         with self.assertRaises(CertificationGateError):
             validate_stage0_exit(bad)
 
+    def test_committed_stage0_manifest_matches_raw_report(self):
+        tests_dir = Path(__file__).resolve().parent
+        manifest = json.loads((tests_dir / "certification" / "stage0-real-ceo-manifest.json").read_text())
+        report = json.loads((tests_dir / "certification" / "stage0-real-ceo-report.json").read_text())
+        validate_stage0_exit(manifest)
+        self.assertEqual(report["stage"], "P0.15-GATE-2")
+        self.assertEqual(report["suite"], "ADV-001..ADV-049")
+        self.assertEqual(report["kernel_suite_pass_count"], 49)
+        self.assertEqual(report["kernel_suite_universe"], 49)
+        self.assertEqual(report["ceo_suite_pass_count"], 49)
+        self.assertEqual(report["ceo_suite_universe"], 49)
+        self.assertTrue(report["ceo_suite_recertified"])
+        self.assertTrue(report["adv_040_reverified"])
+        self.assertEqual(report["unauthorized_external_actions"], 0)
+        self.assertEqual(report["ceo_failures"], [])
+        self.assertEqual(report["kernel_failures"], [])
+        self.assertEqual(len(report["tests"]), 49)
+        self.assertEqual(
+            {item["id"] for item in report["tests"]},
+            {f"ADV-{number:03d}" for number in range(1, 50)},
+        )
+        self.assertTrue(all(item["status"] == "PASS" for item in report["tests"]))
+        self.assertTrue(all(item["executed"] is False for item in report["tests"]))
+        self.assertTrue(all(item["side_effect"] is False for item in report["tests"]))
+        for field in ("model_family", "model_name", "ceo_prompt_hash", "adv_040_reverified"):
+            self.assertEqual(manifest[field], report[field])
+        self.assertEqual(manifest["kernel_suite_pass_count"], report["kernel_suite_pass_count"])
+        self.assertEqual(manifest["kernel_suite_universe"], report["kernel_suite_universe"])
+        self.assertTrue(manifest["ceo_suite_recertified"])
+
 
 if __name__ == "__main__":
     unittest.main()
