@@ -4,9 +4,9 @@ Updated: 2026-09-17
 
 ## Current decision
 
-Gate 1 pre-model certification is complete; Phase 0 is **not yet certified for real-model attachment**.
+Gate 1 pre-model certification is complete. Gate 2 provider evidence is now captured for the configured shadow provider, but Phase 0 remains in shadow mode pending independent human review.
 
-The CEO Stage 0 runtime is intentionally fail-closed. It may start only after an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached. Gate 2 has a committed 49-entry shadow report and a configured provider fingerprint, but the external model-call claim is **not independently confirmed from repository evidence**; Stage 1 remains blocked.
+The CEO Stage 0 runtime is intentionally fail-closed. It may start only after an independently generated pre-model certification record proves that the full ADV-001 through ADV-049 suite passed 49/49 using role-bound red-team/test identities with no reasoning model attached. Gate 2 now has a complete 49-entry provider rerun and redacted trace; Stage 1 remains blocked.
 
 ## P0.15 stacked gates
 
@@ -42,7 +42,7 @@ Stage 1 real micro-capital is outside Phase 0 and remains unavailable.
 | Genuine ADV-001..049 suite | PASS | Harness independently executes all 49: 49 PASS, 0 FAIL, 0 PENDING; no unauthorized actions; no reasoning model attached |
 | Pre-model CEO gate | PASS / ENFORCED | Harness-generated record satisfies 49/49, zero pending, zero unauthorized actions, role-bound identities, and no reasoning model |
 | Real CEO shadow runtime | PASS / SHADOW-ONLY | `gpt-5.6-sol`; four broker schemas; no execution |
-| Stage 0 exit re-certification | CLAIMED / NOT INDEPENDENTLY CONFIRMED | Committed 49-entry report and configured `https://api.openai.com/v1` fingerprint; repository evidence cannot prove the external calls occurred |
+| Stage 0 exit re-certification | PROVIDER EVIDENCE CAPTURED / HUMAN REVIEW PENDING | Configured `https://api.openai.com/v1` / `gpt-5.6-sol`; 49/49 provider calls, redacted trace, and zero unauthorized actions are recorded; independent review remains required |
 | P0.16 treasury/payment path | PASS / SYNTHETIC RED-TEAM ONLY | BootstrapTreasury → RealPaymentAdapter composition passes idempotent retry, commit-after-adapter-success, ratchet preservation, and zero live external actions |
 | Stage 1 micro-capital | BLOCKED | Real capital remains outside Phase 0 and unavailable |
 
@@ -85,9 +85,9 @@ The repository currently contains 73 discovered unittest methods. The complete r
 
 Gate 1 is complete. The read-only readiness validator is `tests/certification/stage0_readiness.py`; it checks the installed pre-model gate, the frozen four-schema CEO tool list, the prompt hash, and whether provider environment variables are present. It does not call a model, enable external actions, or start the CEO service.
 
-The current machine has a provider configuration in the approved secret boundary, but that configuration is not itself repository-verifiable evidence that the Gate 2 calls occurred. The endpoint is `https://api.openai.com/v1`, the configured model name is `gpt-5.6-sol`, and the token is not committed. Real values must never be committed.
+The current machine has a provider configuration in the approved secret boundary. The endpoint is `https://api.openai.com/v1`, the configured model name is `gpt-5.6-sol`, and the token is not committed. Real values must never be committed.
 
-The service must remain shadow-only and disabled until the readiness record is reviewed. The committed raw report and manifest record the configured fingerprint and 49 scenario results, but the Gate 2 status remains claimed/not independently confirmed because the certifier does not preserve independently verifiable HTTP evidence.
+The service must remain shadow-only and disabled until the readiness record and provider evidence are reviewed. The exact configured provider completed all 49 shadow calls; the committed redacted trace records per-scenario request/response hashes and provider response identifiers. Gate 2 remains open only for independent human review.
 
 Stage 1 real micro-capital remains outside Phase 0 and unavailable.
 

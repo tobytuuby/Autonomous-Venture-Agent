@@ -1,7 +1,7 @@
 # Phase 1 Status
 
-**Status:** Partial implementation evidence complete; Gate 2 remains open
-**Commit under test:** `d743a259c5c6aea22f3f40855b26ecc2a6e4dd7b`
+**Status:** Provider evidence captured; Gate 2 pending independent human review
+**Implementation commit:** `8cd7ee3032d01e7de89c4c164cba835e484a8f1e`
 **Execution class:** Shadow reasoning only
 
 ## Evidence collected
@@ -13,9 +13,11 @@
 - `ADV-040` durable CEO-shaped replay: pass.
 - Reachability denial: pass for payment/external execution boundaries.
 - P0.16: synthetic/red-team-only; `EXTERNAL_ACTIONS_EXECUTED=0`.
-- Provider classification: synthetic/offline; not independently verifiable provider execution.
+- Provider execution: configured `https://api.openai.com/v1` / `gpt-5.6-sol`; 49/49 responses captured.
+- Provider trace: 49 PASS entries, SHA-256 `1c6fa9e983a2fc99617d959ad7fa48120e8a012e39b19555dc5b06f572a191dd`.
 - Technical and non-technical assessments are separated in [the certification report](reports/PHASE1-GATE2-CERTIFICATION.md).
-- Raw per-case evidence is in [p1-shadow-report.json](../tests/certification/p1-shadow-report.json).
+- Raw synthetic per-case evidence remains in [p1-shadow-report.json](../tests/certification/p1-shadow-report.json).
+- Exact-provider report: [stage0-real-provider-report-20260917.json](../tests/certification/stage0-real-provider-report-20260917.json).
 
 ## Gate 2 decision
 

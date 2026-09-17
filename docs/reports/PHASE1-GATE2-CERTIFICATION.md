@@ -1,38 +1,40 @@
 # P1 Gate 2 Certification Report
 
-Status: OPEN - independent provider execution and human review remain outstanding
+Status: OPEN - independent human review pending
 
-This report contains synthetic/offline shadow evidence only. It does not attach a production CEO, execute capital/payment actions, or contact an external party.
+This report records a shadow-only run against the configured provider. It did not attach a production CEO, invoke payment or broker execution, allocate capital, launch a venture, or spawn workers.
 
 ## Technical assessment
 
-- Commit under test: d743a259c5c6aea22f3f40855b26ecc2a6e4dd7b
-- Worktree clean at collection: False
-- ADV universe: ADV-001..ADV-049
-- ADV result: 49/49; failures 0; pending 0
-- Durable decision records: 49
-- Decision event chain valid: True
-- Crash recovery: True
-- ADV-040 durable replay evidence: True
-- Reachability denial: True
-- Provider classification: synthetic/offline; not independently verifiable provider execution
-- External actions executed: 0
+- Implementation commit: 8cd7ee3032d01e7de89c4c164cba835e484a8f1e
+- Provider endpoint origin: https://api.openai.com/v1
+- Provider model: gpt-5.6-sol
+- Provider family: openai-compatible
+- CEO prompt hash: c253f423c37f2efc660d037bf328f03b26f570b38aa720a3148e79148c5f63a0
+- Kernel ADV result: 49/49
+- Configured-provider CEO result: 49/49
+- ADV-040 reverified: True
+- Provider trace: 49 PASS entries, 0 FAIL entries
+- Provider trace SHA-256: 1c6fa9e983a2fc99617d959ad7fa48120e8a012e39b19555dc5b06f572a191dd
+- Unauthorized external actions: 0
+- Provider report SHA-256: c07a23739aeb5022041595a210587e5cc651de1afd05e2028da960dd96110417
+
+The redacted trace contains scenario IDs, request hashes, response hashes, provider response IDs, model identifiers, and finish statuses. It contains no token or prompt contents.
 
 ## Non-technical assessment
 
-- Authority boundary: Shadow reasoning only; no production CEO, capital, payment, venture, worker, or broker execution authority.
-- Evidence meaning: The report proves local synthetic shadow plumbing, durable state, replay handling, and negative reachability only.
-- Remaining limitation: No independently verifiable provider call against the exact configured CEO fingerprint was performed.
-- Human decision required: An independent reviewer must examine provider evidence and explicitly classify Gate 2 before closure.
+- Authority boundary: shadow reasoning only.
+- No production CEO identity was attached.
+- No real capital, payment, broker, venture, worker, or external business action was executed.
+- The provider evidence demonstrates the configured model boundary responded successfully to all 49 scenarios.
+- Independent human review is still required to inspect the evidence, confirm provenance, and explicitly classify Gate 2.
 
-## Source hashes
+## Evidence files
 
-- phase0-implementation-plan-v3.2.md: a6acb5c02dce5fa7b3b8008115beac4009615f2f62f9184f8dc99748d060fd4d
-- phase0-policy-kernel-spec-v11.md: 40734f0e452806259f8d52be55d281291778d797f0230386da956c8a033f22a1
-- phase1-implementation-plan-v1.0.md: ecaa8d81a4b686507b6126d95a590c90f40ce8ffc6ad30bc4038ef8ec147ccea
-- phase1-policy-spec-v1.0.md: 5be2278c5a17e25d5b34555c5216e094e75f0fdb5e2e36617755bfe2d4f320cf
-- project-phase-plan-v1.0.md: c792f578917391280299bceee8102bae7b3a34d61557133126c61592b2727397
+- [Exact-provider report](../../tests/certification/stage0-real-provider-report-20260917.json)
+- [Redacted provider trace](../../tests/certification/stage0-provider-trace-20260917.jsonl)
+- [Synthetic P1 report](../../tests/certification/p1-shadow-report.json)
 
 ## Decision
 
-Gate 2 remains OPEN. Synthetic 49/49 and durable shadow evidence do not substitute for independently verifiable provider execution against the exact CEO configuration.
+Gate 2 is not yet closed. Provider execution evidence is complete; the remaining required action is independent human review and explicit approval.
