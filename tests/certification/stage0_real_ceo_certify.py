@@ -19,6 +19,8 @@ def main() -> int:
     parser.add_argument("--log", required=True)
     parser.add_argument("--trace", required=True)
     args = parser.parse_args()
+    trace_path = Path(args.trace)
+    trace_path.write_text("", encoding="utf-8")
 
     kernel = execute_suite()
     kernel_by_id = {item["id"]: item for item in kernel}

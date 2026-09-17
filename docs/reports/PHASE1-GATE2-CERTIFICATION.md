@@ -17,9 +17,9 @@ This report records a shadow-only run against the configured provider. It did no
 - Configured-provider CEO result: 49/49
 - ADV-040 reverified: True
 - Provider trace: 49 PASS entries, 0 FAIL entries
-- Provider trace SHA-256: 1c6fa9e983a2fc99617d959ad7fa48120e8a012e39b19555dc5b06f572a191dd
+- Provider trace SHA-256: 4a6821127272c091299f05e94bbbeebdfec5376bebe4e409b808a9b77fbbadcd
 - Unauthorized external actions: 0
-- Provider report SHA-256: c07a23739aeb5022041595a210587e5cc651de1afd05e2028da960dd96110417
+- Provider report SHA-256: 0268d7518d7b6130c5cd801e64ac87d436c4078824ee7f38c67fc606c63e67b3
 
 Evidence classification:
 - Verified external provider execution: provisional classification supported by the captured 49-entry trace, per-scenario request/response hashes, and provider response identifiers; independent human review remains required.

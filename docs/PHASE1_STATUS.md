@@ -16,7 +16,7 @@
 - Reachability denial: pass for payment/external execution boundaries.
 - P0.16: synthetic/red-team-only; `EXTERNAL_ACTIONS_EXECUTED=0`.
 - Provider execution: configured `https://api.openai.com/v1` / `gpt-5.6-sol`; 49/49 responses captured.
-- Provider trace: 49 PASS entries, SHA-256 `1c6fa9e983a2fc99617d959ad7fa48120e8a012e39b19555dc5b06f572a191dd`.
+- Provider trace: 49 PASS entries, SHA-256 `4a6821127272c091299f05e94bbbeebdfec5376bebe4e409b808a9b77fbbadcd`.
 - Technical and non-technical assessments are separated in [the certification report](reports/PHASE1-GATE2-CERTIFICATION.md).
 - Raw synthetic per-case evidence remains in [p1-shadow-report.json](../tests/certification/p1-shadow-report.json).
 - Exact-provider report: [stage0-real-provider-report-20260917.json](../tests/certification/stage0-real-provider-report-20260917.json).

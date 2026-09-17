@@ -5,6 +5,16 @@
   "ceo_suite_pass_count": 49,
   "ceo_suite_recertified": true,
   "ceo_suite_universe": 49,
+  "evidence_classification": {
+    "externally_configured_but_not_independently_verifiable": [],
+    "failed_or_incomplete_execution": [],
+    "synthetic_or_offline_execution": [
+      "kernel ADV suite"
+    ],
+    "verified_external_provider_execution": [
+      "configured-provider trace"
+    ]
+  },
   "kernel_failures": [],
   "kernel_suite_pass_count": 49,
   "kernel_suite_universe": 49,
@@ -15,7 +25,7 @@
     "fail_entries": 0,
     "pass_entries": 49,
     "path": "/home/epsilon/venture-control-workspace/tests/certification/stage0-provider-trace-20260917.jsonl",
-    "sha256": "1c6fa9e983a2fc99617d959ad7fa48120e8a012e39b19555dc5b06f572a191dd"
+    "sha256": "4a6821127272c091299f05e94bbbeebdfec5376bebe4e409b808a9b77fbbadcd"
   },
   "reasoning_model_attached": true,
   "stage": "P0.15-GATE-2",
