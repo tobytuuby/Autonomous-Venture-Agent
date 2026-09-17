@@ -6,6 +6,10 @@
 **Phase:** P1 — CEO Stage 0 shadow hardening and Gate 2 closure
 **Governing specification:** `phase1-policy-spec-v1.0.md`
 **Baseline:** P0.15 implementation in `phase0-implementation-plan-v3.2.md`
+**Source documents and exact hashes:**
+- `phase1-policy-spec-v1.0.md`: `5be2278c5a17e25d5b34555c5216e094e75f0fdb5e2e36617755bfe2d4f320cf`
+- `phase0-implementation-plan-v3.2.md`: `10fb7b5c71f00f26f9d32ffc85259eba2f3396751eee7aeb7b365e30dd89d65b`
+- `project-phase-plan-v1.0.md`: `c792f578917391280299bceee8102bae7b3a34d61557133126c61592b2727397`
 **Execution class:** Shadow reasoning only
 **Explicitly excluded:** real CEO attachment, Venture Manager or worker spawning, external payments, live broker execution, and real capital actions.
 

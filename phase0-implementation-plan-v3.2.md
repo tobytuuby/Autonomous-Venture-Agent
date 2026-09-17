@@ -2,7 +2,7 @@
 
 ## v3.2 — Bootstrap treasury and real-integration implementation clarification (aligned to architecture v11)
 
-**Status:** Canonical plan version v3.2. This revision derives from the newly frozen kernel specification v11 and preserves phase0-implementation-plan-v3.1.md as the historical v10-aligned baseline. v11 adds bootstrap treasury mode in §3.2; it does not change the 49-test ADV-001–ADV-049 certification universe, the stacked pre-model/Stage 0 gates, or the requirement that certification use role-bound test identities before any reasoning model is attached.
+**Status:** Current adopted plan version v3.2; canonical for Phase 0. This revision derives from the newly frozen kernel specification v11 and preserves phase0-implementation-plan-v3.1.md as the historical v10-aligned baseline. v11 adds bootstrap treasury mode in §3.2; it does not change the 49-test ADV-001–ADV-049 certification universe, the stacked pre-model/Stage 0 gates, or the requirement that certification use role-bound test identities before any reasoning model is attached.
 
 This revision records the following adopted changes:
 
@@ -53,12 +53,12 @@ v2.0 (retained for history) derived from architecture v8, which added Section 10
 v1.1 (retained for history) corrected two traceability errors found in v1.0 before freeze: P0.14 had misattributed `ADV-019` (composite-capability/confused-deputy) to venture over-provisioning and was missing `ADV-023` from its own validation line; `ADV-019` now closes at P0.5, where `CAP-009`'s action-graph evaluation actually lives. `FIN-004`/`SWEEP-002` now lock `venture_reinvestment_pct` at its adopted 20% default rather than leaving it referenced without a value.
 
 ```
-phase0-policy-kernel-spec-v10.md      (governing architecture — what must be true)
+phase0-policy-kernel-spec-v11.md      (governing architecture — what must be true)
         ↓
-phase0-implementation-plan-v3.1.md    (this document — what gets built, in what order,
+phase0-implementation-plan-v3.2.md    (this document — what gets built, in what order,
                                        what evidence closes each step)
         ↓
-ordered increments (P0.0 – P0.15) + gates
+ordered increments (P0.0 – P0.16) + gates
         ↓
 code / migrations / Rego / tests
 ```
@@ -136,6 +136,7 @@ Every ID below traces to a specific v9 section. Implementation tasks declare `Im
 - `FIN-007` — Ratchet rule: if `eligible_treasury_balance` shrinks below what's already deployed, existing allocations are not clawed back; new allocations/top-ups freeze until deployed capital falls back under the ceiling.
 - `FIN-008` — Treasury percentage parameters are changeable only through the `POL-*` process; lowering the protected floor or raising the deployable ceiling is a widening change.
 - `FIN-009` — The capital sufficiency gate (`PORT-004`) and the deployable-pool ceiling (`FIN-005`) both apply to every venture launch; passing one never substitutes for the other.
+- `FIN-010` — Bootstrap treasury mode is durable and policy-gated for the initial seed: protected cash floor and operating reserve are 0%, portfolio deployability is 100%, the per-new-venture cap remains 10%, and the mode exits on the first strictly positive available profit with the FIN-007 ratchet preserving existing commitments.
 
 **Platform governor (v9 §3.3)**
 
@@ -620,7 +621,7 @@ The adapter is reachable only from the certification harness and role-bound red-
 
 **ADRs.** `docs/adr/` records decisions v9 deliberately leaves open. An ADR chooses *how* to satisfy v9; it cannot weaken v9. If a proposed ADR would change an architectural invariant, that requires an architecture revision through the same process used for every prior version bump (v1 through v9), not an ADR. Seed ADRs anticipated from the increments above: `ADR-001-postgres-is-authoritative-state.md`, `ADR-002-rootless-podman-workers.md`, `ADR-003-broker-api-authentication.md`, `ADR-004-ledger-hash-format.md`, `ADR-005-opa-fail-closed-defaults.md`.
 
-**Git discipline.** One branch per increment (`phase0/p0-00-...` through `phase0/p0-15-...`). An increment closes only when its tests pass, its security gate passes, its docs are updated, and its evidence is captured — then commit, review, merge. Something discovered mid-increment that's useful for a later one becomes a `BACKLOG-P0.x-00N` note, not an early implementation of that later increment.
+**Git discipline.** One branch per increment (`phase0/p0-00-...` through `phase0/p0-16-...`). An increment closes only when its tests pass, its security gate passes, its docs are updated, and its evidence is captured — then commit, review, merge. Something discovered mid-increment that's useful for a later one becomes a `BACKLOG-P0.x-00N` note, not an early implementation of that later increment.
 
 **Coding-agent task envelope.** Every task handed to an implementation agent (Claude, Codex, or otherwise) states: repository root, starting branch/commit, authoritative documents (`phase0-policy-kernel-spec-v11.md` and this plan), the specific `P0.x.y` task, allowed files, forbidden files, requirement IDs implemented, tests required, and an explicit "do not" list — do not alter architecture, broaden scope, modify unrelated modules, weaken tests, alter requirements, or touch infrastructure outside this project.
 

@@ -45,7 +45,7 @@ def main() -> int:
     print("ADAPTER_IDEMPOTENCY=PASS")
     print("RED_TEAM_ONLY=PASS")
     print("SYNTHETIC_TRANSPORT_CALLS=%s" % len(calls))
-    print("LIVE_EXTERNAL_ACTIONS=0")
+    print("EXTERNAL_ACTIONS_EXECUTED=0")
     return 0
 
 
