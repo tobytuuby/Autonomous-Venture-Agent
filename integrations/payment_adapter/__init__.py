@@ -1,2 +1,3 @@
 from .simulated import SimulatedPaymentAdapter
-__all__ = ["SimulatedPaymentAdapter"]
+from .real import PaymentAdapterDenied, PaymentExposureError, PaymentReceipt, RealPaymentAdapter
+__all__ = ["SimulatedPaymentAdapter", "RealPaymentAdapter", "PaymentAdapterDenied", "PaymentExposureError", "PaymentReceipt"]
