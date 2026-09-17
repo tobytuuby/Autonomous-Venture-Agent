@@ -6,8 +6,8 @@ This report contains synthetic/offline shadow evidence only. It does not attach 
 
 ## Technical assessment
 
-- Commit under test: b03c4c7a1b0d4918ee9ea7eb589e30772b54ced3
-- Worktree clean at collection: True
+- Commit under test: d743a259c5c6aea22f3f40855b26ecc2a6e4dd7b
+- Worktree clean at collection: False
 - ADV universe: ADV-001..ADV-049
 - ADV result: 49/49; failures 0; pending 0
 - Durable decision records: 49
@@ -27,7 +27,7 @@ This report contains synthetic/offline shadow evidence only. It does not attach 
 
 ## Source hashes
 
-- phase0-implementation-plan-v3.2.md: 10fb7b5c71f00f26f9d32ffc85259eba2f3396751eee7aeb7b365e30dd89d65b
+- phase0-implementation-plan-v3.2.md: a6acb5c02dce5fa7b3b8008115beac4009615f2f62f9184f8dc99748d060fd4d
 - phase0-policy-kernel-spec-v11.md: 40734f0e452806259f8d52be55d281291778d797f0230386da956c8a033f22a1
 - phase1-implementation-plan-v1.0.md: ecaa8d81a4b686507b6126d95a590c90f40ce8ffc6ad30bc4038ef8ec147ccea
 - phase1-policy-spec-v1.0.md: 5be2278c5a17e25d5b34555c5216e094e75f0fdb5e2e36617755bfe2d4f320cf

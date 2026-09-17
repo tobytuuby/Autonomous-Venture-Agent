@@ -1,7 +1,7 @@
 # Phase 1 Status
 
 **Status:** Partial implementation evidence complete; Gate 2 remains open
-**Commit under test:** `b03c4c7a1b0d4918ee9ea7eb589e30772b54ced3`
+**Commit under test:** `d743a259c5c6aea22f3f40855b26ecc2a6e4dd7b`
 **Execution class:** Shadow reasoning only
 
 ## Evidence collected
