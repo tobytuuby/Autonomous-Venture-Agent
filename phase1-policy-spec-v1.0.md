@@ -7,7 +7,7 @@
 **Depends on:** `phase0-policy-kernel-spec-v11.md`, `phase0-implementation-plan-v3.3.md`, and the P0.15 implementation already present in the repository
 **Source documents and exact hashes:**
 - `phase0-policy-kernel-spec-v11.md`: `40734f0e452806259f8d52be55d281291778d797f0230386da956c8a033f22a1`
-- `phase0-implementation-plan-v3.3.md`: `6ecd4ad98ac607eb37ec258b59b3609ea572470b103da8a4277c4eec75a61016`
+- `phase0-implementation-plan-v3.3.md`: `5fd23ab6a490f3233b3aac515d56926cab5c1cecb82db822c5de9436f8a5a142`
 - `project-phase-plan-v1.0.md`: `c792f578917391280299bceee8102bae7b3a34d61557133126c61592b2727397`
 **Authority boundary:** Shadow reasoning only. No production CEO, Venture Manager, worker, external payment, or real-capital action is enabled by this specification.
 
