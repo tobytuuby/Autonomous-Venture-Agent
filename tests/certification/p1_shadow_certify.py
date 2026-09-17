@@ -82,6 +82,7 @@ def main() -> int:
     state_db.parent.mkdir(parents=True, exist_ok=True)
 
     kernel = execute_suite()
+    kernel_by_id = {item["id"]: item for item in kernel}
     passed = sum(item["status"] == "PASS" for item in kernel)
     failed = sum(item["status"] == "FAIL" for item in kernel)
     pending = sum(item["status"] == "PENDING" for item in kernel)
@@ -105,9 +106,11 @@ def main() -> int:
             }
             decision = agent.shadow_decide(opportunity)
             durable = store.get(decision.decision_id)
+            validation = kernel_by_id[scenario.scenario_id]
             shadow_results.append({
                 "id": scenario.scenario_id,
-                "status": "PASS",
+                "status": validation["status"],
+                "validation_evidence": validation["evidence"],
                 "executed": decision.executed,
                 "side_effect": False,
                 "durable_state": durable["state"],
