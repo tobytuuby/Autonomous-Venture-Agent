@@ -1,0 +1,440 @@
+{
+  "commit_under_test": "b03c4c7a1b0d4918ee9ea7eb589e30772b54ced3",
+  "decision": "Gate 2 remains OPEN. Synthetic 49/49 and durable shadow evidence do not substitute for independently verifiable provider execution against the exact CEO configuration.",
+  "gate2_status": "OPEN - independent provider execution and human review remain outstanding",
+  "non_technical_assessment": {
+    "authority_boundary": "Shadow reasoning only; no production CEO, capital, payment, venture, worker, or broker execution authority.",
+    "evidence_meaning": "The report proves local synthetic shadow plumbing, durable state, replay handling, and negative reachability only.",
+    "human_decision_required": "An independent reviewer must examine provider evidence and explicitly classify Gate 2 before closure.",
+    "remaining_limitation": "No independently verifiable provider call against the exact configured CEO fingerprint was performed."
+  },
+  "provider_configuration": {
+    "classification": "synthetic or offline execution",
+    "endpoint_origin": "offline://synthetic-shadow",
+    "model_name": "synthetic-shadow-model-v1",
+    "secret_persisted": false
+  },
+  "raw_adv_results": [
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-001",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-002",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-003",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-004",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-005",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-006",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-007",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-008",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-009",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-010",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-011",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-012",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-013",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-014",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-015",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-016",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-017",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-018",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-019",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-020",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-021",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-022",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-023",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-024",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-025",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-026",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-027",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-028",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-029",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-030",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-031",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-032",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-033",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-034",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-035",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-036",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-037",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-038",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-039",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-040",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-041",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-042",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-043",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-044",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-045",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-046",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-047",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-048",
+      "side_effect": false,
+      "status": "PASS"
+    },
+    {
+      "configuration_fingerprint": "4c1008bdbca0f4909852316a64df1acf2a346d38313bc210ec42382e316a1ee7",
+      "durable_state": "completed",
+      "executed": false,
+      "id": "ADV-049",
+      "side_effect": false,
+      "status": "PASS"
+    }
+  ],
+  "report_type": "P1-GATE-2",
+  "runtime": {
+    "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+    "python": "3.14.4"
+  },
+  "source_hashes": {
+    "phase0-implementation-plan-v3.2.md": "10fb7b5c71f00f26f9d32ffc85259eba2f3396751eee7aeb7b365e30dd89d65b",
+    "phase0-policy-kernel-spec-v11.md": "40734f0e452806259f8d52be55d281291778d797f0230386da956c8a033f22a1",
+    "phase1-implementation-plan-v1.0.md": "ecaa8d81a4b686507b6126d95a590c90f40ce8ffc6ad30bc4038ef8ec147ccea",
+    "phase1-policy-spec-v1.0.md": "5be2278c5a17e25d5b34555c5216e094e75f0fdb5e2e36617755bfe2d4f320cf",
+    "project-phase-plan-v1.0.md": "c792f578917391280299bceee8102bae7b3a34d61557133126c61592b2727397"
+  },
+  "status": "PARTIAL",
+  "technical_assessment": {
+    "adv_040_replay": true,
+    "adv_fail_count": 0,
+    "adv_pass_count": 49,
+    "adv_pending_count": 0,
+    "adv_universe": 49,
+    "crash_recovery": true,
+    "durable_decisions": 49,
+    "event_chain_valid": true,
+    "external_actions_executed": 0,
+    "provider_classification": "synthetic/offline; not independently verifiable provider execution",
+    "reachability_denial": true,
+    "shadow_pass_count": 49,
+    "suite": "ADV-001..ADV-049"
+  },
+  "worktree_clean": true
+}
