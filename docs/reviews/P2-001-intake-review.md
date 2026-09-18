@@ -1,6 +1,6 @@
 # P2.1 Opportunity Intake Review Record
 
-**Status:** Implementation evidence produced; operator review pending  
+**Status:** ACCEPTED — delegated analyst/auditor review
 **Increment:** P2.1 — Opportunity intake  
 **Date:** 2026-09-18
 
@@ -30,6 +30,18 @@
 
 ## Decision
 
-This record is not a P2.1 completion decision. A delegated analyst/auditor or
-project operator must review the implementation, migration, fixtures, and test
-evidence before P2.1 is marked complete and P2.2 begins.
+P2.1 is **ACCEPTED** on 2026-09-18 under explicit operator delegation to the
+analyst/auditor role. The implementation satisfies typed intake, idempotency,
+provenance preservation, freshness, source-integrity, and scope-isolation
+requirements.
+
+Repository corrections to the supplied review: the authoritative migration
+shape is `migrations/p2/001_opportunity_intake.sql`, not `008_p2_intake.sql`;
+the store default freshness window is 30 days, while the one-hour value is
+used only by the stale-evidence test. The review record itself is the delegated
+acceptance record; it does not claim an independent human identity beyond the
+operator's delegation.
+
+P2.1 exit is recorded. P2.2 — Evidence normalization is authorized to begin
+under the existing shadow-only, synthetic-only, provenance-preserving, and
+zero-external-action restrictions.

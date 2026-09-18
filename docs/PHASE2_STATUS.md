@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0 accepted, P2.1 authorized
+**Status:** Active / Implementation; P2.0 and P2.1 accepted, P2.2 authorized
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.2.md`
+**Implementation plan:** `phase2-implementation-plan-v1.3.md`
 
 ## Approval decision
 
@@ -43,10 +43,21 @@ corrected stale descriptions in the review: the evidence schema uses
 `transformation_chain`; review and replay authorization fields are explicitly
 present and constrained to `false`.
 
+## P2.1 acceptance
+
+P2.1 was accepted on 2026-09-18 under explicit operator delegation to the
+analyst/auditor role. The acceptance reviewed typed intake, source hashing,
+freshness enforcement, duplicate convergence, conflict rejection, portfolio
+scope, the migration shape, ADR-P2-002, seven P2.1 tests, and the 91-test
+regression suite.
+
+The acceptance corrected two stale review details: the migration is
+`migrations/p2/001_opportunity_intake.sql`, and the store default freshness
+window is 30 days; the one-hour window is test-specific.
+
 ## Current increment
 
-P2.1 — Opportunity intake — implementation evidence produced; operator review
-pending.
+P2.2 — Evidence normalization — requirements review.
 
 Added the typed, idempotent intake service under `kernel/opportunity/`, the
 P2.1 PostgreSQL migration shape, ADR-P2-002, synthetic intake fixtures, and the
@@ -64,8 +75,8 @@ Validation:
   distinct types.
 - Intake results explicitly deny external action authority.
 
-A delegated analyst/auditor or project operator must review the P2.1 artifacts
-and test evidence before P2.1 is marked complete and P2.2 begins.
+P2.1 is complete for its defined scope. P2.2 is authorized to begin under the
+same shadow-only and synthetic-only authority restrictions.
 
 
 ## Required limitations
