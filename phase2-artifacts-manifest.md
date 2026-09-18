@@ -4,7 +4,7 @@
 **Status:** Adopted as a condition of P2 implementation approval  
 **Adoption date:** 2026-09-18  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Active implementation plan:** `phase2-implementation-plan-v1.2.md`
+**Active implementation plan:** `phase2-implementation-plan-v1.4.md`
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only
 
 ## 1. Purpose

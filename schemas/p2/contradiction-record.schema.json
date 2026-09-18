@@ -1,0 +1,19 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p2/contradiction-record.schema.json",
+  "title":"P2 Contradiction Record",
+  "type":"object","additionalProperties":false,
+  "required":["contradiction_id","portfolio_id","evidence_ids","normalized_evidence_ids","claim_key","status","detected_at","reason","policy_version","configuration_fingerprint"],
+  "properties":{
+    "contradiction_id":{"$ref":"common.schema.json#/$defs/id"},
+    "portfolio_id":{"$ref":"common.schema.json#/$defs/id"},
+    "evidence_ids":{"type":"array","minItems":2,"items":{"$ref":"common.schema.json#/$defs/id"}},
+    "normalized_evidence_ids":{"type":"array","minItems":2,"items":{"$ref":"common.schema.json#/$defs/id"}},
+    "claim_key":{"$ref":"common.schema.json#/$defs/id"},
+    "status":{"type":"string","enum":["detected","quarantined","reviewed"]},
+    "detected_at":{"$ref":"common.schema.json#/$defs/timestamp"},
+    "reason":{"type":"string","minLength":1},
+    "policy_version":{"$ref":"common.schema.json#/$defs/policy_version"},
+    "configuration_fingerprint":{"$ref":"common.schema.json#/$defs/hash"}
+  }
+}

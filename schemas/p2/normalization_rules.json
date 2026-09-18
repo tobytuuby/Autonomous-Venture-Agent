@@ -1,0 +1,9 @@
+{
+  "policy_version":"p2.2",
+  "rules":[
+    {"rule_id":"p2.normalize.external.v1","version":"1","applies_to":["external"],"operation":"preserve_payload","taint_policy":"monotonic","authority_effect":"none"},
+    {"rule_id":"p2.normalize.synthetic.v1","version":"1","applies_to":["synthetic"],"operation":"preserve_payload","taint_policy":"monotonic","authority_effect":"none"},
+    {"rule_id":"p2.normalize.inferred.v1","version":"1","applies_to":["inferred"],"operation":"preserve_payload","taint_policy":"monotonic","authority_effect":"none"},
+    {"rule_id":"p2.normalize.operator.v1","version":"1","applies_to":["operator"],"operation":"preserve_payload","taint_policy":"monotonic","authority_effect":"none"}
+  ]
+}

@@ -8,6 +8,15 @@ from .intake import (
     SourceIntegrityError,
     StaleEvidenceError,
 )
+from .normalization import (
+    EvidenceNormalizer,
+    NormalizationError,
+    NormalizationResult,
+    NormalizationScopeViolation,
+    NormalizationStaleEvidenceError,
+    RawEnvelopeMutationError,
+    TaintReductionError,
+)
 
 __all__ = [
     "DuplicateOpportunity",
@@ -18,4 +27,11 @@ __all__ = [
     "ScopeViolation",
     "SourceIntegrityError",
     "StaleEvidenceError",
+    "EvidenceNormalizer",
+    "NormalizationError",
+    "NormalizationResult",
+    "NormalizationScopeViolation",
+    "NormalizationStaleEvidenceError",
+    "RawEnvelopeMutationError",
+    "TaintReductionError",
 ]

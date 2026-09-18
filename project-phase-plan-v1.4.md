@@ -15,7 +15,7 @@ red-team-only treasury-to-payment path. P1 Gate 2 is closed by explicit human
 review recorded on 2026-09-18. The provider evidence remains classified as
 externally configured but independently unverifiable; closure records the human
 acceptance decision and does not create a cryptographic provider attestation.
-P2.0 and P2.1 are accepted; P2.2 requirements review is active. No real capital action is enabled.
+P2.0 and P2.1 are accepted; P2.2 is implemented pending delegated analyst/auditor acceptance. No real capital action is enabled.
 
 ---
 

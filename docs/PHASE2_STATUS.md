@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0 and P2.1 accepted, P2.2 authorized
+**Status:** Active / Implementation; P2.0 and P2.1 accepted, P2.2 implemented pending acceptance
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.3.md`
+**Implementation plan:** `phase2-implementation-plan-v1.4.md`
 
 ## Approval decision
 
@@ -57,26 +57,26 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.2 — Evidence normalization — requirements review.
+P2.2 — Evidence normalization — implemented; awaiting delegated analyst/auditor acceptance.
 
-Added the typed, idempotent intake service under `kernel/opportunity/`, the
-P2.1 PostgreSQL migration shape, ADR-P2-002, synthetic intake fixtures, and the
-P2.1 review record.
+Added the immutable raw-envelope/derived-record normalizer under
+`kernel/opportunity/normalization.py`, three P2.2 schemas, built-in rules,
+PostgreSQL migration shape, ADR-P2-003, seven P2.2 tests, and the implementation
+review record.
 
 Validation:
 
-- P2.1 intake suite: 7 tests passed.
-- Full repository suite including P2.0/P2.1 tests: 91 tests passed.
-- Exact duplicate delivery converges to one durable opportunity record.
-- Idempotency conflicts and changed duplicate identities are rejected.
-- Tampered source hashes, stale evidence, and cross-portfolio evidence are
-  rejected before persistence.
-- External, synthetic, inferred, and operator evidence types are accepted as
-  distinct types.
-- Intake results explicitly deny external action authority.
+- P2.2 normalization suite: 7 tests passed.
+- Full repository suite including P0/P1/P2.0/P2.1/P2.2 tests: 98 tests passed.
+- All four source types normalize with taint preserved.
+- Duplicate raw evidence converges by deterministic normalized hash and lineage.
+- Contradictory claims are retained and isolated with contradiction references.
+- Cross-scope and stale evidence are rejected before derived persistence.
+- Raw envelope mutation and instruction-smuggling authority widening are rejected.
+- Python compile, JSON parse, and `git diff --check` validations passed.
 
-P2.1 is complete for its defined scope. P2.2 is authorized to begin under the
-same shadow-only and synthetic-only authority restrictions.
+P2.2 implementation is complete for its defined scope. It remains shadow-only
+and synthetic-only pending explicit analyst/auditor acceptance.
 
 
 ## Required limitations

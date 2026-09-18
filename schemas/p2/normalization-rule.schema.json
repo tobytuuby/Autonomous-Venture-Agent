@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p2/normalization-rule.schema.json",
+  "title":"P2 Normalization Rule",
+  "type":"object","additionalProperties":false,
+  "required":["rule_id","version","applies_to","operation","taint_policy","authority_effect"],
+  "properties":{
+    "rule_id":{"$ref":"common.schema.json#/$defs/id"},
+    "version":{"type":"string","minLength":1},
+    "applies_to":{"type":"array","minItems":1,"items":{"$ref":"common.schema.json#/$defs/evidence_type"}},
+    "operation":{"type":"string","enum":["canonicalize_payload","preserve_payload"]},
+    "taint_policy":{"type":"string","const":"monotonic"},
+    "authority_effect":{"type":"string","const":"none"}
+  }
+}
