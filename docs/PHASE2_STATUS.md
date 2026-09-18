@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0, P2.1, and P2.2 accepted; P2.3 implemented pending acceptance
+**Status:** Active / Implementation; P2.0–P2.3 accepted; P2.4 authorized
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.6.md`
+**Implementation plan:** `phase2-implementation-plan-v1.7.md`
 
 ## Approval decision
 
@@ -57,30 +57,17 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.3 — Thesis identity — implemented; awaiting delegated analyst/auditor acceptance.
+P2.4 — Scoring and lifecycle — requirements review authorized.
 
-The requirements review authorized deterministic six-dimension thesis identity,
-complete normalized-evidence lineage, immutable idempotent fingerprints,
-contradiction surfacing, portfolio isolation, taint preservation, and
-shadow-only operation.
+P2.3 was formally accepted on 2026-09-18 under delegated analyst/auditor
+authority. The review verified all seven exit criteria, 7/7 targeted tests,
+105/105 full-suite tests, deterministic six-dimension fingerprints, immutable
+identity, complete lineage, contradiction rejection, portfolio isolation, taint
+preservation, and absence of authorization fields from P2.3 schemas.
 
-Added the thesis identity deriver under `kernel/opportunity/thesis.py`, three
-P2.3 schemas, built-in classifier rules, PostgreSQL migration shape, ADR-P2-004,
-seven P2.3 tests, and the implementation review record.
-
-Validation:
-
-- P2.3 thesis identity suite: 7 tests passed.
-- Full repository suite including P0/P1/P2.0–P2.3 tests: 105 tests passed.
-- All six canonical dimensions receive provenance-bearing assignments.
-- Fingerprints are deterministic SHA-256 hashes of canonical dimension JSON.
-- Repeated derivation converges to one immutable thesis identity.
-- Cross-scope evidence and contradictory evidence are rejected before thesis creation.
-- Forbidden authorization fields are absent from P2.3 schemas.
-- Python compile, JSON parse, and `git diff --check` validations passed.
-
-P2.3 implementation is complete for its defined scope and remains shadow-only
-and synthetic-only pending explicit analyst/auditor acceptance.
+P2.4 is authorized to define deterministic scoring, explainable review
+decisions, and lifecycle transitions while preserving P2.3 identity and
+lineage boundaries.
 
 
 ## Required limitations
