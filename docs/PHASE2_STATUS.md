@@ -1,6 +1,6 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0–P2.3 accepted; P2.4 implemented pending acceptance
+**Status:** Active / Implementation; P2.0–P2.4 accepted; P2.5 implemented pending acceptance
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
@@ -57,13 +57,15 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.4 — Scoring and lifecycle — implemented; awaiting delegated analyst/auditor acceptance.
+P2.5 — Replay and adversarial checks — implemented; awaiting delegated
+analyst/auditor acceptance.
 
-The P2.4 implementation adds versioned scoring policy and computation records,
-explainable confidence intervals, lifecycle transitions, durable replay,
-append-only event hashing, and authority-denial tests. The eight P2.4 exit
-tests pass; the full suite is 113/113. Required acceptance evidence is recorded
-in `docs/reviews/P2-004-scoring-lifecycle-review.md`. P2.4 remains shadow-only
+P2.4 acceptance was recorded by delegated analyst/auditor review. P2.5 adds
+schema-validated durable replay, duplicate convergence, result-chain tamper
+detection, stale and contradictory evidence rejection, cross-portfolio denial,
+authority-widening denial, and a rollback/quarantine runbook. Six P2.5 tests
+pass; acceptance evidence is recorded in
+`docs/reviews/P2-005-replay-adversarial-review.md`. P2.5 remains shadow-only
 and synthetic-only pending delegated analyst/auditor acceptance.
 
 

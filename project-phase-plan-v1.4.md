@@ -170,7 +170,7 @@ kernel-owned services only.
 |---|---|---|---|---|---|---|
 | P0 | Policy kernel and certification | Existing v11 | Existing v3.2 | Complete for P0 scope | Repository baseline | Static/unit and synthetic integration only |
 | P1 | CEO Stage 0 shadow hardening and Gate 2 closure | `phase1-policy-spec-v1.0.md` | `phase1-implementation-plan-v1.1.md` | Complete for P1 scope | P0 Gate 1, P0.15 shadow foundation, and explicit Gate 2 review | Shadow reasoning only |
-| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v1.9.md` | Active / Implementation | P1 exit, P2 approval, P2.0/P2.1 acceptance, and P2.2 review recorded in phase status records | None |
+| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v2.0.md` | Active / Implementation | P1 exit, P2 approval, P2.0/P2.1 acceptance, and P2.2 review recorded in phase status records | None |
 | P3 | Venture formation and sandboxing | `phase3-policy-spec-v1.0.md` | `phase3-implementation-plan-v1.0.md` | Future / Not started | P2 exit | Synthetic only |
 | P4 | Venture execution and operations | `phase4-policy-spec-v1.0.md` | `phase4-implementation-plan-v1.0.md` | Future / Not started | P3 exit | Synthetic only |
 | P5 | Revenue, treasury, and financial operations | `phase5-policy-spec-v1.0.md` | `phase5-implementation-plan-v1.0.md` | Future / Not started | P4 exit | Synthetic, then gated test integration |

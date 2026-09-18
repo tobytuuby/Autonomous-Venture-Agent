@@ -20,7 +20,7 @@ owns the Opportunity and Thesis System.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
 - `docs/PHASE1_STATUS.md` — P1 evidence and Gate 2 decision record.
 - `phase2-policy-spec-v1.0.md` — approved P2 governing specification.
-- `phase2-implementation-plan-v1.9.md` — active P2.4 implementation plan and acceptance record.
+- `phase2-implementation-plan-v2.0.md` — active P2.5 implementation plan and acceptance record.
 - `docs/PHASE2_STATUS.md` — P2 approval, P2.0/P2.1 acceptance, and implementation status.
 
 ## Phase status

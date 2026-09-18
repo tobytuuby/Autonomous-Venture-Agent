@@ -38,6 +38,16 @@ from .lifecycle import (
     LifecycleScopeViolation,
     LifecycleTransitionError,
 )
+from .replay import (
+    AuthorityWideningError,
+    ReplayCoordinator,
+    ReplayDuplicate,
+    ReplayError,
+    ReplayPolicyMismatch,
+    ReplayResult,
+    ReplayScopeViolation,
+    ReplayTamperDetected,
+)
 
 __all__ = [
     "DuplicateOpportunity",
@@ -70,4 +80,12 @@ __all__ = [
     "LifecycleManager",
     "LifecycleScopeViolation",
     "LifecycleTransitionError",
+    "AuthorityWideningError",
+    "ReplayCoordinator",
+    "ReplayDuplicate",
+    "ReplayError",
+    "ReplayPolicyMismatch",
+    "ReplayResult",
+    "ReplayScopeViolation",
+    "ReplayTamperDetected",
 ]
