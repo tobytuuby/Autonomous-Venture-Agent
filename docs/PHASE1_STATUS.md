@@ -8,7 +8,7 @@
 
 ## Evidence collected
 
-- Full repository test suite: 76 tests passed.
+- Full repository test suite: 78 tests passed.
 - P1 ADV universe: `ADV-001`–`ADV-049`, exactly `49/49`.
 - Durable decision records: 49; event chains valid.
 - Crash recovery: pass; interrupted dispatch becomes replayable without response history.
