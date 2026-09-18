@@ -45,25 +45,28 @@ present and constrained to `false`.
 
 ## Current increment
 
-P2.1 — Opportunity intake.
+P2.1 — Opportunity intake — implementation evidence produced; operator review
+pending.
 
-Added versioned JSON Schema Draft 2020-12 contracts under `schemas/p2/` for
-Opportunity, EvidenceEnvelope, ThesisFingerprint, ThesisScore, ReviewDecision,
-LifecycleTransition, and ReplayRequest, with shared envelope definitions.
-Added synthetic fixtures, authority-denial tests, ADR-P2-001, a migration
-determination, and the P2.0 contract review record.
+Added the typed, idempotent intake service under `kernel/opportunity/`, the
+P2.1 PostgreSQL migration shape, ADR-P2-002, synthetic intake fixtures, and the
+P2.1 review record.
 
 Validation:
 
-- P2.0 contract suite: 6 tests passed.
-- Full repository suite: 78 tests passed.
-- Review and replay contracts reject authorization for launch, capital, or
-  external action.
-- Undeclared venture authority is rejected.
-- No P2.0 SQL migration was introduced.
+- P2.1 intake suite: 7 tests passed.
+- Full repository suite including P2.0/P2.1 tests: 91 tests passed.
+- Exact duplicate delivery converges to one durable opportunity record.
+- Idempotency conflicts and changed duplicate identities are rejected.
+- Tampered source hashes, stale evidence, and cross-portfolio evidence are
+  rejected before persistence.
+- External, synthetic, inferred, and operator evidence types are accepted as
+  distinct types.
+- Intake results explicitly deny external action authority.
 
-P2.0 is complete for its defined scope. P2.1 is authorized to begin under the
-same shadow-only and synthetic-only authority restrictions.
+A delegated analyst/auditor or project operator must review the P2.1 artifacts
+and test evidence before P2.1 is marked complete and P2.2 begins.
+
 
 ## Required limitations
 
