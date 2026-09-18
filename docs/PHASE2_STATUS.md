@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0–P2.3 accepted; P2.4 authorized
+**Status:** Active / Implementation; P2.0–P2.3 accepted; P2.4 requirements reviewed
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.7.md`
+**Implementation plan:** `phase2-implementation-plan-v1.8.md`
 
 ## Approval decision
 
@@ -57,17 +57,16 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.4 — Scoring and lifecycle — requirements review authorized.
+P2.4 — Scoring and lifecycle — implementation authorized.
 
-P2.3 was formally accepted on 2026-09-18 under delegated analyst/auditor
-authority. The review verified all seven exit criteria, 7/7 targeted tests,
-105/105 full-suite tests, deterministic six-dimension fingerprints, immutable
-identity, complete lineage, contradiction rejection, portfolio isolation, taint
-preservation, and absence of authorization fields from P2.3 schemas.
+The P2.4 requirements review confirmed deterministic, explainable scoring;
+human review boundaries; a legal lifecycle transition matrix; preservation of
+score, thesis, evidence, and transition history; quarantine, expiration, and
+supersession; portfolio isolation; and zero external-action authority.
 
-P2.4 is authorized to define deterministic scoring, explainable review
-decisions, and lifecycle transitions while preserving P2.3 identity and
-lineage boundaries.
+Required exit evidence is defined in `docs/reviews/P2-004-scoring-lifecycle-requirements.md`.
+P2.4 implementation may now begin under shadow-only and synthetic-only
+restrictions.
 
 
 ## Required limitations
