@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation; P2.0, P2.1, and P2.2 accepted; P2.3 authorized
+**Status:** Active / Implementation; P2.0, P2.1, and P2.2 accepted; P2.3 implemented pending acceptance
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.5.md`
+**Implementation plan:** `phase2-implementation-plan-v1.6.md`
 
 ## Approval decision
 
@@ -57,19 +57,30 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.3 — Thesis identity — requirements review authorized.
+P2.3 — Thesis identity — implemented; awaiting delegated analyst/auditor acceptance.
 
-P2.2 was formally accepted on 2026-09-18 under delegated analyst/auditor
-authority. The review verified all seven exit criteria, 7/7 targeted tests,
-98/98 full-suite tests, schema integrity, monotonic taint propagation,
-contradiction isolation, append-only lineage, raw-envelope immutability,
-freshness, scope, and instruction-smuggling containment.
+The requirements review authorized deterministic six-dimension thesis identity,
+complete normalized-evidence lineage, immutable idempotent fingerprints,
+contradiction surfacing, portfolio isolation, taint preservation, and
+shadow-only operation.
 
-A factual correction remains recorded: P2.1's default freshness window is 30
-days; its one-hour window was test-specific.
+Added the thesis identity deriver under `kernel/opportunity/thesis.py`, three
+P2.3 schemas, built-in classifier rules, PostgreSQL migration shape, ADR-P2-004,
+seven P2.3 tests, and the implementation review record.
 
-P2.3 is authorized to define the deterministic thesis-fingerprint contract,
-similarity rules, duplicate linkage, and cooldown/resubmission boundaries.
+Validation:
+
+- P2.3 thesis identity suite: 7 tests passed.
+- Full repository suite including P0/P1/P2.0–P2.3 tests: 105 tests passed.
+- All six canonical dimensions receive provenance-bearing assignments.
+- Fingerprints are deterministic SHA-256 hashes of canonical dimension JSON.
+- Repeated derivation converges to one immutable thesis identity.
+- Cross-scope evidence and contradictory evidence are rejected before thesis creation.
+- Forbidden authorization fields are absent from P2.3 schemas.
+- Python compile, JSON parse, and `git diff --check` validations passed.
+
+P2.3 implementation is complete for its defined scope and remains shadow-only
+and synthetic-only pending explicit analyst/auditor acceptance.
 
 
 ## Required limitations

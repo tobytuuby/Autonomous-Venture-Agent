@@ -17,6 +17,14 @@ from .normalization import (
     RawEnvelopeMutationError,
     TaintReductionError,
 )
+from .thesis import (
+    ThesisContradictionError,
+    ThesisIdentityDeriver,
+    ThesisIdentityError,
+    ThesisIdentityMutationError,
+    ThesisIdentityResult,
+    ThesisScopeViolation,
+)
 
 __all__ = [
     "DuplicateOpportunity",
@@ -34,4 +42,10 @@ __all__ = [
     "NormalizationStaleEvidenceError",
     "RawEnvelopeMutationError",
     "TaintReductionError",
+    "ThesisContradictionError",
+    "ThesisIdentityDeriver",
+    "ThesisIdentityError",
+    "ThesisIdentityMutationError",
+    "ThesisIdentityResult",
+    "ThesisScopeViolation",
 ]

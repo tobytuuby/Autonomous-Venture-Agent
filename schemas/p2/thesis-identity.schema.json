@@ -1,0 +1,30 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p2/thesis-identity.schema.json",
+  "title":"P2 Thesis Identity",
+  "type":"object","additionalProperties":false,
+  "required":["thesis_id","fingerprint","dimensions","normalized_evidence_ids","dimension_assignment_ids","transformation_chain","conflict_status","policy_version","configuration_fingerprint","created_at","actor","portfolio_scope","correlation_id","idempotency_key"],
+  "properties":{
+    "thesis_id":{"$ref":"common.schema.json#/$defs/id"},
+    "fingerprint":{"$ref":"common.schema.json#/$defs/hash"},
+    "dimensions":{"type":"object","additionalProperties":false,"required":["category","customer_segment","core_offer","monetization_model","acquisition_channel","assumptions"],"properties":{
+      "category":{"type":"array","items":{"type":"string","minLength":1}},
+      "customer_segment":{"type":"array","items":{"type":"string","minLength":1}},
+      "core_offer":{"type":"array","items":{"type":"string","minLength":1}},
+      "monetization_model":{"type":"array","items":{"type":"string","minLength":1}},
+      "acquisition_channel":{"type":"array","items":{"type":"string","minLength":1}},
+      "assumptions":{"type":"array","items":{"type":"string","minLength":1}}
+    }},
+    "normalized_evidence_ids":{"type":"array","minItems":1,"items":{"$ref":"common.schema.json#/$defs/id"}},
+    "dimension_assignment_ids":{"type":"array","minItems":1,"items":{"$ref":"common.schema.json#/$defs/id"}},
+    "transformation_chain":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["operation","at","actor_id","normalized_evidence_ids"],"properties":{"operation":{"type":"string","minLength":1},"at":{"$ref":"common.schema.json#/$defs/timestamp"},"actor_id":{"$ref":"common.schema.json#/$defs/id"},"normalized_evidence_ids":{"type":"array","items":{"$ref":"common.schema.json#/$defs/id"}}}}},
+    "conflict_status":{"type":"string","enum":["none","contradictions_present"]},
+    "policy_version":{"$ref":"common.schema.json#/$defs/policy_version"},
+    "configuration_fingerprint":{"$ref":"common.schema.json#/$defs/hash"},
+    "created_at":{"$ref":"common.schema.json#/$defs/timestamp"},
+    "actor":{"$ref":"common.schema.json#/$defs/actor"},
+    "portfolio_scope":{"$ref":"common.schema.json#/$defs/portfolio_scope"},
+    "correlation_id":{"$ref":"common.schema.json#/$defs/id"},
+    "idempotency_key":{"$ref":"common.schema.json#/$defs/id"}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "policy_version":"p2.3",
+  "rules":{
+    "market-size":"category",
+    "problem-domain":"category",
+    "buyer-profile":"customer_segment",
+    "use-case":"customer_segment",
+    "offer":"core_offer",
+    "value-proposition":"core_offer",
+    "monetization":"monetization_model",
+    "pricing":"monetization_model",
+    "channel":"acquisition_channel",
+    "acquisition":"acquisition_channel",
+    "assumption":"assumptions",
+    "dependency":"assumptions"
+  },
+  "default_dimension":"assumptions"
+}
