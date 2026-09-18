@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Implementation  
+**Status:** Active / Implementation; P2.0 accepted, P2.1 authorized
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v1.1.md`
+**Implementation plan:** `phase2-implementation-plan-v1.2.md`
 
 ## Approval decision
 
@@ -30,10 +30,22 @@ credential requests, or any other external action.
 - P2 implementation plan v1.1 SHA-256:
   `f18946f57b2ec217028d61b8c43ed1f56773da1338e968910865d69595b5076e`
 
+## P2.0 acceptance
+
+P2.0 was accepted on 2026-09-18 under explicit operator delegation to the
+analyst/auditor role. The acceptance reviewed the seven P2 schemas, synthetic
+fixtures, six contract tests, full regression results, ADR-P2-001, the migration
+determination, and the authority-boundary diff.
+
+The review confirmed that P2.0 artifacts exist in the repository. It also
+corrected stale descriptions in the review: the evidence schema uses
+`evidence_type`, `taint_status`, `source_ref`, `payload`, and
+`transformation_chain`; review and replay authorization fields are explicitly
+present and constrained to `false`.
+
 ## Current increment
 
-P2.0 — Baseline and contracts — implementation evidence produced; operator
-review pending.
+P2.1 — Opportunity intake.
 
 Added versioned JSON Schema Draft 2020-12 contracts under `schemas/p2/` for
 Opportunity, EvidenceEnvelope, ThesisFingerprint, ThesisScore, ReviewDecision,
@@ -50,8 +62,8 @@ Validation:
 - Undeclared venture authority is rejected.
 - No P2.0 SQL migration was introduced.
 
-A human operator must review the P2.0 artifacts and test evidence before P2.0
-is marked complete and P2.1 begins.
+P2.0 is complete for its defined scope. P2.1 is authorized to begin under the
+same shadow-only and synthetic-only authority restrictions.
 
 ## Required limitations
 

@@ -13,15 +13,15 @@ owns the Opportunity and Thesis System.
 
 ## Canonical project plan
 
-- `project-phase-plan-v1.2.md` — current project-wide phase registry and
-  P2 approval transition record.
+- `project-phase-plan-v1.3.md` — current project-wide phase registry and
+  P2.0 acceptance transition record.
 - `phase0-policy-kernel-spec-v11.md` — current P0 governing specification.
 - `phase0-implementation-plan-v3.2.md` — current P0 implementation plan.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
 - `docs/PHASE1_STATUS.md` — P1 evidence and Gate 2 decision record.
 - `phase2-policy-spec-v1.0.md` — approved P2 governing specification.
-- `phase2-implementation-plan-v1.1.md` — approved P2 implementation plan.
-- `docs/PHASE2_STATUS.md` — P2 approval and implementation status.
+- `phase2-implementation-plan-v1.2.md` — active P2.1 implementation plan.
+- `docs/PHASE2_STATUS.md` — P2 approval, P2.0 acceptance, and implementation status.
 
 ## Phase status
 
