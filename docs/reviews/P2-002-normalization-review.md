@@ -1,6 +1,6 @@
 # P2.2 Evidence Normalization Implementation Review Record
 
-**Status:** Implemented; awaiting delegated analyst/auditor acceptance  
+**Status:** ACCEPTED — delegated analyst/auditor review
 **Date:** 2026-09-18  
 **Increment:** P2.2 — Evidence normalization
 
