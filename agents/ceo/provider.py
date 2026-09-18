@@ -85,6 +85,39 @@ class OpenAICompatibleShadowModel:
                 "error_type": type(exc).__name__,
             })
             raise ModelProviderError("model provider request failed") from exc
+        try:
+            choices = result.get("choices")
+            if not isinstance(choices, list) or not choices or not isinstance(choices[0], dict):
+                raise ModelProviderError("model returned an invalid choices envelope")
+            choice = choices[0]
+            message = choice.get("message")
+            if not isinstance(message, dict):
+                raise ModelProviderError("model returned an invalid message envelope")
+            tool_call = None
+            calls = message.get("tool_calls") or []
+            if calls:
+                function = calls[0].get("function") or {}
+                schema = TOOL_NAME_TO_SCHEMA.get(function.get("name"))
+                if schema is None:
+                    raise ModelProviderError("model proposed an unknown CEO tool")
+                arguments = function.get("arguments", "{}")
+                try:
+                    arguments = json.loads(arguments) if isinstance(arguments, str) else arguments
+                except json.JSONDecodeError as exc:
+                    raise ModelProviderError("model returned invalid tool arguments") from exc
+                tool_call = {"schema": schema, "arguments": arguments}
+        except Exception as exc:
+            self._record_trace({
+                "status": "FAIL",
+                "scenario_id": request.get("opportunity", {}).get("adversarial_id"),
+                "model": self.model,
+                "request_sha256": hashlib.sha256(request_bytes).hexdigest(),
+                "response_sha256": hashlib.sha256(response_bytes).hexdigest(),
+                "error_type": type(exc).__name__,
+            })
+            if isinstance(exc, ModelProviderError):
+                raise
+            raise ModelProviderError("model provider response validation failed") from exc
         self._record_trace({
             "status": "PASS",
             "scenario_id": request.get("opportunity", {}).get("adversarial_id"),
@@ -93,23 +126,9 @@ class OpenAICompatibleShadowModel:
             "response_sha256": hashlib.sha256(response_bytes).hexdigest(),
             "provider_response_id": result.get("id"),
             "provider_model": result.get("model"),
-            "finish_reason": ((result.get("choices") or [{}])[0]).get("finish_reason"),
+            "finish_reason": choice.get("finish_reason"),
+            "response_schema_validated": True,
         })
-        choice = (result.get("choices") or [{}])[0]
-        message = choice.get("message") or {}
-        tool_call = None
-        calls = message.get("tool_calls") or []
-        if calls:
-            function = calls[0].get("function") or {}
-            schema = TOOL_NAME_TO_SCHEMA.get(function.get("name"))
-            if schema is None:
-                raise ModelProviderError("model proposed an unknown CEO tool")
-            arguments = function.get("arguments", "{}")
-            try:
-                arguments = json.loads(arguments) if isinstance(arguments, str) else arguments
-            except json.JSONDecodeError as exc:
-                raise ModelProviderError("model returned invalid tool arguments") from exc
-            tool_call = {"schema": schema, "arguments": arguments}
         return {"decision": {"content": message.get("content", "")}, "tool_call": tool_call}
 
 

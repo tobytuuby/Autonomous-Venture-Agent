@@ -16,14 +16,14 @@
 - Reachability denial: pass for payment/external execution boundaries.
 - P0.16: synthetic/red-team-only; `EXTERNAL_ACTIONS_EXECUTED=0`.
 - Provider execution: configured `https://api.openai.com/v1` / `gpt-5.6-sol`; 49/49 responses captured.
-- Provider trace: 49 PASS entries, SHA-256 `4a6821127272c091299f05e94bbbeebdfec5376bebe4e409b808a9b77fbbadcd`.
+- Provider trace: 49 PASS entries, SHA-256 `9ce92609a061a13b0683396f50a13bf25b7f70b7a944e04be7eee328fd6bf163`.
 - Technical and non-technical assessments are separated in [the certification report](reports/PHASE1-GATE2-CERTIFICATION.md).
 - Raw synthetic per-case evidence remains in [p1-shadow-report.json](../tests/certification/p1-shadow-report.json).
 - Exact-provider report: [stage0-real-provider-report-20260917.json](../tests/certification/stage0-real-provider-report-20260917.json).
 
 ## Gate 2 decision
 
-Gate 2 is **OPEN**, not closed. The authorized run produced a 49-entry provider trace whose recorded status and request/response hashes support a provisional external-provider evidence classification; the trace is not itself a substitute for independent verification or human review. The remaining closure requirement is an independent human review decision explicitly classifying Gate 2.
+Gate 2 is **OPEN**, not closed. The authorized run produced a 49-entry provider trace whose structurally validated records support the classification “externally configured but independently unverifiable.” The trace is not sufficient to distinguish a genuine provider call from a fabricated but internally consistent artifact, and it is not a substitute for independent verification or human review. The remaining closure requirement is an independent human review decision explicitly classifying Gate 2.
 
 No production CEO was attached, and no real capital, payment, broker, venture, worker, or external action was executed.
 

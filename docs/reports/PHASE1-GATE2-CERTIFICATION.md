@@ -17,15 +17,15 @@ This report records a shadow-only run against the configured provider. It did no
 - Configured-provider CEO result: 49/49
 - ADV-040 reverified: True
 - Provider trace: 49 PASS entries, 0 FAIL entries
-- Provider trace SHA-256: 4a6821127272c091299f05e94bbbeebdfec5376bebe4e409b808a9b77fbbadcd
+- Provider trace SHA-256: 9ce92609a061a13b0683396f50a13bf25b7f70b7a944e04be7eee328fd6bf163
 - Unauthorized external actions: 0
-- Provider report SHA-256: 0268d7518d7b6130c5cd801e64ac87d436c4078824ee7f38c67fc606c63e67b3
+- Provider report SHA-256: afdb72bcd03e001880488eee36b5602ad5a94ec6d2875b7883a9d1813fb85fb4
 
 Evidence classification:
-- Verified external provider execution: provisional classification supported by the captured 49-entry trace, per-scenario request/response hashes, and provider response identifiers; independent human review remains required.
-- Externally configured but independently unverifiable: none asserted for this run.
+- Verified external provider execution: not asserted by this report.
+- Externally configured but independently unverifiable: configured-provider trace with structurally validated responses, per-scenario request/response hashes, and provider response identifiers; the artifact cannot independently prove that the network calls occurred.
 - Synthetic/offline execution: kernel ADV suite and separate P1 shadow certification.
-- Failed or incomplete execution: none recorded in the captured provider run.
+- Failed or incomplete execution: none recorded in the captured provider run; this does not change the external-verification classification.
 
 The redacted trace contains scenario IDs, request hashes, response hashes, provider response IDs, model identifiers, and finish statuses. It contains no token or prompt contents.
 

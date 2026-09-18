@@ -89,7 +89,8 @@ def main() -> int:
             "sha256": hashlib.sha256(trace_path.read_bytes()).hexdigest(),
         },
         "evidence_classification": {
-            "verified_external_provider_execution": (
+            "verified_external_provider_execution": [],
+            "externally_configured_but_not_independently_verifiable": (
                 ["configured-provider trace"]
                 if trace_records
                 and len(trace_records) == len(SCENARIOS)
@@ -97,7 +98,6 @@ def main() -> int:
                 and all(item.get("request_sha256") and item.get("response_sha256") for item in trace_records)
                 else []
             ),
-            "externally_configured_but_not_independently_verifiable": [],
             "synthetic_or_offline_execution": ["kernel ADV suite"],
             "failed_or_incomplete_execution": (
                 ["provider run"]
