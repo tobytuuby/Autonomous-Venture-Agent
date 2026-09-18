@@ -25,6 +25,19 @@ from .thesis import (
     ThesisIdentityResult,
     ThesisScopeViolation,
 )
+from .scoring import (
+    ScoringError,
+    ScoringPolicyMismatch,
+    ScoringScopeViolation,
+    ThesisScorer,
+)
+from .lifecycle import (
+    HumanReviewRequired,
+    LifecycleError,
+    LifecycleManager,
+    LifecycleScopeViolation,
+    LifecycleTransitionError,
+)
 
 __all__ = [
     "DuplicateOpportunity",
@@ -48,4 +61,13 @@ __all__ = [
     "ThesisIdentityMutationError",
     "ThesisIdentityResult",
     "ThesisScopeViolation",
+    "ScoringError",
+    "ScoringPolicyMismatch",
+    "ScoringScopeViolation",
+    "ThesisScorer",
+    "HumanReviewRequired",
+    "LifecycleError",
+    "LifecycleManager",
+    "LifecycleScopeViolation",
+    "LifecycleTransitionError",
 ]

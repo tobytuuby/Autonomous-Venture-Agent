@@ -109,6 +109,52 @@
     },
     "idempotency_key": {
       "$ref": "common.schema.json#/$defs/id"
+    },
+    "score_computation_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "score_algorithm_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_fingerprint": {
+      "$ref": "common.schema.json#/$defs/hash"
+    },
+    "dimension_contributions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
+      }
+    },
+    "score_reasoning": {
+      "type": "string",
+      "minLength": 1
+    },
+    "confidence_interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lower", "expected", "upper", "basis"],
+      "properties": {
+        "lower": {"type": "number", "minimum": 0, "maximum": 100},
+        "expected": {"type": "number", "minimum": 0, "maximum": 100},
+        "upper": {"type": "number", "minimum": 0, "maximum": 100},
+        "basis": {"type": "string", "minLength": 1}
+      }
+    },
+    "taint_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statuses", "strongest"],
+      "properties": {
+        "statuses": {"type": "array", "items": {"$ref": "common.schema.json#/$defs/taint_status"}},
+        "strongest": {"$ref": "common.schema.json#/$defs/taint_status"}
+      }
+    },
+    "contradiction_count": {
+      "type": "integer",
+      "minimum": 0
     }
   }
 }

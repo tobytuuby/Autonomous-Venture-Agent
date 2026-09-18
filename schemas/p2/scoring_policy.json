@@ -1,0 +1,24 @@
+{
+  "policy_version":"p2.4",
+  "score_algorithm_version":"p2.4-weighted-dimensions-v1",
+  "configuration_fingerprint":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "weights":{
+    "category":0.1666666667,
+    "customer_segment":0.1666666667,
+    "core_offer":0.1666666667,
+    "monetization_model":0.1666666667,
+    "acquisition_channel":0.1666666667,
+    "assumptions":0.1666666665
+  },
+  "thresholds":{
+    "acceptance":70,
+    "rejection":40,
+    "max_age_days":30
+  },
+  "uncertainty":{
+    "trusted_margin":2,
+    "mixed_taint_margin":15,
+    "contradiction_margin":20
+  },
+  "authority_effect":"none"
+}
