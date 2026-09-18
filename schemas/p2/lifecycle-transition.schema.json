@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p2/lifecycle-transition.schema.json",
+  "title": "P2 LifecycleTransition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "transition_id",
+    "entity_type",
+    "entity_id",
+    "from_state",
+    "to_state",
+    "reason",
+    "evidence_ids",
+    "policy_version",
+    "configuration_fingerprint",
+    "created_at",
+    "actor",
+    "portfolio_scope",
+    "correlation_id",
+    "idempotency_key"
+  ],
+  "properties": {
+    "transition_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "entity_type": {
+      "type": "string",
+      "enum": [
+        "opportunity",
+        "thesis"
+      ]
+    },
+    "entity_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "from_state": {
+      "type": "string",
+      "enum": [
+        "received",
+        "under_review",
+        "accepted",
+        "rejected",
+        "expired",
+        "quarantined",
+        "superseded"
+      ]
+    },
+    "to_state": {
+      "type": "string",
+      "enum": [
+        "received",
+        "under_review",
+        "accepted",
+        "rejected",
+        "expired",
+        "quarantined",
+        "superseded"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/id"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "policy_version": {
+      "$ref": "common.schema.json#/$defs/policy_version"
+    },
+    "configuration_fingerprint": {
+      "$ref": "common.schema.json#/$defs/hash"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "actor": {
+      "$ref": "common.schema.json#/$defs/actor"
+    },
+    "portfolio_scope": {
+      "$ref": "common.schema.json#/$defs/portfolio_scope"
+    },
+    "correlation_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "idempotency_key": {
+      "$ref": "common.schema.json#/$defs/id"
+    }
+  }
+}

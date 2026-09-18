@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p2/evidence-envelope.schema.json",
+  "title": "P2 EvidenceEnvelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "evidence_type",
+    "taint_status",
+    "source_ref",
+    "source_hash",
+    "captured_at",
+    "payload",
+    "transformation_chain",
+    "policy_version",
+    "configuration_fingerprint",
+    "created_at",
+    "actor",
+    "portfolio_scope",
+    "correlation_id",
+    "idempotency_key"
+  ],
+  "properties": {
+    "evidence_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "evidence_type": {
+      "$ref": "common.schema.json#/$defs/evidence_type"
+    },
+    "taint_status": {
+      "$ref": "common.schema.json#/$defs/taint_status"
+    },
+    "source_ref": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "source_hash": {
+      "$ref": "common.schema.json#/$defs/hash"
+    },
+    "captured_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "transformation_chain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation",
+          "at",
+          "actor_id"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "at": {
+            "$ref": "common.schema.json#/$defs/timestamp"
+          },
+          "actor_id": {
+            "$ref": "common.schema.json#/$defs/id"
+          }
+        }
+      }
+    },
+    "policy_version": {
+      "$ref": "common.schema.json#/$defs/policy_version"
+    },
+    "configuration_fingerprint": {
+      "$ref": "common.schema.json#/$defs/hash"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "actor": {
+      "$ref": "common.schema.json#/$defs/actor"
+    },
+    "portfolio_scope": {
+      "$ref": "common.schema.json#/$defs/portfolio_scope"
+    },
+    "correlation_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "idempotency_key": {
+      "$ref": "common.schema.json#/$defs/id"
+    }
+  }
+}

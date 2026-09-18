@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p2/opportunity.schema.json",
+  "title": "P2 Opportunity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "opportunity_id",
+    "statement",
+    "source_evidence_ids",
+    "policy_version",
+    "configuration_fingerprint",
+    "created_at",
+    "actor",
+    "portfolio_scope",
+    "correlation_id",
+    "idempotency_key"
+  ],
+  "properties": {
+    "opportunity_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 20000
+    },
+    "source_evidence_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/id"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "policy_version": {
+      "$ref": "common.schema.json#/$defs/policy_version"
+    },
+    "configuration_fingerprint": {
+      "$ref": "common.schema.json#/$defs/hash"
+    },
+    "created_at": {
+      "$ref": "common.schema.json#/$defs/timestamp"
+    },
+    "actor": {
+      "$ref": "common.schema.json#/$defs/actor"
+    },
+    "portfolio_scope": {
+      "$ref": "common.schema.json#/$defs/portfolio_scope"
+    },
+    "correlation_id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "idempotency_key": {
+      "$ref": "common.schema.json#/$defs/id"
+    }
+  }
+}
