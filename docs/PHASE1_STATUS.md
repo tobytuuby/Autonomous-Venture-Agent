@@ -1,9 +1,9 @@
 # Phase 1 Status
 
-**Status:** Provider evidence captured; Gate 2 pending independent human review
-**Implementation commit:** `8cd7ee3032d01e7de89c4c164cba835e484a8f1e`
+**Status:** Complete for P1 scope; Gate 2 CLOSED by explicit human review
+**Updated:** 2026-09-18
+**Implementation plan:** `phase1-implementation-plan-v1.1.md`
 **Governing Phase 0 plan:** `phase0-implementation-plan-v3.3.md`
-**Governing Phase 0 plan SHA-256:** `5fd23ab6a490f3233b3aac515d56926cab5c1cecb82db822c5de9436f8a5a142`
 **Execution class:** Shadow reasoning only
 
 ## Evidence collected
@@ -15,18 +15,28 @@
 - `ADV-040` durable CEO-shaped replay: pass.
 - Reachability denial: pass for payment/external execution boundaries.
 - P0.16: synthetic/red-team-only; `EXTERNAL_ACTIONS_EXECUTED=0`.
-- Provider execution: configured `https://api.openai.com/v1` / `gpt-5.6-sol`; 49/49 responses captured.
-- Provider trace: 49 PASS entries, SHA-256 `9ce92609a061a13b0683396f50a13bf25b7f70b7a944e04be7eee328fd6bf163`.
-- Technical and non-technical assessments are separated in [the certification report](reports/PHASE1-GATE2-CERTIFICATION.md).
-- Raw synthetic per-case evidence remains in [p1-shadow-report.json](../tests/certification/p1-shadow-report.json).
-- Exact-provider report: [stage0-real-provider-report-20260917.json](../tests/certification/stage0-real-provider-report-20260917.json).
+- Full provider rerun: `49/49` responses captured against `https://api.openai.com/v1` / `gpt-5.6-sol`.
+- Full provider report: `tests/certification/stage0-real-provider-report-20260918.json`.
+- Full provider trace: `tests/certification/stage0-provider-trace-20260918.jsonl`, SHA-256
+  `1cde2d165e478345e7296aa5b87fdd912da39c43ea32c96d4bd907c5a3cea163`.
+- Subset report/trace for `ADV-001`–`ADV-005` are retained as supplemental evidence.
+- Technical and non-technical assessments remain separated in the certification report.
 
 ## Gate 2 decision
 
-Gate 2 is **OPEN**, not closed. The authorized run produced a 49-entry provider trace whose structurally validated records support the classification “externally configured but independently unverifiable.” The trace is not sufficient to distinguish a genuine provider call from a fabricated but internally consistent artifact, and it is not a substitute for independent verification or human review. The remaining closure requirement is an independent human review decision explicitly classifying Gate 2.
+Gate 2 is **CLOSED**. On 2026-09-18, the project operator explicitly accepted
+the Gate 2 evidence after reviewing the full rerun artifacts and provider-side
+Completions log evidence.
 
-No production CEO was attached, and no real capital, payment, broker, venture, worker, or external action was executed.
+The evidence classification remains **externally configured but independently
+unverifiable**. The closure decision is a human governance decision; it does
+not claim a cryptographic or platform-signed attestation.
 
-## Traceability
+No production CEO was attached, and no real capital, payment, broker, venture,
+worker, or external action was executed.
 
-P1 source-document hashes are recorded in both P1 plans and the raw report. The P0.15 implementation remains the baseline; P1 adds durable shadow evidence and certification plumbing rather than reimplementing P0.15. BOOT/P0.16 evidence remains separate from the `/49` ADV denominator.
+## P1 exit and transition
+
+P1 is complete for its defined scope. P2 is now active for planning under the
+Opportunity and Thesis System charter. P2 must preserve the P0/P1 invariants
+and remains limited to shadow, synthetic, and evidence-producing work.
