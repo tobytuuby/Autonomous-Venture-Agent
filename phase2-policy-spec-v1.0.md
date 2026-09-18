@@ -2,7 +2,7 @@
 
 ## v1.0
 
-**Status:** Draft for review; P2 active for planning
+**Status:** Approved for implementation; P2 active
 **Phase:** P2 — Opportunity and thesis system
 **Predecessor:** P1 complete for defined scope; Gate 2 explicitly closed on 2026-09-18
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only
