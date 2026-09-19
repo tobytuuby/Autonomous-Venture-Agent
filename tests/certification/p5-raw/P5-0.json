@@ -1,0 +1,18 @@
+{
+  "phase": "P5.0",
+  "status": "EXECUTED_PENDING_ACCEPTANCE",
+  "evidence_class": "synthetic",
+  "runner": "venture-control",
+  "focused": {
+    "command": "python3 -m unittest -v tests/p5/test_p5_0_revenue.py",
+    "result": "9/9 passed"
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "result": "179/179 passed"
+  },
+  "warnings": [
+    "Six existing SQLite ResourceWarnings were emitted during finance tests."
+  ],
+  "live_authority_used": false
+}

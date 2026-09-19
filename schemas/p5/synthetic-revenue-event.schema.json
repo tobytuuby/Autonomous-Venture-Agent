@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/p5/synthetic-revenue-event.schema.json",
+  "title": "P5.0 Synthetic Revenue Event",
+  "type": "object",
+  "required": ["event_id", "idempotency_key", "venture_id", "source", "amount_minor", "currency", "provenance", "capability", "effect", "configuration_fingerprint", "created_at"],
+  "properties": {
+    "event_id": {"type": "string", "minLength": 1},
+    "idempotency_key": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "amount_minor": {"type": "integer", "minimum": 0},
+    "currency": {"type": "string", "pattern": "^[A-Z]{3}$"},
+    "provenance": {"type": "array", "minItems": 1},
+    "capability": {"const": "synthetic-revenue"},
+    "effect": {"const": "none"},
+    "live_mode": {"const": false},
+    "external_action_authorized": {"const": false},
+    "configuration_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false
+}

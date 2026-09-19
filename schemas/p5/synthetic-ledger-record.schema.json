@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/p5/synthetic-ledger-record.schema.json",
+  "title": "P5.0 Synthetic Ledger Record",
+  "type": "object",
+  "required": ["event_id", "event_hash", "ledger_hash", "status"],
+  "properties": {
+    "event_id": {"type": "string"},
+    "event_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "ledger_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"const": "RECORDED"}
+  },
+  "additionalProperties": true
+}

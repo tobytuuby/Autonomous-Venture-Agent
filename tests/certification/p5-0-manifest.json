@@ -1,0 +1,13 @@
+{
+  "phase": "P5.0",
+  "status": "READY_FOR_ACCEPTANCE",
+  "baseline": "2808e7f9d904f857bba62a21e8a3097265974006",
+  "focused_command": "python3 -m unittest -v tests/p5/test_p5_0_revenue.py",
+  "focused_result": "9/9 passed",
+  "regression_command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+  "regression_result": "179/179 passed",
+  "runner": "venture-control bridge",
+  "scope": "synthetic revenue event and ledger boundary",
+  "live_authority": "disabled",
+  "warnings": "six existing SQLite ResourceWarnings; exit code 0"
+}
