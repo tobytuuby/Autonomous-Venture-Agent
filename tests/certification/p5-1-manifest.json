@@ -1,0 +1,22 @@
+{
+  "phase": "P5.1",
+  "status": "IMPLEMENTED_PENDING_ACCEPTANCE",
+  "baseline": "c25e743a509ffb6cbf8b00f23570ce734bbf55c8",
+  "scope": "deterministic synthetic reconciliation",
+  "focused_command": "python3 -m unittest -v tests/p5/test_p5_1_reconciliation.py",
+  "focused_result": "10/10 passed",
+  "regression_command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+  "regression_result": "189/189 passed",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "live_authority": "disabled",
+  "evidence_files": [
+    "kernel/p5/reconciliation.py",
+    "schemas/p5/synthetic-reconciliation-result.schema.json",
+    "tests/p5/test_p5_1_reconciliation.py",
+    "tests/certification/p5-raw/P5-1.json"
+  ],
+  "limitations": [
+    "Existing unrelated SQLite ResourceWarnings remain in aggregate finance tests; no P5.1 test warnings were emitted.",
+    "No real financial or external action is used."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "phase": "P5.1",
+  "status": "RUNTIME_VERIFIED_PENDING_ACCEPTANCE",
+  "evidence_class": "synthetic",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "focused": {
+    "command": "python3 -m unittest -v tests/p5/test_p5_1_reconciliation.py",
+    "result": "10/10 passed",
+    "cases": [
+      "valid reconciliation",
+      "order-independent convergence",
+      "duplicate source identity denial",
+      "changed-content collision denial",
+      "missing source denial",
+      "cross-venture denial",
+      "cross-configuration denial",
+      "provenance and taint preservation",
+      "authority-bearing result denial",
+      "durable receipt replay after reopen"
+    ]
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "result": "189/189 passed",
+    "warnings": "Six pre-existing SQLite ResourceWarnings in aggregate finance tests; no failures."
+  },
+  "live_authority": "disabled",
+  "limitations": [
+    "This evidence supports implementation review, not formal P5.1 acceptance.",
+    "No real financial, network, broker, payment, credential, deployment, customer, capital, venture, or worker action was used."
+  ]
+}
