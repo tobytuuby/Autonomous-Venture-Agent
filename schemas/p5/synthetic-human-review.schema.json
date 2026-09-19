@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/p5/synthetic-human-review.schema.json",
+  "title": "P5.3 Synthetic Human Review",
+  "type": "object",
+  "required": [
+    "decision_id",
+    "material_question",
+    "human_approver",
+    "approver_type",
+    "decision",
+    "evidence_hash",
+    "configuration_fingerprint",
+    "status",
+    "capability_granted",
+    "effect"
+  ],
+  "properties": {
+    "decision_id": {"type": "string", "minLength": 1},
+    "material_question": {"type": "string", "minLength": 1},
+    "human_approver": {"type": "string", "minLength": 1},
+    "approver_type": {"const": "human"},
+    "decision": {"enum": ["APPROVE", "REJECT", "DEFER"]},
+    "evidence_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "configuration_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"const": "REVIEWED"},
+    "capability": {"const": "synthetic-human-review"},
+    "capability_granted": {"const": false},
+    "effect": {"const": "none"},
+    "review_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "recorded_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": true
+}

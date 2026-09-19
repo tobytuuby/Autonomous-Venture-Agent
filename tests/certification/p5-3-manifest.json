@@ -1,0 +1,23 @@
+{
+  "phase": "P5.3",
+  "status": "IMPLEMENTED_PENDING_ACCEPTANCE",
+  "baseline": "b4ec643",
+  "scope": "synthetic advisory human-review records",
+  "focused_command": "python3 -m unittest -v tests/p5/test_p5_3_review.py",
+  "focused_result": "9/9 passed",
+  "regression_command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+  "regression_result": "211/211 passed",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "live_authority": "disabled",
+  "evidence_files": [
+    "kernel/p5/review.py",
+    "schemas/p5/synthetic-human-review.schema.json",
+    "tests/p5/test_p5_3_review.py",
+    "tests/certification/p5-raw/P5-3.json"
+  ],
+  "limitations": [
+    "Six pre-existing SQLite ResourceWarnings remain in unrelated aggregate finance tests.",
+    "No P5.3 test warnings were emitted.",
+    "Reviews are advisory records only and grant no capability."
+  ]
+}

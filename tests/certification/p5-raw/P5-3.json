@@ -1,0 +1,31 @@
+{
+  "phase": "P5.3",
+  "status": "RUNTIME_VERIFIED_PENDING_ACCEPTANCE",
+  "evidence_class": "synthetic",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "focused": {
+    "command": "python3 -m unittest -v tests/p5/test_p5_3_review.py",
+    "result": "9/9 passed",
+    "cases": [
+      "valid human review recording",
+      "duplicate review convergence",
+      "changed decision collision denial",
+      "non-human approver denial",
+      "invalid evidence hash denial",
+      "cross-configuration denial",
+      "live-authority denial",
+      "capability-grant denial",
+      "durable replay after reopen"
+    ]
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "result": "211/211 passed",
+    "warnings": "Six pre-existing SQLite ResourceWarnings in unrelated aggregate finance tests; no P5.3 warnings."
+  },
+  "live_authority": "disabled",
+  "limitations": [
+    "This evidence supports implementation review, not formal P5.3 acceptance.",
+    "Human-review records are advisory and capability-free."
+  ]
+}
