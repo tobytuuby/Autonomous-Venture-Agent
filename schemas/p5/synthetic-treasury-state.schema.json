@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/schemas/p5/synthetic-treasury-state.schema.json",
+  "title": "P5.2 Synthetic Treasury State",
+  "type": "object",
+  "required": [
+    "configuration_fingerprint",
+    "venture_id",
+    "source_reconciliation_hashes",
+    "total_reconciled_amount_minor",
+    "reserve_floor_minor",
+    "deployable_ceiling_minor",
+    "reserve_balance_minor",
+    "deployable_balance_minor",
+    "simulation_hash",
+    "status",
+    "capability",
+    "effect",
+    "spendable",
+    "external_action_authorized"
+  ],
+  "properties": {
+    "configuration_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "venture_id": {"type": "string", "minLength": 1},
+    "source_reconciliation_hashes": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "total_reconciled_amount_minor": {"type": "integer", "minimum": 0},
+    "provenance": {"type": "array", "minItems": 1},
+    "reserve_floor_minor": {"type": "integer", "minimum": 0},
+    "deployable_ceiling_minor": {"type": "integer", "minimum": 0},
+    "reserve_balance_minor": {"type": "integer", "minimum": 0},
+    "deployable_balance_minor": {"type": "integer", "minimum": 0},
+    "simulation_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "status": {"const": "SIMULATED"},
+    "capability": {"const": "synthetic-treasury"},
+    "effect": {"const": "none"},
+    "spendable": {"const": false},
+    "external_action_authorized": {"const": false},
+    "created_at": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,23 @@
+{
+  "phase": "P5.2",
+  "status": "IMPLEMENTED_PENDING_ACCEPTANCE",
+  "baseline": "17f4ca6d33115cdf4251974d8e9eb3e4f5acd83a",
+  "scope": "deterministic non-spendable synthetic treasury simulation",
+  "focused_command": "python3 -m unittest -v tests/p5/test_p5_2_treasury.py",
+  "focused_result": "12/12 passed",
+  "regression_command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+  "regression_result": "202/202 passed",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "live_authority": "disabled",
+  "evidence_files": [
+    "kernel/p5/treasury.py",
+    "schemas/p5/synthetic-treasury-state.schema.json",
+    "tests/p5/test_p5_2_treasury.py",
+    "tests/certification/p5-raw/P5-2.json"
+  ],
+  "limitations": [
+    "Six pre-existing SQLite ResourceWarnings remain in unrelated aggregate finance tests.",
+    "No P5.2 test warnings were emitted.",
+    "No real financial, payment, broker, credential, network, deployment, customer, capital, venture, or worker action is used."
+  ]
+}

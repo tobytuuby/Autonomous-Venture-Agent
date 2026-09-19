@@ -58,6 +58,7 @@ class SyntheticReconciler:
         provenance = [item for event in ordered for item in event["provenance"]]
         material = {
             "configuration_fingerprint": self.configuration_fingerprint,
+            "venture_id": ordered[0]["venture_id"],
             "source_event_ids": source_ids,
             "source_event_hashes": source_hashes,
             "total_amount_minor": total,

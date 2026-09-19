@@ -1,0 +1,34 @@
+{
+  "phase": "P5.2",
+  "status": "RUNTIME_VERIFIED_PENDING_ACCEPTANCE",
+  "evidence_class": "synthetic",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "focused": {
+    "command": "python3 -m unittest -v tests/p5/test_p5_2_treasury.py",
+    "result": "12/12 passed",
+    "cases": [
+      "valid synthetic calculation",
+      "deterministic reordering",
+      "duplicate convergence",
+      "changed receipt collision denial",
+      "reserve-floor enforcement",
+      "deployable-ceiling enforcement",
+      "monotonic ratchet enforcement",
+      "cross-venture denial",
+      "cross-configuration denial",
+      "provenance and taint preservation",
+      "durable crash recovery",
+      "live-authority and non-spendable-result denial"
+    ]
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "result": "202/202 passed",
+    "warnings": "Six pre-existing SQLite ResourceWarnings in unrelated aggregate finance tests; no P5.2 warnings."
+  },
+  "live_authority": "disabled",
+  "limitations": [
+    "This evidence supports implementation review, not formal P5.2 acceptance.",
+    "Treasury values are informational and non-spendable."
+  ]
+}
