@@ -1,15 +1,15 @@
 # Autonomous Venture Agent — Project Status
 
-Updated: 2026-09-18
+Updated: 2026-09-19
 
-P2 approval decision recorded after review of the v1.0 policy specification and
-v1.1 implementation plan.
+P2.6 acceptance recorded after review of the complete Phase 2 certification package. P3.0 baseline-and-contracts planning is authorized under synthetic-only conditions.
 
 ## Current phase
 
 P0 is complete for its defined policy-kernel scope. P1 is complete for its
-defined shadow-hardening and Gate 2 scope. P2 is active for implementation and
-owns the Opportunity and Thesis System.
+defined shadow-hardening and Gate 2 scope. P2 is complete for its defined
+shadow and synthetic scope. P3 is authorized for planning and P3.0 baseline
+contracts under synthetic-only conditions.
 
 ## Canonical project plan
 
@@ -20,8 +20,8 @@ owns the Opportunity and Thesis System.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
 - `docs/PHASE1_STATUS.md` — P1 evidence and Gate 2 decision record.
 - `phase2-policy-spec-v1.0.md` — approved P2 governing specification.
-- `phase2-implementation-plan-v2.2.md` — active P2.6 certification implementation and acceptance plan.
-- `docs/PHASE2_STATUS.md` — P2 approval, P2.0/P2.1 acceptance, and implementation status.
+- `phase2-implementation-plan-v2.3.md` — completed P2.6 certification plan and P2 exit record.
+- `docs/PHASE2_STATUS.md` — P2 acceptance, certification, and P3 transition status.
 
 ## Phase status
 
@@ -29,8 +29,9 @@ owns the Opportunity and Thesis System.
 |---|---|---|
 | P0 | Complete for P0 scope | Kernel, certification, shadow foundation, and synthetic P0.16 path |
 | P1 | Complete for P1 scope | CEO Stage 0 shadow hardening; Gate 2 closed |
-| P2 | Active / Implementation | Opportunity and thesis system; no venture launch or capital action |
-| P3–P8 | Future / Not started | Predecessor phase gates remain required |
+| P2 | Complete for P2 scope | Opportunity and thesis system; no venture launch or capital action |
+| P3 | Authorized / Planning | Venture formation and sandboxing; synthetic-only |
+| P4–P8 | Future / Not started | Predecessor phase gates remain required |
 
 ## Gate 2 decision
 

@@ -4,7 +4,7 @@
 **Status:** Adopted as a condition of P2 implementation approval  
 **Adoption date:** 2026-09-18  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Active implementation plan:** `phase2-implementation-plan-v2.2.md`
+**Final implementation plan:** `phase2-implementation-plan-v2.3.md`
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only
 
 ## 1. Purpose
@@ -27,7 +27,7 @@ next increment begins.
 | Artifact | Intended path and format | Owner increment | Acceptance criteria |
 |---|---|---|---|
 | P2 policy specification | `phase2-policy-spec-v1.0.md` | P2.0 baseline | Approved requirements, interfaces, authority invariants, entry/exit gates, and forbidden shortcuts are preserved. |
-| P2 implementation plan | `phase2-implementation-plan-v1.1.md` | P2.0 baseline | Ordered increments, evidence obligations, limitations, and P2.0 next action are versioned and approved. |
+| P2 implementation plan | `phase2-implementation-plan-v2.3.md` | P2.0–P2.6 | Ordered increments, evidence obligations, limitations, certification evidence, and the P2 exit decision are versioned and approved. |
 | P2 status record | `docs/PHASE2_STATUS.md` | P2.0 and each increment | Records approval, current increment, source hashes, evidence class, decisions, blockers, and human review. |
 | Versioned schemas | `schemas/p2/*.json` or equivalent machine-readable format | P2.0 | Opportunity, EvidenceEnvelope, ThesisFingerprint, ThesisScore, ReviewDecision, LifecycleTransition, and ReplayRequest contracts validate required identity, provenance, policy/configuration, actor, scope, correlation, and idempotency fields. No secrets or direct capabilities are permitted. |
 | P2 migrations | `migrations/p2/*.sql` | P2.0/P2.1 as needed | Durable structures are additive/versioned, idempotent, scope-aware, and preserve append-only evidence and transition history. If no migration is needed, P2.0 records that determination and its rationale. |

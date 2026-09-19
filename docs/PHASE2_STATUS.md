@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Certification; P2.0–P2.5 accepted; P2.6 implemented pending acceptance
+**Status:** Complete for P2 scope; P3.0 authorized under conditions
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v2.2.md`
+**Implementation plan:** `phase2-implementation-plan-v2.3.md`
 
 ## Approval decision
 
@@ -57,16 +57,19 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.6 — Certification — implemented; awaiting delegated analyst/auditor
-acceptance.
+P2.6 — Certification — accepted.
 
-The P2.6 runner executed the P2.0–P2.5 suites for a separate 41-test P2
-denominator and also executed the 119-test full regression suite. It produced
-the evidence manifest, raw evidence archive, technical certification report,
-non-technical assessment, source hashes, taint-preservation assessment, replay
-adversarial report, authority-boundary assessment, and conditional P3
-recommendation. P2.6 remains shadow-only and synthetic-only pending delegated
-analyst/auditor acceptance.
+The delegated analyst/auditor accepted P2.6 on 2026-09-18. The acceptance
+reviewed the 41-test P2 denominator, 119-test full regression, raw evidence
+archive, certification runner, manifest, technical and non-technical reports,
+taint/replay evidence, authority assessment, limitations, and conditional P3
+recommendation. The acceptance record is
+`docs/reviews/P2-006-acceptance.md`.
+
+P2 is complete for its defined shadow and synthetic scope. P3.0 baseline and
+contracts planning is authorized under synthetic-only and sandbox-only
+conditions. P3 exit requires its own human review; no external action is
+authorized.
 
 
 ## Required limitations

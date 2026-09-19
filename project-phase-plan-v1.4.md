@@ -170,8 +170,8 @@ kernel-owned services only.
 |---|---|---|---|---|---|---|
 | P0 | Policy kernel and certification | Existing v11 | Existing v3.2 | Complete for P0 scope | Repository baseline | Static/unit and synthetic integration only |
 | P1 | CEO Stage 0 shadow hardening and Gate 2 closure | `phase1-policy-spec-v1.0.md` | `phase1-implementation-plan-v1.1.md` | Complete for P1 scope | P0 Gate 1, P0.15 shadow foundation, and explicit Gate 2 review | Shadow reasoning only |
-| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v2.2.md` | Active / Implementation | P1 exit, P2 approval, P2.0/P2.1 acceptance, and P2.2 review recorded in phase status records | None |
-| P3 | Venture formation and sandboxing | `phase3-policy-spec-v1.0.md` | `phase3-implementation-plan-v1.0.md` | Future / Not started | P2 exit | Synthetic only |
+| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v2.3.md` | Complete for P2 scope | P2.6 accepted; P3 entry conditions recorded | None |
+| P3 | Venture formation and sandboxing | `phase3-policy-spec-v1.0.md` | `phase3-implementation-plan-v1.0.md` | Authorized / Planning | P2 exit accepted; P3.0 entry conditions | Synthetic only |
 | P4 | Venture execution and operations | `phase4-policy-spec-v1.0.md` | `phase4-implementation-plan-v1.0.md` | Future / Not started | P3 exit | Synthetic only |
 | P5 | Revenue, treasury, and financial operations | `phase5-policy-spec-v1.0.md` | `phase5-implementation-plan-v1.0.md` | Future / Not started | P4 exit | Synthetic, then gated test integration |
 | P6 | Portfolio operations and shared services | `phase6-policy-spec-v1.0.md` | `phase6-implementation-plan-v1.0.md` | Future / Not started | P5 exit | Synthetic only until P7 |
@@ -452,13 +452,13 @@ decision about whether the phase is safe, complete, and authorized to advance.
 
 P1 exit and Gate 2 closure are recorded in the v1.1 transition record. P2 approval
 is recorded in the v1.2 transition record. P2.5 acceptance is recorded in the
-P2-005 acceptance record. P2.6 certification evidence is now generated, while
-P2 exit and P3 entry remain subject to explicit human review.
+P2-005 acceptance record. P2.6 acceptance is recorded in the P2-006 acceptance
+record. P2 is complete for its defined scope and P3.0 planning is authorized.
 
-1. Conduct delegated analyst/auditor acceptance of the P2.6 certification
-   package, including the separate P2 denominator and raw evidence.
-2. Do not infer P2 exit or P3 entry from test counts; record the human decision
-   and all limitations explicitly.
+1. Begin P3.0 baseline-and-contracts requirements planning under synthetic-only
+   and sandbox-only conditions.
+2. Preserve P0/P1/P2 invariants, separate the P3 denominator, and require a
+   human review record before the P3.0 exit gate.
 3. Preserve the `/49` P1 evidence and do not relabel it as P2 evidence.
 4. Keep CEO execution authority, Venture Manager/worker spawning, payments,
    capital actions, and all P7 real integrations blocked.
