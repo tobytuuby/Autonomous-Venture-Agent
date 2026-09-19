@@ -1,5 +1,5 @@
 {
-  "commit_chain": "4f278f9 (HEAD -> main, origin/main, origin/HEAD) Accept P2.5 and authorize P2.6 review\nfaa216f Implement P2.5 replay and adversarial checks\n056763a Implement P2.4 scoring and lifecycle\nd750eef Review P2.4 scoring and lifecycle requirements\n1a25b25 Accept P2.3 and authorize P2.4\n6873698 Implement P2.3 thesis identity\n559c06e Accept P2.2 and authorize P2.3\n2ff8651 Implement P2.2 evidence normalization\n4985c11 Accept P2.1 and activate P2.2\n241141e Implement P2.1 opportunity intake\nc63cfb6 Accept P2.0 and authorize P2.1\na9e160c Implement P2.0 baseline contracts",
-  "head": "4f278f953d0b22c55b95a3875baacf7299aef208",
-  "origin_main": "4f278f953d0b22c55b95a3875baacf7299aef208"
+  "commit_chain": "f494acd (HEAD -> main, origin/main, origin/HEAD) Implement P2.6 certification package\n4f278f9 Accept P2.5 and authorize P2.6 review\nfaa216f Implement P2.5 replay and adversarial checks\n056763a Implement P2.4 scoring and lifecycle\nd750eef Review P2.4 scoring and lifecycle requirements\n1a25b25 Accept P2.3 and authorize P2.4\n6873698 Implement P2.3 thesis identity\n559c06e Accept P2.2 and authorize P2.3\n2ff8651 Implement P2.2 evidence normalization\n4985c11 Accept P2.1 and activate P2.2\n241141e Implement P2.1 opportunity intake\nc63cfb6 Accept P2.0 and authorize P2.1",
+  "head": "f494acdd0d3b2cd131c1b08baa5c4c8634cf4a76",
+  "origin_main": "f494acdd0d3b2cd131c1b08baa5c4c8634cf4a76"
 }

@@ -45,12 +45,12 @@ The certification manifest records source hashes for the governing policy,
 implementation plan, artifact manifest, status records, and project status.
 The P2.6 generation run observed:
 
-- HEAD: 4f278f953d0b22c55b95a3875baacf7299aef208
-- origin/main: 4f278f953d0b22c55b95a3875baacf7299aef208
+- HEAD: f494acdd0d3b2cd131c1b08baa5c4c8634cf4a76
+- origin/main: f494acdd0d3b2cd131c1b08baa5c4c8634cf4a76
 
-The final certification commit will update the generated evidence and report
-itself; the final repository state is verified separately after commit and
-push.
+The generated evidence was rerun against the pushed certification commit. The
+final repository state is verified separately after the evidence refresh
+commit.
 
 ## 3. Negative-test results
 
