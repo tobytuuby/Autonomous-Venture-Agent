@@ -1,0 +1,40 @@
+{
+  "phase": "P6.1",
+  "increment": "CEO-to-manager coordination",
+  "status": "planning-only",
+  "implementation_authorized": false,
+  "evidence_status": "pending",
+  "baseline_commit": "9a493fa4054a39f1c669598b83435574fca0ece1",
+  "p6_0_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "planned_focused_denominator": 18,
+  "planned_tests": [
+    "valid typed packet",
+    "required identity and scope fields",
+    "locked fingerprint continuity",
+    "fingerprint mismatch denial",
+    "missing provenance denial",
+    "exact duplicate convergence",
+    "changed-content collision denial",
+    "deterministic replay hash convergence",
+    "expiry denial",
+    "stale-time denial",
+    "cross-portfolio denial",
+    "cross-venture denial",
+    "self-escalation denial",
+    "capability-envelope widening denial",
+    "all nine live-authority fields denied",
+    "effectful/non-synthetic coordination denial",
+    "SQLite reopen durability",
+    "schema and authority rejection"
+  ],
+  "required_future_evidence": [
+    "tests/certification/p6-1-raw/P6-1.json",
+    "tests/certification/p6-1-raw/full-regression.json",
+    "tests/certification/p6-1-raw/git-state.json",
+    "tests/certification/p6-1-config-manifest.json",
+    "docs/reports/PHASE6-P6.1-CERTIFICATION.md",
+    "docs/reports/PHASE6-P6.1-NON-TECHNICAL-ASSESSMENT.md"
+  ],
+  "results": null,
+  "human_acceptance_required": true
+}
