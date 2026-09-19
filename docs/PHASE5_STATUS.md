@@ -1,20 +1,15 @@
 # Phase 5 Status
 
 **Updated:** 2026-09-19
-**Current increment:** P5.0 — Synthetic revenue and ledger boundary
-**Status:** Implementation complete; human acceptance pending
-**Predecessor:** P4.0 accepted for synthetic recording-only scope
+**Current increment:** P5.1 planning — deterministic reconciliation
+**Status:** Planning authorized; implementation not authorized
+**P5.0:** Accepted at c25e743a509ffb6cbf8b00f23570ce734bbf55c8
 **Execution class:** Synthetic integration only
 
-P5 entry was authorized by Kalaap Das on 2026-09-19 for P5.0 only. P5.0
-implements typed synthetic revenue events, durable append-only ledger records,
-provenance and configuration fingerprints, idempotent replay, collision
-denial, and fail-closed denial of all nine live-authority fields.
+P5.0 synthetic revenue and ledger operations were accepted after 9/9 focused
+tests and 179/179 full regression tests passed.
 
-P5.0 tests pass 9/9 and the full discovered unittest regression passes 179/179.
-Six existing SQLite ResourceWarnings remain reported by the aggregate run; no
-test failed.
-
-P5.1 through P5.4 remain blocked pending separate authorization. No live
-financial authority, test-provider authority, credentials, customer contact,
-broker execution, payment, capital allocation, or external action is enabled.
+P5.1 planning is authorized. The proposed increment will derive deterministic
+synthetic reconciliation receipts from P5.0 events. P5.1 implementation
+requires a separate human decision. P5.2, P5.3, P5.4, test-provider
+integration, and all live authority remain blocked.
