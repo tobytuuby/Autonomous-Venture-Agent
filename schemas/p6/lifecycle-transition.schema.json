@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p6/lifecycle-transition.schema.json",
+  "title": "P6 Synthetic Portfolio Lifecycle Transition",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["portfolio_id", "from_state", "to_state", "expected_version",
+    "resulting_version", "configuration_fingerprint", "synthetic_only",
+    "effect", "correlation_id", "actor", "created_at"],
+  "properties": {
+    "portfolio_id": {"type": "string", "minLength": 1},
+    "from_state": {"enum": ["active-synthetic", "quarantined"]},
+    "to_state": {"enum": ["active-synthetic", "quarantined", "wound-down"]},
+    "expected_version": {"type": "integer", "minimum": 1},
+    "resulting_version": {"type": "integer", "minimum": 2},
+    "configuration_fingerprint": {"pattern": "^[a-f0-9]{64}$"},
+    "synthetic_only": {"const": true},
+    "effect": {"const": "none"},
+    "correlation_id": {"type": "string", "minLength": 1},
+    "actor": {"type": "object", "required": ["actor_id", "role"]},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

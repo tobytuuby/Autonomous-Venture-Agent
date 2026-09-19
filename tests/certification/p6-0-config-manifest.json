@@ -1,0 +1,11 @@
+{
+  "phase": "P6.0",
+  "policy_version": "p6.0",
+  "execution_class": "synthetic-only",
+  "registry_schema_version": "p6.0.0",
+  "authority_profile": "all-live-fields-false",
+  "portfolio_scope_mode": "explicit",
+  "aggregate_view_mode": "allowlisted-read-only",
+  "lifecycle_states": ["active-synthetic", "quarantined", "wound-down"],
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11"
+}
