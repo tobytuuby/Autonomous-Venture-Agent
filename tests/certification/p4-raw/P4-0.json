@@ -1,0 +1,48 @@
+{
+  "increment": "P4.0",
+  "evidence_type": "synthetic-recording-boundary",
+  "status": "READY_FOR_HUMAN_REVIEW",
+  "test_results": {
+    "p4_0_new_tests": "9/9",
+    "full_regression": "170/170"
+  },
+  "positive_path": {
+    "mode": "shadow",
+    "effect": "none",
+    "capability": "synthetic-recording",
+    "provenance_preserved": true,
+    "configuration_fingerprint_enforced": true,
+    "durable_idempotent_record": true
+  },
+  "negative_paths": [
+    "idempotency collision denied",
+    "broker authority denied",
+    "live mode denied",
+    "effectful mode denied",
+    "missing provenance denied",
+    "configuration mismatch denied",
+    "unknown capability denied"
+  ],
+  "authority": {
+    "external_action_authorized": false,
+    "capital_authorized": false,
+    "venture_creation_authorized": false,
+    "worker_spawn_authorized": false,
+    "broker_execution_authorized": false,
+    "payment_authorized": false,
+    "credential_access_authorized": false,
+    "deployment_authorized": false,
+    "customer_contact_authorized": false
+  },
+  "reconstruction": [
+    "P3 candidate or other synthetic source",
+    "P4.0 validated rehearsal request",
+    "canonical record hash and idempotency key",
+    "durable synthetic record"
+  ],
+  "limitations": [
+    "No network path exists in the P4.0 adapter",
+    "No live or irreversible operation was attempted",
+    "Six existing SQLite ResourceWarnings occur in aggregate regression"
+  ]
+}

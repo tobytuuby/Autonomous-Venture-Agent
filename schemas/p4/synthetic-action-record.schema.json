@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p4/synthetic-action-record.schema.json",
+  "title": "P4 Synthetic Action Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "idempotency_key",
+    "capability",
+    "mode",
+    "effect",
+    "payload",
+    "provenance",
+    "authority",
+    "synthetic_only",
+    "external_action_authorized",
+    "configuration_fingerprint",
+    "created_at"
+  ],
+  "properties": {
+    "request_id": {"type": "string", "minLength": 1},
+    "idempotency_key": {"type": "string", "minLength": 1},
+    "capability": {"const": "synthetic-recording"},
+    "mode": {"const": "shadow"},
+    "effect": {"const": "none"},
+    "payload": {"type": "object"},
+    "provenance": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "source_hash", "taint_status"],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "source_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "taint_status": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["human_review_required", "external_action_authorized"],
+      "properties": {
+        "human_review_required": {"const": true},
+        "external_action_authorized": {"const": false}
+      }
+    },
+    "synthetic_only": {"const": true},
+    "external_action_authorized": {"const": false},
+    "capital_authorized": {"const": false},
+    "venture_creation_authorized": {"const": false},
+    "worker_spawn_authorized": {"const": false},
+    "broker_execution_authorized": {"const": false},
+    "payment_authorized": {"const": false},
+    "credential_access_authorized": {"const": false},
+    "deployment_authorized": {"const": false},
+    "customer_contact_authorized": {"const": false},
+    "live_mode": {"const": false},
+    "configuration_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

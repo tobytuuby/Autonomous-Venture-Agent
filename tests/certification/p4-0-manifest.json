@@ -1,0 +1,27 @@
+{
+  "increment": "P4.0",
+  "name": "synthetic-recording-boundary",
+  "status": "READY_FOR_HUMAN_REVIEW",
+  "execution_class": "synthetic-shadow-recording-only",
+  "new_tests": "9/9",
+  "full_regression": "170/170",
+  "schema": "schemas/p4/synthetic-action-record.schema.json",
+  "implementation": "kernel/p4/recording.py",
+  "tests": "tests/p4/test_p4_0_recording.py",
+  "adr": "docs/adr/ADR-P4-001-synthetic-recording-boundary.md",
+  "external_action_authorized": false,
+  "capital_authorized": false,
+  "venture_creation_authorized": false,
+  "worker_spawn_authorized": false,
+  "broker_execution_authorized": false,
+  "payment_authorized": false,
+  "credential_access_authorized": false,
+  "deployment_authorized": false,
+  "customer_contact_authorized": false,
+  "evidence": "tests/certification/p4-raw/P4-0.json",
+  "limitations": [
+    "No external provider or broker was contacted",
+    "No live authority was enabled",
+    "Existing SQLite ResourceWarnings remain in aggregate regression"
+  ]
+}
