@@ -1,0 +1,17 @@
+{
+  "scenario_count": 12,
+  "scenarios": [
+    "normal_multi_record_intake",
+    "duplicate_delivery_convergence",
+    "idempotency_collision",
+    "duplicate_identity",
+    "stale_opportunity",
+    "stale_evidence",
+    "cross_scope",
+    "missing_opportunity_cross_reference",
+    "invalid_p2_contract",
+    "source_hash_mutation",
+    "taint_and_lineage_reconstruction",
+    "p2_read_only_boundary"
+  ]
+}

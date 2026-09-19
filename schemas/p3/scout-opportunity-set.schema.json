@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/scout-opportunity-set.schema.json",
+  "title":"P3.1 Scout OpportunitySet",
+  "type":"object","additionalProperties":false,
+  "required":["set_id","opportunities","policy_version","configuration_fingerprint","created_at","actor","portfolio_scope","correlation_id","idempotency_key"],
+  "properties":{
+    "set_id":{"type":"string","minLength":1},"opportunities":{"type":"array","minItems":1,"items":{"type":"object"}},
+    "policy_version":{"type":"string","pattern":"^p2\\.\\d+$"},
+    "configuration_fingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "created_at":{"type":"string","format":"date-time"},
+    "actor":{"type":"object","additionalProperties":false,"required":["actor_id","role"],"properties":{"actor_id":{"type":"string","minLength":1},"role":{"type":"string","enum":["p2-service","human-operator","system"]}}},
+    "portfolio_scope":{"type":"object","additionalProperties":false,"required":["portfolio_id"],"properties":{"portfolio_id":{"type":"string","minLength":1}}},
+    "correlation_id":{"type":"string","minLength":1},"idempotency_key":{"type":"string","minLength":1}
+  }
+}

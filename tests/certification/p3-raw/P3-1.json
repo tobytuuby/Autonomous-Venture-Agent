@@ -1,0 +1,61 @@
+{
+  "increment": "P3.1",
+  "status": "technical-evidence",
+  "source_commit": "046777386c58e206c47d6b0d18467280400b457c",
+  "execution_class": "synthetic integration and shadow reasoning only",
+  "test_command": "python3 -m unittest tests.p3.test_p3_1_intake",
+  "denominator": {"p3_1": 13, "passed": 13, "failed": 0},
+  "scenario_manifest": {
+    "count": 12,
+    "names": [
+      "normal_multi_record_intake",
+      "duplicate_delivery_convergence",
+      "idempotency_collision",
+      "duplicate_identity",
+      "stale_opportunity",
+      "stale_evidence",
+      "cross_scope",
+      "missing_opportunity_cross_reference",
+      "invalid_p2_contract",
+      "source_hash_mutation",
+      "taint_and_lineage_reconstruction",
+      "p2_read_only_boundary"
+    ]
+  },
+  "raw_envelope_archive": {
+    "source": "tests/p3/test_p3_1_intake.py fixture builders",
+    "record_types": ["opportunity", "thesis", "evidence"],
+    "representative_record_ids": [
+      "opp-scout-001",
+      "thesis-scout-001",
+      "evidence-scout-001"
+    ],
+    "raw_records_retained": 3,
+    "source_hashes_retained": true,
+    "p2_state_mutated": false
+  },
+  "normalization_evidence": {
+    "intake_identity": "sha256(opportunity_set_id + thesis_set_id + portfolio_id)",
+    "normalized_record_id": "sha256(canonical intake payload) prefix",
+    "transformation": "p3.1.scout_normalize",
+    "transformation_rows": 3,
+    "taint_status": "tainted",
+    "external_action_authorized": false,
+    "chain_reconstructible": true,
+    "event_chain_verified": true
+  },
+  "negative_results": {
+    "duplicate_delivery": "converges to one durable record",
+    "idempotency_collision": "rejected",
+    "stale_data": "rejected",
+    "authority_scope": "rejected",
+    "cross_reference": "rejected",
+    "invalid_contract": "rejected",
+    "source_mutation": "rejected"
+  },
+  "limitations": [
+    "This archive records synthetic SQLite-backed intake evidence.",
+    "It does not prove Scout scoring, venture creation, sandbox provisioning, capital, payment, broker, credential, customer, deployment, or external-action authority.",
+    "P2 source state is consumed read-only; durable P2 integration is not claimed."
+  ]
+}

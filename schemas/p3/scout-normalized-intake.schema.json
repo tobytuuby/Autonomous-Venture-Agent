@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/scout-normalized-intake.schema.json",
+  "title":"P3.1 Normalized Scout Intake",
+  "type":"object","additionalProperties":false,
+  "required":["intake_id","opportunity_ids","thesis_ids","raw_record_ids","normalized_opportunities","normalized_theses","taint_status","transformation_chain","synthetic_only","external_action_authorized","policy_version","configuration_fingerprint","created_at","actor","portfolio_scope","correlation_id","idempotency_key"],
+  "properties":{
+    "intake_id":{"type":"string","minLength":1},"opportunity_ids":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "thesis_ids":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "raw_record_ids":{"type":"array","minItems":1,"items":{"type":"string","minLength":1}},
+    "normalized_opportunities":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["opportunity_id","statement","source_evidence_ids"],"properties":{"opportunity_id":{"type":"string","minLength":1},"statement":{"type":"string","minLength":1},"source_evidence_ids":{"type":"array","items":{"type":"string","minLength":1}}}}},
+    "normalized_theses":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["thesis_id","opportunity_id","dimensions"],"properties":{"thesis_id":{"type":"string","minLength":1},"opportunity_id":{"type":"string","minLength":1},"dimensions":{"type":"object"}}}},
+    "taint_status":{"type":"string","enum":["tainted","trusted","declassified"]},
+    "transformation_chain":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["operation","at","actor_id","source_record_ids"],"properties":{"operation":{"type":"string","minLength":1},"at":{"type":"string","format":"date-time"},"actor_id":{"type":"string","minLength":1},"source_record_ids":{"type":"array","items":{"type":"string","minLength":1}}}}},
+    "synthetic_only":{"type":"boolean","const":true},"external_action_authorized":{"type":"boolean","const":false},
+    "policy_version":{"type":"string","const":"p3.1"},"configuration_fingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},
+    "created_at":{"type":"string","format":"date-time"},"actor":{"type":"object","additionalProperties":false,"required":["actor_id","role"],"properties":{"actor_id":{"type":"string","minLength":1},"role":{"type":"string","const":"p3-service"}}},
+    "portfolio_scope":{"type":"object","additionalProperties":false,"required":["portfolio_id"],"properties":{"portfolio_id":{"type":"string","minLength":1}}},
+    "correlation_id":{"type":"string","minLength":1},"idempotency_key":{"type":"string","minLength":1}
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "increment": "P3.1",
+  "status": "READY_FOR_REVIEW",
+  "source_commit": "046777386c58e206c47d6b0d18467280400b457c",
+  "test_command": "python3 -m unittest tests.p3.test_p3_1_intake",
+  "denominator": "13",
+  "passed": 13,
+  "failed": 0,
+  "new_tests": 13,
+  "full_regression": {"passed": 138, "failed": 0, "denominator": 138},
+  "fixture_scenarios": 12,
+  "raw_evidence": "tests/certification/p3-raw/P3-1.json",
+  "artifacts": [
+    "kernel/scout/intake.py",
+    "schemas/p3/scout-opportunity-set.schema.json",
+    "schemas/p3/scout-thesis-set.schema.json",
+    "schemas/p3/scout-normalized-intake.schema.json",
+    "tests/p3/test_p3_1_intake.py",
+    "tests/p3/fixtures/p3-1-intake-fixtures.json",
+    "docs/adr/ADR-P3-002-intake-normalization.md"
+  ],
+  "source_hashes": {
+    "phase3-implementation-plan-v1.1.md": "c239cf6e8ba8211f0c5b0b21c8996f60a311f9666ac348ed96f8972a55c83b3e",
+    "kernel/scout/intake.py": "f4fb81717f4832b8c5aac318b733bb5612a5b9995bfc9466ae6dce2b03842a55",
+    "schemas/p3/scout-opportunity-set.schema.json": "eb3d60313b0e2c28b468987672b65e6e90fec675c5b700a3c9cf2d2d5d6ddc81",
+    "schemas/p3/scout-thesis-set.schema.json": "b755c7ec2be4d78b7f4bb3c52be9a2ebf404a09fd451cdaabecc35d46431215a",
+    "schemas/p3/scout-normalized-intake.schema.json": "9363a38590dfc0410fd539a27b00c33ee34cd05d71c9d8fe1e46afb30146b5f2",
+    "tests/p3/test_p3_1_intake.py": "090d16cd892842214f8d56a8208b583db4f869cb8814314d1610bb3feabab818",
+    "tests/p3/fixtures/p3-1-intake-fixtures.json": "197e1693631c29dc843f1270e3351569eb54eea9681109f264c6ebbfc30230ba",
+    "tests/certification/p3-raw/P3-1.json": "21fbfd6c5e619df0861d5a7495c15e4337e5531b7386f350769ed2f81b46e5c9"
+  },
+  "evidence_class": "synthetic, independently reproducible through the committed test runner",
+  "authority": {
+    "synthetic_only": true,
+    "external_action_authorized": false,
+    "p2_state_mutated": false,
+    "capital_authorized": false,
+    "payment_authorized": false,
+    "credential_access": false,
+    "broker_execution": false
+  },
+  "review_required": true
+}
