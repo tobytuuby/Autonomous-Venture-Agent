@@ -32,6 +32,10 @@
       "path": "tests/certification/p6-1-raw/full-regression.json",
       "sha256": "b741317477c864ad7777d248528c62ba18ff31fe679e57804752740181df0014"
     },
+    "git_state": {
+      "path": "tests/certification/p6-1-raw/git-state.json",
+      "sha256": "b0daae691c27c5dcdf7d4903ba17db7c3e598606098442058551913080e69b51"
+    },
     "configuration_manifest": {
       "path": "tests/certification/p6-1-config-manifest.json",
       "sha256": "7984242b9bdf51ed8c92687939c65c8fa722e9e329e46cf8d879855d94b54a0b"
