@@ -1,10 +1,10 @@
 # Phase 2 Status
 
-**Status:** Active / Certification preparation; P2.0–P2.5 accepted; P2.6 requirements review authorized
+**Status:** Active / Certification; P2.0–P2.5 accepted; P2.6 implemented pending acceptance
 **Approval:** Explicitly approved by the project operator on 2026-09-18  
 **Execution class:** Shadow reasoning, synthetic integration, and evidence production only  
 **Governing specification:** `phase2-policy-spec-v1.0.md`  
-**Implementation plan:** `phase2-implementation-plan-v2.1.md`
+**Implementation plan:** `phase2-implementation-plan-v2.2.md`
 
 ## Approval decision
 
@@ -57,18 +57,16 @@ window is 30 days; the one-hour window is test-specific.
 
 ## Current increment
 
-P2.5 — Replay and adversarial checks — accepted.
+P2.6 — Certification — implemented; awaiting delegated analyst/auditor
+acceptance.
 
-The delegated analyst/auditor accepted P2.5 on 2026-09-18. The acceptance
-reviewed six targeted adversarial tests, the 119-test full suite, compile/schema/
-diff checks, durable replay, duplicate convergence, tamper detection, stale and
-contradictory evidence handling, cross-portfolio denial, authority-widening
-denial, and rollback/quarantine evidence. The acceptance record is
-`docs/reviews/P2-005-acceptance.md`.
-
-P2.6 certification requirements review and implementation planning are now
-authorized. P2.6 remains shadow-only and synthetic-only; P2 exit and P3 entry
-are not yet accepted.
+The P2.6 runner executed the P2.0–P2.5 suites for a separate 41-test P2
+denominator and also executed the 119-test full regression suite. It produced
+the evidence manifest, raw evidence archive, technical certification report,
+non-technical assessment, source hashes, taint-preservation assessment, replay
+adversarial report, authority-boundary assessment, and conditional P3
+recommendation. P2.6 remains shadow-only and synthetic-only pending delegated
+analyst/auditor acceptance.
 
 
 ## Required limitations

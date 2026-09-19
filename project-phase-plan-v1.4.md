@@ -170,7 +170,7 @@ kernel-owned services only.
 |---|---|---|---|---|---|---|
 | P0 | Policy kernel and certification | Existing v11 | Existing v3.2 | Complete for P0 scope | Repository baseline | Static/unit and synthetic integration only |
 | P1 | CEO Stage 0 shadow hardening and Gate 2 closure | `phase1-policy-spec-v1.0.md` | `phase1-implementation-plan-v1.1.md` | Complete for P1 scope | P0 Gate 1, P0.15 shadow foundation, and explicit Gate 2 review | Shadow reasoning only |
-| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v2.1.md` | Active / Implementation | P1 exit, P2 approval, P2.0/P2.1 acceptance, and P2.2 review recorded in phase status records | None |
+| P2 | Opportunity and thesis system | `phase2-policy-spec-v1.0.md` | `phase2-implementation-plan-v2.2.md` | Active / Implementation | P1 exit, P2 approval, P2.0/P2.1 acceptance, and P2.2 review recorded in phase status records | None |
 | P3 | Venture formation and sandboxing | `phase3-policy-spec-v1.0.md` | `phase3-implementation-plan-v1.0.md` | Future / Not started | P2 exit | Synthetic only |
 | P4 | Venture execution and operations | `phase4-policy-spec-v1.0.md` | `phase4-implementation-plan-v1.0.md` | Future / Not started | P3 exit | Synthetic only |
 | P5 | Revenue, treasury, and financial operations | `phase5-policy-spec-v1.0.md` | `phase5-implementation-plan-v1.0.md` | Future / Not started | P4 exit | Synthetic, then gated test integration |
@@ -452,13 +452,13 @@ decision about whether the phase is safe, complete, and authorized to advance.
 
 P1 exit and Gate 2 closure are recorded in the v1.1 transition record. P2 approval
 is recorded in the v1.2 transition record. P2.5 acceptance is recorded in the
-P2-005 acceptance record. P2 remains bounded by the P2 charter and inherited
-P0/P1 invariants.
+P2-005 acceptance record. P2.6 certification evidence is now generated, while
+P2 exit and P3 entry remain subject to explicit human review.
 
-1. Conduct the P2.6 certification requirements review and implementation
-   planning, preserving the separate P2 denominator and all raw evidence.
-2. Continue only with the ordered P2.6 certification work; P2 exit and P3 entry
-   require explicit human review and must not be inferred from test counts.
+1. Conduct delegated analyst/auditor acceptance of the P2.6 certification
+   package, including the separate P2 denominator and raw evidence.
+2. Do not infer P2 exit or P3 entry from test counts; record the human decision
+   and all limitations explicitly.
 3. Preserve the `/49` P1 evidence and do not relabel it as P2 evidence.
 4. Keep CEO execution authority, Venture Manager/worker spawning, payments,
    capital actions, and all P7 real integrations blocked.

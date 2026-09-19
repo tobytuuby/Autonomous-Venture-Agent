@@ -1,0 +1,11 @@
+{
+  "command": "PYTHONPATH=. python3 -m unittest tests.p2.test_p2_replay_adversarial -v",
+  "count_matches_expected": true,
+  "exit_code": 0,
+  "expected_test_count": 6,
+  "output_sha256": "9463ddc8389185809d460fe3a02dc423ec969086ef6ad914d35655a2e9ee68c7",
+  "passed": true,
+  "stderr": "test_authority_widening_is_denied (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_authority_widening_is_denied) ... ok\ntest_contradictory_evidence_is_preserved_and_not_silently_replayed (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_contradictory_evidence_is_preserved_and_not_silently_replayed) ... ok\ntest_cross_portfolio_replay_is_denied (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_cross_portfolio_replay_is_denied) ... ok\ntest_durable_replay_reproduces_and_converges_duplicate_request (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_durable_replay_reproduces_and_converges_duplicate_request) ... ok\ntest_stale_evidence_is_rejected_before_replay_inputs_are_created (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_stale_evidence_is_rejected_before_replay_inputs_are_created) ... ok\ntest_tampered_replay_result_is_detected (tests.p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_tampered_replay_result_is_detected) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.038s\n\nOK\n",
+  "stdout": "",
+  "test_count": 6
+}

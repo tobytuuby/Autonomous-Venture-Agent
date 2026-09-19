@@ -1,0 +1,11 @@
+{
+  "command": "PYTHONPATH=. python3 -m unittest tests.p2.test_p2_normalization -v",
+  "count_matches_expected": true,
+  "exit_code": 0,
+  "expected_test_count": 7,
+  "output_sha256": "820d86722e7df51f20d9400e57a2c42ab2a2b1f0efdbc5e556822b69a8bf15f0",
+  "passed": true,
+  "stderr": "test_all_source_types_normalize_with_taint_preservation (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_all_source_types_normalize_with_taint_preservation) ... ok\ntest_contradictions_are_detected_without_overwrite (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_contradictions_are_detected_without_overwrite) ... ok\ntest_cross_scope_normalization_is_rejected (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_cross_scope_normalization_is_rejected) ... ok\ntest_duplicate_raw_evidence_converges_by_lineage (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_duplicate_raw_evidence_converges_by_lineage) ... ok\ntest_raw_envelope_taint_and_instruction_content_cannot_widen_authority (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_raw_envelope_taint_and_instruction_content_cannot_widen_authority) ... ok\ntest_stale_evidence_is_not_normalized (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_stale_evidence_is_not_normalized) ... ok\ntest_transformation_chain_is_append_only (tests.p2.test_p2_normalization.P2EvidenceNormalizationTests.test_transformation_chain_is_append_only) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.040s\n\nOK\n",
+  "stdout": "",
+  "test_count": 7
+}

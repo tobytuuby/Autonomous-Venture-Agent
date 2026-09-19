@@ -1,0 +1,11 @@
+{
+  "command": "PYTHONPATH=. python3 -m unittest tests.p2.test_p2_contracts -v",
+  "count_matches_expected": true,
+  "exit_code": 0,
+  "expected_test_count": 6,
+  "output_sha256": "a934e1d6fa6a90686debbfaad6a095a70b2850dedbd74346d5724fc3025e330b",
+  "passed": true,
+  "stderr": "test_all_contracts_validate_synthetic_fixtures (tests.p2.test_p2_contracts.P2ContractTests.test_all_contracts_validate_synthetic_fixtures) ... ok\ntest_every_contract_requires_policy_and_scope_envelope (tests.p2.test_p2_contracts.P2ContractTests.test_every_contract_requires_policy_and_scope_envelope) ... ok\ntest_no_p2_schema_declares_authorizing_capabilities (tests.p2.test_p2_contracts.P2ContractTests.test_no_p2_schema_declares_authorizing_capabilities) ... ok\ntest_replay_cannot_authorize_external_action (tests.p2.test_p2_contracts.P2ContractTests.test_replay_cannot_authorize_external_action) ... ok\ntest_review_cannot_authorize_launch_capital_or_external_action (tests.p2.test_p2_contracts.P2ContractTests.test_review_cannot_authorize_launch_capital_or_external_action) ... ok\ntest_undeclared_venture_authority_is_rejected (tests.p2.test_p2_contracts.P2ContractTests.test_undeclared_venture_authority_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.028s\n\nOK\n",
+  "stdout": "",
+  "test_count": 6
+}

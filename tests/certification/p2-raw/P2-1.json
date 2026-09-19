@@ -1,0 +1,11 @@
+{
+  "command": "PYTHONPATH=. python3 -m unittest tests.p2.test_p2_intake -v",
+  "count_matches_expected": true,
+  "exit_code": 0,
+  "expected_test_count": 7,
+  "output_sha256": "6ceef4212526809d5f88b975be63f4d369829494b872fca63a602d8fffb2a422",
+  "passed": true,
+  "stderr": "test_all_source_types_are_typed_and_accepted (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_all_source_types_are_typed_and_accepted) ... ok\ntest_cross_scope_evidence_is_rejected (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_cross_scope_evidence_is_rejected) ... ok\ntest_duplicate_identity_with_changed_content_is_rejected (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_duplicate_identity_with_changed_content_is_rejected) ... ok\ntest_exact_duplicate_delivery_converges_to_one_record (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_exact_duplicate_delivery_converges_to_one_record) ... ok\ntest_idempotency_key_conflict_is_rejected (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_idempotency_key_conflict_is_rejected) ... ok\ntest_stale_evidence_is_rejected (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_stale_evidence_is_rejected) ... ok\ntest_tampered_source_is_rejected (tests.p2.test_p2_intake.P2OpportunityIntakeTests.test_tampered_source_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.070s\n\nOK\n",
+  "stdout": "",
+  "test_count": 7
+}
