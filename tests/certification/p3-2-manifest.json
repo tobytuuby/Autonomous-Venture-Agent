@@ -1,0 +1,45 @@
+{
+  "increment": "P3.2",
+  "status": "READY_FOR_REVIEW",
+  "source_commit": "e857d5a01b34e71899f98a68be9133bd559b4637",
+  "test_command": "python3 -m unittest tests.p3.test_p3_2_scoring",
+  "denominator": "23",
+  "passed": 23,
+  "failed": 0,
+  "full_regression": {"passed": 161, "failed": 0, "denominator": 161},
+  "fixture_scenarios": 24,
+  "raw_evidence": "tests/certification/p3-raw/P3-2.json",
+  "artifacts": [
+    "kernel/scout/scoring.py",
+    "schemas/p3/scoring-weight-set.schema.json",
+    "schemas/p3/voyage-candidate.schema.json",
+    "schemas/p3/lifecycle-transition.schema.json",
+    "schemas/p3/review-decision.schema.json",
+    "tests/p3/test_p3_2_scoring.py",
+    "tests/p3/fixtures/p3-2-scoring-fixtures.json",
+    "docs/adr/ADR-P3-003-scoring-lifecycle.md"
+  ],
+  "source_hashes": {
+    "phase3-implementation-plan-v1.2.md": "10ebd9b121a3b39269b9a02232500e7a5638c0cb84f269d4513b5d1ae6f22517",
+    "kernel/scout/scoring.py": "153c793e0dcf7260a2c6e136af658a6719fc4995715d8b88a47df6d214fcac05",
+    "schemas/p3/scoring-weight-set.schema.json": "f4144a0a84bf411a201313b5aecf9b0eb82455755940b46be6d7a5d2bf693560",
+    "schemas/p3/voyage-candidate.schema.json": "e4ba60fb71b2fa2cda74d68e1ca8fcd26d5ccec46b99737e1cd20ad24bb5f23e",
+    "schemas/p3/lifecycle-transition.schema.json": "2fe578d793603c5939dac4112f3eb8e4b292c04a9f67e63c39938ceee3fbf8a1",
+    "schemas/p3/review-decision.schema.json": "d5cef0bcfeb1562a286467a19d626e9f0689a5e25fce1682f259f249e14a1d04",
+    "tests/p3/test_p3_2_scoring.py": "7f30f0e10532ddd4dcde9d4104feeffcffe208e49d76c1587a3ae10287d5f84e",
+    "tests/p3/fixtures/p3-2-scoring-fixtures.json": "30c7f189156a826803b94ccbf932037a9fae7d8cc673c67a115e8299444725a8",
+    "tests/certification/p3-raw/P3-2.json": "3da3f64e19d8a81436814adedbb23714c08c93970e96d2b3fb5a81b99a8b7dc9"
+  },
+  "evidence_class": "synthetic, independently reproducible through the committed test runner",
+  "authority": {
+    "synthetic_only": true,
+    "external_action_authorized": false,
+    "capital_authorized": false,
+    "venture_creation_authorized": false,
+    "broker_execution_authorized": false,
+    "payment_authorized": false,
+    "credential_access": false,
+    "human_acceptance_only": true
+  },
+  "review_required": true
+}

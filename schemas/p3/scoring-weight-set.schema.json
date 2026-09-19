@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/scoring-weight-set.schema.json",
+  "title":"P3.2 Frozen Scout Scoring Weight Set",
+  "type":"object","additionalProperties":false,
+  "required":["weight_version","weights","threshold","uncertainty_base","synthetic_only","external_action_authorized","policy_version"],
+  "properties":{
+    "weight_version":{"type":"string","const":"p3.2-w1"},
+    "weights":{"type":"object","additionalProperties":false,"required":["opportunity_fit","thesis_fit","market_signal","risk_adjustment"],"properties":{"opportunity_fit":{"type":"number","minimum":0,"maximum":1},"thesis_fit":{"type":"number","minimum":0,"maximum":1},"market_signal":{"type":"number","minimum":0,"maximum":1},"risk_adjustment":{"type":"number","minimum":0,"maximum":1}}},
+    "threshold":{"type":"number","const":70},"uncertainty_base":{"type":"number","const":10},
+    "synthetic_only":{"type":"boolean","const":true},"external_action_authorized":{"type":"boolean","const":false},"policy_version":{"type":"string","const":"p3.2"}
+  }
+}

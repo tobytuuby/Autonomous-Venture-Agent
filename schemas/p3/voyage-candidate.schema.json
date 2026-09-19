@@ -1,0 +1,21 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/voyage-candidate.schema.json",
+  "title":"P3.2 Shadow Voyage Candidate",
+  "type":"object","additionalProperties":false,
+  "required":["candidate_id","intake_id","score","confidence_interval","confidence_label","reasoning_chain","weight_version","state","synthetic_only","external_action_authorized","capital_authorized","venture_creation_authorized","broker_execution_authorized","policy_version","configuration_fingerprint","created_at","portfolio_scope","correlation_id","idempotency_key"],
+  "properties":{
+    "candidate_id":{"type":"string","minLength":1},"intake_id":{"type":"string","minLength":1},
+    "score":{"type":"number","minimum":0,"maximum":100},
+    "confidence_interval":{"type":"object","additionalProperties":false,"required":["low","high"],"properties":{"low":{"type":"number","minimum":0,"maximum":100},"high":{"type":"number","minimum":0,"maximum":100}}},
+    "confidence_label":{"type":"string","enum":["high","medium","low"]},
+    "reasoning_chain":{"type":"array","minItems":1,"items":{"type":"object","additionalProperties":false,"required":["factor","input","weight","contribution"],"properties":{"factor":{"type":"string","minLength":1},"input":{"type":"number","minimum":0,"maximum":100},"weight":{"type":"number","minimum":0,"maximum":1},"contribution":{"type":"number"}}}},
+    "contradiction_ids":{"type":"array","items":{"type":"string","minLength":1}},
+    "weight_version":{"type":"string","const":"p3.2-w1"},
+    "state":{"type":"string","const":"SCORED"},
+    "synthetic_only":{"type":"boolean","const":true},"external_action_authorized":{"type":"boolean","const":false},"capital_authorized":{"type":"boolean","const":false},"venture_creation_authorized":{"type":"boolean","const":false},"broker_execution_authorized":{"type":"boolean","const":false},
+    "policy_version":{"type":"string","const":"p3.2"},"configuration_fingerprint":{"type":"string","pattern":"^[0-9a-f]{64}$"},"created_at":{"type":"string","format":"date-time"},
+    "portfolio_scope":{"type":"object","additionalProperties":false,"required":["portfolio_id"],"properties":{"portfolio_id":{"type":"string","minLength":1}}},
+    "correlation_id":{"type":"string","minLength":1},"idempotency_key":{"type":"string","minLength":1}
+  }
+}

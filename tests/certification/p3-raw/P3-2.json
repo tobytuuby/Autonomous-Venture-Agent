@@ -1,0 +1,45 @@
+{
+  "increment": "P3.2",
+  "status": "technical-evidence",
+  "source_commit": "e857d5a01b34e71899f98a68be9133bd559b4637",
+  "execution_class": "synthetic integration and shadow reasoning only",
+  "test_command": "python3 -m unittest tests.p3.test_p3_2_scoring",
+  "denominator": {"p3_2": 23, "passed": 23, "failed": 0},
+  "full_regression": {"passed": 161, "failed": 0, "denominator": 161},
+  "scoring_policy": {
+    "weight_version": "p3.2-w1",
+    "weights": {"opportunity_fit": 0.35, "thesis_fit": 0.25, "market_signal": 0.25, "risk_adjustment": 0.15},
+    "threshold": 70,
+    "uncertainty_base": 10,
+    "expiration_window_days": 30,
+    "quarantine_escalation_count": 2
+  },
+  "reasoning_evidence": {
+    "factors": 4,
+    "contributions_retained": true,
+    "confidence_interval_retained": true,
+    "weight_snapshot_retained": true,
+    "retroactive_weight_update": "rejected"
+  },
+  "lifecycle_evidence": {
+    "states": ["INTAKE", "SCORED", "ACCEPTED", "REJECTED", "EXPIRED", "QUARANTINED"],
+    "audit_entries": ["INTAKE->SCORED", "SCORED->ACCEPTED", "SCORED->REJECTED", "SCORED->EXPIRED", "SCORED->QUARANTINED", "QUARANTINED->QUARANTINED escalation"],
+    "human_acceptance_required": true,
+    "contradiction_acceptance": "rejected",
+    "reconstruction": "transitions table preserves timestamp, actor, role, reason, and human_reviewed"
+  },
+  "negative_results": {
+    "poor_fit": "human rejection",
+    "low_confidence": "uncertainty widened and non-acceptance preserved",
+    "contradictory_signals": "quarantine",
+    "repeated_quarantine": "escalation required on second occurrence",
+    "self_acceptance": "rejected",
+    "non_human_review": "rejected",
+    "capital_venture_broker_authority": "false and unavailable"
+  },
+  "limitations": [
+    "This is synthetic SQLite-backed shadow evidence.",
+    "It does not prove production scoring, venture formation, capital, payments, credentials, broker execution, deployment, customers, or external action.",
+    "The aggregate runner emits six existing SQLite ResourceWarnings while still passing 161/161; these are not P3.2 assertion failures."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "scenario_count": 24,
+  "scenarios": [
+    "deterministic_repeat","frozen_weight_snapshot","reasoning_chain","high_confidence",
+    "low_confidence","poor_fit_rejection","human_acceptance","human_rejection",
+    "scout_self_acceptance_denied","non_human_review_denied","contradictory_quarantine",
+    "repeated_quarantine_escalation","expiration","invalid_transition","scope_denial",
+    "configuration_denial","input_range_denial","authority_widening_denial",
+    "candidate_schema_denial","review_schema_human_only","transition_audit_log",
+    "weight_snapshot_immutable","no_capital_authority","no_broker_authority"
+  ]
+}

@@ -8,6 +8,17 @@ from .intake import (
     ScoutIntakeError,
     VoyageScoutIntakeStore,
 )
+from .scoring import (
+    AuthorityWideningError,
+    CandidateNotFound,
+    ContradictionQuarantine,
+    FrozenWeightError,
+    HumanReviewRequired,
+    InvalidTransition,
+    ScoreResult,
+    ScoringError,
+    VoyageScoringLifecycleStore,
+)
 
 __all__ = [
     "CrossReferenceViolation",
@@ -18,4 +29,13 @@ __all__ = [
     "ScopeViolation",
     "ScoutIntakeError",
     "VoyageScoutIntakeStore",
+    "AuthorityWideningError",
+    "CandidateNotFound",
+    "ContradictionQuarantine",
+    "FrozenWeightError",
+    "HumanReviewRequired",
+    "InvalidTransition",
+    "ScoreResult",
+    "ScoringError",
+    "VoyageScoringLifecycleStore",
 ]

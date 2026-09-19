@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/review-decision.schema.json",
+  "title":"P3.2 Human Voyage Review Decision",
+  "type":"object","additionalProperties":false,
+  "required":["decision_id","candidate_id","decision","reviewer_id","reviewer_role","reason","created_at","external_action_authorized","capital_authorized","venture_creation_authorized"],
+  "properties":{
+    "decision_id":{"type":"string","minLength":1},"candidate_id":{"type":"string","minLength":1},
+    "decision":{"type":"string","enum":["accept","reject","quarantine"]},"reviewer_id":{"type":"string","minLength":1},
+    "reviewer_role":{"type":"string","const":"human-operator"},"reason":{"type":"string","minLength":1},
+    "created_at":{"type":"string","format":"date-time"},"external_action_authorized":{"type":"boolean","const":false},
+    "capital_authorized":{"type":"boolean","const":false},"venture_creation_authorized":{"type":"boolean","const":false}
+  }
+}

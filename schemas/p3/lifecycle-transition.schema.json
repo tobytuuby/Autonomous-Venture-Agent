@@ -1,0 +1,16 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://autonomous-venture-agent.local/schemas/p3/lifecycle-transition.schema.json",
+  "title":"P3.2 Voyage Lifecycle Transition",
+  "type":"object","additionalProperties":false,
+  "required":["transition_id","candidate_id","from_state","to_state","reason","actor_id","actor_role","created_at","human_reviewed","synthetic_only","external_action_authorized"],
+  "properties":{
+    "transition_id":{"type":"string","minLength":1},"candidate_id":{"type":"string","minLength":1},
+    "from_state":{"type":"string","enum":["INTAKE","SCORED","ACCEPTED","REJECTED","EXPIRED","QUARANTINED"]},
+    "to_state":{"type":"string","enum":["INTAKE","SCORED","ACCEPTED","REJECTED","EXPIRED","QUARANTINED"]},
+    "reason":{"type":"string","minLength":1},"actor_id":{"type":"string","minLength":1},
+    "actor_role":{"type":"string","enum":["scout-service","human-operator","system"]},
+    "created_at":{"type":"string","format":"date-time"},"human_reviewed":{"type":"boolean"},
+    "synthetic_only":{"type":"boolean","const":true},"external_action_authorized":{"type":"boolean","const":false}
+  }
+}
