@@ -2,19 +2,22 @@
 
 Updated: 2026-09-19
 
-Phase 5 is closed for synthetic-only scope. Phase 6 planning is authorized;
-Phase 6 implementation is not authorized.
+Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1
+planning is authorized. P6.1 implementation remains separately gated.
 
 ## Current phase
 
-P0 through P5 are complete for their defined scopes. P6 is in planning under
-synthetic-only conditions. The exact P5 baseline is
-`2fe141486c4a5d4bcac133e3e040eb52b734738a`, tagged `P5.4-ACCEPTED`.
+P0 through P5 are complete for their defined scopes. P6.0 is accepted for
+synthetic-only portfolio identity and registry behavior. P6.1 planning may
+proceed under synthetic-only conditions.
+
+The P6.0 implementation commit is
+`419aed0581feae834d79028593fd929e990e63d0`; the evidence commit is
+`96c16f04d79ff0696ebe111e78d7f71e50eb5056`.
 
 ## Canonical project plan
 
-- `project-phase-plan-v1.4.md` — current project-wide phase registry and
-  cross-phase gates.
+- `project-phase-plan-v1.4.md` — current project-wide phase registry and cross-phase gates.
 - `phase0-policy-kernel-spec-v11.md` — current P0 governing specification.
 - `phase0-implementation-plan-v3.2.md` — current P0 implementation plan.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
@@ -27,9 +30,9 @@ synthetic-only conditions. The exact P5 baseline is
 - `phase5-policy-spec-v1.0.md` — P5 governing specification.
 - `phase5-implementation-plan-v1.1.md` — P5 implementation lineage.
 - `docs/PHASE5-CLOSURE.md` — P5 synthetic-only closure.
-- `phase6-policy-spec-v1.0.md` — proposed P6 governing specification.
-- `phase6-implementation-plan-v1.0.md` — proposed P6 implementation plan.
-- `docs/PHASE6_STATUS.md` — P6 planning status and gate summary.
+- `phase6-policy-spec-v1.0.md` — P6 governing specification.
+- `phase6-implementation-plan-v1.0.md` — P6 implementation plan.
+- `docs/PHASE6_STATUS.md` — P6 status and gate summary.
 
 ## Phase status
 
@@ -41,12 +44,14 @@ synthetic-only conditions. The exact P5 baseline is
 | P3 | Complete for defined scope | Venture formation and sandboxing; synthetic-only |
 | P4 | Complete for defined scope | Synthetic recording and operations boundary |
 | P5 | Closed for synthetic-only scope | Revenue, reconciliation, treasury simulation, human review |
-| P6 | Planning authorized | Portfolio operations and shared services; synthetic-only |
-| P7–P8 | Future / Not started | Predecessor phase gates remain required |
+| P6.0 | Accepted | Synthetic portfolio identity and registry |
+| P6.1 | Planning authorized | Coordination planning only; implementation blocked |
+| P6.2–P6.5 | Blocked | Predecessor gates remain required |
+| P7–P8 | Future / Not started | Production gate remains required |
 
 ## P6 authority boundary
 
-P6 planning does not authorize implementation. Test-provider integration and
-all live financial, payment, broker, credential, customer, deployment,
-network, capital, venture, and worker actions remain disabled. P7 remains the
-first phase where real external action may be considered.
+P6.1 planning does not authorize implementation. Test-provider integration and
+all live financial, payment, broker, credential, customer, deployment, network,
+capital, venture, and worker actions remain disabled. P7 remains the first phase
+where real external action may be considered.
