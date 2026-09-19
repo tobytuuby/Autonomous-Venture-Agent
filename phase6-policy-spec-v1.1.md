@@ -1,6 +1,6 @@
 # Phase 6 Policy Specification v1.1 — P6.1 Addendum
 
-Status: planning-only addendum. No implementation or authority change.
+Status: adopted for P6.1 implementation. No live-authority change.
 
 This addendum operationalizes PORT-604 bounded coordination while preserving PORT-601 through PORT-603 portfolio identity and isolation, PORT-610 provenance, PORT-612 fail-closed authority, and PORT-613 evidence separation.
 

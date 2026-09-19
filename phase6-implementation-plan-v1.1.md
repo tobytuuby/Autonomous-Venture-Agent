@@ -1,6 +1,6 @@
 # Phase 6 Implementation Plan v1.1 — P6.1 Coordination
 
-Status: planning authorized; P6.1 implementation not authorized.
+Status: adopted for P6.1 implementation; implementation remains synthetic-only.
 Baseline: 9a493fa4054a39f1c669598b83435574fca0ece1 (P6.0 accepted).
 Locked P6.0 configuration fingerprint: 8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11.
 
