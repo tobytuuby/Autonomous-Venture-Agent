@@ -22,6 +22,8 @@ contracts under synthetic-only conditions.
 - `phase2-policy-spec-v1.0.md` — approved P2 governing specification.
 - `phase2-implementation-plan-v2.3.md` — completed P2.6 certification plan and P2 exit record.
 - `docs/PHASE2_STATUS.md` — P2 acceptance, certification, and P3 transition status.
+- `phase3-policy-spec-v1.0.md` — proposed P3 governing specification, pending P3.0 review.
+- `phase3-implementation-plan-v1.0.md` — active P3.0 baseline-and-contracts plan.
 
 ## Phase status
 
@@ -30,7 +32,7 @@ contracts under synthetic-only conditions.
 | P0 | Complete for P0 scope | Kernel, certification, shadow foundation, and synthetic P0.16 path |
 | P1 | Complete for P1 scope | CEO Stage 0 shadow hardening; Gate 2 closed |
 | P2 | Complete for P2 scope | Opportunity and thesis system; no venture launch or capital action |
-| P3 | Authorized / Planning | Venture formation and sandboxing; synthetic-only |
+| P3 | Authorized / P3.0 review pending | Venture formation and sandboxing; synthetic-only |
 | P4–P8 | Future / Not started | Predecessor phase gates remain required |
 
 ## Gate 2 decision

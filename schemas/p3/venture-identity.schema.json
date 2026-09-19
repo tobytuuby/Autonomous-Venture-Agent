@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p3/venture-identity.schema.json",
+  "title": "P3 Synthetic Venture Identity",
+  "type": "object", "additionalProperties": false,
+  "required": ["venture_id", "accepted_thesis_id", "namespace", "lifecycle_state", "synthetic_only", "external_action_authorized", "capital_authorized", "payment_authorized", "credential_access", "policy_version", "configuration_fingerprint", "created_at", "actor", "portfolio_scope", "correlation_id", "idempotency_key"],
+  "properties": {
+    "venture_id": {"$ref": "common.schema.json#/$defs/id"}, "accepted_thesis_id": {"$ref": "common.schema.json#/$defs/id"}, "namespace": {"$ref": "common.schema.json#/$defs/id"},
+    "lifecycle_state": {"type": "string", "enum": ["candidate", "active-synthetic", "quarantined", "wound-down"]},
+    "synthetic_only": {"type": "boolean", "const": true}, "external_action_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "capital_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "payment_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "credential_access": {"$ref": "common.schema.json#/$defs/false_authority"},
+    "policy_version": {"$ref": "common.schema.json#/$defs/policy_version"}, "configuration_fingerprint": {"$ref": "common.schema.json#/$defs/hash"}, "created_at": {"$ref": "common.schema.json#/$defs/timestamp"}, "actor": {"$ref": "common.schema.json#/$defs/actor"}, "portfolio_scope": {"$ref": "common.schema.json#/$defs/portfolio_scope"}, "correlation_id": {"$ref": "common.schema.json#/$defs/id"}, "idempotency_key": {"$ref": "common.schema.json#/$defs/id"}
+  }
+}

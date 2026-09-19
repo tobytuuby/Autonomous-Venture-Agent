@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p3/provisioning-request.schema.json",
+  "title": "P3 Synthetic Provisioning Request",
+  "type": "object", "additionalProperties": false,
+  "required": ["request_id", "venture_id", "sandbox_id", "operation", "synthetic_only", "idempotency_key", "configuration_fingerprint", "external_action_authorized", "credential_access", "policy_version", "created_at", "actor", "portfolio_scope", "correlation_id"],
+  "properties": {
+    "request_id": {"$ref": "common.schema.json#/$defs/id"}, "venture_id": {"$ref": "common.schema.json#/$defs/id"}, "sandbox_id": {"$ref": "common.schema.json#/$defs/id"}, "operation": {"type": "string", "enum": ["record", "reconcile", "reconstruct", "quarantine", "wind-down"]}, "synthetic_only": {"type": "boolean", "const": true}, "idempotency_key": {"$ref": "common.schema.json#/$defs/id"}, "configuration_fingerprint": {"$ref": "common.schema.json#/$defs/hash"}, "external_action_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "credential_access": {"$ref": "common.schema.json#/$defs/false_authority"},
+    "policy_version": {"$ref": "common.schema.json#/$defs/policy_version"}, "created_at": {"$ref": "common.schema.json#/$defs/timestamp"}, "actor": {"$ref": "common.schema.json#/$defs/actor"}, "portfolio_scope": {"$ref": "common.schema.json#/$defs/portfolio_scope"}, "correlation_id": {"$ref": "common.schema.json#/$defs/id"}
+  }
+}

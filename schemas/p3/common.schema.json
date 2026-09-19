@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p3/common.schema.json",
+  "title": "P3 Common Contract Definitions",
+  "$defs": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time"},
+    "policy_version": {"type": "string", "const": "p3.0"},
+    "actor": {"type": "object", "additionalProperties": false, "required": ["actor_id", "role"], "properties": {"actor_id": {"$ref": "#/$defs/id"}, "role": {"type": "string", "enum": ["ceo-shadow", "p3-service", "venture-manager-shadow", "worker-shadow", "human-operator", "system"]}}},
+    "portfolio_scope": {"type": "object", "additionalProperties": false, "required": ["portfolio_id"], "properties": {"portfolio_id": {"$ref": "#/$defs/id"}}},
+    "envelope": {"type": "object", "additionalProperties": false, "required": ["policy_version", "configuration_fingerprint", "created_at", "actor", "portfolio_scope", "correlation_id", "idempotency_key"], "properties": {"policy_version": {"$ref": "#/$defs/policy_version"}, "configuration_fingerprint": {"$ref": "#/$defs/hash"}, "created_at": {"$ref": "#/$defs/timestamp"}, "actor": {"$ref": "#/$defs/actor"}, "portfolio_scope": {"$ref": "#/$defs/portfolio_scope"}, "correlation_id": {"$ref": "#/$defs/id"}, "idempotency_key": {"$ref": "#/$defs/id"}}},
+    "false_authority": {"type": "boolean", "const": false},
+    "nonempty_strings": {"type": "array", "items": {"$ref": "#/$defs/id"}, "minItems": 1, "uniqueItems": true}
+  }
+}

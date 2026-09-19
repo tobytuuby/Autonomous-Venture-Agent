@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autonomous-venture-agent.local/schemas/p3/manager-envelope.schema.json",
+  "title": "P3 Shadow Venture Manager Envelope",
+  "type": "object", "additionalProperties": false,
+  "required": ["manager_id", "venture_id", "allowed_worker_archetypes", "self_escalation_allowed", "spawn_outside_archetypes", "cross_venture_access", "credential_access", "payment_authorized", "deployment_authorized", "external_action_authorized", "synthetic_only", "policy_version", "configuration_fingerprint", "created_at", "actor", "portfolio_scope", "correlation_id", "idempotency_key"],
+  "properties": {
+    "manager_id": {"$ref": "common.schema.json#/$defs/id"}, "venture_id": {"$ref": "common.schema.json#/$defs/id"}, "allowed_worker_archetypes": {"$ref": "common.schema.json#/$defs/nonempty_strings"},
+    "self_escalation_allowed": {"$ref": "common.schema.json#/$defs/false_authority"}, "spawn_outside_archetypes": {"$ref": "common.schema.json#/$defs/false_authority"}, "cross_venture_access": {"$ref": "common.schema.json#/$defs/false_authority"}, "credential_access": {"$ref": "common.schema.json#/$defs/false_authority"}, "payment_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "deployment_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "external_action_authorized": {"$ref": "common.schema.json#/$defs/false_authority"}, "synthetic_only": {"type": "boolean", "const": true},
+    "policy_version": {"$ref": "common.schema.json#/$defs/policy_version"}, "configuration_fingerprint": {"$ref": "common.schema.json#/$defs/hash"}, "created_at": {"$ref": "common.schema.json#/$defs/timestamp"}, "actor": {"$ref": "common.schema.json#/$defs/actor"}, "portfolio_scope": {"$ref": "common.schema.json#/$defs/portfolio_scope"}, "correlation_id": {"$ref": "common.schema.json#/$defs/id"}, "idempotency_key": {"$ref": "common.schema.json#/$defs/id"}
+  }
+}

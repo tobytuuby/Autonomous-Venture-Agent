@@ -1,0 +1,128 @@
+{
+  "valid": {
+    "venture-identity": {
+      "venture_id": "venture-synthetic-001",
+      "accepted_thesis_id": "thesis-001",
+      "namespace": "ns-venture-001",
+      "lifecycle_state": "candidate",
+      "synthetic_only": true,
+      "external_action_authorized": false,
+      "capital_authorized": false,
+      "payment_authorized": false,
+      "credential_access": false,
+      "policy_version": "p3.0",
+      "configuration_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "created_at": "2026-09-19T02:00:00Z",
+      "actor": {
+        "actor_id": "p3-service",
+        "role": "p3-service"
+      },
+      "portfolio_scope": {
+        "portfolio_id": "portfolio-synthetic"
+      },
+      "correlation_id": "corr-001",
+      "idempotency_key": "idem-venture-001"
+    },
+    "sandbox-descriptor": {
+      "sandbox_id": "sandbox-001",
+      "venture_id": "venture-synthetic-001",
+      "namespace": "ns-venture-001",
+      "image_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "network_mode": "none",
+      "filesystem_mode": "ephemeral",
+      "cross_venture_visibility": false,
+      "credential_access": false,
+      "external_action_authorized": false,
+      "synthetic_only": true,
+      "policy_version": "p3.0",
+      "configuration_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "created_at": "2026-09-19T02:00:00Z",
+      "actor": {
+        "actor_id": "p3-service",
+        "role": "p3-service"
+      },
+      "portfolio_scope": {
+        "portfolio_id": "portfolio-synthetic"
+      },
+      "correlation_id": "corr-002",
+      "idempotency_key": "idem-sandbox-001"
+    },
+    "manager-envelope": {
+      "manager_id": "manager-shadow-001",
+      "venture_id": "venture-synthetic-001",
+      "allowed_worker_archetypes": [
+        "research-shadow",
+        "analysis-shadow"
+      ],
+      "self_escalation_allowed": false,
+      "spawn_outside_archetypes": false,
+      "cross_venture_access": false,
+      "credential_access": false,
+      "payment_authorized": false,
+      "deployment_authorized": false,
+      "external_action_authorized": false,
+      "synthetic_only": true,
+      "policy_version": "p3.0",
+      "configuration_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "created_at": "2026-09-19T02:00:00Z",
+      "actor": {
+        "actor_id": "p3-service",
+        "role": "p3-service"
+      },
+      "portfolio_scope": {
+        "portfolio_id": "portfolio-synthetic"
+      },
+      "correlation_id": "corr-003",
+      "idempotency_key": "idem-manager-001"
+    },
+    "worker-archetype": {
+      "archetype_id": "research-shadow",
+      "manager_id": "manager-shadow-001",
+      "venture_id": "venture-synthetic-001",
+      "task_classes": [
+        "evidence-review"
+      ],
+      "direct_shell": false,
+      "browser_access": false,
+      "credential_access": false,
+      "payment_authorized": false,
+      "deployment_authorized": false,
+      "cross_venture_access": false,
+      "external_action_authorized": false,
+      "synthetic_only": true,
+      "policy_version": "p3.0",
+      "configuration_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "created_at": "2026-09-19T02:00:00Z",
+      "actor": {
+        "actor_id": "p3-service",
+        "role": "p3-service"
+      },
+      "portfolio_scope": {
+        "portfolio_id": "portfolio-synthetic"
+      },
+      "correlation_id": "corr-004",
+      "idempotency_key": "idem-worker-001"
+    },
+    "provisioning-request": {
+      "request_id": "provision-001",
+      "venture_id": "venture-synthetic-001",
+      "sandbox_id": "sandbox-001",
+      "operation": "record",
+      "synthetic_only": true,
+      "idempotency_key": "idem-provision-001",
+      "configuration_fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "external_action_authorized": false,
+      "credential_access": false,
+      "policy_version": "p3.0",
+      "created_at": "2026-09-19T02:00:00Z",
+      "actor": {
+        "actor_id": "p3-service",
+        "role": "p3-service"
+      },
+      "portfolio_scope": {
+        "portfolio_id": "portfolio-synthetic"
+      },
+      "correlation_id": "corr-005"
+    }
+  }
+}
