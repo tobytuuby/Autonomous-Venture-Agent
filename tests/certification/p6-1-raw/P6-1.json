@@ -1,0 +1,13 @@
+{
+  "phase": "P6.1",
+  "increment": "CEO-to-manager coordination",
+  "implementation_commit": "1a6c4ab",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_1_coordination -q",
+  "exit_code": 0,
+  "focused_denominator": 18,
+  "passed": 18,
+  "failed": 0,
+  "result": "PASS",
+  "synthetic_only": true,
+  "live_authority_enabled": false
+}

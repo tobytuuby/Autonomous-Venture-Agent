@@ -1,40 +1,52 @@
 {
   "phase": "P6.1",
   "increment": "CEO-to-manager coordination",
-  "status": "planning-only",
-  "implementation_authorized": false,
-  "evidence_status": "pending",
+  "status": "implementation-complete-human-acceptance-pending",
+  "implementation_authorized": true,
+  "evidence_status": "complete",
   "baseline_commit": "9a493fa4054a39f1c669598b83435574fca0ece1",
+  "implementation_commit": "1a6c4ab6e6154066139c28eac610b62b13e69174",
   "p6_0_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
-  "planned_focused_denominator": 18,
-  "planned_tests": [
-    "valid typed packet",
-    "required identity and scope fields",
-    "locked fingerprint continuity",
-    "fingerprint mismatch denial",
-    "missing provenance denial",
-    "exact duplicate convergence",
-    "changed-content collision denial",
-    "deterministic replay hash convergence",
-    "expiry denial",
-    "stale-time denial",
-    "cross-portfolio denial",
-    "cross-venture denial",
-    "self-escalation denial",
-    "capability-envelope widening denial",
-    "all nine live-authority fields denied",
-    "effectful/non-synthetic coordination denial",
-    "SQLite reopen durability",
-    "schema and authority rejection"
+  "focused_denominator": 18,
+  "focused_passed": 18,
+  "focused_failed": 0,
+  "p6_regression_denominator": 34,
+  "p6_regression_passed": 34,
+  "full_regression_denominator": 255,
+  "full_regression_passed": 255,
+  "test_commands": [
+    "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_1_coordination -q",
+    "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination -q",
+    "PYTHONPATH=. python3 -m unittest discover -s tests -q"
   ],
-  "required_future_evidence": [
-    "tests/certification/p6-1-raw/P6-1.json",
-    "tests/certification/p6-1-raw/full-regression.json",
-    "tests/certification/p6-1-raw/git-state.json",
-    "tests/certification/p6-1-config-manifest.json",
-    "docs/reports/PHASE6-P6.1-CERTIFICATION.md",
-    "docs/reports/PHASE6-P6.1-NON-TECHNICAL-ASSESSMENT.md"
+  "raw_evidence": {
+    "focused": {
+      "path": "tests/certification/p6-1-raw/P6-1.json",
+      "sha256": "5f2158ef1cc35e6f470435d5a47bffa430bc4805a4ead7df57df85cf48be0e7d"
+    },
+    "p6_regression": {
+      "path": "tests/certification/p6-1-raw/p6-regression.json",
+      "sha256": "97e678269a9e2c38305780c5cd0de89b2ff9675b6ac52ab31a46de2191114edf"
+    },
+    "full_regression": {
+      "path": "tests/certification/p6-1-raw/full-regression.json",
+      "sha256": "b741317477c864ad7777d248528c62ba18ff31fe679e57804752740181df0014"
+    },
+    "configuration_manifest": {
+      "path": "tests/certification/p6-1-config-manifest.json",
+      "sha256": "7984242b9bdf51ed8c92687939c65c8fa722e9e329e46cf8d879855d94b54a0b"
+    }
+  },
+  "technical_certification": "docs/reports/PHASE6-P6.1-CERTIFICATION.md",
+  "non_technical_assessment": "docs/reports/PHASE6-P6.1-NON-TECHNICAL-ASSESSMENT.md",
+  "known_limitations": [
+    "Six pre-existing SQLite ResourceWarnings occurred during full regression."
   ],
-  "results": null,
-  "human_acceptance_required": true
+  "live_authority_fields_denied": true,
+  "human_acceptance_required": true,
+  "results": {
+    "focused": "PASS",
+    "p6_regression": "PASS",
+    "full_regression": "PASS"
+  }
 }
