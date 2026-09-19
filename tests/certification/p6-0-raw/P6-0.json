@@ -1,0 +1,13 @@
+{
+  "command": "python3 -m unittest -v tests.p6.test_p6_0_registry",
+  "commit": "419aed0581feae834d79028593fd929e990e63d0",
+  "configuration_manifest_sha256": "af909ea3fcc6f3011b6fb7ed59474bc3e6591f66404b418fa54849a34524d17a",
+  "denominator": 16,
+  "exit_code": 0,
+  "increment": "P6.0",
+  "label": "P6-0",
+  "phase": "P6.0",
+  "started_at_utc": "2026-09-19T19:30:05.226562+00:00",
+  "stderr": "test_01_valid_portfolio_identity (tests.p6.test_p6_0_registry.P60RegistryTests.test_01_valid_portfolio_identity) ... ok\ntest_02_sqlite_reopen_preserves_identity (tests.p6.test_p6_0_registry.P60RegistryTests.test_02_sqlite_reopen_preserves_identity) ... ok\ntest_03_duplicate_identity_converges (tests.p6.test_p6_0_registry.P60RegistryTests.test_03_duplicate_identity_converges) ... ok\ntest_04_identity_collision_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_04_identity_collision_denied) ... ok\ntest_05_fingerprint_mismatch_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_05_fingerprint_mismatch_denied) ... ok\ntest_06_live_authority_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_06_live_authority_denied) ... ok\ntest_07_membership_identity_and_scope (tests.p6.test_p6_0_registry.P60RegistryTests.test_07_membership_identity_and_scope) ... ok\ntest_08_cross_portfolio_scope_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_08_cross_portfolio_scope_denied) ... ok\ntest_09_membership_collision_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_09_membership_collision_denied) ... ok\ntest_10_stale_lifecycle_version_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_10_stale_lifecycle_version_denied) ... ok\ntest_11_lifecycle_transition_is_durable (tests.p6.test_p6_0_registry.P60RegistryTests.test_11_lifecycle_transition_is_durable) ... ok\ntest_12_aggregate_view_is_read_only_and_filtered (tests.p6.test_p6_0_registry.P60RegistryTests.test_12_aggregate_view_is_read_only_and_filtered) ... ok\ntest_13_cross_scope_membership_rejected_before_storage (tests.p6.test_p6_0_registry.P60RegistryTests.test_13_cross_scope_membership_rejected_before_storage) ... ok\ntest_14_non_synthetic_effect_denied (tests.p6.test_p6_0_registry.P60RegistryTests.test_14_non_synthetic_effect_denied) ... ok\ntest_15_configuration_manifest_fingerprint_is_canonical (tests.p6.test_p6_0_registry.P60RegistryTests.test_15_configuration_manifest_fingerprint_is_canonical) ... ok\ntest_16_json_schemas_validate_and_reject_authority (tests.p6.test_p6_0_registry.P60RegistryTests.test_16_json_schemas_validate_and_reject_authority) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.053s\n\nOK\n",
+  "stdout": ""
+}

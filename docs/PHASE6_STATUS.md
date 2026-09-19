@@ -1,51 +1,44 @@
 # Phase 6 Status
 
 **Updated:** 2026-09-19
-**Status:** P6.0 implementation authorized; P6.0 execution not yet accepted
+**Status:** P6.0 implementation complete; human acceptance pending
 **Execution class:** Synthetic-only
+**Implementation commit:** `419aed0581feae834d79028593fd929e990e63d0`
 **Baseline:** `2fe141486c4a5d4bcac133e3e040eb52b734738a`
-**Planning commit:** `d05f71dfeff31e2da5c8e93e611c2dfad4106ab9`
 **Predecessor:** P5.4 accepted; `P5.4-ACCEPTED`
-
-## Definition status
-
-Phase 6 planning was accepted with conditions. Human authorization now permits
-P6.0 implementation only. P6.1–P6.5 remain blocked pending their own decisions.
 
 ## Current increment
 
 **P6.0 — Portfolio identity and registry**
 
-Authorized work is limited to synthetic portfolio identity, venture membership
-and lifecycle records, explicit scope enforcement, allowlisted read-only
-aggregate views, deterministic duplicate/collision denial, stale-version
-rejection, and focused evidence.
+Implementation is complete. P6.0 provides synthetic portfolio identity,
+venture membership, explicit scope enforcement, lifecycle versioning, durable
+SQLite recovery, configuration-fingerprint continuity, and filtered read-only
+aggregate views.
 
-## Entry conditions
+## Verification
 
-Before P6.0 execution:
+- Focused P6.0 tests: **16/16 passed**
+- Full regression: **237/237 passed**
+- Focused raw evidence: `tests/certification/p6-0-raw/P6-0.json`
+- Full-regression raw evidence: `tests/certification/p6-0-raw/full-regression.json`
+- Technical report: `docs/reports/PHASE6-P6.0-CERTIFICATION.md`
+- Non-technical assessment: `docs/reports/PHASE6-P6.0-NON-TECHNICAL-ASSESSMENT.md`
 
-- define the focused denominator and synthetic fixtures;
-- define the canonical P6 configuration manifest and fingerprint inputs;
-- confirm the clean bridge workspace and baseline;
-- verify all nine live-authority fields remain denied;
-- preserve P0–P5 provenance, taint, recovery, and evidence boundaries.
+## Acceptance state
+
+P6.0 is ready for explicit human acceptance. P6.1–P6.5 remain blocked until
+P6.0 acceptance is recorded.
 
 ## Authority boundary
 
-Test-provider integration, payment, broker, credential, customer, deployment,
-network, capital, real venture, and live worker actions remain disabled.
-Synthetic balances and portfolio decisions remain non-spendable and effect-free.
+All nine live-authority fields remain denied. Test-provider integration,
+payment, broker, credential, customer, deployment, network, capital, real
+venture, and live worker actions remain disabled. P6.0 records are synthetic,
+non-spendable, and effect-free.
 
-## Proposed decision gates
+## Known limitation
 
-- **P6.0:** portfolio identity and registry — implementation authorized;
-- **P6.1:** CEO-to-manager coordination — blocked;
-- **P6.2:** shared-service demand and stateless execution — blocked;
-- **P6.3:** aggregate anomaly controls — blocked;
-- **P6.4:** selective quarantine, harvest, reinvestment, and wind-down — blocked;
-- **P6.5:** end-to-end portfolio certification and P6 exit — blocked.
-
-This status record is not an acceptance record. P6.0 acceptance requires focused
-evidence, full-regression impact review, raw artifacts, technical and
-non-technical assessment, and explicit human acceptance.
+The full regression emitted six pre-existing SQLite ResourceWarnings in
+unrelated finance tests. All tests passed with exit code 0. The warning and
+the evidence-capture worktree state are documented in the certification report.

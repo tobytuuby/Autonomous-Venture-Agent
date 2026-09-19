@@ -1,10 +1,14 @@
 {
   "phase": "P6.0",
-  "status": "implementation-evidence-pending",
+  "status": "ready-for-human-acceptance",
   "baseline": "2fe141486c4a5d4bcac133e3e040eb52b734738a",
+  "implementation_commit": "419aed0581feae834d79028593fd929e990e63d0",
   "execution_class": "synthetic-only",
   "focused_test_command": "PYTHONPATH=. python3 -m unittest -v tests.p6.test_p6_0_registry",
   "focused_denominator": 16,
+  "focused_result": "16/16",
+  "full_regression_command": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test*.py' -v",
+  "full_regression_result": "237/237",
   "focused_tests": [
     "valid_portfolio_identity",
     "sqlite_reopen_preserves_identity",
@@ -28,6 +32,9 @@
     "tests/certification/p6-0-raw/full-regression.json",
     "tests/certification/p6-0-raw/git-state.json"
   ],
+  "technical_report": "docs/reports/PHASE6-P6.0-CERTIFICATION.md",
+  "non_technical_assessment": "docs/reports/PHASE6-P6.0-NON-TECHNICAL-ASSESSMENT.md",
+  "configuration_manifest": "tests/certification/p6-0-config-manifest.json",
   "live_authority": "disabled",
   "provider_integration": "disabled"
 }
