@@ -1,0 +1,32 @@
+{
+  "phase": "P5.4",
+  "status": "RUNTIME_VERIFIED_PENDING_ACCEPTANCE",
+  "evidence_class": "synthetic",
+  "runner": "ChatGPT2LocalBridge venture-control",
+  "focused": {
+    "command": "python3 -m unittest -v tests/p5/test_p5_4_integration.py",
+    "result": "10/10 passed",
+    "cases": [
+      "complete P5.0-to-P5.3 composition",
+      "complete-chain replay convergence",
+      "configuration-fingerprint continuity",
+      "cross-configuration denial",
+      "cross-venture denial",
+      "durable reopen at every SQLite boundary",
+      "live-authority denial",
+      "provenance and taint continuity",
+      "capability-free human review",
+      "non-spendable treasury result"
+    ]
+  },
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "result": "221/221 passed",
+    "warnings": "Six pre-existing SQLite ResourceWarnings in unrelated aggregate finance tests; no P5.4 warnings."
+  },
+  "live_authority": "disabled",
+  "limitations": [
+    "This evidence supports implementation review, not formal P5.4 acceptance.",
+    "P5.4 is validation-only and does not unlock test-provider or live integration."
+  ]
+}
