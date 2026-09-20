@@ -1,10 +1,18 @@
 {
-  "phase": "P6.4",
+  "phase": "P6.4-remediation",
   "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_4_operations -q",
   "exit_code": 0,
-  "tests_run": 18,
-  "passed": 18,
+  "tests_run": 26,
+  "passed": 26,
   "failed": 0,
   "result": "OK",
-  "scope": "selective freeze, quarantine, grant revocation, recovery, harvest, reinvestment proposal, wind-down, isolation, provenance, authority denial"
+  "remediation_coverage": [
+    "distinct evidence hash",
+    "explicit grant-revocation linkage",
+    "mandatory venture scope",
+    "idempotency-key collision denial",
+    "authority-restoration denial",
+    "schema validation",
+    "SQLite replay hash verification"
+  ]
 }

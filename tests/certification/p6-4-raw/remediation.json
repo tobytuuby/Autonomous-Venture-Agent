@@ -1,0 +1,14 @@
+{
+  "baseline_commit": "04e9c2ea266cad51a38efd0f3dd280e099d120b5",
+  "requirements_addressed": [
+    "OPS-601 mandatory scope",
+    "OPS-602 explicit grant-revocation record",
+    "OPS-603 recovery cannot restore authority",
+    "OPS-610 distinct evidence hash",
+    "OPS-612 fail-closed live authority",
+    "OPS-613 evidence separation and schema validation"
+  ],
+  "focused_denominator": 26,
+  "p6_regression_denominator": 94,
+  "full_regression_denominator": 315
+}

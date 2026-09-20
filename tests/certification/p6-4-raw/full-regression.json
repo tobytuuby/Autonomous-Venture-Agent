@@ -1,9 +1,9 @@
 {
-  "phase": "P0-P6.4",
+  "phase": "P0-P6.4-remediation",
   "command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
   "exit_code": 0,
-  "tests_run": 307,
-  "passed": 307,
+  "tests_run": 315,
+  "passed": 315,
   "failed": 0,
   "result": "OK",
   "known_warnings": "Six pre-existing SQLite ResourceWarnings from earlier infrastructure tests; no test failures."

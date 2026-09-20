@@ -1,8 +1,7 @@
 {
-  "baseline_commit": "3186f9650608ad98a1c573fe9fabaea2dc893573",
-  "implementation_commit": "89e89a8388c76f12eae6e352657ca8b70ca0e0e5",
-  "evidence_commit_before_final_state": "5629624",
+  "baseline_commit": "04e9c2ea266cad51a38efd0f3dd280e099d120b5",
+  "remediation_commit": "73791a90d56866ee326d4ddf99340b59a3b2e1b7",
   "branch": "main",
-  "workspace_clean_at_evidence_generation": false,
-  "note": "Evidence was generated from the implementation commit; the final status commit records the synchronized clean state."
+  "workspace_clean_at_test_execution": true,
+  "note": "Tests ran from the remediation commit. Evidence files are committed in the subsequent evidence commit."
 }
