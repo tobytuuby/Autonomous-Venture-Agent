@@ -1,7 +1,8 @@
 {
   "baseline_commit": "3186f9650608ad98a1c573fe9fabaea2dc893573",
   "implementation_commit": "89e89a8388c76f12eae6e352657ca8b70ca0e0e5",
+  "evidence_commit_before_final_state": "5629624",
   "branch": "main",
   "workspace_clean_at_evidence_generation": false,
-  "note": "Evidence files are generated after the implementation commit and will be committed in the evidence commit."
+  "note": "Evidence was generated from the implementation commit; the final status commit records the synchronized clean state."
 }
