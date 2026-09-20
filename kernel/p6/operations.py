@@ -241,6 +241,11 @@ class SyntheticOperationsKernel:
 
     def is_frozen(self, venture_id: str, service_class: str | None = None,
                   portfolio_id: str | None = None) -> bool:
+        if portfolio_id is None:
+            raise OperationsDenied("SCOPE_REQUIRED", "portfolio_id is required for freeze checks")
+        if (portfolio_id not in self.allowed_ventures or
+                venture_id not in self.allowed_ventures[portfolio_id]):
+            raise OperationsDenied("SCOPE_DENIED", "venture is outside portfolio scope")
         rows = self.connection.execute(
             "SELECT record_json FROM p64_operations ORDER BY rowid"
         ).fetchall()
@@ -248,7 +253,7 @@ class SyntheticOperationsKernel:
             record = json.loads(row["record_json"])
             if record["venture_id"] != venture_id:
                 continue
-            if portfolio_id is not None and record["portfolio_id"] != portfolio_id:
+            if record["portfolio_id"] != portfolio_id:
                 continue
             if record["operation"] != "freeze":
                 continue
@@ -316,7 +321,14 @@ class SyntheticOperationsKernel:
         )
 
     def _has_quarantine(self, record: Mapping[str, Any]) -> bool:
-        for prior in self.records():
+        rows = self.connection.execute(
+            "SELECT action_id FROM p64_operations ORDER BY rowid"
+        ).fetchall()
+        for row in rows:
+            try:
+                prior = self.replay(row["action_id"])
+            except OperationsDenied:
+                continue
             if prior["operation"] != "quarantine":
                 continue
             if (prior["portfolio_id"] != record["portfolio_id"] or
@@ -339,8 +351,25 @@ class SyntheticOperationsKernel:
             raise OperationsDenied("MISSING_FIELD", "complete operation envelope is required")
         if record["operation"] not in self._OPERATIONS:
             raise OperationsDenied("INVALID_OPERATION", "operation is not in P6.4 scope")
-        if record["operation"] == "grant-revocation" and not record.get("parent_action_id"):
-            raise OperationsDenied("MISSING_FIELD", "grant revocation must reference a parent action")
+        if record["operation"] == "grant-revocation":
+            parent_action_id = record.get("parent_action_id")
+            if not parent_action_id:
+                raise OperationsDenied("MISSING_FIELD", "grant revocation must reference a parent action")
+            parent_row = self.connection.execute(
+                "SELECT record_hash, record_json FROM p64_operations WHERE action_id = ?",
+                (parent_action_id,),
+            ).fetchone()
+            if parent_row is None:
+                raise OperationsDenied("INVALID_PARENT", "grant revocation parent is not recorded")
+            try:
+                parent = self._verified_stored(parent_row)
+            except OperationsDenied as error:
+                raise OperationsDenied("INVALID_PARENT", "grant revocation parent is not valid") from error
+            if (parent.get("operation") != "quarantine" or
+                    parent.get("portfolio_id") != record.get("portfolio_id") or
+                    parent.get("venture_id") != record.get("venture_id") or
+                    parent.get("service_class") != record.get("service_class")):
+                raise OperationsDenied("INVALID_PARENT", "grant revocation parent scope is invalid")
         if record["policy_version"] != self.policy_version:
             raise OperationsDenied("POLICY_MISMATCH", "policy version mismatch")
         if record["venture_id"] not in self.allowed_ventures.get(record["portfolio_id"], set()):

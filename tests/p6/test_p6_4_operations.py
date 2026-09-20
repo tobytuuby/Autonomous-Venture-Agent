@@ -63,13 +63,13 @@ class P64OperationsTests(unittest.TestCase):
                     service_class="metadata-read")
         )
         self.assertEqual(result["service_class"], "metadata-read")
-        self.assertTrue(self.kernel.is_frozen("venture-1", "metadata-read"))
-        self.assertFalse(self.kernel.is_frozen("venture-1", "billing"))
+        self.assertTrue(self.kernel.is_frozen("venture-1", "metadata-read", "portfolio-1"))
+        self.assertFalse(self.kernel.is_frozen("venture-1", "billing", "portfolio-1"))
 
     def test_03_venture_freeze_is_selective(self):
         self.kernel.freeze_venture(self.op())
-        self.assertTrue(self.kernel.is_frozen("venture-1", "anything"))
-        self.assertFalse(self.kernel.is_frozen("venture-2", "anything"))
+        self.assertTrue(self.kernel.is_frozen("venture-1", "anything", "portfolio-1"))
+        self.assertFalse(self.kernel.is_frozen("venture-2", "anything", "portfolio-1"))
 
     def test_04_scope_denial(self):
         self.denied("SCOPE_DENIED", self.op(venture_id="venture-unknown"))
@@ -142,7 +142,7 @@ class P64OperationsTests(unittest.TestCase):
         ))
         self.assertFalse(any(r["venture_id"] == "venture-2" for r in self.kernel.records()
                              if r["operation"] == "quarantine"))
-        self.assertFalse(self.kernel.is_frozen("venture-2", "metadata-read"))
+        self.assertFalse(self.kernel.is_frozen("venture-2", "metadata-read", "portfolio-1"))
 
     def test_14_missing_provenance_denies(self):
         self.denied("MISSING_PROVENANCE", self.op(source_ids=[]))
@@ -212,6 +212,26 @@ class P64OperationsTests(unittest.TestCase):
         record = self.op(action_id="orphan-revocation", operation="grant-revocation")
         self.denied("MISSING_FIELD", record)
 
+    def test_25b_grant_revocation_requires_existing_parent(self):
+        record = self.op(
+            action_id="orphan-revocation-existing-shape",
+            operation="grant-revocation",
+            parent_action_id="does-not-exist",
+        )
+        self.denied("INVALID_PARENT", record)
+
+    def test_25c_grant_revocation_parent_scope_must_match(self):
+        self.kernel.quarantine(self.op(
+            action_id="parent-scope-quarantine", operation="quarantine",
+            venture_id="venture-1"))
+        record = self.op(
+            action_id="parent-scope-revocation",
+            operation="grant-revocation",
+            venture_id="venture-2",
+            parent_action_id="parent-scope-quarantine",
+        )
+        self.denied("INVALID_PARENT", record)
+
     def test_26_operation_record_matches_schema(self):
         result, _ = self.kernel.quarantine(self.op(
             action_id="schema-1", operation="quarantine"
@@ -278,7 +298,9 @@ class P64OperationsTests(unittest.TestCase):
     def test_32_all_operation_types_validate_against_schema(self):
         with open("schemas/p6/operations-record.schema.json", encoding="utf-8") as handle:
             schema = json.load(handle)
-        self.kernel.quarantine(self.op(action_id="schema-quarantine", operation="quarantine"))
+        quarantine_result, _ = self.kernel.quarantine(
+            self.op(action_id="schema-quarantine", operation="quarantine"))
+        validate(instance=quarantine_result, schema=schema)
         records = [
             self.op(action_id="schema-freeze", operation="freeze"),
             self.op(action_id="schema-revocation", operation="grant-revocation",
@@ -292,6 +314,22 @@ class P64OperationsTests(unittest.TestCase):
         results = [self.kernel.submit(record)[0] for record in records]
         for result in results:
             validate(instance=result, schema=schema)
+
+    def test_33_is_frozen_requires_portfolio_scope(self):
+        with self.assertRaises(OperationsDenied) as context:
+            self.kernel.is_frozen("venture-1", "metadata-read")
+        self.assertEqual(context.exception.code, "SCOPE_REQUIRED")
+
+    def test_34_recovery_does_not_use_corrupt_quarantine(self):
+        self.kernel.quarantine(self.op(
+            action_id="corrupt-quarantine", operation="quarantine"))
+        self.kernel.connection.execute(
+            "UPDATE p64_operations SET record_json = ? WHERE action_id = ?",
+            ("{malformed", "corrupt-quarantine"),
+        )
+        self.kernel.connection.commit()
+        self.denied("RECOVERY_REQUIRES_QUARANTINE", self.op(
+            action_id="recover-corrupt", operation="recover"))
 
     def denied_replay(self, code, action_id):
         with self.assertRaises(OperationsDenied) as context:
