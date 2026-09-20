@@ -1,0 +1,11 @@
+{
+  "phase": "P6.2",
+  "scope": "P6.0, P6.1, and P6.2 focused suites",
+  "implementation_commit": "7b68d1892b669d161ac3c538bdf7724946550e59",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination tests.p6.test_p6_2_shared_service -q",
+  "exit_code": 0,
+  "denominator": 50,
+  "passed": 50,
+  "failed": 0,
+  "result": "PASS"
+}

@@ -1,0 +1,27 @@
+{
+  "phase": "P6.2",
+  "schema_version": "p6.2.0",
+  "policy_version": "p6.2",
+  "execution_class": "synthetic-only",
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "parent_p6_0_p6_1_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "service_limits": {
+    "metadata-read": 10,
+    "synthetic-compute": 5
+  },
+  "quota_mode": "bounded per-demand",
+  "state_mode": "stateless",
+  "routing_scope": "explicit portfolio and venture registry membership",
+  "effect_mode": "none",
+  "live_authority_fields": {
+    "live_mode": false,
+    "external_action_authorized": false,
+    "payment_authorized": false,
+    "broker_execution_authorized": false,
+    "credential_access_authorized": false,
+    "customer_contact_authorized": false,
+    "capital_allocation_authorized": false,
+    "deployment_authorized": false,
+    "venture_execution_authorized": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "phase": "P6.2",
+  "increment": "shared-service demand and stateless execution",
+  "implementation_commit": "7b68d1892b669d161ac3c538bdf7724946550e59",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_2_shared_service -q",
+  "exit_code": 0,
+  "focused_denominator": 16,
+  "passed": 16,
+  "failed": 0,
+  "result": "PASS",
+  "synthetic_only": true,
+  "live_authority_enabled": false
+}

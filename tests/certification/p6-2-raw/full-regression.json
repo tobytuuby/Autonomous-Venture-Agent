@@ -1,0 +1,16 @@
+{
+  "phase": "P6.2",
+  "scope": "full repository regression",
+  "implementation_commit": "7b68d1892b669d161ac3c538bdf7724946550e59",
+  "command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
+  "exit_code": 0,
+  "denominator": 271,
+  "passed": 271,
+  "failed": 0,
+  "result": "PASS",
+  "known_warnings": {
+    "type": "ResourceWarning",
+    "count_observed": 6,
+    "description": "Six unclosed SQLite database warnings observed in the broader pre-existing test suite; no test failure and no P6.2-specific attribution established."
+  }
+}
