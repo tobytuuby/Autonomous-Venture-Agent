@@ -1,0 +1,9 @@
+{
+  "phase": "P6.3",
+  "captured_before_final_evidence_commit": true,
+  "implementation_commit": "a558f8be9fc875144016386fa429bc368a9701f8",
+  "evidence_commit_at_capture": "348199732c7b4d8223c8b37420350238dea00a0d",
+  "branch": "main",
+  "workspace_clean_at_capture": true,
+  "live_authority_enabled": false
+}
