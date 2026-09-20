@@ -1,4 +1,4 @@
-"""P6 synthetic portfolio identity and coordination boundaries."""
+"""P6 synthetic portfolio, coordination, and shared-service boundaries."""
 
 from .coordination import (
     CoordinationCollision,
@@ -16,6 +16,12 @@ from .registry import (
     build_portfolio,
     compute_configuration_fingerprint,
 )
+from .shared_service import (
+    DemandDenied,
+    SyntheticSharedServiceRunner,
+    build_demand,
+    compute_demand_hash,
+)
 
 __all__ = [
     "LIVE_FIELDS",
@@ -30,4 +36,8 @@ __all__ = [
     "SyntheticCoordinationKernel",
     "build_coordination_packet",
     "compute_packet_hash",
+    "DemandDenied",
+    "SyntheticSharedServiceRunner",
+    "build_demand",
+    "compute_demand_hash",
 ]

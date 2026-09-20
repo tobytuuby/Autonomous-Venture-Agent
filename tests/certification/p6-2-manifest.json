@@ -1,0 +1,29 @@
+{
+  "phase": "P6.2",
+  "increment": "shared-service demand and stateless execution",
+  "status": "implementation-authorized",
+  "implementation_authorized": true,
+  "evidence_status": "pending",
+  "baseline_commit": "c8c1b253a36a54d6153f95eb16d6c972d2473ca0",
+  "p6_0_p6_1_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "planned_focused_denominator": 16,
+  "planned_tests": [
+    "valid demand",
+    "required fields",
+    "registry scope",
+    "coordination identity",
+    "quota under limit",
+    "quota exceeded denial",
+    "service class eligibility denial",
+    "expiry denial",
+    "stale-time denial",
+    "fingerprint mismatch",
+    "missing provenance",
+    "all nine live-authority fields denied",
+    "effectful/non-synthetic denial",
+    "output attribution",
+    "deterministic stateless replay",
+    "cross-venture isolation"
+  ],
+  "human_acceptance_required": true
+}
