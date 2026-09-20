@@ -1,10 +1,11 @@
 {
-  "phase": "P0-P6.4-remediation",
+  "phase": "P0-P6.4-hardening",
+  "commit": "5743b8c24d4e36438f1cd5565bb54d845d1b0f23",
   "command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
   "exit_code": 0,
-  "tests_run": 315,
-  "passed": 315,
+  "tests_run": 321,
+  "passed": 321,
   "failed": 0,
   "result": "OK",
-  "known_warnings": "Six pre-existing SQLite ResourceWarnings from earlier infrastructure tests; no test failures."
+  "warnings": "Six pre-existing unclosed-SQLite ResourceWarning messages; no test failures."
 }

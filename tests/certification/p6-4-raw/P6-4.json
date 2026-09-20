@@ -1,18 +1,21 @@
 {
-  "phase": "P6.4-remediation",
+  "phase": "P6.4-hardening",
+  "commit": "5743b8c24d4e36438f1cd5565bb54d845d1b0f23",
   "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_4_operations -q",
   "exit_code": 0,
-  "tests_run": 26,
-  "passed": 26,
+  "tests_run": 32,
+  "passed": 32,
   "failed": 0,
   "result": "OK",
-  "remediation_coverage": [
-    "distinct evidence hash",
-    "explicit grant-revocation linkage",
-    "mandatory venture scope",
-    "idempotency-key collision denial",
-    "authority-restoration denial",
-    "schema validation",
-    "SQLite replay hash verification"
+  "coverage": [
+    "independent replay validation of canonical_hash, record_hash, and configuration fingerprint",
+    "evidence_hash/canonical_hash/record_hash semantic separation",
+    "stale configuration drift",
+    "corrupted record hash",
+    "malformed stored JSON",
+    "crash/rollback recovery",
+    "fault-injection convergence",
+    "cross-portfolio isolation",
+    "all seven operation types against JSON schema"
   ]
 }
