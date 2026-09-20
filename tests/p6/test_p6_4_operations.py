@@ -32,9 +32,9 @@ class P64OperationsTests(unittest.TestCase):
 
     def op(self, action_id="action-1", operation="freeze", venture_id="venture-1",
            target_type="venture", service_class=None, configuration_fingerprint=FINGERPRINT,
-           **extra):
+           portfolio_id="portfolio-1", **extra):
         values = dict(
-            action_id=action_id, operation=operation, portfolio_id="portfolio-1",
+            action_id=action_id, operation=operation, portfolio_id=portfolio_id,
             venture_id=venture_id, target_type=target_type, service_class=service_class,
             policy_version=POLICY, configuration_fingerprint=configuration_fingerprint,
             actor={"actor_id": "operator-1", "role": "reviewer"},
@@ -169,7 +169,8 @@ class P64OperationsTests(unittest.TestCase):
                                            allowed_ventures={"portfolio-1": {"venture-1"}})
         replay = second.replay("action-1")
         self.assertEqual(replay["status"], "FROZEN")
-        self.assertEqual(replay["record_hash"], compute_operation_hash(replay))
+        self.assertEqual(replay["canonical_hash"], compute_operation_hash(replay))
+        self.assertNotEqual(replay["record_hash"], replay["canonical_hash"])
         second.close()
         os.unlink(path)
 
@@ -218,6 +219,84 @@ class P64OperationsTests(unittest.TestCase):
         with open("schemas/p6/operations-record.schema.json", encoding="utf-8") as handle:
             schema = json.load(handle)
         validate(instance=result, schema=schema)
+
+    def test_27_replay_rejects_stale_configuration(self):
+        self.kernel.submit(self.op())
+        self.kernel.configuration_fingerprint = "f" * 64
+        self.denied_replay("FINGERPRINT_MISMATCH", "action-1")
+
+    def test_28_replay_rejects_corrupt_record_hash(self):
+        self.kernel.submit(self.op())
+        self.kernel.connection.execute(
+            "UPDATE p64_operations SET record_hash = ? WHERE action_id = ?",
+            ("f" * 64, "action-1"),
+        )
+        self.kernel.connection.commit()
+        self.denied_replay("RECORD_HASH", "action-1")
+
+    def test_29_replay_rejects_malformed_json(self):
+        self.kernel.submit(self.op())
+        self.kernel.connection.execute(
+            "UPDATE p64_operations SET record_json = ? WHERE action_id = ?",
+            ("{malformed", "action-1"),
+        )
+        self.kernel.connection.commit()
+        self.denied_replay("STORAGE_CORRUPTION", "action-1")
+
+    def test_30_crash_rollback_then_retry_converges(self):
+        original = self.kernel._append_revocation
+
+        def fail_once(_):
+            self.kernel._append_revocation = original
+            raise RuntimeError("injected journal crash")
+
+        self.kernel._append_revocation = fail_once
+        with self.assertRaises(OperationsDenied) as context:
+            self.kernel.quarantine(self.op(action_id="crash-1", operation="quarantine"))
+        self.assertEqual(context.exception.code, "JOURNAL_ROLLBACK")
+        self.assertEqual(self.kernel.records(), [])
+        first, duplicate = self.kernel.quarantine(
+            self.op(action_id="crash-1", operation="quarantine"))
+        second, replay_duplicate = self.kernel.quarantine(
+            self.op(action_id="crash-1", operation="quarantine"))
+        self.assertFalse(duplicate)
+        self.assertTrue(replay_duplicate)
+        self.assertEqual(first["record_hash"], second["record_hash"])
+
+    def test_31_cross_portfolio_scope_does_not_leak(self):
+        self.kernel.allowed_ventures["portfolio-2"] = {"venture-1"}
+        self.kernel.freeze_service(self.op(
+            action_id="portfolio-1-freeze", target_type="service",
+            service_class="metadata-read", portfolio_id="portfolio-1"))
+        self.kernel.freeze_service(self.op(
+            action_id="portfolio-2-freeze", target_type="service",
+            service_class="billing", portfolio_id="portfolio-2"))
+        self.assertTrue(self.kernel.is_frozen("venture-1", "metadata-read", "portfolio-1"))
+        self.assertFalse(self.kernel.is_frozen("venture-1", "metadata-read", "portfolio-2"))
+        self.assertTrue(self.kernel.is_frozen("venture-1", "billing", "portfolio-2"))
+
+    def test_32_all_operation_types_validate_against_schema(self):
+        with open("schemas/p6/operations-record.schema.json", encoding="utf-8") as handle:
+            schema = json.load(handle)
+        self.kernel.quarantine(self.op(action_id="schema-quarantine", operation="quarantine"))
+        records = [
+            self.op(action_id="schema-freeze", operation="freeze"),
+            self.op(action_id="schema-revocation", operation="grant-revocation",
+                    parent_action_id="schema-quarantine"),
+            self.op(action_id="schema-recover", operation="recover"),
+            self.op(action_id="schema-harvest", operation="harvest", harvested_units=1),
+            self.op(action_id="schema-reinvest", operation="reinvestment-proposal",
+                    proposed_units=1),
+            self.op(action_id="schema-wind-down", operation="wind-down"),
+        ]
+        results = [self.kernel.submit(record)[0] for record in records]
+        for result in results:
+            validate(instance=result, schema=schema)
+
+    def denied_replay(self, code, action_id):
+        with self.assertRaises(OperationsDenied) as context:
+            self.kernel.replay(action_id)
+        self.assertEqual(context.exception.code, code)
 
 
 if __name__ == "__main__":

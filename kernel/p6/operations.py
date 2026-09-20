@@ -35,8 +35,16 @@ def compute_evidence_hash(record: Mapping[str, Any]) -> str:
 
 
 def compute_operation_hash(record: Mapping[str, Any]) -> str:
+    """Hash the submitted operation, excluding journal/runtime fields."""
     material = {key: value for key, value in record.items()
-                if key not in {"canonical_hash", "status", "duplicate", "record_hash"}}
+                if key not in {"canonical_hash", "status", "duplicate", "record_hash", "grant_revoked"}}
+    return digest(canonical(material))
+
+
+def compute_journal_record_hash(record: Mapping[str, Any]) -> str:
+    """Hash the persisted journal record, excluding only its self-hash."""
+    material = {key: value for key, value in record.items()
+                if key not in {"record_hash", "duplicate"}}
     return digest(canonical(material))
 
 
@@ -147,18 +155,18 @@ class SyntheticOperationsKernel:
     def submit(self, record: Mapping[str, Any]) -> tuple[dict[str, Any], bool]:
         self._validate(record)
         material = dict(record)
-        record_hash = compute_operation_hash(material)
+        canonical_hash = compute_operation_hash(material)
         existing = self.connection.execute(
             "SELECT record_hash, record_json FROM p64_operations "
             "WHERE action_id = ? OR idempotency_key = ?",
             (material["action_id"], material["idempotency_key"]),
         ).fetchone()
         if existing:
-            if existing["record_hash"] != record_hash:
+            stored = self._verified_stored(existing)
+            if stored.get("canonical_hash") != canonical_hash:
                 raise OperationsDenied("IDEMPOTENCY_COLLISION", "idempotency content changed")
-            result = json.loads(existing["record_json"])
-            result["duplicate"] = True
-            return result, True
+            stored["duplicate"] = True
+            return stored, True
         if material["operation"] == "recover" and not self._has_quarantine(material):
             raise OperationsDenied("RECOVERY_REQUIRES_QUARANTINE", "target is not quarantined")
         if material["operation"] == "quarantine":
@@ -175,18 +183,22 @@ class SyntheticOperationsKernel:
             material["status"] = "PROPOSAL_ONLY"
         elif material["operation"] == "wind-down":
             material["status"] = "WIND_DOWN_RECORDED"
-        material["record_hash"] = record_hash
+        material["canonical_hash"] = canonical_hash
         material["duplicate"] = False
-        self.connection.execute(
-            "INSERT INTO p64_operations "
-            "(action_id, idempotency_key, record_hash, record_json, created_at) "
-            "VALUES (?, ?, ?, ?, ?)",
-            (material["action_id"], material["idempotency_key"], record_hash,
-             canonical(material), material["created_at"]),
-        )
-        if material["operation"] == "quarantine":
-            self._append_revocation(material)
-        self.connection.commit()
+        material["record_hash"] = compute_journal_record_hash(material)
+        try:
+            with self.connection:
+                self.connection.execute(
+                    "INSERT INTO p64_operations "
+                    "(action_id, idempotency_key, record_hash, record_json, created_at) "
+                    "VALUES (?, ?, ?, ?, ?)",
+                    (material["action_id"], material["idempotency_key"],
+                     material["record_hash"], canonical(material), material["created_at"]),
+                )
+                if material["operation"] == "quarantine":
+                    self._append_revocation(material)
+        except Exception as error:
+            raise OperationsDenied("JOURNAL_ROLLBACK", "operation journal transaction rolled back") from error
         return dict(material), False
 
     def freeze_service(self, record: Mapping[str, Any]) -> tuple[dict[str, Any], bool]:
@@ -227,13 +239,16 @@ class SyntheticOperationsKernel:
         item["operation"] = "wind-down"
         return self.submit(item)
 
-    def is_frozen(self, venture_id: str, service_class: str | None = None) -> bool:
+    def is_frozen(self, venture_id: str, service_class: str | None = None,
+                  portfolio_id: str | None = None) -> bool:
         rows = self.connection.execute(
             "SELECT record_json FROM p64_operations ORDER BY rowid"
         ).fetchall()
         for row in rows:
             record = json.loads(row["record_json"])
             if record["venture_id"] != venture_id:
+                continue
+            if portfolio_id is not None and record["portfolio_id"] != portfolio_id:
                 continue
             if record["operation"] != "freeze":
                 continue
@@ -243,12 +258,30 @@ class SyntheticOperationsKernel:
 
     def replay(self, action_id: str) -> dict[str, Any]:
         row = self.connection.execute(
-            "SELECT record_json FROM p64_operations WHERE action_id = ?",
+            "SELECT record_hash, record_json FROM p64_operations WHERE action_id = ?",
             (action_id,),
         ).fetchone()
         if row is None:
             raise OperationsDenied("UNKNOWN_ACTION", "operation is not recorded")
-        return json.loads(row["record_json"])
+        return self._verified_stored(row)
+
+    def _verified_stored(self, row: sqlite3.Row) -> dict[str, Any]:
+        try:
+            stored = json.loads(row["record_json"])
+        except (TypeError, json.JSONDecodeError) as error:
+            raise OperationsDenied("STORAGE_CORRUPTION", "stored operation JSON is malformed") from error
+        if not isinstance(stored, dict):
+            raise OperationsDenied("STORAGE_CORRUPTION", "stored operation is not an object")
+        if stored.get("configuration_fingerprint") != self.configuration_fingerprint:
+            raise OperationsDenied("FINGERPRINT_MISMATCH", "stored operation uses stale configuration")
+        if stored.get("canonical_hash") != compute_operation_hash(stored):
+            raise OperationsDenied("CANONICAL_HASH", "stored operation hash mismatch")
+        expected_record_hash = compute_journal_record_hash(stored)
+        if (stored.get("record_hash") != expected_record_hash or
+                row["record_hash"] != expected_record_hash):
+            raise OperationsDenied("RECORD_HASH", "persisted journal record hash mismatch")
+        self._validate(stored)
+        return stored
 
     def records(self) -> list[dict[str, Any]]:
         rows = self.connection.execute(
@@ -272,7 +305,7 @@ class SyntheticOperationsKernel:
         })
         revocation["evidence_hash"] = compute_evidence_hash(revocation)
         revocation["canonical_hash"] = compute_operation_hash(revocation)
-        revocation["record_hash"] = compute_operation_hash(revocation)
+        revocation["record_hash"] = compute_journal_record_hash(revocation)
         self.connection.execute(
             "INSERT INTO p64_operations "
             "(action_id, idempotency_key, record_hash, record_json, created_at) "
@@ -286,7 +319,8 @@ class SyntheticOperationsKernel:
         for prior in self.records():
             if prior["operation"] != "quarantine":
                 continue
-            if prior["venture_id"] != record["venture_id"]:
+            if (prior["portfolio_id"] != record["portfolio_id"] or
+                    prior["venture_id"] != record["venture_id"]):
                 continue
             if prior.get("service_class") == record.get("service_class"):
                 return True
