@@ -41,6 +41,7 @@
     "config_manifest": {"path": "tests/certification/p6-4-config-manifest.json", "sha256": "19a4b0dee3586de742fcb2ef4a30edfeb8b404de91490d88ed5858e001ee95bd"},
     "technical_report": {"path": "docs/reports/PHASE6-P6.4-CERTIFICATION.md", "sha256": "b166675583e3b42f03db34aeeec976562ed163ada221dce1bff5629c07bfdcba"},
     "non_technical_report": {"path": "docs/reports/PHASE6-P6.4-NON-TECHNICAL-ASSESSMENT.md", "sha256": "f5d1ca35038942513dfc27846748e53264f7fbdf3e7d3fb9352bd17916a50a2d"},
-    "remediation_decision": {"path": "docs/p6-4-remediation-decision.md", "sha256": "4495889429f7e33d3c57932f71e5bf25f0e6b9c2d2cb1f82b9a33b8808370059"}
+    "remediation_decision": {"path": "docs/p6-4-remediation-decision.md", "sha256": "4495889429f7e33d3c57932f71e5bf25f0e6b9c2d2cb1f82b9a33b8808370059"},
+    "audit_package": {"path": "docs/audits/PHASE6-P6.4-CODE-FIRST-AUDIT.md", "sha256": "3ed6eddecf24b5eca61c6d9d6ec939e71ef952dc6bbab722c7efb28b216d3808"}
   }
 }
