@@ -1,5 +1,12 @@
-"""P6 synthetic portfolio, coordination, and shared-service boundaries."""
+"""P6 synthetic portfolio, coordination, shared-service, and anomaly boundaries."""
 
+from .anomaly import (
+    AnomalyDenied,
+    SyntheticAnomalyAnalyzer,
+    build_analysis_request,
+    compute_analysis_hash,
+    compute_record_hash,
+)
 from .coordination import (
     CoordinationCollision,
     CoordinationDenied,
@@ -40,4 +47,9 @@ __all__ = [
     "SyntheticSharedServiceRunner",
     "build_demand",
     "compute_demand_hash",
+    "AnomalyDenied",
+    "SyntheticAnomalyAnalyzer",
+    "build_analysis_request",
+    "compute_analysis_hash",
+    "compute_record_hash",
 ]

@@ -1,0 +1,11 @@
+{
+  "phase": "P6.3",
+  "increment": "aggregate anomaly controls",
+  "status": "implementation-authorized",
+  "implementation_authorized": true,
+  "evidence_status": "pending",
+  "baseline_commit": "387f9138d0e550d4171faa83048eb4532d2b2466",
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "planned_focused_denominator": 18,
+  "human_acceptance_required": true
+}
