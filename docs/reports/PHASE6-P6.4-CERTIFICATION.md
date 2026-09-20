@@ -15,4 +15,4 @@ Verified bridge results at the hardening commit:
 
 Six pre-existing unclosed-SQLite ResourceWarning messages occurred during the full repository regression; they did not affect exit status or test results. No provider, network, credential, payment, broker, customer, deployment, capital, venture, or worker execution exists. All nine live-authority fields remain denied.
 
-This is implementation evidence only. P6.4 acceptance remains pending separate human review. No P6.4-ACCEPTED tag was created, and P6.5 was not started.
+This evidence was formally accepted on 2026-09-20 at verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752. The P6.4-ACCEPTED tag records closure. P6.5 is unblocked for separate planning authorization but has not started.

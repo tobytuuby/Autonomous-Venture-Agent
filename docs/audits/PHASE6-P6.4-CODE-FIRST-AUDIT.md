@@ -8,7 +8,7 @@ This document is a self-contained audit package for reviewers who cannot access 
 
 Repository: tobytuuby/Autonomous-Venture-Agent
 Branch: main
-Remote HEAD at package creation: 2ebfb9aee2c7a1343c79cf38493c797b319bbb4b
+Verified source HEAD for acceptance: 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752
 Locked configuration fingerprint: 8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11
 
 The P6.4 hardening chain is linear:
@@ -143,14 +143,14 @@ The raw machine-readable records are:
 - kernel/p6/operations.py: 9604c01e824dcdd4df1362a1d1459187fab46012bd09933ed2ae3cf357991462
 - schemas/p6/operations-record.schema.json: 91675df1572c485bd5352055a3068857fc81c33bbdc479476acefef1d702858b
 - tests/p6/test_p6_4_operations.py: a2d0695e0ace24716b9280da773e335ed59e494c0037dac1354827debaca75cc
-- tests/certification/p6-4-manifest.json: dbb7c1d564ccd623c5233a61feb6d888188fd5d716e19099af7bd1056620b350
+- tests/certification/p6-4-manifest.json: the final manifest records this audit package hash; the two files are intentionally not mutually hashed to avoid a circular digest.
 - tests/certification/p6-4-config-manifest.json: 19a4b0dee3586de742fcb2ef4a30edfeb8b404de91490d88ed5858e001ee95bd
 
 The final manifest contains SHA-256 hashes for all raw evidence, reports, configuration, and decision files.
 
 ## Acceptance state and limitations
 
-At the recorded HEAD, P6.4 is hardening-complete and technically ready for human acceptance. It is not marked accepted. No P6.4-ACCEPTED tag exists. P6.5 has not started.
+At the verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752, P6.4 was formally accepted on 2026-09-20. The P6.4-ACCEPTED tag records closure. P6.5 is unblocked for separate planning authorization but has not started.
 
 A reviewer without bridge access can audit provenance, commit lineage, changed-file scope, source hashes, test inventory, command claims, raw result records, and documented warnings from this package. Such a reviewer cannot independently reproduce execution behavior without a runtime; that limitation is explicit rather than hidden.
 

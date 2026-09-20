@@ -4,7 +4,9 @@
   "branch": "main",
   "workspace_clean_at_test_execution": true,
   "bridge_health": "local HTTP 200",
-  "p6_4_accepted": false,
-  "p6_4_tag_created": false,
-  "p6_5_started": false
+  "acceptance_commit": "3d32dc1010f4eba8c5e63d9be1d0e369a33cf752",
+  "p6_4_accepted": true,
+  "p6_4_tag_created": true,
+  "p6_5_started": false,
+  "p6_5_status": "unblocked-planning-not-started"
 }

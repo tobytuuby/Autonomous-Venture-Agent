@@ -6,4 +6,4 @@ The system remains synthetic recordkeeping. It does not quarantine real systems,
 
 At the hardening commit, 36 focused P6.4 tests, 104 P6 regression tests, and 325 full repository tests passed. Six pre-existing SQLite resource warnings remain documented. Passing tests do not establish production readiness.
 
-P6.4 acceptance remains pending fresh human review. P6.5 remains blocked.
+P6.4 was formally accepted on 2026-09-20 at verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752; the P6.4-ACCEPTED tag records closure. P6.5 is unblocked for separate planning authorization but has not started.

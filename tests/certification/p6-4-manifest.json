@@ -1,7 +1,7 @@
 {
   "phase": "P6.4-follow-up-hardening",
   "scope": "Replay integrity, parent linkage, portfolio scope, recovery verification, schema coverage, and fail-closed synthetic operations",
-  "status": "hardening-complete-acceptance-pending",
+  "status": "accepted",
   "baseline_commit": "f7b790d5039954e5fdd038971d50d88d03564f45",
   "hardening_commit": "0f5b0f56b9d021760dc19a1d3dcebd9ade7842dc",
   "locked_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
@@ -15,10 +15,12 @@
   "p6_regression_command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination tests.p6.test_p6_2_shared_service tests.p6.test_p6_3_anomaly tests.p6.test_p6_4_operations -q",
   "full_regression_command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
   "known_warnings": "Six pre-existing unclosed-SQLite ResourceWarning messages during full regression; no failures.",
-  "acceptance_pending": true,
-  "p6_4_accepted": false,
-  "p6_4_tag_created": false,
+  "acceptance_pending": false,
+  "acceptance_commit": "3d32dc1010f4eba8c5e63d9be1d0e369a33cf752",
+  "p6_4_accepted": true,
+  "p6_4_tag_created": true,
   "p6_5_started": false,
+  "p6_5_status": "unblocked-planning-not-started",
   "controls_verified": [
     "independent replay verification of canonical_hash",
     "independent replay verification of record_hash",
@@ -37,11 +39,11 @@
     "p6_regression": {"path": "tests/certification/p6-4-raw/p6-regression.json", "sha256": "9919bb06df21783b0441546fcfcdb281aa005091861f867e5d5ba1fd78aa6fd5"},
     "full_regression": {"path": "tests/certification/p6-4-raw/full-regression.json", "sha256": "36c94954b33fb35fd91b2d91450d13584bec71aae1df31618c7bb9dffa98ab50"},
     "remediation": {"path": "tests/certification/p6-4-raw/remediation.json", "sha256": "692324a174a4b6b77363e8f169d9531363ad37e708da9f8634c203e7438ca394"},
-    "git_state": {"path": "tests/certification/p6-4-raw/git-state.json", "sha256": "2340240afaef9da8d1ee5c66bcd7f92ebf4e2d78b5e0db60c886dff940e4b242"},
+    "git_state": {"path": "tests/certification/p6-4-raw/git-state.json", "sha256": "0762a3a64b7702164f1380207a1f7c576db4c8e33bc8fab14f542bcade5392b0"},
     "config_manifest": {"path": "tests/certification/p6-4-config-manifest.json", "sha256": "19a4b0dee3586de742fcb2ef4a30edfeb8b404de91490d88ed5858e001ee95bd"},
-    "technical_report": {"path": "docs/reports/PHASE6-P6.4-CERTIFICATION.md", "sha256": "b166675583e3b42f03db34aeeec976562ed163ada221dce1bff5629c07bfdcba"},
-    "non_technical_report": {"path": "docs/reports/PHASE6-P6.4-NON-TECHNICAL-ASSESSMENT.md", "sha256": "f5d1ca35038942513dfc27846748e53264f7fbdf3e7d3fb9352bd17916a50a2d"},
-    "remediation_decision": {"path": "docs/p6-4-remediation-decision.md", "sha256": "4495889429f7e33d3c57932f71e5bf25f0e6b9c2d2cb1f82b9a33b8808370059"},
-    "audit_package": {"path": "docs/audits/PHASE6-P6.4-CODE-FIRST-AUDIT.md", "sha256": "3ed6eddecf24b5eca61c6d9d6ec939e71ef952dc6bbab722c7efb28b216d3808"}
+    "technical_report": {"path": "docs/reports/PHASE6-P6.4-CERTIFICATION.md", "sha256": "90c2fed596377e49bbfbfbaac9cb00fde472af51340c869ac32b520f1d717395"},
+    "non_technical_report": {"path": "docs/reports/PHASE6-P6.4-NON-TECHNICAL-ASSESSMENT.md", "sha256": "86a07c01322d359b03564da0fd23574db6af12c070ec5c71992a5022d3de32cf"},
+    "remediation_decision": {"path": "docs/p6-4-remediation-decision.md", "sha256": "8c3a9b82e01ea716807020a1f4bd650e4f653cb1087f78694b077cc1da575244"},
+    "audit_package": {"path": "docs/audits/PHASE6-P6.4-CODE-FIRST-AUDIT.md", "sha256": "5c89e60410cacd71bd68ef6f41494438cc74c3f3d0fed79a19af46620c871f5f"}
   }
 }
