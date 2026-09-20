@@ -29,6 +29,12 @@ from .shared_service import (
     build_demand,
     compute_demand_hash,
 )
+from .operations import (
+    OperationsDenied,
+    SyntheticOperationsKernel,
+    build_operation,
+    compute_operation_hash,
+)
 
 __all__ = [
     "LIVE_FIELDS",
@@ -52,4 +58,8 @@ __all__ = [
     "build_analysis_request",
     "compute_analysis_hash",
     "compute_record_hash",
+    "OperationsDenied",
+    "SyntheticOperationsKernel",
+    "build_operation",
+    "compute_operation_hash",
 ]
