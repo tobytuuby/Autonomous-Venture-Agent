@@ -1,12 +1,17 @@
+import json
 import os
 import tempfile
 import unittest
+
+from jsonschema import validate
 
 from kernel.p6 import (
     LIVE_FIELDS,
     OperationsDenied,
     SyntheticOperationsKernel,
     build_operation,
+    compute_evidence_hash,
+    compute_operation_hash,
 )
 
 
@@ -156,16 +161,63 @@ class P64OperationsTests(unittest.TestCase):
     def test_18_sqlite_reopen_preserves_replay(self):
         fd, path = tempfile.mkstemp()
         os.close(fd)
-        first = SyntheticOperationsKernel(POLICY, FINGERPRINT, database=path)
+        first = SyntheticOperationsKernel(POLICY, FINGERPRINT, database=path,
+                                          allowed_ventures={"portfolio-1": {"venture-1"}})
         first.submit(self.op())
         first.close()
-        second = SyntheticOperationsKernel(POLICY, FINGERPRINT, database=path)
+        second = SyntheticOperationsKernel(POLICY, FINGERPRINT, database=path,
+                                           allowed_ventures={"portfolio-1": {"venture-1"}})
         replay = second.replay("action-1")
         self.assertEqual(replay["status"], "FROZEN")
-        self.assertEqual(replay["record_hash"], self.kernel.compute_hash(replay)
-                         if hasattr(self.kernel, "compute_hash") else replay["record_hash"])
+        self.assertEqual(replay["record_hash"], compute_operation_hash(replay))
         second.close()
         os.unlink(path)
+
+    def test_19_evidence_hash_is_distinct_and_verified(self):
+        record = self.op(action_id="evidence-1", operation="quarantine")
+        self.assertEqual(record["evidence_hash"], compute_evidence_hash(record))
+        result, _ = self.kernel.quarantine(record)
+        self.assertNotEqual(result["evidence_hash"], result["record_hash"])
+
+    def test_20_quarantine_creates_explicit_revocation_record(self):
+        self.kernel.quarantine(self.op(action_id="quarantine-2", operation="quarantine"))
+        revocation = self.kernel.replay("quarantine-2:grant-revocation")
+        self.assertEqual(revocation["operation"], "grant-revocation")
+        self.assertEqual(revocation["parent_action_id"], "quarantine-2")
+        self.assertEqual(revocation["status"], "GRANT_REVOKED")
+        self.assertEqual(revocation["evidence_hash"], compute_evidence_hash(revocation))
+
+    def test_21_idempotency_key_collision_denies(self):
+        self.kernel.submit(self.op(action_id="idem-1"))
+        changed = self.op(action_id="idem-2", idempotency_key="idem-idem-1")
+        self.denied("IDEMPOTENCY_COLLISION", changed)
+
+    def test_22_scope_is_mandatory(self):
+        with self.assertRaises(OperationsDenied) as context:
+            SyntheticOperationsKernel(POLICY, FINGERPRINT)
+        self.assertEqual(context.exception.code, "SCOPE_REQUIRED")
+
+    def test_23_recovery_cannot_restore_authority(self):
+        self.kernel.quarantine(self.op(action_id="quarantine-3", operation="quarantine"))
+        record = self.op(action_id="recover-3", operation="recover", restores_authority=True)
+        self.denied("AUTHORITY_GRANT", record)
+
+    def test_24_tampered_evidence_hash_denies(self):
+        record = self.op(action_id="tampered-1")
+        record["evidence_hash"] = "f" * 64
+        self.denied("EVIDENCE_HASH", record)
+
+    def test_25_grant_revocation_requires_parent(self):
+        record = self.op(action_id="orphan-revocation", operation="grant-revocation")
+        self.denied("MISSING_FIELD", record)
+
+    def test_26_operation_record_matches_schema(self):
+        result, _ = self.kernel.quarantine(self.op(
+            action_id="schema-1", operation="quarantine"
+        ))
+        with open("schemas/p6/operations-record.schema.json", encoding="utf-8") as handle:
+            schema = json.load(handle)
+        validate(instance=result, schema=schema)
 
 
 if __name__ == "__main__":

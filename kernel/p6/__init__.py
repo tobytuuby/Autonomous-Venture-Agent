@@ -33,6 +33,7 @@ from .operations import (
     OperationsDenied,
     SyntheticOperationsKernel,
     build_operation,
+    compute_evidence_hash,
     compute_operation_hash,
 )
 
@@ -61,5 +62,6 @@ __all__ = [
     "OperationsDenied",
     "SyntheticOperationsKernel",
     "build_operation",
+    "compute_evidence_hash",
     "compute_operation_hash",
 ]

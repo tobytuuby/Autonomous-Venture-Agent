@@ -19,9 +19,24 @@ class OperationsDenied(ValueError):
         self.code = code
 
 
+def compute_evidence_hash(record: Mapping[str, Any]) -> str:
+    material = {
+        "portfolio_id": record.get("portfolio_id"),
+        "venture_id": record.get("venture_id"),
+        "target_type": record.get("target_type"),
+        "service_class": record.get("service_class"),
+        "reason": record.get("reason"),
+        "source_ids": record.get("source_ids"),
+        "source_hashes": record.get("source_hashes"),
+        "lineage": record.get("lineage"),
+        "taint": record.get("taint"),
+    }
+    return digest(canonical(material))
+
+
 def compute_operation_hash(record: Mapping[str, Any]) -> str:
     material = {key: value for key, value in record.items()
-                if key not in {"canonical_hash", "status", "duplicate"}}
+                if key not in {"canonical_hash", "status", "duplicate", "record_hash"}}
     return digest(canonical(material))
 
 
@@ -79,6 +94,8 @@ def build_operation(
     if proposed_units is not None:
         record["proposed_units"] = proposed_units
     record.update(extra)
+    record["evidence_hash"] = compute_evidence_hash(record)
+    record.setdefault("restores_authority", False)
     record["canonical_hash"] = compute_operation_hash(record)
     return record
 
@@ -87,7 +104,7 @@ class SyntheticOperationsKernel:
     """Append-only, deterministic, scope-isolated P6.4 operation journal."""
 
     _OPERATIONS = {
-        "freeze", "quarantine", "recover", "harvest",
+        "freeze", "quarantine", "grant-revocation", "recover", "harvest",
         "reinvestment-proposal", "wind-down",
     }
 
@@ -96,20 +113,34 @@ class SyntheticOperationsKernel:
                  allowed_ventures: Mapping[str, set[str]] | None = None):
         if not isinstance(configuration_fingerprint, str) or len(configuration_fingerprint) != 64:
             raise OperationsDenied("FINGERPRINT_MISMATCH", "invalid locked fingerprint")
+        if not allowed_ventures:
+            raise OperationsDenied("SCOPE_REQUIRED", "portfolio venture scope is required")
         self.policy_version = policy_version
         self.configuration_fingerprint = configuration_fingerprint
         self.allowed_ventures = {
-            portfolio: set(ventures) for portfolio, ventures in (allowed_ventures or {}).items()
+            portfolio: set(ventures) for portfolio, ventures in allowed_ventures.items()
         }
         self.connection = sqlite3.connect(database)
         self.connection.row_factory = sqlite3.Row
         self.connection.execute(
             """CREATE TABLE IF NOT EXISTS p64_operations (
                 action_id TEXT PRIMARY KEY,
+                idempotency_key TEXT NOT NULL,
                 record_hash TEXT NOT NULL,
                 record_json TEXT NOT NULL,
                 created_at TEXT NOT NULL
             )"""
+        )
+        columns = {row["name"] for row in self.connection.execute(
+            "PRAGMA table_info(p64_operations)"
+        ).fetchall()}
+        if "idempotency_key" not in columns:
+            self.connection.execute(
+                "ALTER TABLE p64_operations ADD COLUMN idempotency_key TEXT"
+            )
+        self.connection.execute(
+            "CREATE UNIQUE INDEX IF NOT EXISTS p64_idempotency_idx "
+            "ON p64_operations(idempotency_key)"
         )
         self.connection.commit()
 
@@ -118,12 +149,13 @@ class SyntheticOperationsKernel:
         material = dict(record)
         record_hash = compute_operation_hash(material)
         existing = self.connection.execute(
-            "SELECT record_hash, record_json FROM p64_operations WHERE action_id = ?",
-            (material["action_id"],),
+            "SELECT record_hash, record_json FROM p64_operations "
+            "WHERE action_id = ? OR idempotency_key = ?",
+            (material["action_id"], material["idempotency_key"]),
         ).fetchone()
         if existing:
             if existing["record_hash"] != record_hash:
-                raise OperationsDenied("IDEMPOTENCY_COLLISION", "action content changed")
+                raise OperationsDenied("IDEMPOTENCY_COLLISION", "idempotency content changed")
             result = json.loads(existing["record_json"])
             result["duplicate"] = True
             return result, True
@@ -146,9 +178,14 @@ class SyntheticOperationsKernel:
         material["record_hash"] = record_hash
         material["duplicate"] = False
         self.connection.execute(
-            "INSERT INTO p64_operations VALUES (?, ?, ?, ?)",
-            (material["action_id"], record_hash, canonical(material), material["created_at"]),
+            "INSERT INTO p64_operations "
+            "(action_id, idempotency_key, record_hash, record_json, created_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (material["action_id"], material["idempotency_key"], record_hash,
+             canonical(material), material["created_at"]),
         )
+        if material["operation"] == "quarantine":
+            self._append_revocation(material)
         self.connection.commit()
         return dict(material), False
 
@@ -222,6 +259,29 @@ class SyntheticOperationsKernel:
     def close(self) -> None:
         self.connection.close()
 
+    def _append_revocation(self, quarantine: Mapping[str, Any]) -> None:
+        revocation = dict(quarantine)
+        revocation.update({
+            "action_id": quarantine["action_id"] + ":grant-revocation",
+            "operation": "grant-revocation",
+            "idempotency_key": quarantine["idempotency_key"] + ":grant-revocation",
+            "parent_action_id": quarantine["action_id"],
+            "reason": "grant revoked by quarantine",
+            "status": "GRANT_REVOKED",
+            "grant_revoked": True,
+        })
+        revocation["evidence_hash"] = compute_evidence_hash(revocation)
+        revocation["canonical_hash"] = compute_operation_hash(revocation)
+        revocation["record_hash"] = compute_operation_hash(revocation)
+        self.connection.execute(
+            "INSERT INTO p64_operations "
+            "(action_id, idempotency_key, record_hash, record_json, created_at) "
+            "VALUES (?, ?, ?, ?, ?)",
+            (revocation["action_id"], revocation["idempotency_key"],
+             revocation["record_hash"], canonical(revocation),
+             revocation["created_at"]),
+        )
+
     def _has_quarantine(self, record: Mapping[str, Any]) -> bool:
         for prior in self.records():
             if prior["operation"] != "quarantine":
@@ -239,15 +299,17 @@ class SyntheticOperationsKernel:
             "correlation_id", "idempotency_key", "source_ids", "source_hashes",
             "lineage", "taint", "created_at", "reason", "synthetic_only", "effect",
             "capability_granted", "execution_requested", "capital_movement",
+            "evidence_hash", "restores_authority",
         }
         if not required.issubset(record):
             raise OperationsDenied("MISSING_FIELD", "complete operation envelope is required")
         if record["operation"] not in self._OPERATIONS:
             raise OperationsDenied("INVALID_OPERATION", "operation is not in P6.4 scope")
+        if record["operation"] == "grant-revocation" and not record.get("parent_action_id"):
+            raise OperationsDenied("MISSING_FIELD", "grant revocation must reference a parent action")
         if record["policy_version"] != self.policy_version:
             raise OperationsDenied("POLICY_MISMATCH", "policy version mismatch")
-        if (self.allowed_ventures and
-                record["venture_id"] not in self.allowed_ventures.get(record["portfolio_id"], set())):
+        if record["venture_id"] not in self.allowed_ventures.get(record["portfolio_id"], set()):
             raise OperationsDenied("SCOPE_DENIED", "venture is outside portfolio scope")
         if record["configuration_fingerprint"] != self.configuration_fingerprint:
             raise OperationsDenied("FINGERPRINT_MISMATCH", "configuration fingerprint mismatch")
@@ -266,8 +328,10 @@ class SyntheticOperationsKernel:
         if record["synthetic_only"] is not True or record["effect"] != "none":
             raise OperationsDenied("EFFECTFUL_OPERATION", "operation must be synthetic and effect-free")
         if (record["capability_granted"] or record["execution_requested"] or
-                record["capital_movement"]):
-            raise OperationsDenied("AUTHORITY_GRANT", "operation cannot grant or execute")
+                record["capital_movement"] or record["restores_authority"]):
+            raise OperationsDenied("AUTHORITY_GRANT", "operation cannot grant, restore, or execute")
+        if record["evidence_hash"] != compute_evidence_hash(record):
+            raise OperationsDenied("EVIDENCE_HASH", "evidence hash mismatch")
         if any(bool(record.get(field)) for field in LIVE_FIELDS):
             raise OperationsDenied("LIVE_AUTHORITY", "live authority is denied")
         if record.get("canonical_hash") != compute_operation_hash(record):
