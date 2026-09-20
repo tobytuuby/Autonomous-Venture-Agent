@@ -1,21 +1,13 @@
 {
-  "phase": "P6.4-hardening",
-  "policy_version": "p6.4-hardening",
+  "phase": "P6.4-follow-up-hardening",
+  "policy_version": "p6.4-follow-up-hardening",
   "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
   "synthetic_only": true,
   "effect": "none",
-  "hash_semantics": {
-    "evidence_hash": "evidence material",
-    "canonical_hash": "submitted operation",
-    "record_hash": "persisted journal record"
-  },
-  "replay_independently_verifies": [
-    "stored canonical_hash",
-    "stored record_hash",
-    "current configuration fingerprint",
-    "stored JSON shape and policy envelope"
-  ],
-  "mandatory_scope": true,
+  "hash_semantics": {"evidence_hash": "evidence material", "canonical_hash": "submitted operation", "record_hash": "persisted journal record"},
+  "parent_linkage": {"parent_must_exist": true, "parent_must_be_quarantine": true, "parent_scope_must_match": true},
+  "freeze_queries_require_portfolio_scope": true,
+  "recovery_uses_verified_replay": true,
   "transactional_journal": true,
   "live_mode": false,
   "external_action_authorized": false,

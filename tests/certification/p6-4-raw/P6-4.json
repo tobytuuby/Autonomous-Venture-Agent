@@ -1,21 +1,11 @@
 {
-  "phase": "P6.4-hardening",
-  "commit": "5743b8c24d4e36438f1cd5565bb54d845d1b0f23",
+  "phase": "P6.4-follow-up-hardening",
+  "commit": "0f5b0f56b9d021760dc19a1d3dcebd9ade7842dc",
   "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_4_operations -q",
   "exit_code": 0,
-  "tests_run": 32,
-  "passed": 32,
+  "tests_run": 36,
+  "passed": 36,
   "failed": 0,
   "result": "OK",
-  "coverage": [
-    "independent replay validation of canonical_hash, record_hash, and configuration fingerprint",
-    "evidence_hash/canonical_hash/record_hash semantic separation",
-    "stale configuration drift",
-    "corrupted record hash",
-    "malformed stored JSON",
-    "crash/rollback recovery",
-    "fault-injection convergence",
-    "cross-portfolio isolation",
-    "all seven operation types against JSON schema"
-  ]
+  "coverage": ["replay hash and fingerprint validation", "hash semantic separation", "stale configuration drift", "corrupted and malformed stored input", "crash rollback and fault injection", "cross-portfolio isolation", "grant-revocation parent existence and scope", "mandatory portfolio scope for is_frozen", "corrupt-quarantine recovery handling", "all seven operation types with explicit quarantine schema validation"]
 }

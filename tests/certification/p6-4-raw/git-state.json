@@ -1,6 +1,6 @@
 {
-  "baseline_commit": "edbf031f2851f0e2d5b715b760f6acbccf7330ed",
-  "hardening_commit": "5743b8c24d4e36438f1cd5565bb54d845d1b0f23",
+  "baseline_commit": "f7b790d5039954e5fdd038971d50d88d03564f45",
+  "hardening_commit": "0f5b0f56b9d021760dc19a1d3dcebd9ade7842dc",
   "branch": "main",
   "workspace_clean_at_test_execution": true,
   "bridge_health": "local HTTP 200",

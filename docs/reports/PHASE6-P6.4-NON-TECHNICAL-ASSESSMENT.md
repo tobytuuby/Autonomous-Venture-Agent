@@ -1,9 +1,9 @@
 # P6.4 Hardening Non-Technical Assessment
 
-The hardening makes the record trail independently checkable. Evidence, the submitted operation, and the stored journal record each have separate hashes. A replay cannot proceed if the stored record is malformed, tampered with, tied to a stale configuration, or inconsistent with its journal hash. A failed quarantine write is rolled back as one transaction and can be retried without creating a partial result.
-
-The tests also confirm that one portfolio cannot observe or reuse another portfolio's selective operation state, and that every synthetic operation type conforms to the declared JSON schema.
+The follow-up hardening closes the remaining integrity and scope gaps identified by the code-first audit. A direct grant revocation cannot point to an absent, non-quarantine, or differently scoped parent. Freeze-state inspection requires portfolio context. Recovery does not trust raw journal JSON when deciding whether a quarantine exists. The schema test now validates the quarantine result as well as the other operation results.
 
 The system remains synthetic recordkeeping. It does not quarantine real systems, revoke real credentials, move capital, harvest revenue, reinvest funds, wind down a venture, contact customers, call providers, deploy software, or execute workers.
 
-Residual risks include production concurrency, operational database management, and the difference between synthetic evidence and real-world operations. Passing tests does not establish production readiness. P6.4 acceptance and P6.5 authorization remain blocked pending human decisions.
+At the hardening commit, 36 focused P6.4 tests, 104 P6 regression tests, and 325 full repository tests passed. Six pre-existing SQLite resource warnings remain documented. Passing tests do not establish production readiness.
+
+P6.4 acceptance remains pending fresh human review. P6.5 remains blocked.
