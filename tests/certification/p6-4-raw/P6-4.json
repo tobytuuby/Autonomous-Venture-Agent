@@ -1,0 +1,10 @@
+{
+  "phase": "P6.4",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_4_operations -q",
+  "exit_code": 0,
+  "tests_run": 18,
+  "passed": 18,
+  "failed": 0,
+  "result": "OK",
+  "scope": "selective freeze, quarantine, grant revocation, recovery, harvest, reinvestment proposal, wind-down, isolation, provenance, authority denial"
+}

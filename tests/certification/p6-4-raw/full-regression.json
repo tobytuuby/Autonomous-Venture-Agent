@@ -1,0 +1,10 @@
+{
+  "phase": "P0-P6.4",
+  "command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
+  "exit_code": 0,
+  "tests_run": 307,
+  "passed": 307,
+  "failed": 0,
+  "result": "OK",
+  "known_warnings": "Six pre-existing SQLite ResourceWarnings from earlier infrastructure tests; no test failures."
+}

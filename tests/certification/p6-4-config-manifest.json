@@ -1,0 +1,19 @@
+{
+  "phase": "P6.4",
+  "policy_version": "p6.4",
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "synthetic_only": true,
+  "effect": "none",
+  "live_mode": false,
+  "external_action_authorized": false,
+  "payment_authorized": false,
+  "broker_execution_authorized": false,
+  "credential_access_authorized": false,
+  "customer_contact_authorized": false,
+  "capital_allocation_authorized": false,
+  "deployment_authorized": false,
+  "venture_execution_authorized": false,
+  "provider_integration": false,
+  "network_execution": false,
+  "credential_integration": false
+}

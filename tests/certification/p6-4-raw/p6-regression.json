@@ -1,0 +1,9 @@
+{
+  "phase": "P6.0-P6.4",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination tests.p6.test_p6_2_shared_service tests.p6.test_p6_3_anomaly tests.p6.test_p6_4_operations -q",
+  "exit_code": 0,
+  "tests_run": 86,
+  "passed": 86,
+  "failed": 0,
+  "result": "OK"
+}
