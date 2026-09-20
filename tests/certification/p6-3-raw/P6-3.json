@@ -1,0 +1,14 @@
+{
+  "phase": "P6.3",
+  "increment": "aggregate anomaly controls",
+  "implementation_commit": "a558f8be9fc875144016386fa429bc368a9701f8",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_3_anomaly -q",
+  "exit_code": 0,
+  "focused_denominator": 18,
+  "passed": 18,
+  "failed": 0,
+  "result": "PASS",
+  "seeded_fixture_set": "tests/p6/fixtures/p6-3-anomaly-fixtures.json",
+  "synthetic_only": true,
+  "live_authority_enabled": false
+}

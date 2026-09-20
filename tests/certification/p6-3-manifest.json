@@ -1,11 +1,57 @@
 {
   "phase": "P6.3",
   "increment": "aggregate anomaly controls",
-  "status": "implementation-authorized",
+  "status": "implementation-complete-human-acceptance-pending",
   "implementation_authorized": true,
-  "evidence_status": "pending",
+  "evidence_status": "complete",
   "baseline_commit": "387f9138d0e550d4171faa83048eb4532d2b2466",
+  "implementation_commit": "a558f8be9fc875144016386fa429bc368a9701f8",
   "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
-  "planned_focused_denominator": 18,
-  "human_acceptance_required": true
+  "focused_denominator": 18,
+  "focused_passed": 18,
+  "focused_failed": 0,
+  "p6_regression_denominator": 68,
+  "p6_regression_passed": 68,
+  "full_regression_denominator": 289,
+  "full_regression_passed": 289,
+  "test_commands": [
+    "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_3_anomaly -q",
+    "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination tests.p6.test_p6_2_shared_service tests.p6.test_p6_3_anomaly -q",
+    "PYTHONPATH=. python3 -m unittest discover -s tests -q"
+  ],
+  "seeded_fixtures": {
+    "path": "tests/p6/fixtures/p6-3-anomaly-fixtures.json",
+    "sha256": "d472ef3353d4c6a0203ec72760e731356218298e8add7161a25886e3db06e15f"
+  },
+  "raw_evidence": {
+    "focused": {
+      "path": "tests/certification/p6-3-raw/P6-3.json",
+      "sha256": "a19c0074f0009f073656ea2c1fd0e0d045be78089b225196b09e71129f0c8899"
+    },
+    "p6_regression": {
+      "path": "tests/certification/p6-3-raw/p6-regression.json",
+      "sha256": "3cc94bac7ec9af9255144cac539a6484621a5828cf5f0c0e941997bcaa54ea42"
+    },
+    "full_regression": {
+      "path": "tests/certification/p6-3-raw/full-regression.json",
+      "sha256": "4965392c9aa533dec3a770a93366149eddb7fb8a1c0e34d02272609aea22a07a"
+    },
+    "configuration_manifest": {
+      "path": "tests/certification/p6-3-config-manifest.json",
+      "sha256": "367332ceaa032420f3bcf9262981af068149a007dd7179f774a582cd68c1ab15"
+    }
+  },
+  "technical_certification": "docs/reports/PHASE6-P6.3-CERTIFICATION.md",
+  "non_technical_assessment": "docs/reports/PHASE6-P6.3-NON-TECHNICAL-ASSESSMENT.md",
+  "known_limitations": [
+    "Six pre-existing SQLite ResourceWarnings occurred during full regression.",
+    "False-positive and false-negative review is limited to the seeded fixture set."
+  ],
+  "live_authority_fields_denied": true,
+  "human_acceptance_required": true,
+  "results": {
+    "focused": "PASS",
+    "p6_regression": "PASS",
+    "full_regression": "PASS"
+  }
 }

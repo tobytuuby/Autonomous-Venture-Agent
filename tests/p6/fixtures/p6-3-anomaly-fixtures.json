@@ -1,0 +1,25 @@
+{
+  "phase": "P6.3",
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "fixtures": [
+    {"id": "clean-aggregate", "expected": "NO_ANOMALY"},
+    {"id": "cross-venture-leakage", "expected": "CROSS_VENTURE_LEAKAGE"},
+    {"id": "slow-drift", "expected": "SLOW_DRIFT"},
+    {"id": "duplicate-demand", "expected": "DUPLICATE_PATTERN"},
+    {"id": "structuring-like", "expected": "STRUCTURING_PATTERN"},
+    {"id": "stale-evidence", "expected": "STALE_EVIDENCE"},
+    {"id": "quota-exhaustion", "expected": "QUOTA_EXHAUSTION"},
+    {"id": "configuration-mismatch", "expected": "FINGERPRINT_MISMATCH"},
+    {"id": "counterparty-reuse", "expected": "COUNTERPARTY_REUSE"},
+    {"id": "beneficiary-reuse", "expected": "BENEFICIARY_REUSE"}
+  ],
+  "false_positive_review": {
+    "clean-aggregate": "no finding expected",
+    "counterparty-reuse": "review required because reuse spans ventures; no execution"
+  },
+  "false_negative_review": {
+    "cross-venture-leakage": "quarantine expected",
+    "stale-evidence": "quarantine expected",
+    "quota-exhaustion": "review required expected"
+  }
+}

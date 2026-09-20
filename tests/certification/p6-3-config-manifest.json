@@ -1,0 +1,29 @@
+{
+  "phase": "P6.3",
+  "schema_version": "p6.3.0",
+  "policy_version": "p6.3",
+  "execution_class": "synthetic-only",
+  "configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
+  "detection_rules": {
+    "drift_threshold_units": 5,
+    "structuring_min_records": 3,
+    "structuring_total_units": 10,
+    "structuring_unit_ceiling": 4
+  },
+  "finding_statuses": ["NO_ANOMALY", "REVIEW_REQUIRED", "QUARANTINED"],
+  "state_mode": "stateless",
+  "source_mutation": false,
+  "execution_requested": false,
+  "capability_granted": false,
+  "live_authority_fields": {
+    "live_mode": false,
+    "external_action_authorized": false,
+    "payment_authorized": false,
+    "broker_execution_authorized": false,
+    "credential_access_authorized": false,
+    "customer_contact_authorized": false,
+    "capital_allocation_authorized": false,
+    "deployment_authorized": false,
+    "venture_execution_authorized": false
+  }
+}
