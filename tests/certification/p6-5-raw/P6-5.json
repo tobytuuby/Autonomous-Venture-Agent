@@ -1,0 +1,27 @@
+{
+  "phase": "P6.5",
+  "source_commit": "76a648a9a1c044921f492d02eda357353421807f",
+  "command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_5_certification -q",
+  "tests_run": 12,
+  "passed": 12,
+  "failed": 0,
+  "errors": 0,
+  "exit_code": 0,
+  "result": "OK",
+  "report_hash": "6961d5d04fde96a11106d714cafa55c2482f60f048814d995c145b0434a442ad",
+  "composition": {
+    "portfolio_members": 2,
+    "shared_service_outputs": 2,
+    "finding_codes": [
+      "CROSS_VENTURE_LEAKAGE"
+    ],
+    "operation_statuses": [
+      "QUARANTINED",
+      "RECOVERED",
+      "HARVEST_RECORDED",
+      "PROPOSAL_ONLY"
+    ],
+    "all_live_authority_fields_false": true
+  },
+  "warnings": []
+}

@@ -1,0 +1,14 @@
+{
+  "phase": "full-repository",
+  "source_commit": "76a648a9a1c044921f492d02eda357353421807f",
+  "command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
+  "tests_run": 337,
+  "passed": 337,
+  "failed": 0,
+  "errors": 0,
+  "exit_code": 0,
+  "result": "OK",
+  "warnings": [
+    "Six pre-existing unclosed SQLite ResourceWarning messages; no test failures."
+  ]
+}
