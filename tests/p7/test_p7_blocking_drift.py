@@ -90,7 +90,8 @@ class BlockingDriftTests(unittest.TestCase):
 
         envelope = json.loads(evidence_path.read_text(encoding="utf-8"))
         self.assertEqual(envelope["classification"], "BLOCKING")
-        self.assertEqual(envelope["freeze_status"], "FROZEN")\n        self.assertEqual(envelope["independent_reviewer"], "Kalaap Das")
+        self.assertEqual(envelope["freeze_status"], "FROZEN")
+        self.assertEqual(envelope["independent_reviewer"], "Kalaap Das")
         self.assertEqual(envelope["preservation_latency_seconds"], 5)
         self.assertEqual(envelope["evidence_sha256"], result.evidence_sha256)
 
@@ -121,7 +122,9 @@ class BlockingDriftTests(unittest.TestCase):
             drift_type="payment",
         ))
         self.assertEqual(result.classification, DriftClassification.BLOCKING)
-        self.assertEqual(result.freeze_status, "FAILED")\n        self.assertEqual(result.terminal_status, "BLOCKED_FREEZE_FAILURE")\n        self.assertEqual(result.independent_reviewer, "Kalaap Das")
+        self.assertEqual(result.freeze_status, "FAILED")
+        self.assertEqual(result.terminal_status, "BLOCKED_FREEZE_FAILURE")
+        self.assertEqual(result.independent_reviewer, "Kalaap Das")
         self.assertIsNotNone(result.evidence_path)
         envelope = json.loads(Path(result.evidence_path).read_text(encoding="utf-8"))
         self.assertEqual(envelope["freeze_status"], "FAILED")
