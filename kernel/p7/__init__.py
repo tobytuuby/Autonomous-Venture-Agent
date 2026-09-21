@@ -6,6 +6,7 @@ from .drift import (
     DriftDecision,
     DriftEvidenceError,
     DriftObservation,
+    compute_configuration_fingerprint,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "DriftDecision",
     "DriftEvidenceError",
     "DriftObservation",
+    "compute_configuration_fingerprint",
 ]
