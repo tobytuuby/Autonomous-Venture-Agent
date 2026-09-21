@@ -32,7 +32,7 @@ P7 has not started. All nine live-authority fields and all real external effects
 | P4 | Venture factory recording-only | Recording-only | Complete |
 | P5 | Revenue and ledger systems | Synthetic | Complete |
 | P6 | Portfolio and shared services | Synthetic | Complete through P6.5 |
-| P7 | Production readiness and controlled-integration preparation | Pre-production rehearsal only | Not started |
+| P7 | Production readiness and controlled-integration preparation | Pre-production rehearsal only | P7.0 authorized; execution blocked |
 | P8 | Limited live pilot | Limited and reversible | Not started |
 | P9 | Controlled expansion and production hardening | Approved limits only | Not started |
 | P10 | General production and steady-state governance | Approved production operation | Not started |
