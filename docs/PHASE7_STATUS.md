@@ -1,19 +1,19 @@
 # Phase 7 Status Record
 
-## v1.1
+## v1.2
 
-**Status:** P7.0 COMPLETE — P7.1 ENTRY GATED  
+**Status:** P7.0 COMPLETE — P7.1 PLANNING PREPARED; IMPLEMENTATION GATED
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** `phase7/p7-0-blocking-drift`; P7.0 implementation and regression evidence committed.
+**Current branch/commit:** phase7/p7-0-blocking-drift; P7.0 implementation and regression evidence committed.
 
 ## Acceptance baseline
 
-- P6.5 evidence commit: `89b2399291a48393c6ec3b1092b3b202e3fbfe68`
-- P6.5 acceptance commit: `ba8b8ff777617f33c06caed3c5a8fe328908a31d`
-- P6.5 tag: `P6.5-ACCEPTED`
+- P6.5 evidence commit: 89b2399291a48393c6ec3b1092b3b202e3fbfe68
+- P6.5 acceptance commit: ba8b8ff777617f33c06caed3c5a8fe328908a31d
+- P6.5 tag: P6.5-ACCEPTED
 - P6.5 evidence: 12/12 focused; 116/116 combined; 337/337 full
-- Known warnings: six pre-existing SQLite `ResourceWarning` messages; no failures
+- Known warnings: six pre-existing SQLite ResourceWarning messages; no failures
 
 ## Entry checklist
 
@@ -52,3 +52,13 @@ P7.0 execution requirements are met:
 - no external action occurred.
 
 P7.0 is independently certified. P7.1 has not started; its separate entry decision and implementation authorization remain pending.
+
+## P7.1 planning update
+
+P7.1 scope, implementation increments, evidence requirements, focused denominator, negative tests, recovery tests, and full-regression gate are recorded in:
+
+- docs/p7-1-policy-spec-v1.0.md
+- docs/p7-1-implementation-plan-v1.0.md
+- docs/p7-1-entry-decision.md
+
+P7.1 implementation has not started. No P7.1 code, fixture, test, schema, configuration, or evidence implementation is authorized by this status update. Both P7.1 entry and P7.1 implementation authorization remain pending explicit human approval. P7.2–P7.6 remain not started. P8 remains not authorized.
