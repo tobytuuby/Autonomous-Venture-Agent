@@ -220,11 +220,9 @@ class BlockingDriftController:
             "effect": "none",
             "external_action": False,
         }
-        serialized = _canonical(evidence) + "\n"
-        evidence_hash = _sha256(serialized)
+        evidence_hash = _sha256(_canonical(evidence) + "\n")
         evidence["evidence_sha256"] = evidence_hash
         serialized = _canonical(evidence) + "\n"
-        evidence_hash = _sha256(serialized)
 
         self.evidence_dir.mkdir(parents=True, exist_ok=True)
         destination = self.evidence_dir / f"{observation.case_id}.json"
