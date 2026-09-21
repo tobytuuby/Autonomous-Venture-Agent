@@ -19,14 +19,14 @@
 
 | Requirement | Status |
 |---|---|
-| Roadmap v2.1 approved | BLOCKED — draft |
-| Remaining-phase plan v1.1 approved | BLOCKED — draft |
-| P7 policy v1.0 approved | BLOCKED — draft |
-| P7 test/certification matrix approved | BLOCKED — draft |
-| Explicit human P7 entry decision | BLOCKED — not recorded |
+| Roadmap v2.1 approved | PASS — approved |
+| Remaining-phase plan v1.1 approved | PASS — approved |
+| P7 policy v1.0 approved | PASS — approved |
+| P7 test/certification matrix approved | PASS — approved |
+| Explicit human P7 entry decision | PASS — recorded in docs/P7_ENTRY_DECISION.md |
 | Live authorities disabled | PASS |
 | Real credentials created | NO |
-| P7 implementation started | NO |
+| P7 implementation started | NO — P7.0 execution blocked |
 
 ## Scope boundary
 
