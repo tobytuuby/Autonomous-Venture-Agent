@@ -1,0 +1,517 @@
+{
+  "schema_version": "P7-CASE-REGISTRY-v1.0",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "independent_reviewer": "Kalaap Das",
+  "authority_matrix": {
+    "denominator": 81,
+    "formula": "9 authorities × 9 state families",
+    "authorities": [
+      "network",
+      "broker",
+      "payment",
+      "credential",
+      "deployment",
+      "customer",
+      "capital",
+      "venture",
+      "worker"
+    ],
+    "states": [
+      "request",
+      "approval",
+      "dispatch",
+      "response",
+      "reconciliation",
+      "failure",
+      "freeze",
+      "revoke",
+      "quarantine-wind-down"
+    ],
+    "cases": [
+      {
+        "case_id": "P7.5.AUTHORITY.network.request",
+        "authority": "network",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.approval",
+        "authority": "network",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.dispatch",
+        "authority": "network",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.response",
+        "authority": "network",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.reconciliation",
+        "authority": "network",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.failure",
+        "authority": "network",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.freeze",
+        "authority": "network",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.revoke",
+        "authority": "network",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.network.quarantine-wind-down",
+        "authority": "network",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.request",
+        "authority": "broker",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.approval",
+        "authority": "broker",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.dispatch",
+        "authority": "broker",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.response",
+        "authority": "broker",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.reconciliation",
+        "authority": "broker",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.failure",
+        "authority": "broker",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.freeze",
+        "authority": "broker",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.revoke",
+        "authority": "broker",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.broker.quarantine-wind-down",
+        "authority": "broker",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.request",
+        "authority": "payment",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.approval",
+        "authority": "payment",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.dispatch",
+        "authority": "payment",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.response",
+        "authority": "payment",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.reconciliation",
+        "authority": "payment",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.failure",
+        "authority": "payment",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.freeze",
+        "authority": "payment",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.revoke",
+        "authority": "payment",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.payment.quarantine-wind-down",
+        "authority": "payment",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.request",
+        "authority": "credential",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.approval",
+        "authority": "credential",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.dispatch",
+        "authority": "credential",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.response",
+        "authority": "credential",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.reconciliation",
+        "authority": "credential",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.failure",
+        "authority": "credential",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.freeze",
+        "authority": "credential",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.revoke",
+        "authority": "credential",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.credential.quarantine-wind-down",
+        "authority": "credential",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.request",
+        "authority": "deployment",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.approval",
+        "authority": "deployment",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.dispatch",
+        "authority": "deployment",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.response",
+        "authority": "deployment",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.reconciliation",
+        "authority": "deployment",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.failure",
+        "authority": "deployment",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.freeze",
+        "authority": "deployment",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.revoke",
+        "authority": "deployment",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.deployment.quarantine-wind-down",
+        "authority": "deployment",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.request",
+        "authority": "customer",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.approval",
+        "authority": "customer",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.dispatch",
+        "authority": "customer",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.response",
+        "authority": "customer",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.reconciliation",
+        "authority": "customer",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.failure",
+        "authority": "customer",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.freeze",
+        "authority": "customer",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.revoke",
+        "authority": "customer",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.customer.quarantine-wind-down",
+        "authority": "customer",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.request",
+        "authority": "capital",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.approval",
+        "authority": "capital",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.dispatch",
+        "authority": "capital",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.response",
+        "authority": "capital",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.reconciliation",
+        "authority": "capital",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.failure",
+        "authority": "capital",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.freeze",
+        "authority": "capital",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.revoke",
+        "authority": "capital",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.capital.quarantine-wind-down",
+        "authority": "capital",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.request",
+        "authority": "venture",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.approval",
+        "authority": "venture",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.dispatch",
+        "authority": "venture",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.response",
+        "authority": "venture",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.reconciliation",
+        "authority": "venture",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.failure",
+        "authority": "venture",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.freeze",
+        "authority": "venture",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.revoke",
+        "authority": "venture",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.venture.quarantine-wind-down",
+        "authority": "venture",
+        "state": "quarantine-wind-down"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.request",
+        "authority": "worker",
+        "state": "request"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.approval",
+        "authority": "worker",
+        "state": "approval"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.dispatch",
+        "authority": "worker",
+        "state": "dispatch"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.response",
+        "authority": "worker",
+        "state": "response"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.reconciliation",
+        "authority": "worker",
+        "state": "reconciliation"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.failure",
+        "authority": "worker",
+        "state": "failure"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.freeze",
+        "authority": "worker",
+        "state": "freeze"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.revoke",
+        "authority": "worker",
+        "state": "revoke"
+      },
+      {
+        "case_id": "P7.5.AUTHORITY.worker.quarantine-wind-down",
+        "authority": "worker",
+        "state": "quarantine-wind-down"
+      }
+    ]
+  },
+  "recovery_matrix": {
+    "denominator": 12,
+    "formula": "6 recovery controls × 2 modes",
+    "controls": [
+      "freeze",
+      "revoke",
+      "quarantine",
+      "restore",
+      "rollback",
+      "wind-down"
+    ],
+    "modes": [
+      "normal",
+      "injected-failure"
+    ],
+    "cases": [
+      {
+        "case_id": "P7.5.RECOVERY.freeze.normal",
+        "control": "freeze",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.freeze.injected-failure",
+        "control": "freeze",
+        "mode": "injected-failure"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.revoke.normal",
+        "control": "revoke",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.revoke.injected-failure",
+        "control": "revoke",
+        "mode": "injected-failure"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.quarantine.normal",
+        "control": "quarantine",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.quarantine.injected-failure",
+        "control": "quarantine",
+        "mode": "injected-failure"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.restore.normal",
+        "control": "restore",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.restore.injected-failure",
+        "control": "restore",
+        "mode": "injected-failure"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.rollback.normal",
+        "control": "rollback",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.rollback.injected-failure",
+        "control": "rollback",
+        "mode": "injected-failure"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.wind-down.normal",
+        "control": "wind-down",
+        "mode": "normal"
+      },
+      {
+        "case_id": "P7.5.RECOVERY.wind-down.injected-failure",
+        "control": "wind-down",
+        "mode": "injected-failure"
+      }
+    ]
+  },
+  "evidence_rule": "Each case emits an individual envelope keyed by case_id; unittest subTest is the execution parameterization and is not the evidence denominator."
+}
