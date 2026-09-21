@@ -29,8 +29,8 @@
 | P7.0 implementation | PASS — committed on phase7/p7-0-blocking-drift |
 | P7.0 focused runtime | PASS — 13/13 methods; 93 matrix cases exercised |
 | P7.0 full regression | PASS — 337/337 tests |
-| P7.0 independent certification | PENDING — requires auditor review of committed full-regression evidence |
-| P7.1 entry decision | BLOCKED — P7.0 certification and separate P7.1 authorization required |
+| P7.0 independent certification | PASS — recorded in docs/P7.0-INDEPENDENT-CERTIFICATION.md |
+| P7.1 entry decision | OPEN — separate explicit authorization required; implementation not started |
 
 ## Scope boundary
 
@@ -51,4 +51,4 @@ P7.0 execution requirements are met:
 - evidence and raw output committed;
 - no external action occurred.
 
-P7.0 remains awaiting independent certification. P7.1 has not started and remains separately gated.
+P7.0 is independently certified. P7.1 has not started; its separate entry decision and implementation authorization remain pending.
