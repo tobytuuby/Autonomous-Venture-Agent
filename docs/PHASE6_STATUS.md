@@ -6,8 +6,8 @@
 - P6.1 CEO-to-manager coordination: implementation accepted.
 - P6.2 shared-service demand and stateless execution: accepted synthetic-only.
 - P6.3 aggregate anomaly controls: accepted synthetic-only at final evidence commit 3186f9650608ad98a1c573fe9fabaea2dc893573.
-- P6.4 selective operations: remediation implemented; revised acceptance pending.
-- P6.5: blocked pending P6.4 acceptance.
+- P6.4 selective operations: accepted synthetic-only; tag P6.4-ACCEPTED.
+- P6.5 end-to-end portfolio certification: implementation complete; acceptance pending.
 
 ## Current increment
 
@@ -17,7 +17,7 @@ Findings do not execute, grant capability, or mutate source records. Provider, c
 
 ## Required acceptance gate
 
-P6.4 acceptance requires separate raw evidence, focused denominator, P6 regression, full regression, replay and recovery evidence, technical and non-technical certifications, provenance/fingerprint verification, selective-isolation evidence, and unchanged denial of all nine live-authority fields. P6.5 remains blocked.
+P6.4 was accepted at verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752 and tagged P6.4-ACCEPTED. P6.5 requires separate focused, combined, and full regression evidence, technical and non-technical certifications, provenance/fingerprint verification, end-to-end two-venture composition evidence, and explicit human acceptance. P6.5 remains unaccepted.
 
 ## Locked continuity
 

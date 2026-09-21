@@ -36,6 +36,7 @@ from .operations import (
     compute_evidence_hash,
     compute_operation_hash,
 )
+from .certification import PortfolioCertificationDenied, SyntheticPortfolioCertification
 
 __all__ = [
     "LIVE_FIELDS",
@@ -64,4 +65,6 @@ __all__ = [
     "build_operation",
     "compute_evidence_hash",
     "compute_operation_hash",
+    "PortfolioCertificationDenied",
+    "SyntheticPortfolioCertification",
 ]

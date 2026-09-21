@@ -1,15 +1,15 @@
 # Autonomous Venture Agent — Project Status
 
-Updated: 2026-09-19
+Updated: 2026-09-21
 
 Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1
 planning is authorized. P6.1 implementation remains separately gated.
 
 ## Current phase
 
-P0 through P5 are complete for their defined scopes. P6.0 is accepted for
-synthetic-only portfolio identity and registry behavior. P6.1 planning may
-proceed under synthetic-only conditions.
+P0 through P5 are complete for their defined scopes. P6.0–P6.4 are accepted for
+synthetic-only scope. P6.5 planning and implementation are authorized under
+synthetic-only conditions; P6.5 acceptance remains pending.
 
 The P6.0 implementation commit is
 `419aed0581feae834d79028593fd929e990e63d0`; the evidence commit is
@@ -46,7 +46,8 @@ The P6.0 implementation commit is
 | P5 | Closed for synthetic-only scope | Revenue, reconciliation, treasury simulation, human review |
 | P6.0 | Accepted | Synthetic portfolio identity and registry |
 | P6.1 | Planning authorized | Coordination planning only; implementation blocked |
-| P6.2–P6.5 | Blocked | Predecessor gates remain required |
+| P6.2–P6.4 | Accepted | Synthetic-only portfolio controls |
+| P6.5 | Implementation complete / acceptance pending | End-to-end synthetic certification |
 | P7–P8 | Future / Not started | Production gate remains required |
 
 ## P6 authority boundary
