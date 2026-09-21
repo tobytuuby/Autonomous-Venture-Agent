@@ -1,6 +1,6 @@
 # Phase 6 Policy Specification v1.6 — P6.5
 
-**Status:** Adopted for P6.5 planning and implementation; synthetic-only.
+**Status:** Accepted for P6.5 synthetic-only scope; no live authority enabled.
 **Predecessor:** P6.4 accepted at `3d32dc1010f4eba8c5e63d9be1d0e369a33cf752`.
 **Locked configuration fingerprint:** `8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11`.
 

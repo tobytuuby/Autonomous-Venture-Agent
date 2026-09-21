@@ -1,6 +1,6 @@
 # Phase 6 Implementation Plan v1.6 — P6.5 End-to-End Certification
 
-**Status:** Adopted for P6.5 planning and implementation; acceptance pending.
+**Status:** P6.5 implementation accepted for synthetic-only scope.
 **Execution class:** Synthetic-only.
 **Baseline:** `b77d7e17260d6b4519d1b574f68d130815300c48`.
 **Locked configuration fingerprint:** `8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11`.

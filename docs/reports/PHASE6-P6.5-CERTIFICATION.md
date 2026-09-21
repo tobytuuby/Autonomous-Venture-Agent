@@ -1,6 +1,6 @@
 # P6.5 End-to-End Technical Certification
 
-Status: IMPLEMENTATION COMPLETE — ACCEPTANCE PENDING
+Status: ACCEPTED — SYNTHETIC-ONLY SCOPE
 
 Source commit: `76a648a9a1c044921f492d02eda357353421807f`
 Predecessor acceptance: `P6.4-ACCEPTED` at `3d32dc1010f4eba8c5e63d9be1d0e369a33cf752`
@@ -58,4 +58,4 @@ The full run emitted six pre-existing unclosed-SQLite `ResourceWarning` messages
 
 ## Limitations
 
-This certifies synthetic composition only. It does not certify provider access, production readiness, external actions, live capital, real ventures, or workers. P6.5 remains pending explicit human acceptance; no `P6.5-ACCEPTED` tag was created.
+This certifies synthetic composition only. It does not certify provider access, production readiness, external actions, live capital, real ventures, or workers. P6.5 was formally accepted on 2026-09-21 against evidence-complete commit `89b2399291a48393c6ec3b1092b3b202e3fbfe68`; tag `P6.5-ACCEPTED` records closure. P7 has not started.

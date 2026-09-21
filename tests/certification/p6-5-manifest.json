@@ -1,7 +1,8 @@
 {
   "phase": "P6.5-end-to-end-certification",
-  "status": "implementation-complete-acceptance-pending",
+  "status": "accepted",
   "source_commit": "76a648a9a1c044921f492d02eda357353421807f",
+  "acceptance_commit": "89b2399291a48393c6ec3b1092b3b202e3fbfe68",
   "predecessor_tag": "P6.4-ACCEPTED",
   "locked_configuration_fingerprint": "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11",
   "focused_denominator": 12,
@@ -14,9 +15,11 @@
   "p6_regression_command": "PYTHONPATH=. python3 -m unittest tests.p6.test_p6_0_registry tests.p6.test_p6_1_coordination tests.p6.test_p6_2_shared_service tests.p6.test_p6_3_anomaly tests.p6.test_p6_4_operations tests.p6.test_p6_5_certification -q",
   "full_regression_command": "PYTHONPATH=. python3 -m unittest discover -s tests -q",
   "known_warnings": "Six pre-existing unclosed SQLite ResourceWarning messages during full regression; no failures.",
-  "p6_5_accepted": false,
-  "p6_5_tag_created": false,
+  "p6_5_accepted": true,
+  "p6_5_tag_created": true,
   "p6_5_started": true,
+  "p7_started": false,
+  "p7_status": "not-started",
   "composition": {
     "portfolio_members": 2,
     "shared_service": "metadata-read",
@@ -30,8 +33,8 @@
     "kernel/p6/certification.py": "dfbc5251d8a1672bedd108e4f300c9caf27f6cab6d30d356f5ae4b69aeaca4a5",
     "kernel/p6/__init__.py": "c89cd584bfa9e73501363971b8cdecc6454ae4bfe38944525930da384ed6ffb7",
     "tests/p6/test_p6_5_certification.py": "0d772e8eb137b2cb5d355e7011bdf320b810a854eb6de7e04e1ecf1e730eac11",
-    "phase6-policy-spec-v1.6.md": "7bc83a120236e55d131ca246cf72ec4d5c3e581681ea67e3f736f80e0024119b",
-    "phase6-implementation-plan-v1.6.md": "a80af34be55289f6ad157d4fa098c153b59fd50fafc991659c2ead6e8993995a",
+    "phase6-policy-spec-v1.6.md": "025daee3aa0703a20b3dc3855adff86a14d4eb09d6e193ee58d36738e6dd3382",
+    "phase6-implementation-plan-v1.6.md": "e3e1e8cb3e10e0a639796f0b012d0712579ded6c57b52356739ef05145624a52",
     "docs/p6-5-implementation-authorization.md": "0121f390298a80d2887ccd41647376995480a3d66b97abafa53893e4da7966ff"
   },
   "raw_evidence": {
@@ -49,7 +52,7 @@
     },
     "git_state": {
       "path": "tests/certification/p6-5-raw/git-state.json",
-      "sha256": "081cc46d84dd42d01724332c60a3f907cbb752f2d1afae77193e3fe2a02cf713"
+      "sha256": "45013a53680e111e1d9fd50bfd81b265b3b9f9d6ba00c18881ec665a26715b29"
     },
     "config_manifest": {
       "path": "tests/certification/p6-5-config-manifest.json",
@@ -57,11 +60,15 @@
     },
     "technical_report": {
       "path": "docs/reports/PHASE6-P6.5-CERTIFICATION.md",
-      "sha256": "bd319f56c114be3f9023b3a93ec1897d74c8fea3bf5d4ddaaf4e5c3912ce95f6"
+      "sha256": "2e510df53863d46e0b17b0105e1b952d87ea07e9677067ba3c13212546f5ffc9"
     },
     "non_technical_report": {
       "path": "docs/reports/PHASE6-P6.5-NON-TECHNICAL-ASSESSMENT.md",
-      "sha256": "3c3f6b995f73846a759aaa9a58b670909f586e57acb8c9743c2eae443c1b95c7"
+      "sha256": "6ebcae4fb5faf5d943f96393ec8998ad9968729894edf7d90676cb2da1f2540f"
+    },
+    "acceptance_decision": {
+      "path": "docs/p6-5-acceptance-decision.md",
+      "sha256": "69151c6f39776e6d7c7e76ab932a53051b4eafc0aab27c7f7f8575a4fddfacd3"
     }
   }
 }

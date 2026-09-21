@@ -1,12 +1,15 @@
 {
   "source_commit": "76a648a9a1c044921f492d02eda357353421807f",
+  "acceptance_commit": "89b2399291a48393c6ec3b1092b3b202e3fbfe68",
   "branch": "main",
   "workspace_clean_at_test_execution": true,
   "bridge_health": "local HTTP 200",
   "p6_4_accepted": true,
   "p6_4_tag_created": true,
   "p6_5_authorized": true,
-  "p6_5_accepted": false,
-  "p6_5_tag_created": false,
-  "p6_5_started": true
+  "p6_5_accepted": true,
+  "p6_5_tag_created": true,
+  "p6_5_started": true,
+  "p7_started": false,
+  "p7_status": "not-started"
 }

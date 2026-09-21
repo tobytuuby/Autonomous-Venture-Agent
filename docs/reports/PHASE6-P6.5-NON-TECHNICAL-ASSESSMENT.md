@@ -1,6 +1,6 @@
 # P6.5 End-to-End Non-Technical Assessment
 
-Status: IMPLEMENTATION COMPLETE — ACCEPTANCE PENDING
+Status: ACCEPTED — SYNTHETIC-ONLY SCOPE
 
 P6.5 demonstrates that the accepted synthetic portfolio components can work
 together across two isolated test ventures and one bounded shared service. The
@@ -18,5 +18,6 @@ Bridge-verified results are 12/12 focused P6.5 tests, 116/116 combined P6
 tests, and 337/337 full repository tests. Six pre-existing SQLite resource
 warnings remain documented; they did not cause failures.
 
-P6.5 is not accepted by this implementation record. A separate human decision
-is required before any `P6.5-ACCEPTED` tag or progression beyond P6.
+P6.5 was formally accepted on 2026-09-21 against evidence-complete commit
+`89b2399291a48393c6ec3b1092b3b202e3fbfe68`; tag `P6.5-ACCEPTED` records closure.
+P7 has not started and remains separately gated.

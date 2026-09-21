@@ -7,7 +7,7 @@
 - P6.2 shared-service demand and stateless execution: accepted synthetic-only.
 - P6.3 aggregate anomaly controls: accepted synthetic-only at final evidence commit 3186f9650608ad98a1c573fe9fabaea2dc893573.
 - P6.4 selective operations: accepted synthetic-only; tag P6.4-ACCEPTED.
-- P6.5 end-to-end portfolio certification: implementation complete; acceptance pending.
+- P6.5 end-to-end portfolio certification: accepted synthetic-only; tag P6.5-ACCEPTED.
 
 ## Current increment
 
@@ -17,7 +17,7 @@ Findings do not execute, grant capability, or mutate source records. Provider, c
 
 ## Required acceptance gate
 
-P6.4 was accepted at verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752 and tagged P6.4-ACCEPTED. P6.5 requires separate focused, combined, and full regression evidence, technical and non-technical certifications, provenance/fingerprint verification, end-to-end two-venture composition evidence, and explicit human acceptance. P6.5 remains unaccepted.
+P6.4 was accepted at verified source state 3d32dc1010f4eba8c5e63d9be1d0e369a33cf752 and tagged P6.4-ACCEPTED. P6.5 acceptance was recorded on 2026-09-21 against evidence-complete commit 89b2399291a48393c6ec3b1092b3b202e3fbfe68 after review of the focused, combined, full-regression, composition, and authority-negative evidence. P6.5 remains synthetic-only; P7 has not started.
 
 ## Locked continuity
 
