@@ -49,6 +49,7 @@ class BlockingDriftTests(unittest.TestCase):
         self.controller = BlockingDriftController(
             evidence_dir=self.tempdir.name,
             freeze_scope=self.freeze,
+            reviewer_identity="Kalaap Das",
             now=lambda: self.now_value,
             tolerance_rules={"capacity": 5},
         )
@@ -112,6 +113,7 @@ class BlockingDriftTests(unittest.TestCase):
         controller = BlockingDriftController(
             evidence_dir=self.tempdir.name,
             freeze_scope=fail_freeze,
+            reviewer_identity="Kalaap Das",
             now=lambda: self.now_value,
         )
         result = controller.handle(observation(
@@ -129,6 +131,7 @@ class BlockingDriftTests(unittest.TestCase):
         controller = BlockingDriftController(
             evidence_dir=self.tempdir.name,
             freeze_scope=self.freeze,
+            reviewer_identity="Kalaap Das",
             now=lambda: datetime(2026, 9, 21, 0, 15, 1, tzinfo=timezone.utc),
         )
         with self.assertRaises(DriftEvidenceError):
