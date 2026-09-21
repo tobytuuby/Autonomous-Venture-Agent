@@ -15,7 +15,6 @@ from kernel.p7.cases import (
 )
 
 
-FINGERPRINT = "8da59318c29821dc273edc0b027b5cf002111bddd076a125159c52854ffd0b11"
 # The matrix fixture intentionally uses a deterministic, secret-free fingerprint.
 FINGERPRINT = "8da59318c29821dc273edc0b027b5cf002111ddbd076a125159c52854ffd0b11"
 DETECTED = "2026-09-21T00:00:00+00:00"
