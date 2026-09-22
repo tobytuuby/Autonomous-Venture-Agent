@@ -1,11 +1,11 @@
 # Phase 7 Status Record
 
-## v2.1
+## v2.2
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED — P7.4 AUTHORIZED; PLANNING RECORDED, IMPLEMENTATION PENDING
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED — P7.4 IMPLEMENTATION COMPLETE; ACCEPTANCE PENDING
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P7.3-ACCEPTED
-**Current branch/commit:** phase7/p7-4-credential-provider-boundary; P7.4 planning commit pending.
+**Current branch/commit:** phase7/p7-4-credential-provider-boundary; evidence/report commit pending.
 
 ## Acceptance baseline
 
@@ -15,9 +15,22 @@
 - P7.2 acceptance: c0ce6d7; 8/8 focused methods; 30/30 cases; 366/366 full regression.
 - P7.3 acceptance: bc925ce; 9/9 focused methods; 32/32 cases; 375/375 full regression.
 
-## P7.4 entry and audit contract
+## P7.4 entry, implementation, and audit contract
 
-P7.4 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. The separate entry decision, policy, and implementation plan must be committed before implementation. P7.4 evidence must let a GitHub-only auditor audit planning and implementation separately without bridge access or test reruns.
+P7.4 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. Planning commit: 32483ec. Implementation commit: 5118bc4. The packet separately exposes planning audit and implementation audit for a GitHub-only reviewer without bridge access or test reruns.
+
+## P7.4 recorded verification snapshot
+
+- Focused: 9/9 unittest methods.
+- Case envelopes: 40/40.
+- Full regression: 384/384.
+- External actions: 0.
+- Unauthorized actions: 0.
+- Live credentials: 0.
+- All nine live authorities: denied.
+- Warnings: six pre-existing SQLite ResourceWarning messages; zero failures and zero errors.
+- Independent review: pending.
+- Human acceptance: pending.
 
 ## Boundary
 
@@ -25,4 +38,4 @@ All P7.4 work is synthetic, shadow, or isolated pre-production only. No real CEO
 
 ## Next gate
 
-P7.5 has not started. P7.4 acceptance requires implementation evidence, focused/negative/recovery tests, full regression, complete self-auditing packet, independent review, and a separate human decision.
+P7.5 has not started. P7.4 acceptance requires independent planning/implementation audit, evidence review, and a separate human decision.

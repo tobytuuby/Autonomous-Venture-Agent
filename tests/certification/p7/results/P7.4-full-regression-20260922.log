@@ -1,0 +1,13 @@
+P7.4 full regression evidence
+command: python3 -m unittest discover -s tests -p 'test*.py'
+runner: Python 3.14 unittest
+timestamp_utc: 2026-09-22
+exit_code: 0
+
+Ran 384 tests in 1.742s
+
+OK
+
+warnings:
+- six pre-existing SQLite ResourceWarning messages
+- warnings did not produce failures or errors
