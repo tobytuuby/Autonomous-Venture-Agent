@@ -9,6 +9,7 @@ from .topology import (
     validate_topology, verify_evidence_hash,
 )
 from .recovery import RecoveryError, RecoveryObjectives, SyntheticRecoveryManager
+from .observability import ObservabilityError, PreservationRecord, SyntheticObservability
 
 __all__ = [
     "BlockingDriftController", "DriftClassification", "DriftDecision",
@@ -17,4 +18,5 @@ __all__ = [
     "SyntheticDeploymentController", "TopologyDenied", "build_release_identity",
     "compute_topology_fingerprint", "validate_topology", "verify_evidence_hash",
     "RecoveryError", "RecoveryObjectives", "SyntheticRecoveryManager",
+    "ObservabilityError", "PreservationRecord", "SyntheticObservability",
 ]
