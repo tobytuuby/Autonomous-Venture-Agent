@@ -54,3 +54,8 @@ The packet must distinguish planning audit from implementation audit and must sa
 Reconcile every packet artifact against committed source and tests. Verify all nine authorities remain false, no secret appears in any committed artifact or generated projection, no external I/O exists, and the implementer is not the sole reviewer. Push planning, implementation, tests, evidence, and acceptance records as separate auditable commits.
 
 Do not begin P7.5 or claim P7.4 acceptance until the independent review and human acceptance decision are recorded.
+
+
+## Remediation increment — design reconciliation
+
+The remediation implementation extends the in-memory record with per-version lineage metadata: opaque handle, predecessor handle, UTC creation timestamp, and SHA-256 material fingerprint. It never persists raw secret material beyond the active in-memory fixture and deletes prior material on rotation. Provider registration and credential creation now require `actor="synthetic-operator"`; unauthorized attempts fail closed. Focused tests cover metadata, predecessor continuity, non-recoverability, provider-registration authorization, and credential-creation authorization. Evidence must be regenerated only after the remediated tests are executed and independently reviewed.
