@@ -59,3 +59,13 @@ No packet may imply that the auditor reran the tests. Recorded execution evidenc
 ## Pass/fail and boundary
 
 P7.4 passes only with zero failed required cases, zero unauthorized actions, zero live credentials, zero provider/network effects, complete redaction, successful normal and injected-failure rotation/revocation coverage, complete packet hashes, independent review, and full regression. Passing evidence does not authorize P7.5, P8, live credentials, provider access, or production deployment.
+
+
+## Remediation addendum — 2026-09-22
+
+The rejected review cycle is resolved by the following explicit design decisions:
+
+- Prior secret values are intentionally non-recoverable. Rotation deletes the prior secret material from fixture custody; lineage retains only opaque handles and non-secret metadata.
+- Every credential version records an opaque handle, version, predecessor handle, UTC creation timestamp, and SHA-256 material fingerprint. The fingerprint is not a secret and cannot reconstruct the secret.
+- Provider registration and credential creation require the actor `synthetic-operator`, in addition to the existing actor checks for rotation and revocation. Provider projection remains non-mutating and does not authorize execution.
+- Policy, implementation, and focused tests must be reconciled against the corrected behavior before P7.4 reconsideration. Existing 2026-09-22 evidence is superseded until regenerated from the remediated source.
