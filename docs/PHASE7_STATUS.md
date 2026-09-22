@@ -1,11 +1,11 @@
 # Phase 7 Status Record
 
-## v1.8
+## v1.9
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 AUTHORIZED, IMPLEMENTATION NOT STARTED  
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 IMPLEMENTATION COMPLETE; ACCEPTANCE PENDING  
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** phase7/p7-3-observability-incident, branched from P7.2 acceptance c0ce6d7.
+**Current branch/commit:** phase7/p7-3-observability-incident; evidence/report commit pending.
 
 ## Acceptance baseline
 
@@ -14,26 +14,41 @@
 - P7.1 acceptance: a5cbe7d; 8/8 focused methods; 53/53 cases; 358/358 full regression.
 - P7.2 acceptance: c0ce6d7; 8/8 focused methods; 30/30 cases; 366/366 full regression.
 
-## P7.3 entry
+## P7.3 entry and implementation
 
-P7.3 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. Entry decision: docs/p7-3-entry-decision.md. Policy: docs/p7-3-policy-spec-v1.0.md. Implementation plan: docs/p7-3-implementation-plan-v1.0.md.
+P7.3 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. Entry/specification commit: 96b36bb. Implementation commit: dcb915d.
 
 ## P7.3 auditability requirement
 
-The independent auditor has no bridge access to run tests. P7.3 evidence must therefore be independently auditable from committed GitHub artifacts without rerunning tests. The packet must clearly separate planning artifacts, implementation artifacts, executed evidence, source/test inventories, hashes, raw logs, case envelopes, reviewer identity, independent review, and human decision.
+The independent auditor has no bridge access to run tests. The committed packet must therefore independently expose:
 
-## P7.3 progress
+- planning artifacts and their hashes;
+- implementation source files and exact hashes, sizes, and line counts;
+- test-method inventory and 32 individual case IDs;
+- raw focused and full-regression logs;
+- per-case JSONL envelopes;
+- manifest artifact hashes;
+- source-to-requirement mapping;
+- independent review and human decision.
 
-- Entry/specification: pending commit.
-- Implementation: not started.
-- Focused/negative/recovery tests: not started.
-- Evidence packet: not started.
-- Independent review and human acceptance: not started.
+The packet must distinguish planning audit from implementation audit and must not imply that the auditor reran the tests.
+
+## P7.3 verification snapshot
+
+- Focused: 9/9 unittest methods.
+- Case envelopes: 32/32.
+- Full regression: 375/375.
+- External actions: 0.
+- Unauthorized actions: 0.
+- Live credentials: 0.
+- All nine live authorities: denied.
+- Independent review: pending.
+- Human acceptance: pending.
 
 ## Boundary
 
-All P7.3 work is synthetic, shadow, or isolated pre-production only. All nine live authorities remain denied. No live credentials, real CEO, external contact, customer, capital, payment, deployment, broker, network, venture, worker, provider, or real-world action is permitted. Model output never authorizes execution.
+All P7.3 work is synthetic, shadow, or isolated pre-production only. No real CEO, live credential, external contact, customer, capital, payment, deployment, broker, network, venture, worker, provider, database, queue, or real-world action is permitted. Model output never authorizes execution.
 
 ## Next gate
 
-P7.4 has not started. P7.3 implementation may begin only after the entry/specification commit is pushed.
+P7.4 has not started. P7.3 acceptance requires independent direct-code and evidence review plus a separate human decision.

@@ -1,0 +1,52 @@
+{
+  "artifact_hashes_excluding_manifest": {
+    "P7.3-case-results-20260922.jsonl": "c97d277b257dbbb30b737e23340e3c4fb4a85e080cf82623fedc9bdc0ca813f0",
+    "P7.3-focused-runtime-20260922.log": "f8b92089c8de98525a563dd66c524ac319dcc20631b384e092760cc7611ff385",
+    "P7.3-full-regression-20260922.log": "7714c8163b3b9abcf99b10005e75a2c23a9a9354b97c74cf13c4bff518040a35",
+    "P7.3-source-inventory-20260922.json": "a49b97fe900c26c7e1f19394ea01c513666d0dcaee5c38904151560402b38d30",
+    "P7.3-test-inventory-20260922.json": "b4b8122a1c73dcaeef41cc4995405a029883ee42df11d7261ad699b79d170c2a"
+  },
+  "audit_mode": "read-only GitHub packet; no auditor test rerun",
+  "case_envelopes": {
+    "passed": 32,
+    "total": 32
+  },
+  "configuration_fingerprint": "p7.3-config-a",
+  "environment_identity": "p7.3-isolated",
+  "external_actions": 0,
+  "focused_methods": {
+    "passed": 9,
+    "total": 9
+  },
+  "full_regression": {
+    "passed": 375,
+    "total": 375
+  },
+  "generated_at_utc": "2026-09-22T00:00:00Z",
+  "implementation_audited": true,
+  "implementation_commit": "dcb915d",
+  "live_authorities": {
+    "broker": false,
+    "capital": false,
+    "credential": false,
+    "customer": false,
+    "deployment": false,
+    "network": false,
+    "payment": false,
+    "venture": false,
+    "worker": false
+  },
+  "live_credentials": 0,
+  "phase": "P7.3",
+  "planning_audited": true,
+  "planning_commit": "96b36bb",
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "Kalaap Das",
+  "title": "Observability and incident response",
+  "unauthorized_actions": 0,
+  "warnings": {
+    "errors": 0,
+    "failing_tests": 0,
+    "sqlite_resource_warnings": 6
+  }
+}

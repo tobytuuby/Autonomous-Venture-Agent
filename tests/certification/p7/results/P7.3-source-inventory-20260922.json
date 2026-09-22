@@ -1,0 +1,47 @@
+{
+  "audit_requirement": "Planning and implementation must be audited from committed artifacts without test rerun.",
+  "implementation_commit": "dcb915d",
+  "planning_commit": "96b36bb",
+  "planning_files": {
+    "docs/p7-3-entry-decision.md": "d7024c9ea2d63e57ffbaf262f260ca586c9fc0181fd2c2e4e61b4f2f46fa0d0c",
+    "docs/p7-3-implementation-plan-v1.0.md": "89651977f471a47d462b293685c207b023e1bafd4574abdfc40ce2b3a4d49e05",
+    "docs/p7-3-policy-spec-v1.0.md": "f05a1b2b1b3749ee08ba49ec228347f8fab45dbbc42311d1eaf467b137b68c37"
+  },
+  "source_commit": "dcb915d",
+  "source_files": {
+    "kernel/p7/__init__.py": {
+      "bytes": 1136,
+      "lines": 22,
+      "requirements": [
+        "P7 package exports",
+        "P7.1/P7.2 compatibility"
+      ],
+      "sha256": "4fc4ed11db4013e5c666b60e15e73e0b67c34a02ed9704374bba6c8d52d2252c"
+    },
+    "kernel/p7/observability.py": {
+      "bytes": 11160,
+      "lines": 289,
+      "requirements": [
+        "event-integrity",
+        "metrics",
+        "alerts",
+        "incidents",
+        "retention",
+        "preservation",
+        "fail-closed"
+      ],
+      "sha256": "388dece523ef9b5c514ca860396ab878dbc18d32c439862a1d0e974e6734cdd7"
+    },
+    "tests/p7/test_p7_3_observability.py": {
+      "bytes": 5840,
+      "lines": 121,
+      "requirements": [
+        "focused",
+        "negative",
+        "recovery",
+        "authority denial"
+      ],
+      "sha256": "7ec247c3029077f8da6dba53f333421f4241576055ed6df5eca0d8806dab7df6"
+    }
+  }
+}
