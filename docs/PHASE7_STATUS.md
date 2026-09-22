@@ -1,11 +1,11 @@
 # Phase 7 Status Record
 
-## v1.9
+## v2.0
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 IMPLEMENTATION COMPLETE; ACCEPTANCE PENDING  
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** phase7/p7-3-observability-incident; evidence/report commit pending.
+**Current branch/commit:** phase7/p7-3-observability-incident; P7.3 acceptance recorded in the subsequent acceptance commit.
 
 ## Acceptance baseline
 
@@ -42,8 +42,8 @@ The packet must distinguish planning audit from implementation audit and must no
 - Unauthorized actions: 0.
 - Live credentials: 0.
 - All nine live authorities: denied.
-- Independent review: pending.
-- Human acceptance: pending.
+- Independent review: accepted by Kalaap Das from committed artifacts; no test rerun.
+- Human acceptance: recorded in the P7.3 acceptance decision.
 
 ## Boundary
 
@@ -51,4 +51,4 @@ All P7.3 work is synthetic, shadow, or isolated pre-production only. No real CEO
 
 ## Next gate
 
-P7.4 has not started. P7.3 acceptance requires independent direct-code and evidence review plus a separate human decision.
+P7.4 has not started. P7.3 is accepted only for the documented synthetic, shadow, and isolated pre-production scope.
