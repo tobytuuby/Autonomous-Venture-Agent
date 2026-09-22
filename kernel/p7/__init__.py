@@ -10,6 +10,7 @@ from .topology import (
 )
 from .recovery import RecoveryError, RecoveryObjectives, SyntheticRecoveryManager
 from .observability import ObservabilityError, PreservationRecord, SyntheticObservability
+from .provider_boundary import CredentialRecord, ProviderBoundaryError, SyntheticProviderBoundary
 
 __all__ = [
     "BlockingDriftController", "DriftClassification", "DriftDecision",
@@ -19,4 +20,5 @@ __all__ = [
     "compute_topology_fingerprint", "validate_topology", "verify_evidence_hash",
     "RecoveryError", "RecoveryObjectives", "SyntheticRecoveryManager",
     "ObservabilityError", "PreservationRecord", "SyntheticObservability",
+    "CredentialRecord", "ProviderBoundaryError", "SyntheticProviderBoundary",
 ]
