@@ -1,11 +1,11 @@
 # Phase 7 Status Record
 
-## v2.0
+## v2.1
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED — P7.4 AUTHORIZED; PLANNING RECORDED, IMPLEMENTATION PENDING
 **Phase:** P7 — Production readiness and controlled-integration preparation  
-**Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** phase7/p7-3-observability-incident; P7.3 acceptance recorded in the subsequent acceptance commit.
+**Predecessor:** P7.3-ACCEPTED
+**Current branch/commit:** phase7/p7-4-credential-provider-boundary; P7.4 planning commit pending.
 
 ## Acceptance baseline
 
@@ -13,42 +13,16 @@
 - P7.0 independent certification: fb48b7cf95004bd6db6850236264d1374e5e2854; 13/13 focused; 93/93 matrix cases; 337/337 full regression.
 - P7.1 acceptance: a5cbe7d; 8/8 focused methods; 53/53 cases; 358/358 full regression.
 - P7.2 acceptance: c0ce6d7; 8/8 focused methods; 30/30 cases; 366/366 full regression.
+- P7.3 acceptance: bc925ce; 9/9 focused methods; 32/32 cases; 375/375 full regression.
 
-## P7.3 entry and implementation
+## P7.4 entry and audit contract
 
-P7.3 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. Entry/specification commit: 96b36bb. Implementation commit: dcb915d.
-
-## P7.3 auditability requirement
-
-The independent auditor has no bridge access to run tests. The committed packet must therefore independently expose:
-
-- planning artifacts and their hashes;
-- implementation source files and exact hashes, sizes, and line counts;
-- test-method inventory and 32 individual case IDs;
-- raw focused and full-regression logs;
-- per-case JSONL envelopes;
-- manifest artifact hashes;
-- source-to-requirement mapping;
-- independent review and human decision.
-
-The packet must distinguish planning audit from implementation audit and must not imply that the auditor reran the tests.
-
-## P7.3 verification snapshot
-
-- Focused: 9/9 unittest methods.
-- Case envelopes: 32/32.
-- Full regression: 375/375.
-- External actions: 0.
-- Unauthorized actions: 0.
-- Live credentials: 0.
-- All nine live authorities: denied.
-- Independent review: accepted by Kalaap Das from committed artifacts; no test rerun.
-- Human acceptance: recorded in the P7.3 acceptance decision.
+P7.4 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. The separate entry decision, policy, and implementation plan must be committed before implementation. P7.4 evidence must let a GitHub-only auditor audit planning and implementation separately without bridge access or test reruns.
 
 ## Boundary
 
-All P7.3 work is synthetic, shadow, or isolated pre-production only. No real CEO, live credential, external contact, customer, capital, payment, deployment, broker, network, venture, worker, provider, database, queue, or real-world action is permitted. Model output never authorizes execution.
+All P7.4 work is synthetic, shadow, or isolated pre-production only. No real CEO, live credential, provider, external contact, customer, capital, payment, deployment, broker, network, venture, worker, database, queue, or real-world action is permitted. Model output never authorizes execution.
 
 ## Next gate
 
-P7.4 has not started. P7.3 is accepted only for the documented synthetic, shadow, and isolated pre-production scope.
+P7.5 has not started. P7.4 acceptance requires implementation evidence, focused/negative/recovery tests, full regression, complete self-auditing packet, independent review, and a separate human decision.
