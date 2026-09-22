@@ -1,39 +1,39 @@
 # Phase 7 Status Record
 
-## v1.7
+## v1.8
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED  
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 AUTHORIZED, IMPLEMENTATION NOT STARTED  
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** phase7/p7-2-backup-restore; acceptance commit pending.
+**Current branch/commit:** phase7/p7-3-observability-incident, branched from P7.2 acceptance c0ce6d7.
 
 ## Acceptance baseline
 
 - P6.5: 337/337 full regression; accepted at ba8b8ff777617f33c06caed3c5a8fe328908a31d.
 - P7.0 independent certification: fb48b7cf95004bd6db6850236264d1374e5e2854; 13/13 focused; 93/93 matrix cases; 337/337 full regression.
-- P7.1 acceptance: a5cbe7d; 8/8 focused methods; 53/53 cases; 358/358 full regression; zero external actions.
-- P7.2 acceptance: recorded in docs/p7-2-acceptance-decision.md.
+- P7.1 acceptance: a5cbe7d; 8/8 focused methods; 53/53 cases; 358/358 full regression.
+- P7.2 acceptance: c0ce6d7; 8/8 focused methods; 30/30 cases; 366/366 full regression.
 
-## P7.2 verification
+## P7.3 entry
 
-- Entry/specification: ccebe60.
-- Implementation: a5074ab.
-- Evidence: 8622f99.
-- Focused: 8/8 methods.
-- Case envelopes: 30/30.
-- Full regression: 366/366.
-- External actions: 0.
-- Unauthorized actions: 0.
-- Live credentials: 0.
-- All nine live authorities: denied.
-- Recovery objectives: observed RPO 0 seconds; observed RTO 1 second against a 120-second target.
-- Independent reviewer: Kalaap Das.
-- Review record: docs/reports/P7.2-INDEPENDENT-REVIEW.md.
+P7.3 planning and implementation were explicitly authorized by Kalaap Das on 2026-09-22. Entry decision: docs/p7-3-entry-decision.md. Policy: docs/p7-3-policy-spec-v1.0.md. Implementation plan: docs/p7-3-implementation-plan-v1.0.md.
+
+## P7.3 auditability requirement
+
+The independent auditor has no bridge access to run tests. P7.3 evidence must therefore be independently auditable from committed GitHub artifacts without rerunning tests. The packet must clearly separate planning artifacts, implementation artifacts, executed evidence, source/test inventories, hashes, raw logs, case envelopes, reviewer identity, independent review, and human decision.
+
+## P7.3 progress
+
+- Entry/specification: pending commit.
+- Implementation: not started.
+- Focused/negative/recovery tests: not started.
+- Evidence packet: not started.
+- Independent review and human acceptance: not started.
 
 ## Boundary
 
-All execution remains synthetic, shadow, or isolated pre-production only. No real CEO, live credential, external contact, customer, capital, payment, deployment, broker, network, venture, worker, provider, or real-world action is permitted. Model output never authorizes execution.
+All P7.3 work is synthetic, shadow, or isolated pre-production only. All nine live authorities remain denied. No live credentials, real CEO, external contact, customer, capital, payment, deployment, broker, network, venture, worker, provider, or real-world action is permitted. Model output never authorizes execution.
 
 ## Next gate
 
-P7.3 has not started. It requires its own plan, entry decision, implementation authorization, tests, evidence, independent review, and acceptance.
+P7.4 has not started. P7.3 implementation may begin only after the entry/specification commit is pushed.
