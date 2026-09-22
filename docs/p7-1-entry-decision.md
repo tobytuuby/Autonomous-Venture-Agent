@@ -4,10 +4,10 @@
 
 **Phase:** P7.1 — Topology and deployment controls
 **Predecessor:** P7.0 independently certified
-**Date prepared:** 2026-09-21
+**Date prepared:** 2026-09-22
 **Decision authority:** Kalaap Das, independent reviewer and human approval authority
 **Execution class:** Synthetic, shadow, or isolated pre-production only
-**Implementation authorization:** NOT RECORDED
+**Implementation authorization:** AUTHORIZED by Kalaap Das on 2026-09-22
 
 ## Baseline verified
 
@@ -34,19 +34,19 @@
 
 ## Proposed P7.1 decision
 
-**PENDING EXPLICIT HUMAN DECISION.**
+**P7.1 ENTRY AUTHORIZED; P7.1 IMPLEMENTATION AUTHORIZED.**
 
-The P7.1 scope, implementation increments, evidence requirements, focused denominator, negative tests, recovery tests, and full-regression gate are defined in docs/p7-1-implementation-plan-v1.0.md. No P7.1 code, fixture, test, schema, configuration, or evidence implementation has started.
+The P7.1 scope, implementation increments, evidence requirements, focused denominator, negative tests, recovery tests, and full-regression gate are defined in docs/p7-1-implementation-plan-v1.0.md. Implementation may now begin under the documented synthetic-only constraints.
 
 ## Authorization record
 
-This record becomes an entry authorization only when the human authority explicitly records both decisions:
+The human authority has explicitly recorded both decisions:
 
 1. **P7.1 entry:** AUTHORIZED or BLOCKED.
 2. **P7.1 implementation:** AUTHORIZED or NOT AUTHORIZED.
 
-Until both are AUTHORIZED, repository changes are limited to planning and decision records. P7.2 and later remain not started. P8 remains not authorized.
+Repository changes may now include P7.1 implementation, tests, and evidence only. P7.2 and later remain not started. P8 remains not authorized.
 
 ## Required next action
 
-Obtain the explicit human decision and, if authorized, create a separate P7.1 implementation branch from the certified P7.0 commit before changing code.
+Create the separate P7.1 implementation branch from the certified P7.0 planning state before changing code.
