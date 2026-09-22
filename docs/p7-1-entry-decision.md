@@ -42,8 +42,8 @@ The P7.1 scope, implementation increments, evidence requirements, focused denomi
 
 The human authority has explicitly recorded both decisions:
 
-1. **P7.1 entry:** AUTHORIZED or BLOCKED.
-2. **P7.1 implementation:** AUTHORIZED or NOT AUTHORIZED.
+1. **P7.1 entry:** AUTHORIZED — Kalaap Das, 2026-09-22.
+2. **P7.1 implementation:** AUTHORIZED — Kalaap Das, 2026-09-22.
 
 Repository changes may now include P7.1 implementation, tests, and evidence only. P7.2 and later remain not started. P8 remains not authorized.
 
