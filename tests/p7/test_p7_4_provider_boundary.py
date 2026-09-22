@@ -14,9 +14,9 @@ class TestP74ProviderBoundary(unittest.TestCase):
         self.boundary = SyntheticProviderBoundary(
             source_commit="32483ec", config_fingerprint="p7.4-config-a"
         )
-        self.boundary.register_provider(provider_id="synthetic-provider", dependency_sha256=DEPENDENCY)
+        self.boundary.register_provider(actor="synthetic-operator", provider_id="synthetic-provider", dependency_sha256=DEPENDENCY)
         self.boundary.create_credential(
-            credential_id="cred-001", owner="synthetic-operator",
+            actor="synthetic-operator", credential_id="cred-001", owner="synthetic-operator",
             provider_id="synthetic-provider", secret_material="synthetic-secret-initial"
         )
 
@@ -30,6 +30,20 @@ class TestP74ProviderBoundary(unittest.TestCase):
         self.assertTrue(record["synthetic_only"])
         self.assertFalse(record["live_credential"])
         self.assertEqual(record["provider_id"], "synthetic-provider")
+        self.assertEqual(record["version"], 1)
+        self.assertIsNone(record["lineage_metadata"][0]["predecessor_handle"])
+        self.assertEqual(record["lineage_metadata"][0]["handle"], record["handle"])
+        self.assertEqual(len(record["lineage_metadata"][0]["material_hash"]), 64)
+        self.assertTrue(record["lineage_metadata"][0]["created_at"].endswith("Z"))
+        with self.assertRaises(ProviderBoundaryError):
+            self.boundary.create_credential(
+                actor="model-output", credential_id="cred-actor-denied", owner="synthetic-operator",
+                provider_id="synthetic-provider", secret_material="synthetic-secret-3"
+            )
+        with self.assertRaises(ProviderBoundaryError):
+            self.boundary.register_provider(
+                actor="model-output", provider_id="synthetic-provider-2", dependency_sha256=DEPENDENCY
+            )
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.create_credential(
                 credential_id="cred-002", owner="synthetic-operator",
@@ -67,6 +81,10 @@ class TestP74ProviderBoundary(unittest.TestCase):
         self.assertEqual(new["version"], 2)
         self.assertEqual(new["lineage"][0], old["handle"])
         self.assertNotEqual(new["handle"], old["handle"])
+        self.assertEqual(new["lineage_metadata"][1]["predecessor_handle"], old["handle"])
+        self.assertEqual(new["lineage_metadata"][1]["handle"], new["handle"])
+        self.assertNotEqual(new["lineage_metadata"][0]["material_hash"], new["lineage_metadata"][1]["material_hash"])
+        self.assertNotIn("synthetic-secret-initial", json.dumps(new, sort_keys=True))
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.provider_request(
                 credential_id="missing", provider_id="synthetic-provider",
@@ -81,6 +99,7 @@ class TestP74ProviderBoundary(unittest.TestCase):
     def test_revocation_and_recovery_cases(self):
         revoked = self.boundary.revoke(credential_id="cred-001", actor="synthetic-operator")
         self.assertEqual(revoked["status"], "REVOKED")
+        self.assertTrue(revoked["revoked_at"].endswith("Z"))
         self.assertFalse(self.boundary._secrets)
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.public_record("missing")
@@ -89,7 +108,7 @@ class TestP74ProviderBoundary(unittest.TestCase):
         )
         recovered.register_provider(provider_id="synthetic-provider", dependency_sha256=DEPENDENCY)
         record = recovered.create_credential(
-            credential_id="cred-recovered", owner="synthetic-operator",
+            actor="synthetic-operator", credential_id="cred-recovered", owner="synthetic-operator",
             provider_id="synthetic-provider", secret_material="synthetic-secret-recovered"
         )
         self.assertEqual(record["status"], "ACTIVE")
