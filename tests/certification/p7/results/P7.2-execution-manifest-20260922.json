@@ -1,0 +1,40 @@
+{
+  "case_envelopes": {
+    "passed": 30,
+    "total": 30
+  },
+  "config_fingerprint": "p7.2-config-a",
+  "corruption_rejection": "PASS",
+  "environment": "p7.2-isolated",
+  "external_actions": 0,
+  "focused_methods": {
+    "passed": 8,
+    "total": 8
+  },
+  "full_regression": {
+    "passed": 366,
+    "total": 366
+  },
+  "generated_at": "2026-09-22T00:00:00Z",
+  "injected_failure_restore": "PASS",
+  "live_authorities": {
+    "broker": false,
+    "capital": false,
+    "credential": false,
+    "customer": false,
+    "deployment": false,
+    "network": false,
+    "payment": false,
+    "venture": false,
+    "worker": false
+  },
+  "live_credentials": 0,
+  "normal_restore": "PASS",
+  "phase": "P7.2",
+  "recovery_objectives_recorded": true,
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "Kalaap Das",
+  "source_commit": "a5074ab",
+  "title": "Backup, restore, and disaster recovery",
+  "unauthorized_actions": 0
+}

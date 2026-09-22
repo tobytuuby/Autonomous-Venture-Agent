@@ -1,0 +1,19 @@
+$ python3 -m unittest discover -s tests -p 'test*.py'
+exit 0
+
+..........................................................................................................................................................................................................................................................................................................................................
+Six pre-existing SQLite ResourceWarning messages observed; no test failures or errors.
+....................................
+
+----------------------------------------------------------------------
+Ran 366 tests in 1.968s
+
+OK
+
+P7.2 focused methods included in regression: 8
+P7.2 case denominator: 30/30
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
+All nine live authorities: denied
+Reviewer: Kalaap Das

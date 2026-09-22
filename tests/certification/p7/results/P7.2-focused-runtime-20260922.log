@@ -1,0 +1,22 @@
+$ python3 -m unittest tests.p7.test_p7_2_backup_restore -v
+exit 0
+test_authority_and_authorization_denial_cases ... ok
+test_backup_restore_contract_cases ... ok
+test_case_registry_has_30_cases ... ok
+test_corruption_and_mismatch_rejection_cases ... ok
+test_injected_failure_and_recovery_objectives_cases ... ok
+test_no_external_side_effects ... ok
+test_service_and_host_recovery_cases ... ok
+test_state_hash_is_deterministic ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
+
+OK
+
+Declared case denominator: 30/30
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
+All nine live authorities: denied
+Reviewer: Kalaap Das
