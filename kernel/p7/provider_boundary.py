@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from datetime import datetime, timezone
 from dataclasses import dataclass
 from typing import Any, Mapping
 
@@ -22,6 +23,14 @@ def _sha256(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
+def _timestamp() -> str:
+    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _material_hash(secret_material: str) -> str:
+    return _sha256(secret_material.encode("utf-8"))
+
+
 @dataclass(frozen=True)
 class CredentialRecord:
     credential_id: str
@@ -31,6 +40,7 @@ class CredentialRecord:
     owner: str
     status: str
     lineage: tuple[str, ...]
+    lineage_metadata: tuple[dict[str, Any], ...]
     evidence_hash: str
 
     def public(self) -> dict[str, Any]:
@@ -42,6 +52,7 @@ class CredentialRecord:
             "owner": self.owner,
             "status": self.status,
             "lineage": list(self.lineage),
+            "lineage_metadata": [dict(item) for item in self.lineage_metadata],
             "evidence_hash": self.evidence_hash,
             "synthetic_only": True,
             "live_credential": False,
@@ -116,8 +127,10 @@ class SyntheticProviderBoundary:
             "material": dict(material),
         }))
 
-    def register_provider(self, *, provider_id: str, dependency_sha256: str, live_provider: bool = False) -> dict[str, Any]:
+    def register_provider(self, *, actor: str, provider_id: str, dependency_sha256: str, live_provider: bool = False) -> dict[str, Any]:
         self._guard()
+        if actor != "synthetic-operator":
+            raise ProviderBoundaryError("unauthorized provider registration actor")
         if live_provider or provider_id.startswith("live-"):
             raise ProviderBoundaryError("live provider denied")
         if not provider_id or not self._is_sha256(dependency_sha256):
@@ -139,8 +152,11 @@ class SyntheticProviderBoundary:
         owner: str,
         provider_id: str,
         secret_material: str,
+        actor: str,
     ) -> dict[str, Any]:
         self._guard()
+        if actor != "synthetic-operator":
+            raise ProviderBoundaryError("unauthorized credential creation actor")
         if provider_id not in self._providers:
             raise ProviderBoundaryError("provider is not allowlisted")
         if not credential_id or not owner or not self._synthetic_secret(secret_material):
@@ -151,9 +167,18 @@ class SyntheticProviderBoundary:
             "credential_id": credential_id, "version": 1,
             "source_commit": self.source_commit, "environment": self.environment,
         }))
+        created_at = _timestamp()
+        lineage_metadata = ({
+            "handle": handle,
+            "version": 1,
+            "predecessor_handle": None,
+            "created_at": created_at,
+            "material_hash": _material_hash(secret_material),
+        },)
         record = CredentialRecord(
             credential_id, handle, 1, provider_id, owner, "ACTIVE", (handle,),
-            self._evidence_hash({"operation": "create", "handle": handle}),
+            lineage_metadata,
+            self._evidence_hash({"operation": "create", "handle": handle, "created_at": created_at}),
         )
         self._records[credential_id] = record
         self._secrets[handle] = secret_material
@@ -193,13 +218,21 @@ class SyntheticProviderBoundary:
             "credential_id": credential_id, "version": new_version,
             "source_commit": self.source_commit, "environment": self.environment,
         }))
+        created_at = _timestamp()
         lineage = old.lineage + (new_handle,)
+        lineage_metadata = old.lineage_metadata + ({
+            "handle": new_handle,
+            "version": new_version,
+            "predecessor_handle": old.handle,
+            "created_at": created_at,
+            "material_hash": _material_hash(new_secret_material),
+        },)
         self._secrets.pop(old.handle, None)
         self._secrets[new_handle] = new_secret_material
         record = CredentialRecord(
             credential_id, new_handle, new_version, old.provider_id, old.owner,
-            "ACTIVE", lineage,
-            self._evidence_hash({"operation": "rotate", "old_handle": old.handle, "new_handle": new_handle}),
+            "ACTIVE", lineage, lineage_metadata,
+            self._evidence_hash({"operation": "rotate", "old_handle": old.handle, "new_handle": new_handle, "created_at": created_at}),
         )
         self._records[credential_id] = record
         return record.public()
@@ -221,14 +254,16 @@ class SyntheticProviderBoundary:
         self._secrets.pop(old.handle, None)
         record = CredentialRecord(
             old.credential_id, old.handle, old.version, old.provider_id, old.owner,
-            "REVOKED", old.lineage,
+            "REVOKED", old.lineage, old.lineage_metadata,
             self._evidence_hash({"operation": "revoke", "handle": old.handle}),
         )
         self._records[credential_id] = record
+        revoked_at = _timestamp()
         revocation = {
             "credential_id": credential_id,
             "handle": old.handle,
             "status": "REVOKED",
+            "revoked_at": revoked_at,
             "evidence_hash": record.evidence_hash,
             "source_commit": self.source_commit,
             "configuration_fingerprint": self.config_fingerprint,
