@@ -1,0 +1,53 @@
+{
+  "phase": "P7.1",
+  "increment": "topology-and-deployment-controls",
+  "source_commit": "78c763d",
+  "source_commit_full": "78c763d1cfd7f4f3dfacd2f0a99aff1e3374415d",
+  "execution_class": "synthetic-isolated-pre-production",
+  "environment_identity": "venture-control-synthetic-p71",
+  "reviewer_classification": "independent-review-required",
+  "independent_reviewer": "Kalaap Das",
+  "focused_method_denominator": 8,
+  "focused_method_passed": 8,
+  "focused_case_denominator": 53,
+  "focused_case_passed": 53,
+  "full_regression_denominator": 358,
+  "full_regression_passed": 358,
+  "failures": 0,
+  "errors": 0,
+  "external_actions": false,
+  "live_credentials": false,
+  "real_ceo": false,
+  "live_authorities_denied": [
+    "network", "broker", "payment", "credential", "deployment",
+    "customer", "capital", "venture", "worker"
+  ],
+  "case_families": {
+    "topology-contract": 8,
+    "identity-separation": 10,
+    "admission-and-denial": 21,
+    "rollback-and-recovery": 10,
+    "two-consecutive-rehearsals": 4
+  },
+  "focused_command": "python3 -m unittest tests.p7.test_p7_1_topology -v",
+  "full_regression_command": "python3 -m unittest discover -s tests -p 'test*.py'",
+  "evidence": [
+    {
+      "path": "tests/certification/p7/results/P7.1-focused-runtime-20260922.log",
+      "sha256": "6cdf6874209cfd2c8c2d966f00d6719036cb649835a8d11f8e530eb128809fb0"
+    },
+    {
+      "path": "tests/certification/p7/results/P7.1-full-regression-20260922.log",
+      "sha256": "26c17cb62e8e922dca75c758ce17bd76e1d5b298e152b5149911f9c5eb38f162"
+    },
+    {
+      "path": "tests/certification/p7/results/P7.1-case-results-20260922.jsonl",
+      "sha256": "eabfa6edd90fa1ab26ebafd552c2acbb7872b66ab5193b204e5ccb60068d7ea1"
+    }
+  ],
+  "warnings": {
+    "count": 6,
+    "classification": "pre-existing SQLite ResourceWarning; non-failing"
+  },
+  "status": "implementation-and-regression-evidence-passing; independent-acceptance-pending"
+}

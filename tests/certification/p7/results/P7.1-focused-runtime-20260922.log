@@ -1,0 +1,13 @@
+test_admission_and_negative_cases (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_admission_and_negative_cases) ... ok
+test_case_registry_has_minimum_53_individual_cases (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_case_registry_has_minimum_53_individual_cases) ... ok
+test_identity_separation_cases (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_identity_separation_cases) ... ok
+test_invalid_topology_and_rollback_fail_closed (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_invalid_topology_and_rollback_fail_closed) ... ok
+test_no_external_side_effects (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_no_external_side_effects) ... ok
+test_recovery_and_rollback_cases (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_recovery_and_rollback_cases) ... ok
+test_topology_contract_cases (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_topology_contract_cases) ... ok
+test_two_consecutive_clean_rehearsals (tests.p7.test_p7_1_topology.P71TopologyDeploymentTests.test_two_consecutive_clean_rehearsals) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.044s
+
+OK

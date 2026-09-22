@@ -1,11 +1,11 @@
 # Phase 7 Status Record
 
-## v1.2
+## v1.3
 
-**Status:** P7.0 COMPLETE — P7.1 PLANNING PREPARED; IMPLEMENTATION GATED
+**Status:** P7.0 COMPLETE — P7.1 IMPLEMENTED; INDEPENDENT ACCEPTANCE PENDING
 **Phase:** P7 — Production readiness and controlled-integration preparation  
 **Predecessor:** P6.5-ACCEPTED  
-**Current branch/commit:** phase7/p7-0-blocking-drift; P7.0 implementation and regression evidence committed.
+**Current branch/commit:** phase7/p7-1-topology-deployment; P7.1 evidence tested from 78c763d1cfd7f4f3dfacd2f0a99aff1e3374415d.
 
 ## Acceptance baseline
 
@@ -14,6 +14,16 @@
 - P6.5 tag: P6.5-ACCEPTED
 - P6.5 evidence: 12/12 focused; 116/116 combined; 337/337 full
 - Known warnings: six pre-existing SQLite ResourceWarning messages; no failures
+
+## P7.0 baseline
+
+- Independent certification: fb48b7cf95004bd6db6850236264d1374e5e2854
+- Focused runtime: 13/13 methods; 93/93 matrix cases
+- Full regression before P7.1 test-discovery inclusion: 337/337 tests
+- External actions: none
+- All nine live authorities: denied
+- Real CEO: not attached
+- Live credentials: none
 
 ## Entry checklist
 
@@ -30,7 +40,7 @@
 | P7.0 focused runtime | PASS — 13/13 methods; 93 matrix cases exercised |
 | P7.0 full regression | PASS — 337/337 tests |
 | P7.0 independent certification | PASS — recorded in docs/P7.0-INDEPENDENT-CERTIFICATION.md |
-| P7.1 entry decision | OPEN — separate explicit authorization required; implementation not started |
+| P7.1 entry and implementation authorization | PASS — recorded in docs/p7-1-entry-decision.md |
 
 ## Scope boundary
 
@@ -51,14 +61,25 @@ P7.0 execution requirements are met:
 - evidence and raw output committed;
 - no external action occurred.
 
-P7.0 is independently certified. P7.1 has not started; its separate entry decision and implementation authorization remain pending.
+P7.0 is independently certified. P7.1 has now been separately authorized and implemented.
 
-## P7.1 planning update
+## P7.1 implementation result
 
-P7.1 scope, implementation increments, evidence requirements, focused denominator, negative tests, recovery tests, and full-regression gate are recorded in:
+P7.1 covers production-shaped isolated topology, ownership and trust boundaries, configuration/release identity separation, fail-closed deployment admission, deployment denial, rollback, and two consecutive clean rehearsal runs.
 
-- docs/p7-1-policy-spec-v1.0.md
-- docs/p7-1-implementation-plan-v1.0.md
-- docs/p7-1-entry-decision.md
+- Focused: 8/8 unittest methods; 53/53 individual cases.
+- Full regression with tests/p7 included: 358/358.
+- Failures/errors: 0/0.
+- External actions: none.
+- Live credentials: none.
+- All nine live authorities: denied.
+- Model output did not authorize execution.
+- Six pre-existing SQLite ResourceWarning messages remained non-failing.
 
-P7.1 implementation has not started. No P7.1 code, fixture, test, schema, configuration, or evidence implementation is authorized by this status update. Both P7.1 entry and P7.1 implementation authorization remain pending explicit human approval. P7.2–P7.6 remain not started. P8 remains not authorized.
+Implementation and evidence are interpreted in docs/reports/P7.1-TOPOLOGY-DEPLOYMENT-IMPLEMENTATION.md. Raw evidence and manifest are under tests/certification/p7/results/.
+
+## P7.1 acceptance gate
+
+P7.1 is not yet accepted. Independent review and a separate human acceptance decision remain pending in docs/reports/P7.1-INDEPENDENT-REVIEW.md.
+
+P7.2–P7.6 remain not started. P8 remains not authorized.

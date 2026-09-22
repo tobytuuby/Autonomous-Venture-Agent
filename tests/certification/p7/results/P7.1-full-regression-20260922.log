@@ -1,0 +1,23 @@
+................................................................................................................................................................................................................................................................................................................................../usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c040>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c130>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c310>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c400>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c220>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/threading.py:301: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7b0b47a6c5e0>
+  if hasattr(lock, '_release_save'):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+....................................
+----------------------------------------------------------------------
+Ran 358 tests in 1.684s
+
+OK
