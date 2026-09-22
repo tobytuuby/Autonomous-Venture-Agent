@@ -7,7 +7,15 @@ from pathlib import Path
 
 OUT = Path("tests/certification/p7/results")
 OUT.mkdir(parents=True, exist_ok=True)
-SOURCE_COMMIT = "5118bc4"
+SOURCE_COMMIT = os.environ["P7_SOURCE_COMMIT"]
+if os.environ.get("P7_EXECUTION_VERIFIED") != "1":
+    raise RuntimeError("Refusing to generate P7.4 evidence without verified execution. Set P7_EXECUTION_VERIFIED=1 only after running focused and full regression suites.")
+FOCUSED_PASSED = int(os.environ["P7_FOCUSED_PASSED"])
+FOCUSED_TOTAL = int(os.environ["P7_FOCUSED_TOTAL"])
+CASES_PASSED = int(os.environ["P7_CASES_PASSED"])
+CASES_TOTAL = int(os.environ["P7_CASES_TOTAL"])
+REGRESSION_PASSED = int(os.environ["P7_REGRESSION_PASSED"])
+REGRESSION_TOTAL = int(os.environ["P7_REGRESSION_TOTAL"])
 PLANNING_COMMIT = "32483ec"
 CONFIG = "p7.4-config-a"
 ENVIRONMENT = "p7.4-isolated"
@@ -137,9 +145,9 @@ manifest = {
     "environment_identity": ENVIRONMENT,
     "configuration_fingerprint": CONFIG,
     "reviewer": REVIEWER,
-    "focused_methods": {"passed": 9, "total": 9},
-    "case_envelopes": {"passed": 40, "total": 40},
-    "full_regression": {"passed": 384, "total": 384},
+    "focused_methods": {"passed": FOCUSED_PASSED, "total": FOCUSED_TOTAL},
+    "case_envelopes": {"passed": CASES_PASSED, "total": CASES_TOTAL},
+    "full_regression": {"passed": REGRESSION_PASSED, "total": REGRESSION_TOTAL},
     "external_actions": 0,
     "unauthorized_actions": 0,
     "live_credentials": 0,
