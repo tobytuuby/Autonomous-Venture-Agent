@@ -1,0 +1,14 @@
+test_allowlist_and_dependency_negative_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_allowlist_and_dependency_negative_cases) ... ok
+test_authority_and_model_denial_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_authority_and_model_denial_cases) ... ok
+test_case_registry_has_40_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_case_registry_has_40_cases) ... ok
+test_identity_binding_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_identity_binding_cases) ... ok
+test_injected_failure_paths_are_fail_closed (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_injected_failure_paths_are_fail_closed) ... ok
+test_redaction_and_no_secret_leak_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_redaction_and_no_secret_leak_cases) ... ok
+test_revocation_and_recovery_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_revocation_and_recovery_cases) ... ok
+test_rotation_and_lineage_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_rotation_and_lineage_cases) ... ok
+test_synthetic_custody_and_binding_cases (tests.p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_synthetic_custody_and_binding_cases) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.004s
+
+OK

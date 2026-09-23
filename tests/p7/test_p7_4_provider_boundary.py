@@ -46,12 +46,12 @@ class TestP74ProviderBoundary(unittest.TestCase):
             )
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.create_credential(
-                credential_id="cred-002", owner="synthetic-operator",
+                actor="synthetic-operator", credential_id="cred-002", owner="synthetic-operator",
                 provider_id="unknown-provider", secret_material="synthetic-secret-2"
             )
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.create_credential(
-                credential_id="cred-003", owner="synthetic-operator",
+                actor="synthetic-operator", credential_id="cred-003", owner="synthetic-operator",
                 provider_id="synthetic-provider", secret_material="production-token"
             )
 
@@ -106,7 +106,7 @@ class TestP74ProviderBoundary(unittest.TestCase):
         recovered = SyntheticProviderBoundary(
             source_commit="32483ec", config_fingerprint="p7.4-config-a"
         )
-        recovered.register_provider(provider_id="synthetic-provider", dependency_sha256=DEPENDENCY)
+        recovered.register_provider(actor="synthetic-operator", provider_id="synthetic-provider", dependency_sha256=DEPENDENCY)
         record = recovered.create_credential(
             actor="synthetic-operator", credential_id="cred-recovered", owner="synthetic-operator",
             provider_id="synthetic-provider", secret_material="synthetic-secret-recovered"
@@ -115,9 +115,9 @@ class TestP74ProviderBoundary(unittest.TestCase):
 
     def test_allowlist_and_dependency_negative_cases(self):
         with self.assertRaises(ProviderBoundaryError):
-            self.boundary.register_provider(provider_id="live-provider", dependency_sha256=DEPENDENCY)
+            self.boundary.register_provider(actor="synthetic-operator", provider_id="live-provider", dependency_sha256=DEPENDENCY)
         with self.assertRaises(ProviderBoundaryError):
-            self.boundary.register_provider(provider_id="unpinned", dependency_sha256="not-a-hash")
+            self.boundary.register_provider(actor="synthetic-operator", provider_id="unpinned", dependency_sha256="not-a-hash")
         with self.assertRaises(ProviderBoundaryError):
             self.boundary.provider_request(
                 credential_id="cred-001", provider_id="synthetic-provider",
@@ -165,7 +165,7 @@ class TestP74ProviderBoundary(unittest.TestCase):
             self.assertTrue(fresh.fail_closed)
             with self.assertRaises(ProviderBoundaryError):
                 fresh.authorities() if False else fresh.register_provider(
-                    provider_id="synthetic-provider", dependency_sha256=DEPENDENCY
+                    actor="synthetic-operator", provider_id="synthetic-provider", dependency_sha256=DEPENDENCY
                 )
 
 
