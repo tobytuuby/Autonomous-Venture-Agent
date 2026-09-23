@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 OUT = Path("tests/certification/p7/results")
@@ -20,24 +21,22 @@ PLANNING_COMMIT = "32483ec"
 CONFIG = "p7.4-config-a"
 ENVIRONMENT = "p7.4-isolated"
 REVIEWER = "Kalaap Das"
-TIMESTAMP = "2026-09-22T00:00:00Z"
+TIMESTAMP = os.environ["P7_EVIDENCE_TIMESTAMP"]
+EVIDENCE_DATE = os.environ["P7_EVIDENCE_DATE"]
 AUTHORITIES = ("network", "broker", "payment", "credential", "deployment", "customer", "capital", "venture", "worker")
+SOURCE_REQUIREMENTS = {
+    "kernel/p7/provider_boundary.py": ["synthetic-custody", "lineage-metadata", "non-recoverability", "actor-enforcement", "rotation", "revocation", "allowlist", "dependency-pinning", "redaction", "fail-closed"],
+    "kernel/p7/__init__.py": ["P7 package exports", "P7.1/P7.2/P7.3 compatibility"],
+    "tests/p7/test_p7_4_provider_boundary.py": ["focused", "negative", "recovery", "lineage metadata", "actor enforcement", "authority denial", "secret-leak prevention"],
+}
 SOURCE_FILES = {
-    "kernel/p7/provider_boundary.py": {
-        "sha256": "7f4b8c40dda0109222c64126a982bbcec5ab83641f2fab1070caef400d2537b7",
-        "bytes": 11447, "lines": 297,
-        "requirements": ["synthetic-custody", "rotation", "revocation", "allowlist", "dependency-pinning", "redaction", "fail-closed"],
-    },
-    "kernel/p7/__init__.py": {
-        "sha256": "edba45367803bc5ed490050bc54c0f30da9b68e85ed8d92a8b0217fa9a08d11e",
-        "bytes": 1312, "lines": 24,
-        "requirements": ["P7 package exports", "P7.1/P7.2/P7.3 compatibility"],
-    },
-    "tests/p7/test_p7_4_provider_boundary.py": {
-        "sha256": "1022441374e12cfc7328ad3d93a33e3fa066269bb35d51932f9e4e8b5c7c39b1",
-        "bytes": 7801, "lines": 164,
-        "requirements": ["focused", "negative", "recovery", "authority denial", "secret-leak prevention"],
-    },
+    path: {
+        "sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        "bytes": Path(path).stat().st_size,
+        "lines": len(Path(path).read_text(encoding="utf-8").splitlines()),
+        "requirements": requirements,
+    }
+    for path, requirements in SOURCE_REQUIREMENTS.items()
 }
 PLANNING_FILES = {
     "docs/p7-4-entry-decision.md": "895395e59f9969415d0c80c902ecdeb8cf2f55b5acc8d85565f35c4cf8e97af7",
@@ -63,7 +62,7 @@ CASE_IDS = (
     + [f"P7.4.REDACTION.secrets.{i:03d}" for i in range(1, 5)]
     + [f"P7.4.AUTHORITY_DENIAL.negative.{i:03d}" for i in range(1, 5)]
 )
-FOCUSED_LOG_SHA256 = hashlib.sha256((OUT / "P7.4-focused-runtime-20260922.log").read_bytes()).hexdigest()
+FOCUSED_LOG_SHA256 = hashlib.sha256((OUT / f"P7.4-focused-runtime-{EVIDENCE_DATE}.log").read_bytes()).hexdigest()
 METHOD_MAP = {
     "CUSTODY": "test_synthetic_custody_and_binding_cases",
     "ROTATION": "test_rotation_and_lineage_cases",
@@ -104,10 +103,10 @@ for case_id in CASE_IDS:
     }
     record["evidence_hash"] = hashlib.sha256(json.dumps(record, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     records.append(record)
-(OUT / "P7.4-case-results-20260922.jsonl").write_text(
+(OUT / f"P7.4-case-results-{EVIDENCE_DATE}.jsonl").write_text(
     "".join(json.dumps(record, sort_keys=True) + "\n" for record in records), encoding="utf-8"
 )
-(OUT / "P7.4-source-inventory-20260922.json").write_text(json.dumps({
+(OUT / f"P7.4-source-inventory-{EVIDENCE_DATE}.json").write_text(json.dumps({
     "source_commit": SOURCE_COMMIT,
     "planning_commit": PLANNING_COMMIT,
     "implementation_commit": SOURCE_COMMIT,
@@ -117,7 +116,7 @@ for case_id in CASE_IDS:
     "implementation_audit": "Inspect source, tests, requirement mapping, and recorded execution evidence independently of planning.",
     "audit_requirement": "Planning and implementation must be audited from committed artifacts without test rerun.",
 }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-(OUT / "P7.4-test-inventory-20260922.json").write_text(json.dumps({
+(OUT / f"P7.4-test-inventory-{EVIDENCE_DATE}.json").write_text(json.dumps({
     "source_commit": SOURCE_COMMIT,
     "test_file": "tests/p7/test_p7_4_provider_boundary.py",
     "test_file_sha256": SOURCE_FILES["tests/p7/test_p7_4_provider_boundary.py"]["sha256"],
@@ -130,11 +129,11 @@ for case_id in CASE_IDS:
     "audit_access_note": "Committed method inventory and case registry; no auditor rerun required.",
 }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 artifact_paths = [
-    "P7.4-focused-runtime-20260922.log",
-    "P7.4-full-regression-20260922.log",
-    "P7.4-case-results-20260922.jsonl",
-    "P7.4-source-inventory-20260922.json",
-    "P7.4-test-inventory-20260922.json",
+    f"P7.4-focused-runtime-{EVIDENCE_DATE}.log",
+    f"P7.4-full-regression-{EVIDENCE_DATE}.log",
+    f"P7.4-case-results-{EVIDENCE_DATE}.jsonl",
+    f"P7.4-source-inventory-{EVIDENCE_DATE}.json",
+    f"P7.4-test-inventory-{EVIDENCE_DATE}.json",
 ]
 artifact_hashes = {name: hashlib.sha256((OUT / name).read_bytes()).hexdigest() for name in artifact_paths}
 manifest = {
@@ -153,11 +152,11 @@ manifest = {
     "live_credentials": 0,
     "live_authorities": {name: False for name in AUTHORITIES},
     "warnings": {"sqlite_resource_warnings": 6, "failing_tests": 0, "errors": 0},
-    "audit_mode": "read-only GitHub packet; no auditor test rerun",
+    "audit_mode": "venture-control bridge runtime execution; independent audit pending",
     "planning_audited": True,
     "implementation_audited": True,
     "review_status": "PENDING_INDEPENDENT_REVIEW",
     "artifact_hashes_excluding_manifest": artifact_hashes,
     "generated_at_utc": TIMESTAMP,
 }
-(OUT / "P7.4-execution-manifest-20260922.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+(OUT / f"P7.4-execution-manifest-{EVIDENCE_DATE}.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

@@ -1,0 +1,55 @@
+{
+  "audit_requirement": "Planning and implementation must be audited from committed artifacts without test rerun.",
+  "implementation_audit": "Inspect source, tests, requirement mapping, and recorded execution evidence independently of planning.",
+  "implementation_commit": "7f9eccdf2f95f18741e7b41aae3bbd31344b096f",
+  "planning_audit": "Inspect entry decision, policy, plan, status, and their commit ordering.",
+  "planning_commit": "32483ec",
+  "planning_files": {
+    "docs/p7-4-entry-decision.md": "895395e59f9969415d0c80c902ecdeb8cf2f55b5acc8d85565f35c4cf8e97af7",
+    "docs/p7-4-implementation-plan-v1.0.md": "402b5f4949b35bb2d1d3f42326e14ad5f15c94b8ce5e4d519f2cd61a05ad8737",
+    "docs/p7-4-policy-spec-v1.0.md": "397124032e998b030288955856aa993b39cc24498540cd04aa71247f8d6db9f8"
+  },
+  "source_commit": "7f9eccdf2f95f18741e7b41aae3bbd31344b096f",
+  "source_files": {
+    "kernel/p7/__init__.py": {
+      "bytes": 1312,
+      "lines": 24,
+      "requirements": [
+        "P7 package exports",
+        "P7.1/P7.2/P7.3 compatibility"
+      ],
+      "sha256": "edba45367803bc5ed490050bc54c0f30da9b68e85ed8d92a8b0217fa9a08d11e"
+    },
+    "kernel/p7/provider_boundary.py": {
+      "bytes": 12886,
+      "lines": 332,
+      "requirements": [
+        "synthetic-custody",
+        "lineage-metadata",
+        "non-recoverability",
+        "actor-enforcement",
+        "rotation",
+        "revocation",
+        "allowlist",
+        "dependency-pinning",
+        "redaction",
+        "fail-closed"
+      ],
+      "sha256": "f138133a4ee26b4caa98fbc550697a450f69758d149db77092c0df09caf76cef"
+    },
+    "tests/p7/test_p7_4_provider_boundary.py": {
+      "bytes": 9380,
+      "lines": 183,
+      "requirements": [
+        "focused",
+        "negative",
+        "recovery",
+        "lineage metadata",
+        "actor enforcement",
+        "authority denial",
+        "secret-leak prevention"
+      ],
+      "sha256": "cf9e9ea8251e4f5699c6dee6d652b1494ae773d955a1960f514e1ebaee92cedd"
+    }
+  }
+}

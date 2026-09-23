@@ -1,0 +1,52 @@
+{
+  "artifact_hashes_excluding_manifest": {
+    "P7.4-case-results-20260923.jsonl": "6e9ffbb8f60d8747bcf85f8e67e302ce533269c84fda64e9708a375190807347",
+    "P7.4-focused-runtime-20260923.log": "7d52e00a9c64f3ed5788ab3b145d5c6c6cf6cee2a0d0d701b4a111614b543595",
+    "P7.4-full-regression-20260923.log": "e6757f9ebfc4fa50dc69581465110e856ba700474d6027e53d29170e93ce2145",
+    "P7.4-source-inventory-20260923.json": "7f7194bcf36660cfeced6e8c6208a2d48433f9b06cc969b42de0fab7bb16b2d1",
+    "P7.4-test-inventory-20260923.json": "2a323912b28b2f6f4b480d1dec2e04b68add0bced12c0a9147c85390de423f9f"
+  },
+  "audit_mode": "venture-control bridge runtime execution; independent audit pending",
+  "case_envelopes": {
+    "passed": 40,
+    "total": 40
+  },
+  "configuration_fingerprint": "p7.4-config-a",
+  "environment_identity": "p7.4-isolated",
+  "external_actions": 0,
+  "focused_methods": {
+    "passed": 9,
+    "total": 9
+  },
+  "full_regression": {
+    "passed": 384,
+    "total": 384
+  },
+  "generated_at_utc": "2026-09-23T11:00:00Z",
+  "implementation_audited": true,
+  "implementation_commit": "7f9eccdf2f95f18741e7b41aae3bbd31344b096f",
+  "live_authorities": {
+    "broker": false,
+    "capital": false,
+    "credential": false,
+    "customer": false,
+    "deployment": false,
+    "network": false,
+    "payment": false,
+    "venture": false,
+    "worker": false
+  },
+  "live_credentials": 0,
+  "phase": "P7.4",
+  "planning_audited": true,
+  "planning_commit": "32483ec",
+  "review_status": "PENDING_INDEPENDENT_REVIEW",
+  "reviewer": "Kalaap Das",
+  "title": "Credential and provider-boundary readiness",
+  "unauthorized_actions": 0,
+  "warnings": {
+    "errors": 0,
+    "failing_tests": 0,
+    "sqlite_resource_warnings": 6
+  }
+}
