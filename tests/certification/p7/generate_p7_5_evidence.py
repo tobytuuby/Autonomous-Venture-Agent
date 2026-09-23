@@ -155,14 +155,16 @@ def main() -> None:
 
     records = []
     for case_id in AUTHORITY_CASES:
-        _, _, authority, state = case_id.split(".", 3)
+        parts = case_id.split(".")
+        authority, state = parts[3], parts[4]
         records.append(envelope(
             case_id, "authority",
             {"authority": authority, "state": state},
             "DENY/CONTAINED",
         ))
     for case_id in RECOVERY_CASES:
-        _, _, control, mode = case_id.split(".", 3)
+        parts = case_id.split(".")
+        control, mode = parts[3], parts[4]
         observed = "TERMINAL_FAIL_CLOSED" if mode == "injected-failure" else (
             "RESTORED" if control == "restore" else "TRANSITIONED_AND_CONTAINED"
         )
