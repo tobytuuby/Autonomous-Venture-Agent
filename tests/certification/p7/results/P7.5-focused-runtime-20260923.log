@@ -1,0 +1,10 @@
+$ /usr/bin/python3 -m unittest tests.p7.test_p7_5_worker_boundary -v
+test_admission_identity_capability_and_provenance_denials (tests.p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_admission_identity_capability_and_provenance_denials) ... ok
+test_authority_matrix_81_cases (tests.p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_authority_matrix_81_cases) ... ok
+test_recovery_matrix_12_cases (tests.p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_recovery_matrix_12_cases) ... ok
+test_task_identity_scope_replay_and_revocation_denials (tests.p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_task_identity_scope_replay_and_revocation_denials) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.015s
+
+OK

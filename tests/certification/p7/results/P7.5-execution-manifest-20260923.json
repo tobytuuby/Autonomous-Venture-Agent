@@ -1,0 +1,53 @@
+{
+  "schema_version": "P7.5-EVIDENCE-v1.0",
+  "phase": "P7.5",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "source_commit": "441f5d84ddc507e0a61711425c3552064225fd9d",
+  "branch": "phase7/p7-4-credential-provider-boundary",
+  "focused_command": "/usr/bin/python3 -m unittest tests.p7.test_p7_5_worker_boundary -v",
+  "focused_methods": 4,
+  "full_regression_command": "/usr/bin/python3 -m unittest discover -s tests -p test*.py -v",
+  "full_regression_tests": 388,
+  "authority_denominator": 81,
+  "recovery_denominator": 12,
+  "case_denominator": 93,
+  "configuration_fingerprint": "db98163624ed06349c4a3470bbfe5511a60227039181d82cb883bc555e175ffd",
+  "environment_identity": "synthetic-worker-boundary",
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "all_live_authorities_denied": true,
+  "model_output_authorization": false,
+  "warning_disposition": "Any warnings are retained verbatim in raw logs and require independent review.",
+  "artifacts": {
+    "P7.5-focused-runtime-20260923.log": {
+      "sha256": "017e03a7c36663e09beb951e1f1435fff360511feb33f4bd9ab91205e641d291",
+      "byte_size": 779
+    },
+    "P7.5-full-regression-20260923.log": {
+      "sha256": "f91546bcae639283778b65df09b4e5fc4b056328b9b963dcced448bbb1cf7e60",
+      "byte_size": 53172
+    },
+    "P7.5-case-results-20260923.jsonl": {
+      "sha256": "467b91ae5899d600173d6b8ad7e9dc3f25ca25e61ee6eced542036b0092ecb22",
+      "byte_size": 154375
+    },
+    "P7.5-source-inventory-20260923.json": {
+      "sha256": "41a4151c930ae7c9b0b725116c1dfee59b9f153e58a0405c61c0b3300bf9903a",
+      "byte_size": 1065
+    },
+    "P7.5-test-inventory-20260923.json": {
+      "sha256": "f53dae23482eded9f4617ceea484f370bb12b8d2927a3e158f526d3441bce2d2",
+      "byte_size": 1095
+    },
+    "P7.5-authority-matrix-20260923.md": {
+      "sha256": "08cf5a23f06d91ecca1257312dda12e9457f236cc1da1d55f0d6908cd432b7b9",
+      "byte_size": 7267
+    },
+    "P7.5-recovery-matrix-20260923.md": {
+      "sha256": "3f63dae9182f33db77324baf5097eb43a63dc1b4f290ad5485974dabe8658331",
+      "byte_size": 1395
+    }
+  },
+  "review_status": "PENDING_INDEPENDENT_REVIEW"
+}

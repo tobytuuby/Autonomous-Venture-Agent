@@ -1,0 +1,30 @@
+{
+  "phase": "P7.5",
+  "source_commit": "441f5d84ddc507e0a61711425c3552064225fd9d",
+  "files": [
+    {
+      "path": "kernel/p7/worker_boundary.py",
+      "git_blob_sha": "45669e76b60370dfb9da26e463df00e45cd8d263",
+      "sha256": "0801767ecc6fb6890c9a9c4959f41bd6a38376b144ec6ea09745fd8b45431e28",
+      "byte_size": 19956,
+      "line_count": 473,
+      "requirement": "synthetic worker admission, task, revocation, replay, recovery"
+    },
+    {
+      "path": "schemas/p7/worker-boundary.schema.json",
+      "git_blob_sha": "407628a771bf60f39142f5bd9531cab1749e6097",
+      "sha256": "02e614e6f6b2a4951593f32e9d006e6457ebd7865690f110ee9026a088d086ed",
+      "byte_size": 1786,
+      "line_count": 34,
+      "requirement": "worker boundary record contract"
+    },
+    {
+      "path": "kernel/p7/__init__.py",
+      "git_blob_sha": "e2c5cbeeaf498df26f5c1518232a9f08a9e61e1c",
+      "sha256": "a7d1bd28dea8fe70a11079c2ac9530d60cd2d5009cff448829ae5f9f01a81932",
+      "byte_size": 1440,
+      "line_count": 26,
+      "requirement": "public P7.5 exports"
+    }
+  ]
+}

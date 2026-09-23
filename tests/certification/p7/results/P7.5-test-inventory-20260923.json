@@ -1,0 +1,45 @@
+{
+  "phase": "P7.5",
+  "test_file": {
+    "path": "tests/p7/test_p7_5_worker_boundary.py",
+    "git_blob_sha": "0257d336ead06bc9d29ac332b8169aa1b5cc7495",
+    "sha256": "9031f3fd57035d11f57fa1dd988223dd1279eab8ea5e62eee4eb47375561dc47",
+    "byte_size": 8417,
+    "line_count": 225,
+    "requirement": "focused negative and recovery tests"
+  },
+  "focused_method_count": 4,
+  "focused_methods": [
+    "test_admission_identity_capability_and_provenance_denials",
+    "test_authority_matrix_81_cases",
+    "test_recovery_matrix_12_cases",
+    "test_task_identity_scope_replay_and_revocation_denials"
+  ],
+  "authority_case_count": 81,
+  "recovery_case_count": 12,
+  "total_case_count": 93,
+  "case_registry": {
+    "authorities": [
+      "network",
+      "broker",
+      "payment",
+      "credential",
+      "deployment",
+      "customer",
+      "capital",
+      "venture",
+      "worker"
+    ],
+    "states": [
+      "request",
+      "approval",
+      "dispatch",
+      "response",
+      "reconciliation",
+      "failure",
+      "freeze",
+      "revoke",
+      "quarantine-wind-down"
+    ]
+  }
+}
