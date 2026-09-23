@@ -11,6 +11,7 @@ from .topology import (
 from .recovery import RecoveryError, RecoveryObjectives, SyntheticRecoveryManager
 from .observability import ObservabilityError, PreservationRecord, SyntheticObservability
 from .provider_boundary import CredentialRecord, ProviderBoundaryError, SyntheticProviderBoundary
+from .worker_boundary import SyntheticWorkerBoundary, WorkerBoundaryError
 
 __all__ = [
     "BlockingDriftController", "DriftClassification", "DriftDecision",
@@ -21,4 +22,5 @@ __all__ = [
     "RecoveryError", "RecoveryObjectives", "SyntheticRecoveryManager",
     "ObservabilityError", "PreservationRecord", "SyntheticObservability",
     "CredentialRecord", "ProviderBoundaryError", "SyntheticProviderBoundary",
+    "SyntheticWorkerBoundary", "WorkerBoundaryError",
 ]
