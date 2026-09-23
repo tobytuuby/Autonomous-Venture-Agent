@@ -90,7 +90,7 @@ for case_id in CASE_IDS:
         "expected_disposition": "PASS",
         "observed_disposition": "PASS",
         "assertion_summary": "Synthetic custody/provider boundary assertion recorded with negative and recovery coverage.",
-        "raw_output_path": "tests/certification/p7/results/P7.4-focused-runtime-20260922.log",
+        "raw_output_path": f"tests/certification/p7/results/P7.4-focused-runtime-{EVIDENCE_DATE}.log",
         "raw_output_sha256": FOCUSED_LOG_SHA256,
         "evidence_preserved_at": TIMESTAMP,
         "injected_failure": family in {"ROTATION", "REVOCATION", "ALLOWLIST_DEPENDENCY"},

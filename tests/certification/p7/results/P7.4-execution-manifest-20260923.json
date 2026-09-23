@@ -1,6 +1,6 @@
 {
   "artifact_hashes_excluding_manifest": {
-    "P7.4-case-results-20260923.jsonl": "6e9ffbb8f60d8747bcf85f8e67e302ce533269c84fda64e9708a375190807347",
+    "P7.4-case-results-20260923.jsonl": "960e920f4f9c06dcd8c7cb086937a140b6792a75aad08508e24843497f7c8fca",
     "P7.4-focused-runtime-20260923.log": "7d52e00a9c64f3ed5788ab3b145d5c6c6cf6cee2a0d0d701b4a111614b543595",
     "P7.4-full-regression-20260923.log": "e6757f9ebfc4fa50dc69581465110e856ba700474d6027e53d29170e93ce2145",
     "P7.4-source-inventory-20260923.json": "7f7194bcf36660cfeced6e8c6208a2d48433f9b06cc969b42de0fab7bb16b2d1",
