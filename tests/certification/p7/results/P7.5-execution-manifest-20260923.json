@@ -2,7 +2,7 @@
   "schema_version": "P7.5-EVIDENCE-v1.0",
   "phase": "P7.5",
   "execution_class": "synthetic-shadow-isolated-pre-production",
-  "source_commit": "441f5d84ddc507e0a61711425c3552064225fd9d",
+  "source_commit": "6e96f6b2c148f22962969a27ca7cc8be13732902",
   "branch": "phase7/p7-4-credential-provider-boundary",
   "focused_command": "/usr/bin/python3 -m unittest tests.p7.test_p7_5_worker_boundary -v",
   "focused_methods": 4,
@@ -21,19 +21,19 @@
   "warning_disposition": "Any warnings are retained verbatim in raw logs and require independent review.",
   "artifacts": {
     "P7.5-focused-runtime-20260923.log": {
-      "sha256": "017e03a7c36663e09beb951e1f1435fff360511feb33f4bd9ab91205e641d291",
+      "sha256": "e175852c61825efd4822482ba11e942222115230684bd394f61a37143fa2390a",
       "byte_size": 779
     },
     "P7.5-full-regression-20260923.log": {
-      "sha256": "f91546bcae639283778b65df09b4e5fc4b056328b9b963dcced448bbb1cf7e60",
+      "sha256": "1af06936bf106f62fbecf1cf9576ef086a7c9b3ee7640e86351c8fe3b9fa9cc9",
       "byte_size": 53172
     },
     "P7.5-case-results-20260923.jsonl": {
-      "sha256": "467b91ae5899d600173d6b8ad7e9dc3f25ca25e61ee6eced542036b0092ecb22",
-      "byte_size": 154375
+      "sha256": "1a5f4e1710a41382f309b0722f1f1e2646aaa6486c4bc6b012cf53cc453d1421",
+      "byte_size": 153431
     },
     "P7.5-source-inventory-20260923.json": {
-      "sha256": "41a4151c930ae7c9b0b725116c1dfee59b9f153e58a0405c61c0b3300bf9903a",
+      "sha256": "82e714741e038484082589a21c5f1a11e1457b79b7d49ec8f2b577a615e8088c",
       "byte_size": 1065
     },
     "P7.5-test-inventory-20260923.json": {
@@ -41,12 +41,12 @@
       "byte_size": 1095
     },
     "P7.5-authority-matrix-20260923.md": {
-      "sha256": "08cf5a23f06d91ecca1257312dda12e9457f236cc1da1d55f0d6908cd432b7b9",
-      "byte_size": 7267
+      "sha256": "86544c78e64daefab051b0433ee1e1d7ea9744ad9a306558dc5a7680880e7951",
+      "byte_size": 6457
     },
     "P7.5-recovery-matrix-20260923.md": {
-      "sha256": "3f63dae9182f33db77324baf5097eb43a63dc1b4f290ad5485974dabe8658331",
-      "byte_size": 1395
+      "sha256": "4ed14360943f829c9201bfd4a170d7c2aa7f77082b25d8a1c99c693cf355fac1",
+      "byte_size": 1233
     }
   },
   "review_status": "PENDING_INDEPENDENT_REVIEW"

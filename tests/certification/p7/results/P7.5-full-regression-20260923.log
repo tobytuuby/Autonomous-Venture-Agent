@@ -351,22 +351,22 @@ test_expired_manifest_denies_without_grace_period (test_compliance.ComplianceTes
 test_latching_requires_human_reset (test_compliance.ComplianceTests.test_latching_requires_human_reset) ... ok
 test_progressive_requires_staged_clean_recovery (test_compliance.ComplianceTests.test_progressive_requires_staged_clean_recovery) ... ok
 test_prohibited_action_overrides_permitted_action (test_compliance.ComplianceTests.test_prohibited_action_overrides_permitted_action) ... ok
-test_concurrent_requests_respect_global_ceiling (test_compute.ComputeGovernorTests.test_concurrent_requests_respect_global_ceiling) ... /usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049af880>
+test_concurrent_requests_respect_global_ceiling (test_compute.ComputeGovernorTests.test_concurrent_requests_respect_global_ceiling) ... /usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99f880>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049af970>
+/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99f970>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049afc40>
+/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99fc40>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049afd30>
+/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99fd30>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049afe20>
+/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99fe20>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7a3a049aff10>
+/usr/lib/python3.14/threading.py:603: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x79eb3c99ff10>
   self._cond = Condition(Lock())
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
 ok
@@ -407,6 +407,6 @@ test_repair_budget_quarantines (test_supervisor.SupervisorTests.test_repair_budg
 test_repeated_fingerprint_escalates (test_supervisor.SupervisorTests.test_repeated_fingerprint_escalates) ... ok
 
 ----------------------------------------------------------------------
-Ran 388 tests in 2.032s
+Ran 388 tests in 2.072s
 
 OK
