@@ -1,0 +1,24 @@
+{
+  "schema_version": "P8.0-EVIDENCE-v1.0",
+  "phase": "P8.0",
+  "scope": "synthetic pilot charter preflight only",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "source_commit": "6774c9530a6e9bdbf480e05a92b9bb797087bf95",
+  "focused_methods": 13,
+  "full_regression_tests": 407,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "all_live_authorities_denied": true,
+  "model_output_authorization": false,
+  "live_action_permitted": false,
+  "written_live_action_approval": "PENDING",
+  "artifacts": {
+    "kernel/p8/pilot_gate.py": {"sha256": "247424a05373d2664956598029f75d02dfa9ab254220d6c94abb0cff320f6569", "git_blob_sha": "5fd8d3cfa957161fa8bf1c29e840c223a017d500"},
+    "tests/p8/test_p8_0_pilot_gate.py": {"sha256": "16bd63387d4e9d290f13e7cbaf0be42b2fe98985b0eac363e2867c5099efc9f7", "git_blob_sha": "d9ec10952053a68a9be90f309c8cb618fd46c896"},
+    "schemas/p8/pilot-charter.schema.json": {"sha256": "fc378a4c88e9496fc6ca7d2ba6ffec0c08059e1a19fc90b906f1ff971d643696", "git_blob_sha": "8f0caf65e3bf16dba3694afcb173341ce96eca4f"},
+    "tests/certification/p8-focused-runtime-20260924.log": {"sha256": "c6111d8737c191d97488888bda2b456056fa6949615b9a84097527c688673b83"},
+    "tests/certification/p8-full-regression-20260924.log": {"sha256": "efd7d7b2c8483ea944b5760b0c77dbc796f5bf9c7f7d4633982329e79bad32de"}
+  },
+  "boundary_statement": "P8.0 does not execute or authorize P8.1 live action."
+}

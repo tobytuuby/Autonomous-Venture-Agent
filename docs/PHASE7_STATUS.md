@@ -2,7 +2,7 @@
 
 ## v2.7
 
-**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED — P7.4 ACCEPTED — P7.5 IMPLEMENTATION COMPLETE — P7.6 CERTIFICATION IMPLEMENTATION COMPLETE; DECISION PENDING
+**Status:** P7.0 COMPLETE — P7.1 ACCEPTED — P7.2 ACCEPTED — P7.3 ACCEPTED — P7.4 ACCEPTED — P7.5 ACCEPTED FOR SYNTHETIC SCOPE — P7.6 ACCEPTED FOR SYNTHETIC SCOPE
 **Phase:** P7 — Production readiness and controlled-integration preparation
 **Predecessor:** P7.5-IMPLEMENTED
 **Current branch/commit:** phase7/p7-4-credential-provider-boundary; P7.6 implementation commit b208690.
@@ -28,7 +28,7 @@ The evidence packet is committed under tests/certification/p7/results/*P7.5*2026
 
 P7.6 implements a read-only independent-certification harness for P7.5. The harness reports 17/17 audit checks PASS, 6/6 focused certification tests, inherited P7.5 evidence of 93/93 envelopes, and 394/394 full regression after the P7.6 test addition. It does not authorize execution. The independent certification decision remains pending.
 
-The P7.6 evidence packet is committed under tests/certification/p7/results/*P7.6*20260924*.
+The P7.6 evidence packet is committed under tests/certification/p7/results/*P7.6*20260924*. Acceptance is recorded in docs/reports/P7.6-INDEPENDENT-ACCEPTANCE.md.
 
 ## Boundary
 
@@ -36,4 +36,4 @@ All P7 behavior remains synthetic, shadow, or isolated pre-production only. No r
 
 ## Next gate
 
-Complete the independent P7.6 certification review and record a separate ACCEPTED, BLOCKED, PARTIAL, or NOT EXECUTED decision. P8 remains out of scope.
+P8.0 synthetic preflight is authorized and implemented. P8.1 live action remains blocked pending a completed charter and separate written live-action approval. P9 and P10 remain out of scope.

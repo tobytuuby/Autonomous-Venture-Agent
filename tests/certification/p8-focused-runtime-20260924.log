@@ -1,0 +1,19 @@
+$ python3 -m unittest tests.p8.test_p8_0_pilot_gate -v
+test_all_nine_live_authorities_are_denied (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_all_nine_live_authorities_are_denied) ... ok
+test_approvers_monitoring_reconciliation_and_stops_are_required (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_approvers_monitoring_reconciliation_and_stops_are_required) ... ok
+test_automatic_stop_is_fail_closed (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_automatic_stop_is_fail_closed) ... ok
+test_charter_collision_and_snapshot_are_deterministic (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_charter_collision_and_snapshot_are_deterministic) ... ok
+test_live_action_request_is_always_denied (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_live_action_request_is_always_denied) ... ok
+test_live_credentials_and_live_mode_are_denied (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_live_credentials_and_live_mode_are_denied) ... ok
+test_model_output_cannot_authorize_pilot (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_model_output_cannot_authorize_pilot) ... ok
+test_multiple_ventures_or_authority_classes_are_denied (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_multiple_ventures_or_authority_classes_are_denied) ... ok
+test_numeric_ceilings_are_finite_and_ordered (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_numeric_ceilings_are_finite_and_ordered) ... ok
+test_operating_window_is_bounded_and_ordered (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_operating_window_is_bounded_and_ordered) ... ok
+test_result_authority_fingerprint_is_all_false (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_result_authority_fingerprint_is_all_false) ... ok
+test_valid_single_venture_charter_is_preflight_ready (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_valid_single_venture_charter_is_preflight_ready) ... ok
+test_written_live_action_approval_must_remain_pending (tests.p8.test_p8_0_pilot_gate.TestP80PilotGate.test_written_live_action_approval_must_remain_pending) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.007s
+
+OK
