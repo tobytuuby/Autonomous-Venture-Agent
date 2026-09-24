@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "P8.1 Synthetic Controlled Action Request",
+  "type": "object",
+  "required": [
+    "request_id",
+    "venture_id",
+    "authority_class",
+    "charter_hash",
+    "execution_class",
+    "synthetic_only",
+    "effect",
+    "written_live_action_approval"
+  ],
+  "properties": {
+    "request_id": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "authority_class": {"type": "string", "minLength": 1},
+    "charter_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "execution_class": {"const": "synthetic-shadow-isolated-pre-production"},
+    "synthetic_only": {"const": true},
+    "effect": {"const": "none"},
+    "written_live_action_approval": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {"status": {"const": "PENDING"}},
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
