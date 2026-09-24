@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "P8.0 Synthetic Pilot Charter",
+  "type": "object",
+  "required": [
+    "pilot_id",
+    "venture_id",
+    "authority_class",
+    "operating_window",
+    "exposure_ceiling",
+    "loss_ceiling",
+    "named_approvers",
+    "monitoring_plan",
+    "reconciliation_plan",
+    "automatic_stop_conditions",
+    "written_live_action_approval",
+    "synthetic_only",
+    "effect"
+  ],
+  "properties": {
+    "pilot_id": {"type": "string", "minLength": 1},
+    "venture_id": {"type": "string", "minLength": 1},
+    "authority_class": {"type": "string", "minLength": 1},
+    "operating_window": {
+      "type": "object",
+      "required": ["start", "end", "timezone"],
+      "properties": {
+        "start": {"type": "string", "format": "date-time"},
+        "end": {"type": "string", "format": "date-time"},
+        "timezone": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "exposure_ceiling": {"type": "number", "exclusiveMinimum": 0},
+    "loss_ceiling": {"type": "number", "minimum": 0},
+    "named_approvers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "monitoring_plan": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "reconciliation_plan": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "automatic_stop_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "written_live_action_approval": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {"status": {"const": "PENDING"}},
+      "additionalProperties": false
+    },
+    "synthetic_only": {"const": true},
+    "effect": {"const": "none"}
+  },
+  "additionalProperties": false
+}
