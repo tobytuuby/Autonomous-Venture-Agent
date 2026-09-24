@@ -1,0 +1,16 @@
+P8.1 focused runtime
+Commit: 6b6fb1042d09f60e3f908e69996d5286b31c88ff
+Command: python3 -m unittest tests.p8.test_p8_1_action_gate -v
+
+Ran 8 tests in 0.004s
+OK
+
+Cases:
+- valid request denied without effect
+- all nine live authorities denied
+- live credentials and live mode denied
+- model output and approval text denied
+- non-synthetic execution denied
+- execution always denied
+- replay idempotency and collision fail-closed
+- automatic stop terminal

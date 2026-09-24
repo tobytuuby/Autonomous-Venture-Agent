@@ -1,0 +1,17 @@
+{
+  "phase": "P8.1",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "implementation_commit": "6b6fb1042d09f60e3f908e69996d5286b31c88ff",
+  "focused_methods": 8,
+  "full_regression_tests": 415,
+  "all_nine_live_authorities_denied": true,
+  "live_action_permitted": false,
+  "model_output_authorization": false,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "schema_valid": true,
+  "source_import_scan": "PASS",
+  "execution_performed": false,
+  "evidence_scope": "synthetic denial only"
+}
