@@ -1,0 +1,27 @@
+{
+  "schema_version": "P7.6-EVIDENCE-v1.0",
+  "phase": "P7.6",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "audited_commit": "b208690e297700deba2dd09ea20faa3087404ec4",
+  "p7_5_evidence_source_commit": "6e96f6b2c148f22962969a27ca7cc8be13732902",
+  "focused_methods": 6,
+  "audit_check_denominator": 17,
+  "inherited_p7_5_authority_denominator": 81,
+  "inherited_p7_5_recovery_denominator": 12,
+  "inherited_p7_5_case_denominator": 93,
+  "full_regression_tests": 394,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "all_live_authorities_denied": true,
+  "model_output_authorization": false,
+  "audit_status": "PASS",
+  "acceptance_decision": "PENDING_HUMAN_INDEPENDENT_DECISION",
+  "artifacts": {
+    "tests/certification/p7/audit_p7_6.py": {"sha256": "067a808d00f2495e94d8e1703e94d973d6c7d36cc6627e4d3c90b101653e087f", "git_blob_sha": "9117ce057cadafd9489acccff0e53fc6cf8cf8c6"},
+    "tests/p7/test_p7_6_independent_certification.py": {"sha256": "71917f1a25bde3b0d73053bd61c825a7a762662b87a528cd675f3c461a4efc93", "git_blob_sha": "b6ddbdac1581fe9e05b3a150cd30fa76ccb76056"},
+    "tests/certification/p7/results/P7.6-independent-certification-20260924.json": {"sha256": "84d1636dfb2a75c6fa677229aff3d467d1aa7d8bdf3131881567c3904153d4a7"},
+    "tests/certification/p7/results/P7.6-focused-runtime-20260924.log": {"sha256": "ecd0e4d2fa783ef8005571c7b462e56a6aaf963d8494b6562fb9dc6d0c4593b3"},
+    "tests/certification/p7/results/P7.6-full-regression-20260924.log": {"sha256": "3f5bee24a34c1109f14734cea6a1909f2364bbef320c059a8cd517007d38a615"}
+  }
+}

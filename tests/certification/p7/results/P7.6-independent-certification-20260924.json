@@ -1,0 +1,30 @@
+{
+  "schema_version": "P7.6-INDEPENDENT-CERTIFICATION-v1.0",
+  "phase": "P7.6",
+  "scope": "independent read-only certification of P7.5 synthetic worker boundary",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "audited_commit": "b208690e297700deba2dd09ea20faa3087404ec4",
+  "p7_5_evidence_source_commit": "6e96f6b2c148f22962969a27ca7cc8be13732902",
+  "checks": {
+    "required_artifacts_present": true,
+    "evidence_source_commit_exists": true,
+    "evidence_source_is_ancestor_or_current": true,
+    "case_denominator_93": true,
+    "authority_denominator_81": true,
+    "recovery_denominator_12": true,
+    "all_case_envelopes_pass": true,
+    "case_hashes_recompute": true,
+    "manifest_denominators_match": true,
+    "manifest_zero_counts": true,
+    "manifest_boundary_flags": true,
+    "source_inventory_hashes_match": true,
+    "test_inventory_hash_matches": true,
+    "runtime_logs_report_expected_counts": true,
+    "worker_source_has_no_external_io_or_process_imports": true,
+    "p7_5_focused_method_inventory": true,
+    "schema_is_valid_json": true
+  },
+  "findings": [],
+  "status": "PASS",
+  "acceptance_decision": "PENDING_HUMAN_INDEPENDENT_DECISION"
+}

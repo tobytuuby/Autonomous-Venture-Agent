@@ -1,0 +1,12 @@
+$ python3 -m unittest tests.p7.test_p7_6_independent_certification -v
+test_artifact_presence_and_commit_lineage (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_artifact_presence_and_commit_lineage) ... ok
+test_case_denominator_and_envelopes (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_case_denominator_and_envelopes) ... ok
+test_certification_remains_non_authorizing (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_certification_remains_non_authorizing) ... ok
+test_manifest_counts_and_boundary (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_manifest_counts_and_boundary) ... ok
+test_runtime_logs_and_no_external_io (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_runtime_logs_and_no_external_io) ... ok
+test_source_and_test_inventory_integrity (tests.p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_source_and_test_inventory_integrity) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.056s
+
+OK
