@@ -1,0 +1,13 @@
+{
+  "remediation_commit": "6bfd536",
+  "files": [
+    {"path":"kernel/p8/charter_registry.py","sha256":"50a13f0dcc43ce178cfa2a33e689e037472f0ce223ef906d4be62688df166830"},
+    {"path":"kernel/p8/p81_action_gate.py","sha256":"e9878fba8e050a08613863280a3edff85164797469b6558e71e506778a210a68"},
+    {"path":"tests/p8/test_p8_1_action_gate.py","sha256":"f43f2f15e2f0128401405f5f0b08df2211137e4a110730caa9246fb1175bf4b4"},
+    {"path":"schemas/p8/p81-action-request.schema.json","sha256":"5740d698c417f1e2b0620790d745983d4478d66c27b31794f951bc5419cf45c4"},
+    {"path":"docs/p8-1-policy-spec-v1.0.md","sha256":"c24988fbb22f7f35df056ad240ea94ba41a0f5b473ced8c4287056aa4a490ec4"},
+    {"path":"docs/p8-1-implementation-plan-v1.0.md","sha256":"7d9923aa944cac7e0a44a6f1157bc2bc557dab275ea62358d1de0eb40f14c914"},
+    {"path":"docs/p8-1-entry-decision.md","sha256":"8f1d612873d1186afac138276406132c69710c6c2a07b37e1fc4c1c0a7b2fcca"},
+    {"path":"docs/p8-1-test-and-evidence-plan-v1.0.md","sha256":"92fde31d183454b8dc08aa7d277c067d280d5d02a57d3baac902399f513e5571"}
+  ]
+}

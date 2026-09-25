@@ -1,0 +1,6 @@
+P8.1 remediation full regression
+Commit: 6bfd536
+Command: python3 -m unittest discover -s tests -p 'test*.py'
+
+Ran 418 tests in 1.957s
+OK

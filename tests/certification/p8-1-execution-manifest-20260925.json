@@ -1,0 +1,21 @@
+{
+  "phase": "P8.1",
+  "remediation_commit": "6bfd536",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "focused_methods": 11,
+  "full_regression_tests": 418,
+  "p8_0_and_p8_1_tests": 24,
+  "all_nine_live_authorities_denied": true,
+  "schema_authority_fields_const_false": true,
+  "charter_registry_binding": true,
+  "unknown_charter_rejected": true,
+  "scope_mismatch_rejected": true,
+  "live_action_permitted": false,
+  "model_output_authorization": false,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "schema_valid": true,
+  "execution_performed": false,
+  "evidence_scope": "synthetic denial only"
+}

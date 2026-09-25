@@ -1,0 +1,17 @@
+P8.1 remediation focused runtime
+Commit: 6bfd536
+Command: python3 -m unittest tests.p8.test_p8_1_action_gate -v
+
+Ran 11 tests in 0.009s
+OK
+
+Remediation coverage:
+- all nine live authorities rejected by runtime
+- schema requires all nine authorities and rejects true values
+- unknown charter hash rejected
+- request scope mismatch rejected
+- valid request denied without effect
+- live credentials/model/non-synthetic inputs rejected
+- execution always denied
+- replay idempotent
+- automatic stop terminal
