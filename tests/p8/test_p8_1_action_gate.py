@@ -1,7 +1,13 @@
+import copy
 import hashlib
+import json
 import unittest
+from pathlib import Path
+
+from jsonschema import Draft202012Validator
 
 from kernel.p6.registry import LIVE_FIELDS
+from kernel.p8.charter_registry import SyntheticCharterRegistry
 from kernel.p8.p81_action_gate import P81Denied, SyntheticP81ActionGate
 
 
@@ -24,10 +30,28 @@ def request(**overrides):
     return record
 
 
+def registry():
+    result = {
+        "status": "PREFLIGHT_READY",
+        "venture_id": "venture-a",
+        "authority_class": "synthetic-research",
+        "record_hash": "a" * 64,
+        "synthetic_only": True,
+        "effect": "none",
+        "live_action_permitted": False,
+        "written_live_action_approval": {"status": "PENDING"},
+        "authority_flags": {field: False for field in LIVE_FIELDS},
+    }
+    value = SyntheticCharterRegistry()
+    value.approve(result)
+    return value
+
+
 def gate():
     return SyntheticP81ActionGate(
         policy_version="p8.1",
         configuration_fingerprint=CONFIG,
+        charter_registry=registry(),
     )
 
 
@@ -67,13 +91,19 @@ class TestP81ActionGate(unittest.TestCase):
         with self.assertRaises(P81Denied):
             gate().execute("request-001")
 
-    def test_replay_is_idempotent_and_collision_fails_closed(self):
+    def test_replay_is_idempotent(self):
         instance = gate()
         first = instance.submit(request())
         second = instance.submit(request())
         self.assertEqual(first, second)
+
+    def test_unknown_charter_hash_is_denied(self):
         with self.assertRaises(P81Denied):
-            instance.submit(request(venture_id="venture-b"))
+            gate().submit(request(charter_hash="f" * 64))
+
+    def test_request_scope_must_match_charter(self):
+        with self.assertRaises(P81Denied):
+            gate().submit(request(venture_id="venture-b"))
 
     def test_automatic_stop_is_terminal(self):
         instance = gate()
@@ -82,3 +112,19 @@ class TestP81ActionGate(unittest.TestCase):
         self.assertEqual(stopped["status"], "STOPPED")
         with self.assertRaises(P81Denied):
             instance.submit(request(request_id="request-002"))
+
+    def test_schema_requires_all_false_authorities_and_rejects_true(self):
+        schema_path = Path(__file__).parents[2] / "schemas" / "p8" / "p81-action-request.schema.json"
+        validator = Draft202012Validator(json.loads(schema_path.read_text()))
+        valid = request()
+        validator.validate(valid)
+        for field in LIVE_FIELDS:
+            with self.subTest(field=field):
+                invalid = copy.deepcopy(valid)
+                invalid[field] = True
+                with self.assertRaises(Exception):
+                    validator.validate(invalid)
+
+
+if __name__ == "__main__":
+    unittest.main()

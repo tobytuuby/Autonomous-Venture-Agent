@@ -1,8 +1,4 @@
-"""P8.1 synthetic controlled-action denial boundary.
-
-This module records only deterministic synthetic denials. It has no executor,
-provider, credential, network, process, or external-I/O capability.
-"""
+"""P8.1 synthetic controlled-action denial boundary."""
 
 from __future__ import annotations
 
@@ -11,6 +7,7 @@ import json
 from typing import Any, Mapping
 
 from kernel.p6.registry import LIVE_FIELDS, canonical
+from kernel.p8.charter_registry import SyntheticCharterRegistry
 
 
 class P81Denied(ValueError):
@@ -32,13 +29,22 @@ class SyntheticP81ActionGate:
     }
     EXECUTION_CLASS = "synthetic-shadow-isolated-pre-production"
 
-    def __init__(self, *, policy_version: str, configuration_fingerprint: str):
+    def __init__(
+        self,
+        *,
+        policy_version: str,
+        configuration_fingerprint: str,
+        charter_registry: SyntheticCharterRegistry,
+    ):
         if not isinstance(policy_version, str) or not policy_version.strip():
             raise P81Denied("policy_version is required")
         if not isinstance(configuration_fingerprint, str) or len(configuration_fingerprint) != 64:
             raise P81Denied("configuration_fingerprint must be a SHA-256 digest")
+        if not isinstance(charter_registry, SyntheticCharterRegistry):
+            raise P81Denied("approved charter registry is required")
         self.policy_version = policy_version
         self.configuration_fingerprint = configuration_fingerprint
+        self.charter_registry = charter_registry
         self._requests: dict[str, tuple[str, dict[str, Any]]] = {}
         self._stopped = False
 
@@ -75,6 +81,11 @@ class SyntheticP81ActionGate:
         charter_hash = self._text(request["charter_hash"], "charter_hash")
         if len(charter_hash) != 64 or any(c not in "0123456789abcdef" for c in charter_hash):
             raise P81Denied("charter_hash must be a SHA-256 digest")
+        charter = self.charter_registry.resolve(charter_hash)
+        if charter is None:
+            raise P81Denied("charter_hash is not an approved P8.0 preflight record")
+        if charter["venture_id"] != venture_id or charter["authority_class"] != authority_class:
+            raise P81Denied("request scope does not match approved P8.0 charter")
         material = {
             "request_id": request_id,
             "venture_id": venture_id,
