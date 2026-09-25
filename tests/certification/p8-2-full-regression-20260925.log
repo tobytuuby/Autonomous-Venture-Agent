@@ -1,0 +1,6 @@
+P8.2 full regression
+Implementation commit: 4cd9105
+Command: python3 -m unittest discover -s tests -p 'test*.py'
+
+Ran 428 tests in 1.756s
+OK

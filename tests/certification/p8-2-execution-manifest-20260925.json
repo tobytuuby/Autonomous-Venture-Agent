@@ -1,0 +1,18 @@
+{
+  "phase": "P8.2",
+  "implementation_commit": "4cd9105",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "focused_methods": 10,
+  "p8_0_p8_1_p8_2_focused_tests": 34,
+  "full_regression_tests": 428,
+  "all_nine_live_authorities_denied": true,
+  "quarantine_on_drift": true,
+  "charter_registry_binding": true,
+  "schema_valid": true,
+  "live_action_permitted": false,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "execution_performed": false,
+  "evidence_scope": "synthetic observation and quarantine only"
+}
