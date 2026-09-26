@@ -9,23 +9,23 @@
 
 ### P8.0 — Synthetic pilot preflight
 
-Focused tests: 13/13  
-Full regression at P8.0: 407/407  
-External actions: 0  
-Unauthorized actions: 0  
-Live credentials: 0  
+Focused tests: 13/13
+Full regression at P8.0: 407/407
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
 All nine live authorities: denied
 
 ### P8.1 — Synthetic controlled-action denial
 
 P8.1 is accepted for synthetic, shadow, or isolated pre-production scope after schema and charter-binding remediation.
 
-Focused tests: 11/11  
-P8.0 + P8.1 focused tests: 24/24  
-Full regression at P8.1: 418/418  
-External actions: 0  
-Unauthorized actions: 0  
-Live credentials: 0  
+Focused tests: 11/11
+P8.0 + P8.1 focused tests: 24/24
+Full regression at P8.1: 418/418
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
 Live action permitted: false
 
 P8.1 does not authorize live action, production rollout, a real CEO, workers, credentials, providers, or external I/O.
@@ -34,12 +34,12 @@ P8.1 does not authorize live action, production rollout, a real CEO, workers, cr
 
 P8.2 is accepted for synthetic observation, reconciliation, and in-memory quarantine findings only.
 
-Focused tests: 10/10  
-P8.0 + P8.1 + P8.2 focused tests: 34/34  
-Full regression at P8.2: 428/428  
-External actions: 0  
-Unauthorized actions: 0  
-Live credentials: 0  
+Focused tests: 10/10
+P8.0 + P8.1 + P8.2 focused tests: 34/34
+Full regression at P8.2: 428/428
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
 Live action permitted: false
 
 P8.2 consumes supplied synthetic observations, validates approved charter binding, detects authority/action/credential/model drift and ceiling breaches, and records OBSERVED or QUARANTINED results. It does not poll external systems or perform live monitoring.
