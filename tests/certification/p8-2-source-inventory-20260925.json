@@ -1,0 +1,12 @@
+{
+  "implementation_commit": "4cd9105",
+  "files": [
+    {"path":"kernel/p8/p82_monitor.py","sha256":"e58fbb5f1eb2763d2b3661d73e8f04df4f1c29835acf64d09c4d2b943865fd24"},
+    {"path":"tests/p8/test_p8_2_monitor.py","sha256":"e6e3c7de7420d09ab86e893495521f5101b3b860ddfa8d54f01ec5c5a0d14408"},
+    {"path":"schemas/p8/p82-monitor-observation.schema.json","sha256":"7c9eceaaf0ae0619cec92b5583fe5933f71215cb0115df1b9dc30283be2bf2e7"},
+    {"path":"docs/p8-2-policy-spec-v1.0.md","sha256":"6974d3c82a48a86381d9d65e50eca1c1a7bcad1e23574472462fe74c92efd659"},
+    {"path":"docs/p8-2-implementation-plan-v1.0.md","sha256":"6728e844edf388c1a951bcfe261336d3639fac3f619dedbb095bc09e8e66e7e0"},
+    {"path":"docs/p8-2-entry-decision.md","sha256":"2693838f29f56c2230ee3d986028e17e555da1b89a6a702edc2c7c858ecc4780"},
+    {"path":"docs/p8-2-test-and-evidence-plan-v1.0.md","sha256":"329bf754a17b2cdb1922e68a489ef3aea8d9b186f0a8a09592c16e91b1f87b1a"}
+  ]
+}

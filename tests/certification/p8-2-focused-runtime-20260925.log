@@ -1,0 +1,17 @@
+P8.2 focused runtime
+Implementation commit: 4cd9105
+Command: python3 -m unittest tests.p8.test_p8_2_monitor -v
+
+Ran 10 tests in 0.015s
+OK
+
+Coverage:
+- valid synthetic observation
+- all nine authority drifts quarantine
+- action, credential, and model drifts quarantine
+- unknown charter and scope mismatch denial
+- schema false-authority enforcement
+- exposure/loss ceiling quarantine
+- replay idempotency and collision denial
+- terminal automatic stop
+- non-synthetic/malformed numeric handling

@@ -1,17 +1,16 @@
 # Autonomous Venture Agent
 
-The Autonomous Venture Agent is a policy-first system for synthetic, shadow, and isolated pre-production experimentation. Its repository records the policy boundaries, deterministic kernels, schemas, tests, and audit evidence for each project phase.
+The Autonomous Venture Agent is a policy-first system for synthetic, shadow, and isolated pre-production experimentation. Its repository records policy boundaries, deterministic kernels, schemas, tests, and audit evidence for each project phase.
 
 ## Current accepted baseline
 
-The `main` branch contains accepted work through P8.1:
+The `main` branch contains accepted work through P8.2 for synthetic observation and quarantine scope:
 
 - P7.6: synthetic certification boundary accepted.
 - P8.0: synthetic pilot preflight accepted.
 - P8.1: synthetic controlled-action denial boundary accepted after schema and charter-binding remediation.
-- Full regression on the accepted P8.1 baseline: 418/418 passed.
-
-P8.2 synthetic monitoring work is intentionally maintained on the feature branch `phase7/p7-4-credential-provider-boundary` until it completes independent audit and acceptance. It is not part of `main`.
+- P8.2: synthetic monitoring and reconciliation boundary accepted for observation-only scope.
+- Full regression on the P8.2 baseline: 428/428 passed.
 
 ## Safety boundary
 
@@ -24,7 +23,7 @@ The repository does not authorize live operation. The following remain denied:
 - Model output as execution authority
 - P8.3, P8.4, P9, and P10
 
-P8.1 is a non-executing boundary. P8.2, while developed on the feature branch, is limited to synthetic observation, reconciliation, and quarantine findings.
+P8.2 only consumes supplied synthetic observations and creates in-memory observation or quarantine findings. It does not poll external systems or execute actions.
 
 ## Branch and acceptance workflow
 
@@ -55,10 +54,10 @@ From the repository root:
 python3 -m unittest discover -s tests -p 'test*.py'
 ```
 
-Focused P8 tests on the accepted `main` baseline:
+Focused P8 tests:
 
 ```bash
-python3 -m unittest tests.p8.test_p8_0_pilot_gate tests.p8.test_p8_1_action_gate
+python3 -m unittest tests.p8.test_p8_0_pilot_gate tests.p8.test_p8_1_action_gate tests.p8.test_p8_2_monitor
 ```
 
-All phase claims must be verified against committed source, schemas, tests, hashes, runtime logs, and Git history. Reported test counts are not a substitute for independent verification.
+All phase claims must be verified against committed source, schemas, tests, hashes, runtime logs, and Git history.
