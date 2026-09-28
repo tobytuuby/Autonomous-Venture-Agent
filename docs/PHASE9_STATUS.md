@@ -3,7 +3,7 @@
 **Version:** 1.0
 **Updated:** 2026-09-28
 **Branch:** phase9/p9-synthetic-boundary-hardening
-**Status:** Implementation in progress
+**Status:** ACCEPTED for synthetic boundary hardening
 **Execution class:** synthetic-shadow-isolated-pre-production
 
 P9 is authorized only for synthetic boundary hardening. No P9 work widens authority, contacts a provider, attaches a real CEO, enables a live worker or venture, or performs an external action. Model output is never authorization. All nine live authorities remain denied. P10 remains unauthorized.
@@ -24,4 +24,4 @@ Raw logs and artifact fingerprints are recorded in `tests/certification/p9/` aft
 
 ## Exit status
 
-Implementation and tests complete; independent audit and synthetic-scope acceptance remain pending. This status is not production approval or P10 entry approval.
+Independent audit completed and P9 accepted for the synthetic scope recorded in `docs/p9-acceptance-decision.md`. P10 and all live authority remain unauthorized.

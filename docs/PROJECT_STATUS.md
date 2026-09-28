@@ -4,7 +4,7 @@
 
 P8.4 is accepted and merged to `main` at `0f8df0f00f15207afdf7bfe74bb466aa3d6dd386`. Its combined P8 focused suite passed 59/59 and full regression passed 453/453. The P8.4 evidence branch remains preserved at `7276c6566af5a21527c8f42c33adb0d9567aace1`.
 
-P9 synthetic boundary hardening is authorized and in progress on `phase9/p9-synthetic-boundary-hardening`. The scope is in-memory synthetic-only evaluation and recovery simulation. All nine live authorities remain denied; model output cannot authorize execution; no P10 work is authorized. See `docs/PHASE9_STATUS.md` and `docs/p9-entry-decision.md`.
+P9 synthetic boundary hardening is accepted for its in-memory synthetic-only scope. All nine live authorities remain denied; model output cannot authorize execution; no P10 work is authorized. See `docs/PHASE9_STATUS.md` and `docs/p9-acceptance-decision.md`.
 
 ## Historical status snapshot — 2026-09-24
 

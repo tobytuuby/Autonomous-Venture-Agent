@@ -9,7 +9,7 @@ The accepted `main` baseline includes P8.4 synthetic pilot certification and clo
 - P8.0–P8.4: accepted for synthetic pilot certification and closeout.
 - P8.4 merge: `0f8df0f00f15207afdf7bfe74bb466aa3d6dd386`.
 - P8 combined focused tests: 59/59 passed; full regression: 453/453 passed.
-- P9 synthetic boundary hardening is in progress on `phase9/p9-synthetic-boundary-hardening`; it is not accepted yet.
+- P9 synthetic boundary hardening is accepted for synthetic scope; see `docs/p9-acceptance-decision.md`.
 
 ## Safety boundary
 
