@@ -1,6 +1,6 @@
 {
   "phase": "P8.4",
-  "implementation_commit": "pending",
+  "implementation_commit": "8c7fb8a",
   "execution_class": "synthetic-shadow-isolated-pre-production",
   "files": [
     {"path":"kernel/p8/p84_certification.py","sha256":"7ebbf7a176af4e4be05b7ceb10742f530ac5b73d189ad4b7c100ed8accc6977a"},
