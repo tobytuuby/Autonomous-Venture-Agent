@@ -1,6 +1,21 @@
 # Phase 8 Status Record
 
-## v1.4
+## v1.5 — P8.4 acceptance and merge reconciliation
+
+**Status:** P8.0–P8.4 accepted for synthetic pilot certification and closeout only
+**Accepted main endpoint:** 0f8df0f00f15207afdf7bfe74bb466aa3d6dd386
+**P8.4 implementation/evidence branch preserved:** phase8/p8-4-synthetic-certification at 7276c6566af5a21527c8f42c33adb0d9567aace1
+**Execution class:** synthetic-shadow-isolated-pre-production
+
+P8.4 acceptance was confirmed by Kalaap Das, and GitHub records the merge as “Merge accepted P8.4 synthetic pilot certification.” The accepted feature branch is merged to main; the merge commit is an ancestor of main.
+
+P8.4 evidence: focused 13/13; cumulative P8 focused 59/59; full regression 453/453. All nine live authorities denied; execution_performed=false; external actions=0; unauthorized actions=0; live credentials=0; live action permitted=false; P8.5 authorized=false.
+
+P8.4 certifies synthetic evidence only. It does not authorize live operation, production rollout, CEO or worker execution, credentials, providers, external I/O, P9 live expansion, or P10. The P8.4 implementation report's pending-acceptance statement is superseded by this reconciliation.
+
+P9 planning and implementation are separately authorized for the synthetic-only scope recorded in docs/p9-entry-decision.md. P10 remains unstarted and unauthorized.
+
+## v1.4 — historical status, superseded for P8.4 acceptance
 
 **Status:** P8.0–P8.3 accepted on main; P8.4 synthetic implementation complete pending independent acceptance
 **Accepted main endpoint:** 65a5c3d

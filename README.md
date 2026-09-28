@@ -4,13 +4,12 @@ The Autonomous Venture Agent is a policy-first system for synthetic, shadow, and
 
 ## Current accepted baseline
 
-The `main` branch contains accepted work through P8.2 for synthetic observation and quarantine scope:
+The accepted `main` baseline includes P8.4 synthetic pilot certification and closeout only.
 
-- P7.6: synthetic certification boundary accepted.
-- P8.0: synthetic pilot preflight accepted.
-- P8.1: synthetic controlled-action denial boundary accepted after schema and charter-binding remediation.
-- P8.2: synthetic monitoring and reconciliation boundary accepted for observation-only scope.
-- Full regression on the P8.2 baseline: 428/428 passed.
+- P8.0–P8.4: accepted for synthetic pilot certification and closeout.
+- P8.4 merge: `0f8df0f00f15207afdf7bfe74bb466aa3d6dd386`.
+- P8 combined focused tests: 59/59 passed; full regression: 453/453 passed.
+- P9 synthetic boundary hardening is accepted for synthetic scope; see `docs/p9-acceptance-decision.md`.
 
 ## Safety boundary
 
@@ -21,18 +20,18 @@ The repository does not authorize live operation. The following remain denied:
 - Network, provider, broker, payment, customer, capital, deployment, venture, or external actions
 - Production rollout
 - Model output as execution authority
-- P8.3, P8.4, P9, and P10
+- Any P10 work
 
-P8.2 only consumes supplied synthetic observations and creates in-memory observation or quarantine findings. It does not poll external systems or execute actions.
+P9 is limited to supplied synthetic records and in-memory evaluation. It does not poll external systems or execute actions. All nine live authorities remain denied.
 
 ## Branch and acceptance workflow
 
 Accepted work is merged into `main` only after independent review and explicit acceptance. New phase work is developed on a feature branch and remains out of `main` until accepted.
 
-The current phase branch is:
+The current implementation branch is:
 
 ```text
-phase7/p7-4-credential-provider-boundary
+phase9/p9-synthetic-boundary-hardening
 ```
 
 This separation keeps `main` as the accepted, auditable baseline and prevents unaccepted phase work from being treated as authorized.
@@ -54,10 +53,10 @@ From the repository root:
 python3 -m unittest discover -s tests -p 'test*.py'
 ```
 
-Focused P8 tests:
+Focused P9 tests:
 
 ```bash
-python3 -m unittest tests.p8.test_p8_0_pilot_gate tests.p8.test_p8_1_action_gate tests.p8.test_p8_2_monitor
+python3 -m unittest tests.p9.test_p9_synthetic_boundary
 ```
 
 All phase claims must be verified against committed source, schemas, tests, hashes, runtime logs, and Git history.
