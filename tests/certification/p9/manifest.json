@@ -1,0 +1,147 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2218,
+      "path": "independent-audit-contract.md",
+      "sha256": "11d8638bb957b6143731b6ab70b6539b576999c4d540b2a6cc9c4828a289c8dd"
+    },
+    {
+      "bytes": 1730,
+      "path": "source-inventory.json",
+      "sha256": "4cb8f23c99302dc94fee995b4a3a92af7a25871bdfc98aa578fb034adc2b7132"
+    },
+    {
+      "bytes": 9243,
+      "path": "raw/p9-focused.log",
+      "sha256": "d1d1a06dc099ca170f5a38dca3d83e606c17aeec4a48ccc3e161525abdd13366"
+    },
+    {
+      "bytes": 8065,
+      "path": "raw/p8-focused.log",
+      "sha256": "a2370e8dc058d158a96c9f3ecaecc9b4596d45ef21f4bf86fca64e072a3fdcec"
+    },
+    {
+      "bytes": 69673,
+      "path": "raw/full-regression.log",
+      "sha256": "073030a7a50b44bccabb9c8e28ec227bfe26c0ffffee010a07a46dd95909e22c"
+    }
+  ],
+  "authority_fields_all_false": {
+    "broker_execution_authorized": false,
+    "capital_allocation_authorized": false,
+    "credential_access_authorized": false,
+    "customer_contact_authorized": false,
+    "deployment_authorized": false,
+    "external_action_authorized": false,
+    "live_mode": false,
+    "payment_authorized": false,
+    "venture_execution_authorized": false
+  },
+  "base_p8_4_merge": "0f8df0f00f15207afdf7bfe74bb466aa3d6dd386",
+  "branch": "phase9/p9-synthetic-boundary-hardening",
+  "commands": {
+    "full_regression": "PYTHONPATH=. python3 -m unittest discover -s tests -p 'test*.py' -v",
+    "p8_focused": "PYTHONPATH=. python3 -m unittest discover -s tests/p8 -p 'test*.py' -v",
+    "p9_focused": "PYTHONPATH=. python3 -m unittest tests.p9.test_p9_synthetic_boundary -v"
+  },
+  "denominators": {
+    "combined_focused": {
+      "failed": 0,
+      "passed": 107
+    },
+    "full_regression": {
+      "failed": 0,
+      "passed": 501
+    },
+    "p8_focused": {
+      "failed": 0,
+      "passed": 59
+    },
+    "p9_focused": {
+      "cases": [
+        "01_valid_numeric_limit",
+        "02_valid_operating_window",
+        "03_valid_fixture_venture_count",
+        "04_valid_concurrency",
+        "05_valid_observation",
+        "06_recovery_freeze",
+        "07_recovery_revoke",
+        "08_recovery_quarantine",
+        "09_authority_live_mode",
+        "10_authority_external_action_authorized",
+        "11_authority_payment_authorized",
+        "12_authority_broker_execution_authorized",
+        "13_authority_credential_access_authorized",
+        "14_authority_customer_contact_authorized",
+        "15_authority_capital_allocation_authorized",
+        "16_authority_deployment_authorized",
+        "17_authority_venture_execution_authorized",
+        "18_model_approval_text_is_inert",
+        "19_model_override_text_is_inert",
+        "20_malformed_model_recommendation_is_inert",
+        "21_prompt_injection_text_is_inert",
+        "22_model_authorization_bit_is_denied",
+        "23_unknown_charter_is_denied",
+        "24_stale_charter_is_denied",
+        "25_venture_charter_mismatch_is_denied",
+        "26_portfolio_charter_mismatch_is_denied",
+        "27_replay_identity_cannot_cross_venture",
+        "28_venture_sequences_are_isolated",
+        "29_missing_charter_binding_is_denied",
+        "30_model_context_does_not_cross_scope",
+        "31_identical_replay_is_idempotent",
+        "32_changed_material_collision_stops_boundary",
+        "33_duplicate_sequence_fails_closed",
+        "34_out_of_order_sequence_fails_closed",
+        "35_tampered_evidence_hash_stops_boundary",
+        "36_missing_or_malformed_evidence_hash_is_denied",
+        "37_recovery_freeze_state",
+        "38_recovery_revoke_state",
+        "39_recovery_quarantine_state",
+        "40_recovery_wind_down_state",
+        "41_restore_rollback_and_terminal_reopen_are_denied",
+        "42_injected_failure_is_terminal",
+        "43_invalid_execution_mode_is_quarantined",
+        "44_non_synthetic_input_is_quarantined",
+        "45_effectful_input_is_quarantined",
+        "46_schema_requires_all_nine_false_authorities",
+        "47_provider_network_and_credential_flags_fail_closed",
+        "48_automatic_stop_is_terminal"
+      ],
+      "failed": 0,
+      "passed": 48
+    }
+  },
+  "execution_performed": false,
+  "external_action": 0,
+  "live_action_permitted": false,
+  "live_credential": 0,
+  "manifest_self_hash": "excluded; hash manifest bytes independently when reviewing",
+  "model_output_authorization": false,
+  "network_calls": 0,
+  "phase": "P9",
+  "provider_calls": 0,
+  "repository": "https://github.com/tobytuuby/Autonomous-Venture-Agent",
+  "run_metadata": {
+    "full_regression": {
+      "completed_at_utc": "2026-09-28T20:03:27.335Z",
+      "process_id": "proc_mulodaey_f13244",
+      "started_at_utc": "2026-09-28T20:03:20.698Z"
+    },
+    "p8_focused": {
+      "completed_at_utc": "2026-09-28T20:03:53.101Z",
+      "process_id": "proc_mulodrnc_z40tq5",
+      "started_at_utc": "2026-09-28T20:03:43.032Z"
+    },
+    "p9_focused": {
+      "completed_at_utc": "2026-09-28T20:03:27.335Z",
+      "process_id": "proc_mulod77v_dpltdi",
+      "started_at_utc": "2026-09-28T20:03:16.555Z"
+    },
+    "python_version": "3.14.4"
+  },
+  "status": "implementation_tested_independent_audit_pending",
+  "tested_source_commit": "78f70e09f81316221400592b39474ef6c7cb8d98",
+  "tested_source_tree_clean": true,
+  "unauthorized_action": 0
+}

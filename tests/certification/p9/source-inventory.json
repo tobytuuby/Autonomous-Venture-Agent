@@ -1,0 +1,55 @@
+{
+  "files": [
+    {
+      "bytes": 4098,
+      "path": "docs/p9-policy-spec-v1.0.md",
+      "sha256": "84a74b3cefae50d4fd1a85db08270c7e8b0d00f3c5e6c998a083b659cb6ebe1e"
+    },
+    {
+      "bytes": 3026,
+      "path": "docs/p9-implementation-plan-v1.0.md",
+      "sha256": "612e3304530e214c541dd45c987e2a78a342d4c31f378efb0eede5581ca92d78"
+    },
+    {
+      "bytes": 3491,
+      "path": "docs/p9-test-and-evidence-plan-v1.0.md",
+      "sha256": "44d80f44a69c94f7bdfcc9abda546bf51fecdd19c7687d908c19afcab0b8493f"
+    },
+    {
+      "bytes": 1917,
+      "path": "docs/p9-entry-decision.md",
+      "sha256": "4d912925361dbe6714198a39c9e1d5691a99a55505ee8d4d9a53c5dd674f6820"
+    },
+    {
+      "bytes": 1409,
+      "path": "docs/PHASE9_STATUS.md",
+      "sha256": "56d1a29f994d56465e54987bca5145178fec9758ea8260b17b74bac1369fb5f4"
+    },
+    {
+      "bytes": 154,
+      "path": "kernel/p9/__init__.py",
+      "sha256": "b6c2ff8f645a24ffedec9c0169d422999d072c2130a5819b605a1b4d6a677012"
+    },
+    {
+      "bytes": 13823,
+      "path": "kernel/p9/synthetic_boundary.py",
+      "sha256": "bb17ac5921741903442d1d18bb370a2448f4c6a137fff731a34b2bfd8fd9a1be"
+    },
+    {
+      "bytes": 2931,
+      "path": "schemas/p9/p9-synthetic-record.schema.json",
+      "sha256": "da97d961fce03b2ae5900fac825cf56520617bc5cc87988e78f49cddea64ca66"
+    },
+    {
+      "bytes": 35,
+      "path": "tests/p9/__init__.py",
+      "sha256": "d25ea5d74e24e63d8c9ac6627833ae74cfb769b93520a56af1a71cb5828b612d"
+    },
+    {
+      "bytes": 14877,
+      "path": "tests/p9/test_p9_synthetic_boundary.py",
+      "sha256": "45b132119981a012d32b68d8e665ebf251def982615af716fc1ac69cd10311aa"
+    }
+  ],
+  "source_commit": "78f70e09f81316221400592b39474ef6c7cb8d98"
+}
