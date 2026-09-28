@@ -1,0 +1,15 @@
+{
+  "phase": "P8.4",
+  "implementation_commit": "pending",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "files": [
+    {"path":"kernel/p8/p84_certification.py","sha256":"7ebbf7a176af4e4be05b7ceb10742f530ac5b73d189ad4b7c100ed8accc6977a"},
+    {"path":"tests/p8/test_p8_4_certification.py","sha256":"7599e981b2caebb31b3befad4bf850e45e8de6141bbf5bd0db2858551eb86e53"},
+    {"path":"schemas/p8/p84-certification-packet.schema.json","sha256":"04f73a4121b1099c0e94e01ca67c9381471e496216db3ffb1b7cfc81ad5e0275"},
+    {"path":"docs/p8-4-policy-spec-v1.0.md","sha256":"b4c34edc735516ce8a71c05c6870b15bc2699d72a419020cb9f411869b60912e"},
+    {"path":"docs/p8-4-implementation-plan-v1.0.md","sha256":"c13dfa88e0433d111ce34ffc4c599bd451d7f35a87dfbfd8912b9afa3c4ed1c9"},
+    {"path":"docs/p8-4-entry-decision.md","sha256":"45802c397ba6fd88bcea9b8f524f7856d4f00e1524947f614753e2148ec6a663"},
+    {"path":"docs/p8-4-test-and-evidence-plan-v1.0.md","sha256":"9437a4928c2637b7f55aa81de903b4098faa0b6e7a0e84b6b3181ad381af5748"}
+  ],
+  "forbidden_imports_in_implementation": 0
+}

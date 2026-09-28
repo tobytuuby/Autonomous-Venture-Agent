@@ -1,0 +1,19 @@
+{
+  "phase": "P8.4",
+  "implementation_commit": "pending",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "focused_methods": 13,
+  "p8_focused_tests": 59,
+  "full_regression_tests": 453,
+  "all_nine_live_authorities_denied": true,
+  "phase_denominators_complete": true,
+  "independent_human_review_required": true,
+  "schema_valid": true,
+  "execution_performed": false,
+  "external_actions": 0,
+  "unauthorized_actions": 0,
+  "live_credentials": 0,
+  "live_action_permitted": false,
+  "p8_5_authorized": false,
+  "evidence_scope": "synthetic pilot certification and closeout only"
+}
