@@ -1,5 +1,6 @@
 {
   "phase": "P8.3",
+  "implementation_commit": "917ccb6",
   "execution_class": "synthetic-shadow-isolated-pre-production",
   "files": [
     {"path":"kernel/p8/p83_recovery.py","sha256":"2569df2906fc5cbd452cf6a8dce5dee8d94d403df5ca0c206b7292fac25382a7"},

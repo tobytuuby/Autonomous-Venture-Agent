@@ -1,5 +1,6 @@
 {
   "phase": "P8.3",
+  "implementation_commit": "917ccb6",
   "execution_class": "synthetic-shadow-isolated-pre-production",
   "focused_methods": 12,
   "p8_focused_tests": 46,
