@@ -1,10 +1,10 @@
 # Phase 8 Status Record
 
-## v1.1
+## v1.2
 
-**Status:** P8.0, P8.1, and P8.2 SYNTHETIC IMPLEMENTATIONS COMPLETE; P8.2 ACCEPTED FOR SYNTHETIC OBSERVATION/QUARANTINE SCOPE
-**Branch:** phase7/p7-4-credential-provider-boundary
-**Accepted main endpoint:** pending merge of P8.2 documentation reconciliation
+**Status:** P8.0, P8.1, and P8.2 accepted on main; P8.3 synthetic implementation complete pending independent acceptance
+**Accepted main endpoint:** 130b977
+**P8.3 branch:** phase8/p8-3-synthetic-recovery-wind-down
 **Execution class:** synthetic-shadow-isolated-pre-production
 
 ### P8.0 — Synthetic pilot preflight
@@ -44,16 +44,23 @@ Live action permitted: false
 
 P8.2 consumes supplied synthetic observations, validates approved charter binding, detects authority/action/credential/model drift and ceiling breaches, and records OBSERVED or QUARANTINED results. It does not poll external systems or perform live monitoring.
 
-### Naming convention reconciliation
+### P8.3 — Synthetic recovery and wind-down
 
-Phase implementation and policy documents use the canonical `p8-*` and `p8-2-*` filenames. The phase status record uses the human-readable `PHASE8_STATUS.md` filename. No `phase8-*` aliases are required.
+P8.3 is implemented on the feature branch for independent review. It records supplied synthetic recovery requests, models bounded freeze/revoke/quarantine/wind-down states, denies restore/rollback authority widening, preserves terminal states, and fails closed on replay collisions or injected failures.
 
-### Commit references
+Focused tests: 12/12
+P8.0 + P8.1 + P8.2 + P8.3 focused tests: 46/46
+Full regression: 440/440
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
+Execution performed: false
+Live action permitted: false
 
-- P8.0 implementation: `b5ff99c`
-- P8.1 remediation: `6bfd536`
-- P8.1 evidence: `53892d6`
-- P8.2 implementation: `4cd9105`
-- P8.2 evidence: `d867a5b`
+P8.3 does not perform live recovery, live wind-down, worker or venture execution, CEO attachment, credential access, provider polling, or external I/O. It is not yet accepted on main.
 
-P8.3, P8.4, P9, and P10 remain unstarted and unauthorized. No live authority is granted by this status record.
+### Naming convention
+
+Phase implementation and policy documents use the canonical `p8-*` and `p8-2-*`/ `p8-3-*` filenames. The phase status record uses `PHASE8_STATUS.md`. No `phase8-*` aliases are required.
+
+P8.4, P9, and P10 remain unstarted and unauthorized. No live authority is granted by this status record.

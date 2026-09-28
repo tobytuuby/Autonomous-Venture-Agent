@@ -1,0 +1,18 @@
+P8.3 focused runtime
+Command: python3 -m unittest tests.p8.test_p8_3_recovery -v
+Execution class: synthetic-shadow-isolated-pre-production
+
+Ran 12 tests in 0.016s
+OK
+
+Coverage:
+- bounded synthetic freeze, revoke, quarantine, and wind-down records
+- restore and rollback denial
+- all nine authority drift containment
+- action, credential, and model drift containment
+- charter binding and cross-scope denial
+- schema false-authority enforcement
+- terminal-state protection
+- replay idempotency and collision denial
+- injected-failure terminal containment
+- automatic stop and malformed-input fail-closed behavior
