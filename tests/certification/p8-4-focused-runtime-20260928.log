@@ -1,0 +1,6 @@
+P8.4 focused runtime
+Command: python3 -m unittest tests.p8.test_p8_4_certification -v
+Execution class: synthetic-shadow-isolated-pre-production
+
+Ran 13 tests in 0.022s
+OK

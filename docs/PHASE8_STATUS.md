@@ -1,10 +1,10 @@
 # Phase 8 Status Record
 
-## v1.3
+## v1.4
 
-**Status:** P8.0, P8.1, P8.2, and P8.3 accepted on main; P8.3 accepted for synthetic recovery and wind-down scope
-**Accepted main endpoint:** 87bb0a9
-**P8.3 implementation branch:** phase8/p8-3-synthetic-recovery-wind-down
+**Status:** P8.0–P8.3 accepted on main; P8.4 synthetic implementation complete pending independent acceptance
+**Accepted main endpoint:** 65a5c3d
+**P8.4 implementation branch:** phase8/p8-4-synthetic-certification
 **Execution class:** synthetic-shadow-isolated-pre-production
 
 ### P8.0 — Synthetic pilot preflight
@@ -59,8 +59,20 @@ Live action permitted: false
 
 P8.3 does not perform live recovery, live wind-down, worker or venture execution, CEO attachment, credential access, provider polling, or external I/O.
 
-### Naming convention
+### P8.4 — Synthetic pilot certification and closeout
 
-Phase implementation and policy documents use the canonical `p8-*`, `p8-2-*`, and `p8-3-*` filenames. The phase status record uses `PHASE8_STATUS.md`. No `phase8-*` aliases are required.
+P8.4 is implemented on the feature branch pending independent acceptance. It validates supplied P8.0–P8.3 evidence completeness, expected denominators, charter binding, evidence identity, independent human review metadata, and all-false authority indicators. It emits a synthetic certification result only.
 
-P8.4, P9, and P10 remain unstarted and unauthorized. No live authority is granted by this status record.
+Focused tests: 13/13
+P8.0 + P8.1 + P8.2 + P8.3 + P8.4 focused tests: 59/59
+Full regression: 453/453
+External actions: 0
+Unauthorized actions: 0
+Live credentials: 0
+Execution performed: false
+Live action permitted: false
+P8.5 authorized: false
+
+P8.4 does not authorize live operation, production rollout, CEO or worker execution, credentials, providers, external I/O, P8.5, P9, or P10. It remains on its feature branch until independent acceptance and a separate merge decision.
+
+P9 and P10 remain unstarted and unauthorized. No live authority is granted by this status record.
