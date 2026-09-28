@@ -1,0 +1,6 @@
+P8.3 full regression
+Command: python3 -m unittest discover -s tests -p 'test*.py'
+Execution class: synthetic-shadow-isolated-pre-production
+
+Ran 440 tests in 2.034s
+OK

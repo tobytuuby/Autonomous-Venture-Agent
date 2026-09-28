@@ -1,0 +1,15 @@
+{
+  "phase": "P8.3",
+  "implementation_commit": "917ccb6",
+  "execution_class": "synthetic-shadow-isolated-pre-production",
+  "files": [
+    {"path":"kernel/p8/p83_recovery.py","sha256":"2569df2906fc5cbd452cf6a8dce5dee8d94d403df5ca0c206b7292fac25382a7"},
+    {"path":"tests/p8/test_p8_3_recovery.py","sha256":"f22b743af3535d0dee107b2dc13be5d603db939932c5f9fa2898af7254d6c63e"},
+    {"path":"schemas/p8/p83-recovery-request.schema.json","sha256":"991b1bc003c5a3bb12efa8c5ed7d91f30f25136138a87dcf7e757ad91d3235a0"},
+    {"path":"docs/p8-3-policy-spec-v1.0.md","sha256":"001f2740c8a137ba93ffb90266297978a9e8d31c736c048530e423670ae60c1f"},
+    {"path":"docs/p8-3-implementation-plan-v1.0.md","sha256":"c3f2153c5afd167c1c92e332f3e585237106a8eb3df8cacbd2ee09dcbab11088"},
+    {"path":"docs/p8-3-entry-decision.md","sha256":"580368f0520678a94087baea5c6080128f43e2214d499d857e252adef86aaf1a"},
+    {"path":"docs/p8-3-test-and-evidence-plan-v1.0.md","sha256":"5de38d264010184d0ceab4b8af922c514ac60d00c6fc0330394319f44cfc4e8c"}
+  ],
+  "forbidden_imports_in_implementation": 0
+}
