@@ -1,0 +1,286 @@
+{
+  "denominator": 69,
+  "errors": 0,
+  "failed": 0,
+  "format": "P11 focused case results v1.0",
+  "passed": 69,
+  "results": [
+    {
+      "case_id": "01_complete_package_is_ready_for_review_only",
+      "status": "PASS"
+    },
+    {
+      "case_id": "02_production_candidate_label_does_not_authorize_a_test",
+      "status": "PASS"
+    },
+    {
+      "case_id": "03_schema_enforces_all_authority_and_action_false_constants",
+      "status": "PASS"
+    },
+    {
+      "case_id": "04_input_hash_is_returned_and_bound",
+      "status": "PASS"
+    },
+    {
+      "case_id": "05_approval_text_is_inert",
+      "status": "PASS"
+    },
+    {
+      "case_id": "06_model_output_authorization_true_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "07_non_text_model_output_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "08_execution_mode_drift_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "09_non_production_candidate_mode_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "10_real_target_identifier_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "11_multiple_ventures_block",
+      "status": "PASS"
+    },
+    {
+      "case_id": "12_mutating_operation_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "13_non_synthetic_data_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "14_duration_over_30_minutes_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "15_concurrency_above_one_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "16_write_operations_block",
+      "status": "PASS"
+    },
+    {
+      "case_id": "17_customer_data_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "18_customer_contact_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "19_external_actions_block",
+      "status": "PASS"
+    },
+    {
+      "case_id": "20_nonempty_authority_request_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "21_nonzero_exposure_or_loss_limit_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "22_network_access_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "23_credential_access_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "24_provider_access_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "25_missing_safeguard_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "26_missing_monitor_metric_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "27_duplicate_monitor_metrics_block",
+      "status": "PASS"
+    },
+    {
+      "case_id": "28_missing_stop_condition_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "29_duplicate_stop_conditions_block",
+      "status": "PASS"
+    },
+    {
+      "case_id": "30_monitor_heartbeat_over_60_seconds_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "31_automatic_stop_must_be_enabled",
+      "status": "PASS"
+    },
+    {
+      "case_id": "32_live_alert_route_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "33_mutating_rollback_plan_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "34_unrehearsed_recovery_plan_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "35_reviewer_must_differ_from_implementer",
+      "status": "PASS"
+    },
+    {
+      "case_id": "36_independent_review_required",
+      "status": "PASS"
+    },
+    {
+      "case_id": "37_configuration_fingerprint_mismatch_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "38_source_commit_mismatch_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "39_tampered_evidence_hash_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "40_malformed_candidate_type_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "41_unknown_top_level_field_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "42_injected_failure_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "43_noncanonical_nan_blocks",
+      "status": "PASS"
+    },
+    {
+      "case_id": "44_exact_replay_is_idempotent",
+      "status": "PASS"
+    },
+    {
+      "case_id": "45_changed_material_under_review_id_stops",
+      "status": "PASS"
+    },
+    {
+      "case_id": "46_live_authority_broker_execution_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "47_live_authority_capital_allocation_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "48_live_authority_credential_access_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "49_live_authority_customer_contact_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "50_live_authority_deployment_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "51_live_authority_external_action_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "52_live_authority_live_mode_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "53_live_authority_payment_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "54_live_authority_venture_execution_authorized_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "55_action_broker_action_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "56_action_capital_action_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "57_action_customer_contact_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "58_action_deployment_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "59_action_execution_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "60_action_external_action_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "61_action_live_action_permitted_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "62_action_live_credential_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "63_action_model_output_authorization_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "64_action_network_call_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "65_action_payment_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "66_action_provider_call_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "67_action_unauthorized_action_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "68_action_venture_action_performed_denied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "69_action_worker_action_performed_denied",
+      "status": "PASS"
+    }
+  ],
+  "source_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796"
+}

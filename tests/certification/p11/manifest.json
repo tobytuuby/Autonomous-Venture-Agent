@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "bytes": 1615,
+      "path": "tests/certification/p11/baseline-lock.json",
+      "sha256": "bca020523948efe196c22d7c8cf405a942afb4f713f63741963d1ca1679984ca"
+    },
+    {
+      "bytes": 10684,
+      "path": "tests/certification/p11/case-registry.json",
+      "sha256": "648a10d0c7d71cfb01aa2c33968128d4f1e057f7d0d674510b14688871a86d3c"
+    },
+    {
+      "bytes": 6604,
+      "path": "tests/certification/p11/case-results.json",
+      "sha256": "9f110dcd6855b8b0f15f09a3a1d6f5511a9b9d9d2ab539c2396b55e46e455af2"
+    },
+    {
+      "bytes": 168,
+      "path": "tests/certification/p11/raw/p11-focused.log",
+      "sha256": "7505f87ef354fc9d20aaa4c83d989d614370f2428c8e2d9c10e2ee6cc1940337"
+    },
+    {
+      "bytes": 712,
+      "path": "tests/certification/p11/raw/full-regression.log",
+      "sha256": "26b1db7b91838ab4ea7b0a125f728b5e0ea4be06ac67260ae504d18374f8c36c"
+    },
+    {
+      "bytes": 868,
+      "path": "tests/certification/p11/run-metadata.json",
+      "sha256": "df5abe3c0ac33384e6cc9d26663768352de153e28eb310a3b26524e11abe2e6e"
+    },
+    {
+      "bytes": 1690,
+      "path": "tests/certification/p11/source-inventory.json",
+      "sha256": "634df838ecb8519fd6b15e20ee9d35b8a957c0b5a7e0cf9ce7494aa38fac1e6f"
+    }
+  ],
+  "base_main_commit": "487162974308e1a17a989ca5fe478a19ea153400",
+  "format": "P11 synthetic readiness-gate evidence manifest v1.0",
+  "manifest_self_hash": "excluded; recompute SHA-256 over manifest bytes independently",
+  "source_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796",
+  "status": "implementation_tested_independent_audit_pending"
+}

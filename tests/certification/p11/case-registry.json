@@ -1,0 +1,351 @@
+{
+  "cases": [
+    {
+      "case_id": "01_complete_package_is_ready_for_review_only",
+      "index": 1,
+      "test_method": "test_01_complete_package_is_ready_for_review_only"
+    },
+    {
+      "case_id": "02_production_candidate_label_does_not_authorize_a_test",
+      "index": 2,
+      "test_method": "test_02_production_candidate_label_does_not_authorize_a_test"
+    },
+    {
+      "case_id": "03_schema_enforces_all_authority_and_action_false_constants",
+      "index": 3,
+      "test_method": "test_03_schema_enforces_all_authority_and_action_false_constants"
+    },
+    {
+      "case_id": "04_input_hash_is_returned_and_bound",
+      "index": 4,
+      "test_method": "test_04_input_hash_is_returned_and_bound"
+    },
+    {
+      "case_id": "05_approval_text_is_inert",
+      "index": 5,
+      "test_method": "test_05_approval_text_is_inert"
+    },
+    {
+      "case_id": "06_model_output_authorization_true_blocks",
+      "index": 6,
+      "test_method": "test_06_model_output_authorization_true_blocks"
+    },
+    {
+      "case_id": "07_non_text_model_output_blocks",
+      "index": 7,
+      "test_method": "test_07_non_text_model_output_blocks"
+    },
+    {
+      "case_id": "08_execution_mode_drift_blocks",
+      "index": 8,
+      "test_method": "test_08_execution_mode_drift_blocks"
+    },
+    {
+      "case_id": "09_non_production_candidate_mode_blocks",
+      "index": 9,
+      "test_method": "test_09_non_production_candidate_mode_blocks"
+    },
+    {
+      "case_id": "10_real_target_identifier_blocks",
+      "index": 10,
+      "test_method": "test_10_real_target_identifier_blocks"
+    },
+    {
+      "case_id": "11_multiple_ventures_block",
+      "index": 11,
+      "test_method": "test_11_multiple_ventures_block"
+    },
+    {
+      "case_id": "12_mutating_operation_blocks",
+      "index": 12,
+      "test_method": "test_12_mutating_operation_blocks"
+    },
+    {
+      "case_id": "13_non_synthetic_data_blocks",
+      "index": 13,
+      "test_method": "test_13_non_synthetic_data_blocks"
+    },
+    {
+      "case_id": "14_duration_over_30_minutes_blocks",
+      "index": 14,
+      "test_method": "test_14_duration_over_30_minutes_blocks"
+    },
+    {
+      "case_id": "15_concurrency_above_one_blocks",
+      "index": 15,
+      "test_method": "test_15_concurrency_above_one_blocks"
+    },
+    {
+      "case_id": "16_write_operations_block",
+      "index": 16,
+      "test_method": "test_16_write_operations_block"
+    },
+    {
+      "case_id": "17_customer_data_blocks",
+      "index": 17,
+      "test_method": "test_17_customer_data_blocks"
+    },
+    {
+      "case_id": "18_customer_contact_blocks",
+      "index": 18,
+      "test_method": "test_18_customer_contact_blocks"
+    },
+    {
+      "case_id": "19_external_actions_block",
+      "index": 19,
+      "test_method": "test_19_external_actions_block"
+    },
+    {
+      "case_id": "20_nonempty_authority_request_blocks",
+      "index": 20,
+      "test_method": "test_20_nonempty_authority_request_blocks"
+    },
+    {
+      "case_id": "21_nonzero_exposure_or_loss_limit_blocks",
+      "index": 21,
+      "test_method": "test_21_nonzero_exposure_or_loss_limit_blocks"
+    },
+    {
+      "case_id": "22_network_access_blocks",
+      "index": 22,
+      "test_method": "test_22_network_access_blocks"
+    },
+    {
+      "case_id": "23_credential_access_blocks",
+      "index": 23,
+      "test_method": "test_23_credential_access_blocks"
+    },
+    {
+      "case_id": "24_provider_access_blocks",
+      "index": 24,
+      "test_method": "test_24_provider_access_blocks"
+    },
+    {
+      "case_id": "25_missing_safeguard_blocks",
+      "index": 25,
+      "test_method": "test_25_missing_safeguard_blocks"
+    },
+    {
+      "case_id": "26_missing_monitor_metric_blocks",
+      "index": 26,
+      "test_method": "test_26_missing_monitor_metric_blocks"
+    },
+    {
+      "case_id": "27_duplicate_monitor_metrics_block",
+      "index": 27,
+      "test_method": "test_27_duplicate_monitor_metrics_block"
+    },
+    {
+      "case_id": "28_missing_stop_condition_blocks",
+      "index": 28,
+      "test_method": "test_28_missing_stop_condition_blocks"
+    },
+    {
+      "case_id": "29_duplicate_stop_conditions_block",
+      "index": 29,
+      "test_method": "test_29_duplicate_stop_conditions_block"
+    },
+    {
+      "case_id": "30_monitor_heartbeat_over_60_seconds_blocks",
+      "index": 30,
+      "test_method": "test_30_monitor_heartbeat_over_60_seconds_blocks"
+    },
+    {
+      "case_id": "31_automatic_stop_must_be_enabled",
+      "index": 31,
+      "test_method": "test_31_automatic_stop_must_be_enabled"
+    },
+    {
+      "case_id": "32_live_alert_route_blocks",
+      "index": 32,
+      "test_method": "test_32_live_alert_route_blocks"
+    },
+    {
+      "case_id": "33_mutating_rollback_plan_blocks",
+      "index": 33,
+      "test_method": "test_33_mutating_rollback_plan_blocks"
+    },
+    {
+      "case_id": "34_unrehearsed_recovery_plan_blocks",
+      "index": 34,
+      "test_method": "test_34_unrehearsed_recovery_plan_blocks"
+    },
+    {
+      "case_id": "35_reviewer_must_differ_from_implementer",
+      "index": 35,
+      "test_method": "test_35_reviewer_must_differ_from_implementer"
+    },
+    {
+      "case_id": "36_independent_review_required",
+      "index": 36,
+      "test_method": "test_36_independent_review_required"
+    },
+    {
+      "case_id": "37_configuration_fingerprint_mismatch_blocks",
+      "index": 37,
+      "test_method": "test_37_configuration_fingerprint_mismatch_blocks"
+    },
+    {
+      "case_id": "38_source_commit_mismatch_blocks",
+      "index": 38,
+      "test_method": "test_38_source_commit_mismatch_blocks"
+    },
+    {
+      "case_id": "39_tampered_evidence_hash_blocks",
+      "index": 39,
+      "test_method": "test_39_tampered_evidence_hash_blocks"
+    },
+    {
+      "case_id": "40_malformed_candidate_type_blocks",
+      "index": 40,
+      "test_method": "test_40_malformed_candidate_type_blocks"
+    },
+    {
+      "case_id": "41_unknown_top_level_field_blocks",
+      "index": 41,
+      "test_method": "test_41_unknown_top_level_field_blocks"
+    },
+    {
+      "case_id": "42_injected_failure_blocks",
+      "index": 42,
+      "test_method": "test_42_injected_failure_blocks"
+    },
+    {
+      "case_id": "43_noncanonical_nan_blocks",
+      "index": 43,
+      "test_method": "test_43_noncanonical_nan_blocks"
+    },
+    {
+      "case_id": "44_exact_replay_is_idempotent",
+      "index": 44,
+      "test_method": "test_44_exact_replay_is_idempotent"
+    },
+    {
+      "case_id": "45_changed_material_under_review_id_stops",
+      "index": 45,
+      "test_method": "test_45_changed_material_under_review_id_stops"
+    },
+    {
+      "case_id": "46_live_authority_broker_execution_authorized_denied",
+      "index": 46,
+      "test_method": "test_46_live_authority_broker_execution_authorized_denied"
+    },
+    {
+      "case_id": "47_live_authority_capital_allocation_authorized_denied",
+      "index": 47,
+      "test_method": "test_47_live_authority_capital_allocation_authorized_denied"
+    },
+    {
+      "case_id": "48_live_authority_credential_access_authorized_denied",
+      "index": 48,
+      "test_method": "test_48_live_authority_credential_access_authorized_denied"
+    },
+    {
+      "case_id": "49_live_authority_customer_contact_authorized_denied",
+      "index": 49,
+      "test_method": "test_49_live_authority_customer_contact_authorized_denied"
+    },
+    {
+      "case_id": "50_live_authority_deployment_authorized_denied",
+      "index": 50,
+      "test_method": "test_50_live_authority_deployment_authorized_denied"
+    },
+    {
+      "case_id": "51_live_authority_external_action_authorized_denied",
+      "index": 51,
+      "test_method": "test_51_live_authority_external_action_authorized_denied"
+    },
+    {
+      "case_id": "52_live_authority_live_mode_denied",
+      "index": 52,
+      "test_method": "test_52_live_authority_live_mode_denied"
+    },
+    {
+      "case_id": "53_live_authority_payment_authorized_denied",
+      "index": 53,
+      "test_method": "test_53_live_authority_payment_authorized_denied"
+    },
+    {
+      "case_id": "54_live_authority_venture_execution_authorized_denied",
+      "index": 54,
+      "test_method": "test_54_live_authority_venture_execution_authorized_denied"
+    },
+    {
+      "case_id": "55_action_broker_action_performed_denied",
+      "index": 55,
+      "test_method": "test_55_action_broker_action_performed_denied"
+    },
+    {
+      "case_id": "56_action_capital_action_performed_denied",
+      "index": 56,
+      "test_method": "test_56_action_capital_action_performed_denied"
+    },
+    {
+      "case_id": "57_action_customer_contact_performed_denied",
+      "index": 57,
+      "test_method": "test_57_action_customer_contact_performed_denied"
+    },
+    {
+      "case_id": "58_action_deployment_performed_denied",
+      "index": 58,
+      "test_method": "test_58_action_deployment_performed_denied"
+    },
+    {
+      "case_id": "59_action_execution_performed_denied",
+      "index": 59,
+      "test_method": "test_59_action_execution_performed_denied"
+    },
+    {
+      "case_id": "60_action_external_action_denied",
+      "index": 60,
+      "test_method": "test_60_action_external_action_denied"
+    },
+    {
+      "case_id": "61_action_live_action_permitted_denied",
+      "index": 61,
+      "test_method": "test_61_action_live_action_permitted_denied"
+    },
+    {
+      "case_id": "62_action_live_credential_denied",
+      "index": 62,
+      "test_method": "test_62_action_live_credential_denied"
+    },
+    {
+      "case_id": "63_action_model_output_authorization_denied",
+      "index": 63,
+      "test_method": "test_63_action_model_output_authorization_denied"
+    },
+    {
+      "case_id": "64_action_network_call_denied",
+      "index": 64,
+      "test_method": "test_64_action_network_call_denied"
+    },
+    {
+      "case_id": "65_action_payment_performed_denied",
+      "index": 65,
+      "test_method": "test_65_action_payment_performed_denied"
+    },
+    {
+      "case_id": "66_action_provider_call_denied",
+      "index": 66,
+      "test_method": "test_66_action_provider_call_denied"
+    },
+    {
+      "case_id": "67_action_unauthorized_action_denied",
+      "index": 67,
+      "test_method": "test_67_action_unauthorized_action_denied"
+    },
+    {
+      "case_id": "68_action_venture_action_performed_denied",
+      "index": 68,
+      "test_method": "test_68_action_venture_action_performed_denied"
+    },
+    {
+      "case_id": "69_action_worker_action_performed_denied",
+      "index": 69,
+      "test_method": "test_69_action_worker_action_performed_denied"
+    }
+  ],
+  "denominator": 69,
+  "format": "P11 focused case registry v1.0"
+}

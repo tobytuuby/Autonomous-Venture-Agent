@@ -1,0 +1,27 @@
+{
+  "base_main_commit": "487162974308e1a17a989ca5fe478a19ea153400",
+  "focused": {
+    "command": "python3 -m unittest tests.p11.test_readiness_gate",
+    "errors": 0,
+    "failures": 0,
+    "passed": 69,
+    "successful": true,
+    "tests_run": 69
+  },
+  "format": "P11 certification run metadata v1.0",
+  "full_regression": {
+    "command": "python3 -m unittest discover -s tests -p 'test*.py'",
+    "errors": 0,
+    "failures": 0,
+    "passed": 612,
+    "successful": true,
+    "tests_run": 612
+  },
+  "independent_audit": "pending",
+  "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+  "source_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796",
+  "test_execution_external_actions": 0,
+  "test_execution_live_authority_grants": 0,
+  "timestamp_utc": "2026-09-29T04:57:06.396831+00:00"
+}

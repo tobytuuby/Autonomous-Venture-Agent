@@ -1,0 +1,57 @@
+[
+  {
+    "bytes": 60,
+    "path": "kernel/p11/__init__.py",
+    "sha256": "60aaf8b02e42d9602072f5f10072f083a8da8a9671aee6c5dd7d37b10d1f36be"
+  },
+  {
+    "bytes": 14221,
+    "path": "kernel/p11/readiness_gate.py",
+    "sha256": "2c7dcbdc8f4b4abea2e7bb80e6420f15a22f0ec22662e1971058a84091c97512"
+  },
+  {
+    "bytes": 6523,
+    "path": "schemas/p11/readiness-plan.schema.json",
+    "sha256": "1c98ed68395ad988a4d962dbd6c8650b5d2a6511bf6ac51d2844f4a2d3c3bbaf"
+  },
+  {
+    "bytes": 62,
+    "path": "tests/p11/__init__.py",
+    "sha256": "e1e78af388b4b3e49422c484ed26c0983b2bcd2306da606558d6399761613237"
+  },
+  {
+    "bytes": 19189,
+    "path": "tests/p11/test_readiness_gate.py",
+    "sha256": "ef969a0a54dc7ab565158c663499813c5d966cefc952b56426e457361b9e1c0b"
+  },
+  {
+    "bytes": 5077,
+    "path": "docs/p11-policy-spec-v1.0.md",
+    "sha256": "cd65c6e9be5d05b9b1910e63bef3ed457bba22f8e5c14a36d6847c04309f6299"
+  },
+  {
+    "bytes": 2778,
+    "path": "docs/p11-implementation-plan-v1.0.md",
+    "sha256": "e5bae8bcd9d3e63c0ba83f0b2ddf8758eba7d71d431f18387ce125249f64c42e"
+  },
+  {
+    "bytes": 2967,
+    "path": "docs/p11-test-and-evidence-plan-v1.0.md",
+    "sha256": "0014d1a029cff91c9027c946a4348472a56c8f5f0dfd4cba91b714eeca29fdd5"
+  },
+  {
+    "bytes": 1950,
+    "path": "docs/p11-entry-decision.md",
+    "sha256": "58f68febede06b01db473f8d8f77fd98e570e4e0671dbed134f4911d75dc7fe6"
+  },
+  {
+    "bytes": 1631,
+    "path": "docs/PHASE11_STATUS.md",
+    "sha256": "cda171a4334814aa8698d1219a601c97b32e2d3756ef03c70eea513ed5d04ae8"
+  },
+  {
+    "bytes": 5153,
+    "path": "docs/PROJECT_STATUS.md",
+    "sha256": "291b073f7908330e76c4dda04cfc57db12fe5017e7ba89bf08c0eb1a2c44d608"
+  }
+]
