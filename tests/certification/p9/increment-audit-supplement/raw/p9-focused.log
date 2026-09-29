@@ -1,0 +1,101 @@
+test_01_valid_numeric_limit (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_01_valid_numeric_limit)
+P9 case 01_valid_numeric_limit ... ok
+test_02_valid_operating_window (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_02_valid_operating_window)
+P9 case 02_valid_operating_window ... ok
+test_03_valid_fixture_venture_count (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_03_valid_fixture_venture_count)
+P9 case 03_valid_fixture_venture_count ... ok
+test_04_valid_concurrency (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_04_valid_concurrency)
+P9 case 04_valid_concurrency ... ok
+test_05_valid_observation (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_05_valid_observation)
+P9 case 05_valid_observation ... ok
+test_06_recovery_freeze (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_06_recovery_freeze)
+P9 case 06_recovery_freeze ... ok
+test_07_recovery_revoke (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_07_recovery_revoke)
+P9 case 07_recovery_revoke ... ok
+test_08_recovery_quarantine (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_08_recovery_quarantine)
+P9 case 08_recovery_quarantine ... ok
+test_09_authority_live_mode (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_09_authority_live_mode)
+P9 case 09_authority_live_mode ... ok
+test_10_authority_external_action_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_10_authority_external_action_authorized)
+P9 case 10_authority_external_action_authorized ... ok
+test_11_authority_payment_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_11_authority_payment_authorized)
+P9 case 11_authority_payment_authorized ... ok
+test_12_authority_broker_execution_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_12_authority_broker_execution_authorized)
+P9 case 12_authority_broker_execution_authorized ... ok
+test_13_authority_credential_access_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_13_authority_credential_access_authorized)
+P9 case 13_authority_credential_access_authorized ... ok
+test_14_authority_customer_contact_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_14_authority_customer_contact_authorized)
+P9 case 14_authority_customer_contact_authorized ... ok
+test_15_authority_capital_allocation_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_15_authority_capital_allocation_authorized)
+P9 case 15_authority_capital_allocation_authorized ... ok
+test_16_authority_deployment_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_16_authority_deployment_authorized)
+P9 case 16_authority_deployment_authorized ... ok
+test_17_authority_venture_execution_authorized (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_17_authority_venture_execution_authorized)
+P9 case 17_authority_venture_execution_authorized ... ok
+test_18_model_approval_text_is_inert (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_18_model_approval_text_is_inert)
+P9 case 18_model_approval_text_is_inert ... ok
+test_19_model_override_text_is_inert (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_19_model_override_text_is_inert)
+P9 case 19_model_override_text_is_inert ... ok
+test_20_malformed_model_recommendation_is_inert (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_20_malformed_model_recommendation_is_inert)
+P9 case 20_malformed_model_recommendation_is_inert ... ok
+test_21_prompt_injection_text_is_inert (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_21_prompt_injection_text_is_inert)
+P9 case 21_prompt_injection_text_is_inert ... ok
+test_22_model_authorization_bit_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_22_model_authorization_bit_is_denied)
+P9 case 22_model_authorization_bit_is_denied ... ok
+test_23_unknown_charter_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_23_unknown_charter_is_denied)
+P9 case 23_unknown_charter_is_denied ... ok
+test_24_stale_charter_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_24_stale_charter_is_denied)
+P9 case 24_stale_charter_is_denied ... ok
+test_25_venture_charter_mismatch_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_25_venture_charter_mismatch_is_denied)
+P9 case 25_venture_charter_mismatch_is_denied ... ok
+test_26_portfolio_charter_mismatch_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_26_portfolio_charter_mismatch_is_denied)
+P9 case 26_portfolio_charter_mismatch_is_denied ... ok
+test_27_replay_identity_cannot_cross_venture (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_27_replay_identity_cannot_cross_venture)
+P9 case 27_replay_identity_cannot_cross_venture ... ok
+test_28_venture_sequences_are_isolated (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_28_venture_sequences_are_isolated)
+P9 case 28_venture_sequences_are_isolated ... ok
+test_29_missing_charter_binding_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_29_missing_charter_binding_is_denied)
+P9 case 29_missing_charter_binding_is_denied ... ok
+test_30_model_context_does_not_cross_scope (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_30_model_context_does_not_cross_scope)
+P9 case 30_model_context_does_not_cross_scope ... ok
+test_31_identical_replay_is_idempotent (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_31_identical_replay_is_idempotent)
+P9 case 31_identical_replay_is_idempotent ... ok
+test_32_changed_material_collision_stops_boundary (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_32_changed_material_collision_stops_boundary)
+P9 case 32_changed_material_collision_stops_boundary ... ok
+test_33_duplicate_sequence_fails_closed (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_33_duplicate_sequence_fails_closed)
+P9 case 33_duplicate_sequence_fails_closed ... ok
+test_34_out_of_order_sequence_fails_closed (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_34_out_of_order_sequence_fails_closed)
+P9 case 34_out_of_order_sequence_fails_closed ... ok
+test_35_tampered_evidence_hash_stops_boundary (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_35_tampered_evidence_hash_stops_boundary)
+P9 case 35_tampered_evidence_hash_stops_boundary ... ok
+test_36_missing_or_malformed_evidence_hash_is_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_36_missing_or_malformed_evidence_hash_is_denied)
+P9 case 36_missing_or_malformed_evidence_hash_is_denied ... ok
+test_37_recovery_freeze_state (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_37_recovery_freeze_state)
+P9 case 37_recovery_freeze_state ... ok
+test_38_recovery_revoke_state (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_38_recovery_revoke_state)
+P9 case 38_recovery_revoke_state ... ok
+test_39_recovery_quarantine_state (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_39_recovery_quarantine_state)
+P9 case 39_recovery_quarantine_state ... ok
+test_40_recovery_wind_down_state (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_40_recovery_wind_down_state)
+P9 case 40_recovery_wind_down_state ... ok
+test_41_restore_rollback_and_terminal_reopen_are_denied (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_41_restore_rollback_and_terminal_reopen_are_denied)
+P9 case 41_restore_rollback_and_terminal_reopen_are_denied ... ok
+test_42_injected_failure_is_terminal (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_42_injected_failure_is_terminal)
+P9 case 42_injected_failure_is_terminal ... ok
+test_43_invalid_execution_mode_is_quarantined (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_43_invalid_execution_mode_is_quarantined)
+P9 case 43_invalid_execution_mode_is_quarantined ... ok
+test_44_non_synthetic_input_is_quarantined (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_44_non_synthetic_input_is_quarantined)
+P9 case 44_non_synthetic_input_is_quarantined ... ok
+test_45_effectful_input_is_quarantined (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_45_effectful_input_is_quarantined)
+P9 case 45_effectful_input_is_quarantined ... ok
+test_46_schema_requires_all_nine_false_authorities (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_46_schema_requires_all_nine_false_authorities)
+P9 case 46_schema_requires_all_nine_false_authorities ... ok
+test_47_provider_network_and_credential_flags_fail_closed (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_47_provider_network_and_credential_flags_fail_closed)
+P9 case 47_provider_network_and_credential_flags_fail_closed ... ok
+test_48_automatic_stop_is_terminal (tests.p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_48_automatic_stop_is_terminal)
+P9 case 48_automatic_stop_is_terminal ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 0.029s
+
+OK
