@@ -4,7 +4,9 @@
 
 P8.4 is accepted and merged to `main` at `0f8df0f00f15207afdf7bfe74bb466aa3d6dd386`. Its combined P8 focused suite passed 59/59 and full regression passed 453/453. The P8.4 evidence branch remains preserved at `7276c6566af5a21527c8f42c33adb0d9567aace1`.
 
-P9 synthetic boundary hardening is accepted for its in-memory synthetic-only scope. All nine live authorities remain denied; model output cannot authorize execution; no P10 work is authorized. See `docs/PHASE9_STATUS.md` and `docs/p9-acceptance-decision.md`.
+P9 synthetic boundary hardening and its corrective fail-closed change are accepted on `main` at `616aa066db77f1bc25730929dd57d16d92ac386c`. The corrected full regression baseline passed 501/501. P9 remains synthetic-only; all nine live authorities are denied and model output cannot authorize execution.
+
+P10 planning and implementation are authorized only for synthetic governance rehearsal. The active branch is `phase10/p10-synthetic-governance`; the work is tested but not independently audited or accepted. It grants no production readiness, go-live, or external-action authority. See `docs/PHASE10_STATUS.md`.
 
 ## Historical status snapshot — 2026-09-24
 
@@ -12,17 +14,11 @@ Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1 planning 
 
 ## Current phase
 
-P0 through P6 are complete for their defined scopes. P7.0–P7.6 are complete through
-synthetic certification, with P8.0 synthetic preflight implementation complete. P8.1 live
-action remains blocked pending a completed pilot charter and separate written approval.
-
-The P6.0 implementation commit is
-`419aed0581feae834d79028593fd929e990e63d0`; the evidence commit is
-`96c16f04d79ff0696ebe111e78d7f71e50eb5056`.
+P0 through P9 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is active on a feature branch for synthetic governance rehearsal and remains pending independent review.
 
 ## Canonical project plan
 
-- `project-phase-plan-v1.4.md` — current project-wide phase registry and cross-phase gates.
+- `project-phase-plan-v1.4.md` — project-wide phase registry and cross-phase gates (historical pointer; newer roadmap drafts are not canonical unless separately approved).
 - `phase0-policy-kernel-spec-v11.md` — current P0 governing specification.
 - `phase0-implementation-plan-v3.2.md` — current P0 implementation plan.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
@@ -38,6 +34,11 @@ The P6.0 implementation commit is
 - `phase6-policy-spec-v1.0.md` — P6 governing specification.
 - `phase6-implementation-plan-v1.0.md` — P6 implementation plan.
 - `docs/PHASE6_STATUS.md` — P6 status and gate summary.
+- `docs/p10-policy-spec-v1.0.md` — P10 synthetic governance rehearsal policy.
+- `docs/p10-implementation-plan-v1.0.md` — P10 implementation plan.
+- `docs/p10-test-and-evidence-plan-v1.0.md` — P10 denominator and evidence contract.
+- `docs/p10-entry-decision.md` — P10 synthetic entry authorization.
+- `docs/PHASE10_STATUS.md` — P10 implementation and audit status.
 
 ## Phase status
 
@@ -49,17 +50,12 @@ The P6.0 implementation commit is
 | P3 | Complete for defined scope | Venture formation and sandboxing; synthetic-only |
 | P4 | Complete for defined scope | Synthetic recording and operations boundary |
 | P5 | Closed for synthetic-only scope | Revenue, reconciliation, treasury simulation, human review |
-| P6.0 | Accepted | Synthetic portfolio identity and registry |
-| P6.1 | Planning authorized | Coordination planning only; implementation blocked |
-| P6.2–P6.4 | Accepted | Synthetic-only portfolio controls |
-| P6.5 | Accepted | End-to-end synthetic certification |
+| P6 | Accepted through P6.5 | Synthetic portfolio identity, controls, and certification |
 | P7 | Synthetic certification complete | No live authority; P7.6 accepted for synthetic scope |
-| P8.0 | Implemented | Synthetic pilot preflight; P8.1 live action blocked |
-| P8.1–P10 | Not started / unauthorized | Separate charter, approval, and phase gates required |
+| P8 | Accepted through P8.4 | Synthetic pilot certification and closeout only |
+| P9 | Accepted | Synthetic boundary hardening; correction merged to main |
+| P10 | Implementation tested; audit pending | Synthetic governance rehearsal only; no production/live authority |
 
-## P6 authority boundary
+## Global authority boundary
 
-P6.1 planning does not authorize implementation. Test-provider integration and
-all live financial, payment, broker, credential, customer, deployment, network,
-capital, venture, and worker actions remain disabled. P7 remains the first phase
-where real external action may be considered.
+All nine live authorities and all external effects remain denied in this work. The P10 evaluator is a synthetic record processor only. No P10 result grants production, go-live, CEO, worker, venture, credential, provider, customer, capital, payment, broker, deployment, network, or external authority.
