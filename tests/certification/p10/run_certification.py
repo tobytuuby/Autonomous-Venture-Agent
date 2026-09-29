@@ -48,6 +48,7 @@ def canonical(value) -> bytes:
 
 
 def run_suite(suite, label):
+    started_at = datetime.now(timezone.utc)
     stream = io.StringIO()
     runner = unittest.TextTestRunner(stream=stream, verbosity=2, resultclass=RecordingResult)
     result = runner.run(suite)
@@ -63,7 +64,7 @@ def run_suite(suite, label):
     log = (
         f"label={label}\n"
         f"command=python3 tests/certification/p10/run_certification.py\n"
-        f"started_at_utc={datetime.now(timezone.utc).isoformat()}\n"
+        f"started_at_utc={started_at.isoformat()}\n"
         f"python={sys.version.replace(chr(10), ' ')}\n"
         + stream.getvalue()
         + f"RESULT tests={report['tests_run']} passed={report['passed']} "
@@ -79,6 +80,18 @@ def main():
 
     if len(CASES) != 42:
         raise SystemExit(f"expected 42 P10 focused cases; found {len(CASES)}")
+
+    branch = subprocess.check_output(
+        ["git", "branch", "--show-current"], cwd=ROOT, text=True
+    ).strip()
+    head_commit = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+    ).strip()
+    porcelain = subprocess.check_output(
+        ["git", "status", "--porcelain=v1"], cwd=ROOT, text=True
+    )
+    if porcelain.strip():
+        raise SystemExit("worktree must be clean before certification evidence is generated")
 
     OUT.mkdir(parents=True, exist_ok=True)
     raw = OUT / "raw"
@@ -118,18 +131,6 @@ def main():
         ["git", "rev-parse", "7c1b82f95891aaae82f6eeab7de9219e3f4f1f52"],
         cwd=ROOT, text=True
     ).strip()
-    head_commit = subprocess.check_output(
-        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
-    ).strip()
-    branch = subprocess.check_output(
-        ["git", "branch", "--show-current"], cwd=ROOT, text=True
-    ).strip()
-    porcelain = subprocess.check_output(
-        ["git", "status", "--porcelain=v1"], cwd=ROOT, text=True
-    )
-    if porcelain.strip():
-        raise SystemExit("worktree must be clean before certification evidence is generated")
-
     denied_authorities = {field: False for field in LIVE_FIELDS}
     fingerprint = hashlib.sha256(canonical(denied_authorities)).hexdigest()
     baseline = {
@@ -138,7 +139,7 @@ def main():
         "base_main_commit": base_commit,
         "implementation_commit": implementation_commit,
         "evidence_commit_under_test": head_commit,
-        "worktree_clean": True,
+        "source_worktree_clean_before_run": True,
         "p9_full_regression_baseline": 501,
         "p10_focused_denominator": 42,
         "p10_focused_passed": focused["passed"],
@@ -197,7 +198,8 @@ def main():
 
     entries = []
     for path in sorted(OUT.rglob("*")):
-        if path.is_file() and path.name != "manifest.json":
+        if (path.is_file() and path.name != "manifest.json"
+                and "__pycache__" not in path.parts and path.suffix != ".pyc"):
             relative = path.relative_to(ROOT).as_posix()
             entries.append({"path": relative, "bytes": path.stat().st_size, "sha256": sha256(path)})
     manifest = {
