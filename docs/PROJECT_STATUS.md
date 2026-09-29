@@ -8,7 +8,7 @@ P9 synthetic boundary hardening and its corrective fail-closed change are accept
 
 P10 synthetic governance rehearsal was accepted by independent read-only code inspection and merged to `main` at `ce9d53dd8b1aded38c8d0adf91b91e657149bd94`. The auditor did not execute tests; 42/42 focused and 543/543 regression results are recorded certification evidence. P10 grants no production readiness, go-live, or external-action authority. See `docs/PHASE10_STATUS.md`.
 
-P11 was independently reviewed and accepted for its synthetic planning-gate scope, then merged to `main` at `092ce140ad16971fa84328a77b3f671394fc196a`. Its positive result means only READY_FOR_INDEPENDENT_REVIEW; it does not approve or authorize a production test, widen authority, or authorize P12. See `docs/PHASE11_STATUS.md` and `docs/reviews/P11-independent-acceptance.md`.
+P11 was independently reviewed and accepted for its synthetic planning-gate scope, then merged to `main` at `092ce140ad16971fa84328a77b3f671394fc196a`. Its positive result means only READY_FOR_INDEPENDENT_REVIEW; it does not approve or authorize a production test or widen authority. On 2026-09-29, roadmap planning for proposed P12–P14 was separately authorized. P12 implementation and P13 execution remain unauthorized; P12 must end with an independent audit decision. See `docs/PHASE11_STATUS.md`, `docs/reviews/P11-independent-acceptance.md`, and `project-phase-plan-v2.2-DRAFT.md`.
 
 ## Historical status snapshot — 2026-09-24
 
@@ -16,11 +16,12 @@ Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1 planning 
 
 ## Current phase
 
-P0 through P11 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is accepted for synthetic governance rehearsal only and merged to `main`; it does not authorize production readiness or live operation. P11 is accepted and merged for synthetic review-package validation only; it does not authorize production testing or live operation.
+P0 through P11 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is accepted for synthetic governance rehearsal only and merged to `main`; it does not authorize production readiness or live operation. P11 is accepted and merged for synthetic review-package validation only; it does not authorize production testing or live operation. Roadmap planning for proposed P12–P14 is authorized; P12 implementation and any live test remain separately gated.
 
 ## Canonical project plan
 
-- `project-phase-plan-v1.4.md` — project-wide phase registry and cross-phase gates (historical pointer; newer roadmap drafts are not canonical unless separately approved).
+- `project-phase-plan-v1.4.md` — previous project-wide phase registry; retained unchanged.
+- `project-phase-plan-v2.2-DRAFT.md` — proposed post-P11 roadmap through P14; draft only, not canonical until explicitly approved.
 - `phase0-policy-kernel-spec-v11.md` — current P0 governing specification.
 - `phase0-implementation-plan-v3.2.md` — current P0 implementation plan.
 - `phase1-implementation-plan-v1.1.md` — P1 exit record.
@@ -58,6 +59,9 @@ P0 through P11 are complete for their defined scopes. P8.4 closes synthetic pilo
 | P9 | Accepted | Synthetic boundary hardening; correction merged to main |
 | P10 | Accepted for synthetic scope; merged | Synthetic governance rehearsal only; no production/live authority |
 | P11 | Accepted for synthetic planning-gate scope; merged | Non-authorizing plan validator; no production test or live authority |
+| P12 | Roadmap planning authorized only | Exact limited-test charter and readiness evidence; exit requires independent audit decision |
+| P13 | Proposed; not authorized | Bounded limited-test execution only after P12 ACCEPTED and separate exact authorization |
+| P14 | Proposed; not authorized | Independent post-test review; no automatic continuation or expansion |
 
 ## Global authority boundary
 
