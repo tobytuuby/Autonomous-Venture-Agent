@@ -6,7 +6,7 @@ P8.4 is accepted and merged to `main` at `0f8df0f00f15207afdf7bfe74bb466aa3d6dd3
 
 P9 synthetic boundary hardening and its corrective fail-closed change are accepted on `main` at `616aa066db77f1bc25730929dd57d16d92ac386c`. The corrected full regression baseline passed 501/501. P9 remains synthetic-only; all nine live authorities are denied and model output cannot authorize execution.
 
-P10 planning and implementation are authorized only for synthetic governance rehearsal. The active branch is `phase10/p10-synthetic-governance`; the work is tested but not independently audited or accepted. It grants no production readiness, go-live, or external-action authority. See `docs/PHASE10_STATUS.md`.
+P10 synthetic governance rehearsal was accepted by independent read-only code inspection and merged to `main` at `ce9d53dd8b1aded38c8d0adf91b91e657149bd94`. The auditor did not execute tests; 42/42 focused and 543/543 regression results are recorded certification evidence. P10 grants no production readiness, go-live, or external-action authority. See `docs/PHASE10_STATUS.md`.
 
 ## Historical status snapshot — 2026-09-24
 
@@ -14,7 +14,7 @@ Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1 planning 
 
 ## Current phase
 
-P0 through P9 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is active on a feature branch for synthetic governance rehearsal and remains pending independent review.
+P0 through P10 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is accepted for synthetic governance rehearsal only and merged to `main`; it does not authorize production readiness or live operation.
 
 ## Canonical project plan
 
@@ -54,7 +54,7 @@ P0 through P9 are complete for their defined scopes. P8.4 closes synthetic pilot
 | P7 | Synthetic certification complete | No live authority; P7.6 accepted for synthetic scope |
 | P8 | Accepted through P8.4 | Synthetic pilot certification and closeout only |
 | P9 | Accepted | Synthetic boundary hardening; correction merged to main |
-| P10 | Implementation tested; audit pending | Synthetic governance rehearsal only; no production/live authority |
+| P10 | Accepted for synthetic scope; merged | Synthetic governance rehearsal only; no production/live authority |
 
 ## Global authority boundary
 
