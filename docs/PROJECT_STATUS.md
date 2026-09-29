@@ -8,13 +8,15 @@ P9 synthetic boundary hardening and its corrective fail-closed change are accept
 
 P10 synthetic governance rehearsal was accepted by independent read-only code inspection and merged to `main` at `ce9d53dd8b1aded38c8d0adf91b91e657149bd94`. The auditor did not execute tests; 42/42 focused and 543/543 regression results are recorded certification evidence. P10 grants no production readiness, go-live, or external-action authority. See `docs/PHASE10_STATUS.md`.
 
+On 2026-09-28, planning and implementation were separately authorized on `phase11/production-readiness-review-gate` for a synthetic planning/review validator only. Its positive result means only READY_FOR_INDEPENDENT_REVIEW; it does not approve or authorize a production test, widen authority, or authorize P12. See `docs/PHASE11_STATUS.md`.
+
 ## Historical status snapshot — 2026-09-24
 
 Phase 5 is closed for synthetic-only scope. P6.0 is accepted, and P6.1 planning is authorized. P6.1 implementation remains separately gated.
 
 ## Current phase
 
-P0 through P10 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is accepted for synthetic governance rehearsal only and merged to `main`; it does not authorize production readiness or live operation.
+P0 through P10 are complete for their defined scopes. P8.4 closes synthetic pilot certification only; it does not authorize live operation. P9 hardens the synthetic boundary. P10 is accepted for synthetic governance rehearsal only and merged to `main`; it does not authorize production readiness or live operation. P11 gate implementation is in progress on a feature branch for synthetic review-package validation only.
 
 ## Canonical project plan
 
@@ -55,6 +57,7 @@ P0 through P10 are complete for their defined scopes. P8.4 closes synthetic pilo
 | P8 | Accepted through P8.4 | Synthetic pilot certification and closeout only |
 | P9 | Accepted | Synthetic boundary hardening; correction merged to main |
 | P10 | Accepted for synthetic scope; merged | Synthetic governance rehearsal only; no production/live authority |
+| P11 | Authorized for planning-gate implementation only | Synthetic plan validator; no production test or live authority |
 
 ## Global authority boundary
 
