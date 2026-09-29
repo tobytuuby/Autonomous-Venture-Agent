@@ -23,4 +23,4 @@ P10.0–P10.4 cover baseline binding, synthetic operating ownership, four suppli
 
 ## Evidence and disposition
 
-Raw evidence and artifact inventory are being assembled under `tests/certification/p10/`. Independent review is pending. This status is not acceptance and does not authorize merge to main or any live/production action.
+The reproducible evidence packet is stored under `tests/certification/p10/`, with focused and full raw logs, per-case registry/results, source inventory, baseline lock, run metadata, and a SHA-256 manifest. Independent review is pending. This status is not acceptance and does not authorize merge to main or any live/production action.
