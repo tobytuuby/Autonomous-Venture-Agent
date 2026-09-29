@@ -1,0 +1,63 @@
+{
+  "artifacts": [
+    {
+      "bytes": 3507,
+      "path": "reassessment.md",
+      "sha256": "70cd3ee4738a1104c1bd3ef82bc876a0d059df100657733d0ea8c9d137134f48"
+    },
+    {
+      "bytes": 1573,
+      "path": "baseline-lock.json",
+      "sha256": "491a6257d3fb0f9e113ec200c4c2f1691814039a9747d1b1bb49edfd948d7780"
+    },
+    {
+      "bytes": 9243,
+      "path": "raw/p9-focused.log",
+      "sha256": "f436244b35a9c4fa3dd155aa28bd2f5c8b3d0d3ba230cd390c8f9b123dbb8d7b"
+    },
+    {
+      "bytes": 69673,
+      "path": "raw/full-regression.log",
+      "sha256": "9cf67a479d24899be9ec59ee0678a7cb1a3548bd276d89ff2cfea352bde5aa18"
+    }
+  ],
+  "base_main_commit": "99976ecec6af3afc241a0bc574dcceb80cea34c7",
+  "branch": "phase9/p9-increment-audit-remediation",
+  "results": {
+    "full_regression": {
+      "failed": 0,
+      "passed": 501
+    },
+    "p9_focused": {
+      "failed": 0,
+      "passed": 48
+    }
+  },
+  "run_metadata": {
+    "full_regression": {
+      "completed_at_utc": "2026-09-29T00:22:54.606Z",
+      "process_id": "proc_mulxmuht_4bpr80",
+      "started_at_utc": "2026-09-29T00:22:43.169Z"
+    },
+    "p9_focused": {
+      "completed_at_utc": "2026-09-29T00:22:54.606Z",
+      "process_id": "proc_mulxmxgm_0viw55",
+      "started_at_utc": "2026-09-29T00:22:47.014Z"
+    },
+    "python_version": "3.14.4"
+  },
+  "source_commit": "36b99e121c6a1fb14747e747d37a07b64141f673",
+  "source_files": [
+    {
+      "bytes": 14471,
+      "path": "kernel/p9/synthetic_boundary.py",
+      "sha256": "d56299b7dfce0ab69563b15688bffdc2536848c2f6c4cf19efc273c6181af741"
+    },
+    {
+      "bytes": 15519,
+      "path": "tests/p9/test_p9_synthetic_boundary.py",
+      "sha256": "8111134d6df9056de4efa31fe57dcd6fb1e02366fd29caada583cd9bec389150"
+    }
+  ],
+  "status": "remediation_tested_independent_review_pending"
+}
