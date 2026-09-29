@@ -17,7 +17,19 @@
     "successful": true,
     "tests_run": 612
   },
-  "independent_audit": "pending",
+  "independent_audit": "accepted",
+  "independent_audit_record": {
+    "decision": "ACCEPTED",
+    "decision_date": "2026-09-29",
+    "decision_record": "docs/reviews/P11-independent-acceptance.md",
+    "reviewed_branch": "phase11/production-readiness-review-gate",
+    "reviewed_branch_tip": "092ce140ad16971fa84328a77b3f671394fc196a",
+    "reviewed_implementation_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796",
+    "reviewer_identity": "not provided in the submitted review report",
+    "scope": "synthetic non-authorizing readiness planning gate only",
+    "test_execution": "69 focused and 612 full-regression results are recorded evidence; this metadata update does not claim the reviewer reran them"
+  },
+  "merged_main_commit": "092ce140ad16971fa84328a77b3f671394fc196a",
   "platform": "Linux-7.0.0-31-generic-x86_64-with-glibc2.43",
   "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
   "source_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796",

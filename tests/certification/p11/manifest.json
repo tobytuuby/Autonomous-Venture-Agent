@@ -1,6 +1,11 @@
 {
   "artifacts": [
     {
+      "path": "docs/reviews/P11-independent-acceptance.md",
+      "bytes": 2172,
+      "sha256": "b2e2096bcfd0ac300044fa2f42ce20c9a767d4189679765201588c2856bc8abc"
+    },
+    {
       "bytes": 1615,
       "path": "tests/certification/p11/baseline-lock.json",
       "sha256": "bca020523948efe196c22d7c8cf405a942afb4f713f63741963d1ca1679984ca"
@@ -16,29 +21,37 @@
       "sha256": "9f110dcd6855b8b0f15f09a3a1d6f5511a9b9d9d2ab539c2396b55e46e455af2"
     },
     {
-      "bytes": 168,
-      "path": "tests/certification/p11/raw/p11-focused.log",
-      "sha256": "7505f87ef354fc9d20aaa4c83d989d614370f2428c8e2d9c10e2ee6cc1940337"
-    },
-    {
       "bytes": 712,
       "path": "tests/certification/p11/raw/full-regression.log",
       "sha256": "26b1db7b91838ab4ea7b0a125f728b5e0ea4be06ac67260ae504d18374f8c36c"
     },
     {
-      "bytes": 868,
-      "path": "tests/certification/p11/run-metadata.json",
-      "sha256": "df5abe3c0ac33384e6cc9d26663768352de153e28eb310a3b26524e11abe2e6e"
+      "bytes": 168,
+      "path": "tests/certification/p11/raw/p11-focused.log",
+      "sha256": "7505f87ef354fc9d20aaa4c83d989d614370f2428c8e2d9c10e2ee6cc1940337"
     },
     {
-      "bytes": 1690,
+      "path": "tests/certification/p11/run-metadata.json",
+      "bytes": 1619,
+      "sha256": "8a18a548178bbceed005e67213793db935cc2acbe2d7ad3f27aab8f967da6641"
+    },
+    {
       "path": "tests/certification/p11/source-inventory.json",
-      "sha256": "634df838ecb8519fd6b15e20ee9d35b8a957c0b5a7e0cf9ce7494aa38fac1e6f"
+      "bytes": 1857,
+      "sha256": "c374e0cceca127241476e891721c1dde7b3727f3a185b807e6fcd849fdbe487a"
     }
   ],
   "base_main_commit": "487162974308e1a17a989ca5fe478a19ea153400",
   "format": "P11 synthetic readiness-gate evidence manifest v1.0",
   "manifest_self_hash": "excluded; recompute SHA-256 over manifest bytes independently",
   "source_commit": "1d026e8e3d5e0702948dceb3f48e40312bbe1796",
-  "status": "implementation_tested_independent_audit_pending"
+  "status": "accepted_synthetic_non_authorizing_gate",
+  "merged_main_commit": "092ce140ad16971fa84328a77b3f671394fc196a",
+  "independent_review": {
+    "decision": "ACCEPTED",
+    "decision_date": "2026-09-29",
+    "reviewed_branch_tip": "092ce140ad16971fa84328a77b3f671394fc196a",
+    "decision_record": "docs/reviews/P11-independent-acceptance.md",
+    "scope": "synthetic non-authorizing readiness planning gate only"
+  }
 }
