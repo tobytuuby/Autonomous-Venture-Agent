@@ -12,7 +12,7 @@
 - **Production service/runtime:** Kalaap Das reports that the site runs on a self-hosted Linux VM with Apache, and that most of the site uses PHP. This is user-provided information, not independently verified; exact VM identity, Apache/PHP versions, application architecture, and deployment details remain TBD.
 - **Environment:** Intended target is the production website; exact production host, exposure, and runtime are TBD.
 - **Tenant or venture:** TBD; may be not applicable for a public website.
-- **Endpoint:** No health/status endpoint has been identified; exact host and path remain TBD.
+- **Endpoint:** Kalaap Das reports that repository review found no documented health/status endpoint or references for `health`, `status`, `healthz`, `ready`, or `ping`. A minimal unauthenticated `/health` endpoint returning `200 OK` with no sensitive information is a proposed candidate only; it does not currently exist as a verified endpoint.
 - **Accountable service owner:** Kalaap Das, designated by the user; service ownership is user-reported.
 - The repository and local venture-control bridge are not production targets.
 
@@ -32,7 +32,7 @@ The proposed test succeeds only if all planned probes satisfy health criteria an
 
 ## 3. Allowed and forbidden operations
 
-**Proposed allowed operation:** One fixed, documented read operation, such as HTTP GET to one allowlisted health/status path. Exact method, host, path, protocol, and response fields are TBD and must be bound into the final charter.
+**Proposed allowed operation:** Once an endpoint exists and is reviewed, one fixed read operation such as HTTP GET to one allowlisted health/status path may be considered. The proposed `/health` endpoint is not yet implemented or approved. Creating or deploying it would change the production service and is outside this read-only test baseline; no production code change or deployment is authorized here. Exact method, host, path, protocol, and response fields must be bound into the final charter.
 
 **Prohibited in this baseline:**
 
@@ -115,14 +115,15 @@ Do not capture credentials, tokens, raw sensitive response bodies, or customer/p
 
 ## 10. Open items before a complete charter
 
-1. Identify the self-hosted application/runtime, exact production environment, and actual host serving ctkfamily.com.
-2. Confirm which existing endpoint, if any, is a documented read-only health/status endpoint and its response fields.
-3. Identify the dedicated synthetic tenant and exact health endpoint/response fields.
-4. Confirm the service's health criteria, SLOs, and impact thresholds.
-5. Resolve whether tightly scoped network or credential access is required and obtain separate authorization if applicable.
-6. Name the on-call contact/stop authority and approved alert route.
-7. Complete service-owner, security, privacy, and any applicable operational approvals.
-8. Specify rehearsal evidence, evidence store, retention, and access controls.
-9. Bind the final charter hash and reviewed source commit for the user's P12 audit decision.
+1. Identify the exact production environment and host serving ctkfamily.com; confirm the reported Linux/Apache/PHP details as needed for the plan.
+2. Decide separately whether to create a minimal `/health` endpoint; first implement and inspect it in non-production, define exactly what `200 OK` means, and verify its response contains no sensitive information. Any production deployment requires its own explicit review and authorization.
+3. If an endpoint is created or otherwise selected, bind its exact host/path, method, protocol, and response fields into the charter.
+4. Identify whether a dedicated synthetic tenant applies.
+5. Confirm the service's health criteria, SLOs, and impact thresholds.
+6. Resolve whether tightly scoped network or credential access is required and obtain separate authorization if applicable.
+7. Name the on-call contact/stop authority and approved alert route.
+8. Complete service-owner, security, privacy, and any applicable operational approvals.
+9. Specify rehearsal evidence, evidence store, retention, and access controls.
+10. Bind the final charter hash and reviewed source commit for the user's P12 audit decision.
 
 Until the open items are resolved and the user records the required decisions, this document remains an incomplete planning draft. It does not authorize P12 implementation or any production test.
