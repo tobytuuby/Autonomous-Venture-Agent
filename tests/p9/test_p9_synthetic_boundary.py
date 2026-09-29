@@ -312,6 +312,20 @@ def _(test):
             request["evidence_hash"] = "bad"
         with test.subTest(mutation=mutation), test.assertRaises(P9Denied):
             instance.evaluate(request)
+    malformed_records = (
+        record(event_type=[]),
+        record(scope_dimension=[]),
+        record(event_type="recovery", changed_dimensions=[], requested_control=[]),
+        record(event_type="recovery", changed_dimensions=[], current_state=[]),
+    )
+    for malformed in malformed_records:
+        instance = boundary()
+        result = instance.evaluate(malformed)
+        test.assertEqual(result["disposition"], "QUARANTINED")
+        test.assertTrue(result["stop_required"])
+        test.assertTrue(instance._stopped)
+        with test.assertRaises(P9Denied):
+            instance.evaluate(record(event_id="after-malformed"))
 
 
 @case("37_recovery_freeze_state")

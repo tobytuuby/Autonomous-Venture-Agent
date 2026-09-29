@@ -174,12 +174,20 @@ class SyntheticP9Boundary:
             return self._quarantine(record, "DENIED_FIELDS=" + ",".join(names))
 
         event_type = record["event_type"]
-        if event_type not in self.ALLOWED_EVENT_TYPES:
-            raise P9Denied("unsupported event_type")
+        if not isinstance(event_type, str) or event_type not in self.ALLOWED_EVENT_TYPES:
+            return self._quarantine(record, "EVENT_TYPE_INVALID")
         dimension = record["scope_dimension"]
+        if not isinstance(dimension, str) or dimension not in self.ALLOWED_DIMENSIONS:
+            return self._quarantine(record, "SCOPE_DIMENSION_INVALID")
+        control = record["requested_control"]
+        if not isinstance(control, str) or control not in {*self.RECOVERY_RESULTS, "restore", "rollback", "none"}:
+            return self._quarantine(record, "RECOVERY_CONTROL_INVALID")
+        current_state = record["current_state"]
+        if not isinstance(current_state, str) or current_state not in self.STATES:
+            return self._quarantine(record, "RECOVERY_STATE_INVALID")
         changed = record["changed_dimensions"]
         if not isinstance(changed, list):
-            raise P9Denied("changed_dimensions must be an array")
+            return self._quarantine(record, "CHANGED_DIMENSIONS_INVALID")
         if event_type == "scope_change":
             if dimension not in self.ALLOWED_DIMENSIONS or changed != [dimension]:
                 return self._quarantine(record, "SCOPE_DIMENSION_NOT_ALLOWED_OR_NOT_SINGLE")
