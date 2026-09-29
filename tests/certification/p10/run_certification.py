@@ -102,7 +102,7 @@ def main():
     (raw / "p10-focused.log").write_text(focused_log, encoding="utf-8")
 
     all_suite = unittest.defaultTestLoader.discover(
-        start_dir=str(ROOT / "tests"), pattern="test*.py", top_level_dir=str(ROOT)
+        start_dir=str(ROOT / "tests"), pattern="test*.py"
     )
     full, full_log = run_suite(all_suite, "full repository regression")
     (raw / "full-regression.log").write_text(full_log, encoding="utf-8")
