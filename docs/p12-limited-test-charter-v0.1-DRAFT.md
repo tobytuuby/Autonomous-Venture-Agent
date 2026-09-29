@@ -9,7 +9,7 @@
 ## 1. Proposed target
 
 - **Candidate domain:** ctkfamily.com; Kalaap Das reports owning and self-hosting it.
-- **Production service/runtime:** Website service is user-reported as self-hosted; application, server, and deployment details are TBD and unverified.
+- **Production service/runtime:** Kalaap Das reports that the site runs on a self-hosted Linux VM with Apache, and that most of the site uses PHP. This is user-provided information, not independently verified; exact VM identity, Apache/PHP versions, application architecture, and deployment details remain TBD.
 - **Environment:** Intended target is the production website; exact production host, exposure, and runtime are TBD.
 - **Tenant or venture:** TBD; may be not applicable for a public website.
 - **Endpoint:** No health/status endpoint has been identified; exact host and path remain TBD.
