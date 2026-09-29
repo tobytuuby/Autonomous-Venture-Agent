@@ -8,11 +8,12 @@
 
 ## 1. Proposed target
 
-- **Production service:** TBD — no target has been selected.
-- **Environment:** Production, exact environment/region TBD.
-- **Tenant or venture:** One dedicated synthetic test tenant if the service supports it; exact identity TBD.
-- **Endpoint:** One documented read-only health/status endpoint; exact host and path TBD.
-- **Accountable service owner:** Kalaap Das, as designated by the user; applicability to the selected service must be confirmed.
+- **Candidate domain:** ctkfamily.com; Kalaap Das reports owning and self-hosting it.
+- **Production service/runtime:** Website service is user-reported as self-hosted; application, server, and deployment details are TBD and unverified.
+- **Environment:** Intended target is the production website; exact production host, exposure, and runtime are TBD.
+- **Tenant or venture:** TBD; may be not applicable for a public website.
+- **Endpoint:** No health/status endpoint has been identified; exact host and path remain TBD.
+- **Accountable service owner:** Kalaap Das, designated by the user; service ownership is user-reported.
 - The repository and local venture-control bridge are not production targets.
 
 No endpoint, target identifier, account, or access path may be inferred or substituted by the implementer.
@@ -114,8 +115,8 @@ Do not capture credentials, tokens, raw sensitive response bodies, or customer/p
 
 ## 10. Open items before a complete charter
 
-1. Select and identify the real production service and exact environment.
-2. Confirm Kalaap Das is accountable for that service.
+1. Identify the self-hosted application/runtime, exact production environment, and actual host serving ctkfamily.com.
+2. Confirm which existing endpoint, if any, is a documented read-only health/status endpoint and its response fields.
 3. Identify the dedicated synthetic tenant and exact health endpoint/response fields.
 4. Confirm the service's health criteria, SLOs, and impact thresholds.
 5. Resolve whether tightly scoped network or credential access is required and obtain separate authorization if applicable.
