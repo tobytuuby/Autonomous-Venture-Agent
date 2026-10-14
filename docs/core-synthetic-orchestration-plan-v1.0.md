@@ -5,6 +5,7 @@
 **Repository baseline inspected:** main at 37c393d7723ee8bbe4bc276a435d912c6b621136
 **Execution class:** Offline synthetic fixtures only
 **Phase mapping:** This is a core capability plan, not a numbered roadmap phase. It does not alter P12–P14 status or authorize later phases.
+**Operating-policy draft:** [`venture-operating-policy-v1.0-DRAFT.md`](venture-operating-policy-v1.0-DRAFT.md) records the intended venture funding and profit rules, without granting runtime authority.
 
 ## Purpose
 
