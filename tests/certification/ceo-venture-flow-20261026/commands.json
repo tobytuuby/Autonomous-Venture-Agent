@@ -1,0 +1,83 @@
+[
+  {
+    "name": "focused",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_ceo_venture_flow",
+      "tests.test_venture_exercise",
+      "tests.test_ceo_durable",
+      "tests.test_ceo_shadow",
+      "tests.test_ceo_provider",
+      "tests.test_synthetic_venture_store",
+      "tests.test_synthetic_orchestration",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "regression",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "compileall",
+    "argv": [
+      "python3",
+      "-m",
+      "compileall",
+      "-q",
+      "agents",
+      "broker",
+      "kernel",
+      "tests"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "exercise",
+    "argv": [
+      "python3",
+      "-m",
+      "agents.ceo.venture_exercise",
+      "--durable-ceo",
+      "--database",
+      "artifacts/ceo-venture-flow.sqlite",
+      "--report",
+      "artifacts/ceo-venture-flow.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "replay",
+    "argv": [
+      "python3",
+      "-m",
+      "agents.ceo.venture_exercise",
+      "--durable-ceo",
+      "--database",
+      "artifacts/ceo-venture-flow.sqlite",
+      "--report",
+      "artifacts/ceo-venture-flow-replay.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  }
+]

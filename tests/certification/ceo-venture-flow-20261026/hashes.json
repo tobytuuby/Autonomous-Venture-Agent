@@ -1,0 +1,18 @@
+{
+  "tests/certification/ceo-venture-flow-20261026/commands.json": "3c60d0e37e8b1f9e5087f93aa14105317b4a42434de7709edac400ddc5b1370e",
+  "tests/certification/ceo-venture-flow-20261026/compileall.log": "9fa3b6ead7afc298499f30c5b70014c78b6686a8269611537606fa5a7c02b6a2",
+  "tests/certification/ceo-venture-flow-20261026/decision-events.json": "b04aa246a7a6643d7261e7b6f39389d5951053a713521e07afa51418bcf0bfcb",
+  "tests/certification/ceo-venture-flow-20261026/decisions.jsonl": "91ff5be73d1bdac067529e203187cedbb870baaf820b9d984f1f28785b6455d9",
+  "tests/certification/ceo-venture-flow-20261026/diff-check.log": "9fa3b6ead7afc298499f30c5b70014c78b6686a8269611537606fa5a7c02b6a2",
+  "tests/certification/ceo-venture-flow-20261026/exercise-report.json": "ebb382bfa7680ad75d7cbbfa1c2a9e3ce09534999387c3dab2d11fd2310e9fea",
+  "tests/certification/ceo-venture-flow-20261026/exercise.log": "8eae3611babfdb09cf75efb04dbeef0dc7fe1e6e1fbcf54cc47691c178536574",
+  "tests/certification/ceo-venture-flow-20261026/focused.log": "3606ce7a1ac710c5fda71f5787c3911511a2ef299d42d16e37f139bb36608db8",
+  "tests/certification/ceo-venture-flow-20261026/regression.log": "5c3c658944185383c8d6975aaf658db4106ea50e18c31e2b91b0575ae225d007",
+  "tests/certification/ceo-venture-flow-20261026/reopen-replay.log": "0d94ef09f8c27cd0d9990c656e9ed95a2dc182f89e192c058f2f74b220c50127",
+  "tests/certification/ceo-venture-flow-20261026/replay.log": "8eae3611babfdb09cf75efb04dbeef0dc7fe1e6e1fbcf54cc47691c178536574",
+  "agents/ceo/agent.py": "aa0680b0442b98195dacc466939d47bdfa9a00562647d1cc3f34585f1a16ab38",
+  "agents/ceo/durable_state.py": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+  "agents/ceo/venture_exercise.py": "d70464eac23f0fcbe6db2f5f753c118be26ecbad4625866b29699fc7b21b378d",
+  "kernel/synthetic_venture_store.py": "72cefb7c7b1ba1fe563d79f323a85e7bcfea588dba352f1856cc976934a56147",
+  "tests/test_ceo_venture_flow.py": "66da33d6676e4a1b6c5accd62f0d7c0138889fa7d6ed5df8117acc6cfb229b8e"
+}

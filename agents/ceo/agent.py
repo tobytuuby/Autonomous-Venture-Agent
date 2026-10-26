@@ -64,6 +64,7 @@ class CEOAgent:
         log_path: str | Path,
         *,
         durable_store: DurableDecisionStore | None = None,
+        advisory_only: bool = False,
         policy_versions: tuple[str, ...] = ("v11", "v3.2", "p1.0"),
         runner_version: str = "p1-shadow-runner-v1",
         runtime_version: str = "python",
@@ -73,7 +74,7 @@ class CEOAgent:
         self.prompt_hash = hashlib.sha256(prompt.encode()).hexdigest()
         self.log_path = Path(log_path)
         self.model_family = getattr(model, "model_family", "unknown")
-        self.tool_schemas = CEO_TOOL_SCHEMAS
+        self.tool_schemas = () if advisory_only else CEO_TOOL_SCHEMAS
         self.durable_store = durable_store
         endpoint_origin = getattr(model, "endpoint", "offline://synthetic-shadow")
         model_name = getattr(model, "model", self.model_family)
@@ -92,7 +93,8 @@ class CEOAgent:
     def inspect_tools(self) -> tuple[str, ...]:
         return self.tool_schemas
 
-    def shadow_decide(self, opportunity: dict[str, Any]) -> ShadowDecision:
+    def shadow_decide(self, opportunity: dict[str, Any], *,
+                      response_validator: Callable[[dict[str, Any]], Any] | None = None) -> ShadowDecision:
         decision_id = hashlib.sha256(json.dumps(opportunity, sort_keys=True).encode()).hexdigest()[:16]
         if self.durable_store is not None:
             existing = self.durable_store.start(
@@ -100,19 +102,41 @@ class CEOAgent:
                 str(opportunity["adversarial_id"] if "adversarial_id" in opportunity else opportunity["opportunity_id"]),
                 self.configuration_fingerprint,
             )
-            if existing["state"] == "completed" and existing.get("response_json"):
-                return ShadowDecision.from_record(existing["response"])
+            if existing["state"] in {"rejected", "quarantined"}:
+                raise ValueError("shadow decision is terminal and denied")
+            if existing["state"] in {"completed", "response-recorded"} and existing.get("response_json"):
+                record = existing["response"]
+                if response_validator is not None:
+                    response_validator({"decision": record["decision"], "tool_call": record["would_call"]})
+                if existing["state"] == "response-recorded":
+                    self.durable_store.transition(decision_id, "completed")
+                return ShadowDecision.from_record(record)
             if existing["state"] == "dispatched":
                 existing = self.durable_store.recover(decision_id)
             if existing["state"] in {"received", "replayable"}:
                 self.durable_store.transition(decision_id, "dispatched")
 
-        response = self.model({"system": self.prompt, "opportunity": opportunity}, self.tool_schemas)
-        would_call = response.get("tool_call")
-        if would_call and would_call.get("schema") not in self.tool_schemas:
+        try:
+            response = self.model({"system": self.prompt, "opportunity": opportunity}, self.tool_schemas)
+        except Exception:
             if self.durable_store is not None:
-                self.durable_store.transition(decision_id, "quarantined", detail="non-broker tool proposed")
-            raise ValueError("CEO proposed a non-broker tool")
+                self.durable_store.transition(decision_id, "rejected", detail="provider call failed")
+            raise
+        try:
+            if not isinstance(response, dict) or not isinstance(response.get("decision", {}), dict):
+                raise ValueError("invalid shadow response envelope")
+            would_call = response.get("tool_call")
+            if would_call is not None and (
+                not isinstance(would_call, dict) or not self.tool_schemas
+                or would_call.get("schema") not in self.tool_schemas
+            ):
+                raise ValueError("CEO proposed a forbidden tool")
+            if response_validator is not None:
+                response_validator(response)
+        except Exception:
+            if self.durable_store is not None:
+                self.durable_store.transition(decision_id, "quarantined", detail="response validation failed")
+            raise
         decision = ShadowDecision(
             decision_id=decision_id,
             model_family=self.model_family,

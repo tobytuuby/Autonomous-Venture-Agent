@@ -1,0 +1,221 @@
+[
+  {
+    "decision": {
+      "decision_id": "43030dd5ee303a83",
+      "scenario_id": "venture-exercise-v2-evaluation",
+      "configuration_fingerprint": "ca68ba3a43a08ce459d5425858213f149c7853dcf49594a74ddc074c6296a470",
+      "state": "completed",
+      "response_json": "{\"ceo_prompt_hash\":\"0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee\",\"created_at\":\"2026-10-26T07:19:56.547393+00:00\",\"decision\":{\"content\":\"{\\\"comparisons\\\":[{\\\"idea_id\\\":\\\"restock\\\",\\\"rationale\\\":\\\"Clear narrow workflow and highest assumed surplus; inexpensive printable MVP.\\\",\\\"risk\\\":\\\"Studios may already use free reminders; willingness to pay is untested.\\\"},{\\\"idea_id\\\":\\\"handoff\\\",\\\"rationale\\\":\\\"Reusable digital product with low assumed setup cost, but a crowded template niche.\\\",\\\"risk\\\":\\\"Free design-platform templates could eliminate demand.\\\"},{\\\"idea_id\\\":\\\"menu\\\",\\\"rationale\\\":\\\"Higher hypothetical price, but fewer buyers and more support complexity.\\\",\\\"risk\\\":\\\"Incorrect ingredient assumptions could undermine usefulness.\\\"},{\\\"idea_id\\\":\\\"onboarding\\\",\\\"rationale\\\":\\\"Useful workflow but negative assumed surplus in this scenario.\\\",\\\"risk\\\":\\\"Volunteer organizations may lack purchasing budgets.\\\"},{\\\"idea_id\\\":\\\"returns\\\",\\\"rationale\\\":\\\"Simple prototype but negative assumed surplus and strong spreadsheet substitutes.\\\",\\\"risk\\\":\\\"Existing commerce tools may already solve returns tracking.\\\"}],\\\"selected_id\\\":\\\"restock\\\",\\\"selection_reason\\\":\\\"Prioritize a narrow studio workflow for synthetic research; assumed $50 surplus is not validated demand.\\\"}\"},\"decision_id\":\"43030dd5ee303a83\",\"executed\":false,\"model_family\":\"handcrafted-fixture\",\"opportunity_id\":\"venture-exercise-v2-evaluation\",\"side_effect\":false,\"would_call\":null}",
+      "created_at": "2026-10-26T07:19:56.539419+00:00",
+      "updated_at": "2026-10-26T07:19:56.551819+00:00",
+      "response": {
+        "ceo_prompt_hash": "0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee",
+        "created_at": "2026-10-26T07:19:56.547393+00:00",
+        "decision": {
+          "content": "{\"comparisons\":[{\"idea_id\":\"restock\",\"rationale\":\"Clear narrow workflow and highest assumed surplus; inexpensive printable MVP.\",\"risk\":\"Studios may already use free reminders; willingness to pay is untested.\"},{\"idea_id\":\"handoff\",\"rationale\":\"Reusable digital product with low assumed setup cost, but a crowded template niche.\",\"risk\":\"Free design-platform templates could eliminate demand.\"},{\"idea_id\":\"menu\",\"rationale\":\"Higher hypothetical price, but fewer buyers and more support complexity.\",\"risk\":\"Incorrect ingredient assumptions could undermine usefulness.\"},{\"idea_id\":\"onboarding\",\"rationale\":\"Useful workflow but negative assumed surplus in this scenario.\",\"risk\":\"Volunteer organizations may lack purchasing budgets.\"},{\"idea_id\":\"returns\",\"rationale\":\"Simple prototype but negative assumed surplus and strong spreadsheet substitutes.\",\"risk\":\"Existing commerce tools may already solve returns tracking.\"}],\"selected_id\":\"restock\",\"selection_reason\":\"Prioritize a narrow studio workflow for synthetic research; assumed $50 surplus is not validated demand.\"}"
+        },
+        "decision_id": "43030dd5ee303a83",
+        "executed": false,
+        "model_family": "handcrafted-fixture",
+        "opportunity_id": "venture-exercise-v2-evaluation",
+        "side_effect": false,
+        "would_call": null
+      }
+    },
+    "events": [
+      {
+        "sequence": 1,
+        "state": "received",
+        "event_json": "{\"kind\":\"decision_received\"}",
+        "previous_hash": "GENESIS",
+        "event_hash": "f52ac341814705c4cb6c6d376025962668bc14bc4120a5b84c7bbb034ab72c73",
+        "created_at": "2026-10-26T07:19:56.539615+00:00",
+        "event": {
+          "kind": "decision_received"
+        }
+      },
+      {
+        "sequence": 2,
+        "state": "dispatched",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "f52ac341814705c4cb6c6d376025962668bc14bc4120a5b84c7bbb034ab72c73",
+        "event_hash": "c4a0246c76b900f6a7db8e54518dbb7729ecc9319ca70f43a3d23a910836217f",
+        "created_at": "2026-10-26T07:19:56.543504+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 3,
+        "state": "response-recorded",
+        "event_json": "{\"detail\":\"redacted response recorded\",\"kind\":\"state_transition\"}",
+        "previous_hash": "c4a0246c76b900f6a7db8e54518dbb7729ecc9319ca70f43a3d23a910836217f",
+        "event_hash": "57116ec8046752adc1910ef63577bf379c969c3549236ca6a54af3f24618525a",
+        "created_at": "2026-10-26T07:19:56.547840+00:00",
+        "event": {
+          "detail": "redacted response recorded",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 4,
+        "state": "completed",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "57116ec8046752adc1910ef63577bf379c969c3549236ca6a54af3f24618525a",
+        "event_hash": "dda93c3692ba43e4b90462a684f1002d3fc76aa1e16e1dceed87f61c7fbabbf4",
+        "created_at": "2026-10-26T07:19:56.551671+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      }
+    ]
+  },
+  {
+    "decision": {
+      "decision_id": "b07e5a02fc6eb5d9",
+      "scenario_id": "venture-exercise-v2-manager",
+      "configuration_fingerprint": "ca68ba3a43a08ce459d5425858213f149c7853dcf49594a74ddc074c6296a470",
+      "state": "completed",
+      "response_json": "{\"ceo_prompt_hash\":\"0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee\",\"created_at\":\"2026-10-26T07:19:56.564096+00:00\",\"decision\":{\"content\":\"{\\\"deliverables\\\":{\\\"landing_page_copy\\\":\\\"Spend less time discovering empty shelves. A weekly restock routine for independent pottery studios: count essentials, flag reorder levels, and prepare your next supply list. Concept copy only; no purchase or signup is enabled.\\\",\\\"offer\\\":\\\"Hypothetical $20 studio restock kit: printable weekly stock sheet, reorder thresholds and a supplier-neutral order checklist. No subscription; no inventory integration.\\\",\\\"validation_experiment\\\":\\\"Draft an offline interview guide about the last missed restock, current workaround and time lost. Future human-authorized research could compare stated need with template use. Hypothetical success criterion: 3 of 5 interviewees report recurring pain; failure: at most 1. No interviews conducted.\\\"},\\\"plan\\\":{\\\"tasks\\\":[{\\\"inputs\\\":{\\\"evidence\\\":[\\\"Hypothetical $20 studio restock kit: printable weekly stock sheet, reorder thresholds and a supplier-neutral order checklist. No subscription; no inventory integration.\\\",\\\"Spend less time discovering empty shelves. A weekly restock routine for independent pottery studios: count essentials, flag reorder levels, and prepare your next supply list. Concept copy only; no purchase or signup is enabled.\\\",\\\"Draft an offline interview guide about the last missed restock, current workaround and time lost. Future human-authorized research could compare stated need with template use. Hypothetical success criterion: 3 of 5 interviewees report recurring pain; failure: at most 1. No interviews conducted.\\\"]},\\\"objective\\\":\\\"Prepare hypothetical business evidence for review.\\\",\\\"task_id\\\":\\\"offer-review\\\",\\\"title\\\":\\\"offer-review\\\",\\\"worker_type\\\":\\\"summarize_evidence\\\"},{\\\"inputs\\\":{\\\"values\\\":[10000,-5000]},\\\"objective\\\":\\\"Prepare hypothetical business evidence for review.\\\",\\\"task_id\\\":\\\"margin-check\\\",\\\"title\\\":\\\"margin-check\\\",\\\"worker_type\\\":\\\"calculate\\\"},{\\\"inputs\\\":{\\\"checks\\\":[\\\"Verify recurring restock pain before claiming demand.\\\",\\\"Test willingness to pay against free checklist alternatives.\\\",\\\"Review printable usability and accessibility offline.\\\",\\\"Require separate authorization before any contact or publication.\\\"]},\\\"objective\\\":\\\"Prepare hypothetical business evidence for review.\\\",\\\"task_id\\\":\\\"validation-check\\\",\\\"title\\\":\\\"validation-check\\\",\\\"worker_type\\\":\\\"checklist\\\"}]}}\"},\"decision_id\":\"b07e5a02fc6eb5d9\",\"executed\":false,\"model_family\":\"handcrafted-fixture\",\"opportunity_id\":\"venture-exercise-v2-manager\",\"side_effect\":false,\"would_call\":null}",
+      "created_at": "2026-10-26T07:19:56.555695+00:00",
+      "updated_at": "2026-10-26T07:19:56.569139+00:00",
+      "response": {
+        "ceo_prompt_hash": "0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee",
+        "created_at": "2026-10-26T07:19:56.564096+00:00",
+        "decision": {
+          "content": "{\"deliverables\":{\"landing_page_copy\":\"Spend less time discovering empty shelves. A weekly restock routine for independent pottery studios: count essentials, flag reorder levels, and prepare your next supply list. Concept copy only; no purchase or signup is enabled.\",\"offer\":\"Hypothetical $20 studio restock kit: printable weekly stock sheet, reorder thresholds and a supplier-neutral order checklist. No subscription; no inventory integration.\",\"validation_experiment\":\"Draft an offline interview guide about the last missed restock, current workaround and time lost. Future human-authorized research could compare stated need with template use. Hypothetical success criterion: 3 of 5 interviewees report recurring pain; failure: at most 1. No interviews conducted.\"},\"plan\":{\"tasks\":[{\"inputs\":{\"evidence\":[\"Hypothetical $20 studio restock kit: printable weekly stock sheet, reorder thresholds and a supplier-neutral order checklist. No subscription; no inventory integration.\",\"Spend less time discovering empty shelves. A weekly restock routine for independent pottery studios: count essentials, flag reorder levels, and prepare your next supply list. Concept copy only; no purchase or signup is enabled.\",\"Draft an offline interview guide about the last missed restock, current workaround and time lost. Future human-authorized research could compare stated need with template use. Hypothetical success criterion: 3 of 5 interviewees report recurring pain; failure: at most 1. No interviews conducted.\"]},\"objective\":\"Prepare hypothetical business evidence for review.\",\"task_id\":\"offer-review\",\"title\":\"offer-review\",\"worker_type\":\"summarize_evidence\"},{\"inputs\":{\"values\":[10000,-5000]},\"objective\":\"Prepare hypothetical business evidence for review.\",\"task_id\":\"margin-check\",\"title\":\"margin-check\",\"worker_type\":\"calculate\"},{\"inputs\":{\"checks\":[\"Verify recurring restock pain before claiming demand.\",\"Test willingness to pay against free checklist alternatives.\",\"Review printable usability and accessibility offline.\",\"Require separate authorization before any contact or publication.\"]},\"objective\":\"Prepare hypothetical business evidence for review.\",\"task_id\":\"validation-check\",\"title\":\"validation-check\",\"worker_type\":\"checklist\"}]}}"
+        },
+        "decision_id": "b07e5a02fc6eb5d9",
+        "executed": false,
+        "model_family": "handcrafted-fixture",
+        "opportunity_id": "venture-exercise-v2-manager",
+        "side_effect": false,
+        "would_call": null
+      }
+    },
+    "events": [
+      {
+        "sequence": 5,
+        "state": "received",
+        "event_json": "{\"kind\":\"decision_received\"}",
+        "previous_hash": "dda93c3692ba43e4b90462a684f1002d3fc76aa1e16e1dceed87f61c7fbabbf4",
+        "event_hash": "ae30a8101bc069425cfd3be12f5efeb69611f96eea4aeb95e9b21c129a947c8b",
+        "created_at": "2026-10-26T07:19:56.555831+00:00",
+        "event": {
+          "kind": "decision_received"
+        }
+      },
+      {
+        "sequence": 6,
+        "state": "dispatched",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "ae30a8101bc069425cfd3be12f5efeb69611f96eea4aeb95e9b21c129a947c8b",
+        "event_hash": "402c6069544070cef044b5c58afe6d7c8bb089dcbd9317b82ee1b47cfe5e4b40",
+        "created_at": "2026-10-26T07:19:56.559584+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 7,
+        "state": "response-recorded",
+        "event_json": "{\"detail\":\"redacted response recorded\",\"kind\":\"state_transition\"}",
+        "previous_hash": "402c6069544070cef044b5c58afe6d7c8bb089dcbd9317b82ee1b47cfe5e4b40",
+        "event_hash": "fb5fbd8421232f4aa8dbef1b1a3342fe3e6b7c03f6194ea08c43afd6d8e71224",
+        "created_at": "2026-10-26T07:19:56.564488+00:00",
+        "event": {
+          "detail": "redacted response recorded",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 8,
+        "state": "completed",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "fb5fbd8421232f4aa8dbef1b1a3342fe3e6b7c03f6194ea08c43afd6d8e71224",
+        "event_hash": "3f25f2ace406cd24e643713b8342226389672f2645fb32248f23f715811692be",
+        "created_at": "2026-10-26T07:19:56.568989+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      }
+    ]
+  },
+  {
+    "decision": {
+      "decision_id": "36aee65175545190",
+      "scenario_id": "venture-exercise-v2-review",
+      "configuration_fingerprint": "ca68ba3a43a08ce459d5425858213f149c7853dcf49594a74ddc074c6296a470",
+      "state": "completed",
+      "response_json": "{\"ceo_prompt_hash\":\"0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee\",\"created_at\":\"2026-10-26T07:19:56.581690+00:00\",\"decision\":{\"content\":\"{\\\"aggregate_hash\\\":\\\"ec91f9cb6ab313699f58d9858feff010701813ba70f32a1d6e3c8655c3a19000\\\",\\\"concern\\\":\\\"No observed demand, conversion rate or willingness to pay exists. Labor and acquisition costs may erase the assumed margin. No funding or launch decision has been executed.\\\",\\\"disposition\\\":\\\"CONTINUE_SYNTHETIC_RESEARCH\\\",\\\"summary\\\":\\\"The hypothetical kit has a narrow customer and a bounded prototype. Five assumed sales at $20 less $50 costs yield $50 scenario surplus; break-even is three sales. Retain the concept for offline research only.\\\"}\"},\"decision_id\":\"36aee65175545190\",\"executed\":false,\"model_family\":\"handcrafted-fixture\",\"opportunity_id\":\"venture-exercise-v2-review\",\"side_effect\":false,\"would_call\":null}",
+      "created_at": "2026-10-26T07:19:56.573857+00:00",
+      "updated_at": "2026-10-26T07:19:56.585829+00:00",
+      "response": {
+        "ceo_prompt_hash": "0de920597b8e145861c7e5f6d554c33f0c22fd1af2224d384c548eeae9820eee",
+        "created_at": "2026-10-26T07:19:56.581690+00:00",
+        "decision": {
+          "content": "{\"aggregate_hash\":\"ec91f9cb6ab313699f58d9858feff010701813ba70f32a1d6e3c8655c3a19000\",\"concern\":\"No observed demand, conversion rate or willingness to pay exists. Labor and acquisition costs may erase the assumed margin. No funding or launch decision has been executed.\",\"disposition\":\"CONTINUE_SYNTHETIC_RESEARCH\",\"summary\":\"The hypothetical kit has a narrow customer and a bounded prototype. Five assumed sales at $20 less $50 costs yield $50 scenario surplus; break-even is three sales. Retain the concept for offline research only.\"}"
+        },
+        "decision_id": "36aee65175545190",
+        "executed": false,
+        "model_family": "handcrafted-fixture",
+        "opportunity_id": "venture-exercise-v2-review",
+        "side_effect": false,
+        "would_call": null
+      }
+    },
+    "events": [
+      {
+        "sequence": 9,
+        "state": "received",
+        "event_json": "{\"kind\":\"decision_received\"}",
+        "previous_hash": "3f25f2ace406cd24e643713b8342226389672f2645fb32248f23f715811692be",
+        "event_hash": "d263314e139aac9060007de1cbad8caa99d7c146fb56692c40c69c12794f41ca",
+        "created_at": "2026-10-26T07:19:56.574023+00:00",
+        "event": {
+          "kind": "decision_received"
+        }
+      },
+      {
+        "sequence": 10,
+        "state": "dispatched",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "d263314e139aac9060007de1cbad8caa99d7c146fb56692c40c69c12794f41ca",
+        "event_hash": "370573f9e0afeba32673e7c89bbaa880e586675be64903e72d85b5ac13948098",
+        "created_at": "2026-10-26T07:19:56.578033+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 11,
+        "state": "response-recorded",
+        "event_json": "{\"detail\":\"redacted response recorded\",\"kind\":\"state_transition\"}",
+        "previous_hash": "370573f9e0afeba32673e7c89bbaa880e586675be64903e72d85b5ac13948098",
+        "event_hash": "46ba39268b786120fbcee4ad7fecbc4f8ae1223afb61f5ef617b2c5ebc271ee0",
+        "created_at": "2026-10-26T07:19:56.582039+00:00",
+        "event": {
+          "detail": "redacted response recorded",
+          "kind": "state_transition"
+        }
+      },
+      {
+        "sequence": 12,
+        "state": "completed",
+        "event_json": "{\"detail\":\"\",\"kind\":\"state_transition\"}",
+        "previous_hash": "46ba39268b786120fbcee4ad7fecbc4f8ae1223afb61f5ef617b2c5ebc271ee0",
+        "event_hash": "049b2d22226431054b6fd6534bb5d2282a38a6fe315f921b6bce3b077a1c5485",
+        "created_at": "2026-10-26T07:19:56.585681+00:00",
+        "event": {
+          "detail": "",
+          "kind": "state_transition"
+        }
+      }
+    ]
+  }
+]

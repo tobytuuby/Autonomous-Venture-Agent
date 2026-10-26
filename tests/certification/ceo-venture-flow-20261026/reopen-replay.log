@@ -1,0 +1,10 @@
+fixture reports identical=True
+reopened registry equals report=True
+ledger entries=1
+available_to_spend_cents=0
+durable decisions completed=3
+durable event chain verified=True
+registry response/event references verified=True
+actual inference calls=0
+provider configuration keys present=False (presence only; no values inspected)
+exit_code=0

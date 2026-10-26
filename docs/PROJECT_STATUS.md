@@ -73,3 +73,13 @@ All nine live authorities and all external effects remain denied in this work. T
 ## Advisory venture exercise — 2026-10-26
 
 A separate bounded shadow exercise now supports the existing configured model provider for five-idea evaluation, manager work-packet planning and CEO review. Without provider configuration it uses explicitly labeled fixtures; the recorded exercise made zero inference calls. Local worker outputs and a nonspendable synthetic ledger persist for review. Final focused checks passed 36/36 and full regression 640/640. The initially untracked store implementation and tests were integrated without content changes. This milestone changes no phase status or authority boundary. See [implementation and evidence](reports/advisory-venture-exercise-v1.0.md).
+
+## Existing Shadow CEO integration — 2026-10-26
+
+The opt-in `venture_exercise --durable-ceo` path now uses the existing CEOAgent
+and DurableDecisionStore for candidate evaluation, manager planning and advisory
+review. The synthetic registry persists decision/worker lineage and replay is
+idempotent. Focused checks passed 51/51; full regression 652/652; compileall and
+diff checks passed. Evidence is local synthetic execution only: provider settings
+were absent, and no actual inference or external action occurred. No phase or
+authority boundary changes. See [evidence and limitations](reports/ceo-venture-flow-v1.0.md).
