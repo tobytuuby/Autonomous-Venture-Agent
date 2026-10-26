@@ -1,0 +1,15 @@
+{
+  "agents/ceo/venture_exercise.py": "007aba6d939354efa040b87023df31cc6605474a1fe356b376a0b2d06da1c776",
+  "docs/PROJECT_STATUS.md": "7dff584ed31f496abfab761b9314ee6af5e6b1c8245b59dc6a00c023db36eed1",
+  "docs/reports/advisory-venture-exercise-v1.0.md": "8cf389f645334fb312135a10ff4addac52b3dbaf36c1ab99ab0574ea243094e3",
+  "kernel/synthetic_venture_store.py": "95d40491a2c15b17a464ea84e5fe075ce78544d853969d910e3a7daae684057d",
+  "tests/certification/venture-exercise-20261026/compilation.log": "bde294368bfed77c2cddf8cec271d398aee9cdbab3b26e1059281bd33adb0120",
+  "tests/certification/venture-exercise-20261026/execution.json": "0f7b0ce675676b028e3ac63d60625598c49c9d25878db7ad59ee7affadd16e2c",
+  "tests/certification/venture-exercise-20261026/exercise-run.log": "aaa2ee3e9d6cf2ae72408afebb3fb54c33d8b73bf58f5db9afe0e6e3a8ee7c8b",
+  "tests/certification/venture-exercise-20261026/exercise.json": "729d65a2afd12abaf6c5596c48ad74fa29d5ebe6104f798295cf2695e2438dc6",
+  "tests/certification/venture-exercise-20261026/focused.log": "119c6800aab13d3786b62636bceacb05fa018f0ba76b1196314798233c780cb7",
+  "tests/certification/venture-exercise-20261026/ledger-reopen.log": "6fc09cdf700e0cb548abf93fe23291bd7582e7644cd8882f38fb54c46669cb4f",
+  "tests/certification/venture-exercise-20261026/regression.log": "2ef0b01fcfeffc71a481823f7553335858c1f85042df2cf718f80b71b12ad7d7",
+  "tests/test_synthetic_venture_store.py": "59371c4332ff2ca2538e431460d63c6ba381c5875227207299d722aa52cdde3b",
+  "tests/test_venture_exercise.py": "4b0d94b843e6758699e0bf15f0c05b482238ebaeb0301b3652fa9d9408326a49"
+}

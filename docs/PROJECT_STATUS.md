@@ -69,3 +69,7 @@ P0 through P11 are complete for their defined scopes. P8.4 closes synthetic pilo
 ## Global authority boundary
 
 All nine live authorities and all external effects remain denied in this work. The P10 evaluator is a synthetic record processor, and P11 is a synthetic plan validator only. No P10 or P11 result grants production, go-live, CEO, worker, venture, credential, provider, customer, capital, payment, broker, deployment, network, or external authority.
+
+## Advisory venture exercise — 2026-10-26
+
+A separate bounded shadow exercise now supports the existing configured model provider for five-idea evaluation, manager work-packet planning and CEO review. Without provider configuration it uses explicitly labeled fixtures; the recorded exercise made zero inference calls. Local worker outputs and a nonspendable synthetic ledger persist for review. Final focused checks passed 36/36 and full regression 640/640. The initially untracked store implementation and tests were integrated without content changes. This milestone changes no phase status or authority boundary. See [implementation and evidence](reports/advisory-venture-exercise-v1.0.md).

@@ -1,0 +1,54 @@
+{
+  "baseline": "f8b98bec6548d17dc90aabd065af80a4b97c664d",
+  "bridge": "venture-control",
+  "processes": [
+    {
+      "id": "proc_mvovs2k5_yxcbal",
+      "workspace": "venture-control",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "python3 -m agents.ceo.venture_exercise > artifacts/venture-exercise-run.log 2>&1",
+      "pid": 316463,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvovs2k5_yxcbal.log",
+      "status": "exited",
+      "startedAt": "2026-10-26T06:33:48.533Z",
+      "updatedAt": "2026-10-26T06:37:06.948Z"
+    },
+    {
+      "id": "proc_mvovu1ze_4zahp8",
+      "workspace": "venture-control",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "python3 -m unittest tests.test_venture_exercise tests.test_synthetic_orchestration tests.test_synthetic_venture_store tests.test_ceo_provider tests.test_ceo_shadow -v > artifacts/venture-focused.log 2>&1; test_status=$?; printf 'exit_code=%s\\n' \"$test_status\" >> artifacts/venture-focused.log; exit \"$test_status\"",
+      "pid": 318245,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvovu1ze_4zahp8.log",
+      "status": "exited",
+      "startedAt": "2026-10-26T06:35:21.098Z",
+      "updatedAt": "2026-10-26T06:37:06.949Z"
+    },
+    {
+      "id": "proc_mvovu29o_a2clzl",
+      "workspace": "venture-control",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "python3 -m unittest discover -s tests -v > artifacts/venture-regression.log 2>&1; test_status=$?; printf 'exit_code=%s\\n' \"$test_status\" >> artifacts/venture-regression.log; exit \"$test_status\"",
+      "pid": 318248,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvovu29o_a2clzl.log",
+      "status": "exited",
+      "startedAt": "2026-10-26T06:35:21.468Z",
+      "updatedAt": "2026-10-26T06:37:06.949Z"
+    },
+    {
+      "id": "proc_mvovu9o6_pk3021",
+      "workspace": "venture-control",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "python3 -m compileall -q agents broker kernel tests > artifacts/venture-compilation.log 2>&1; compile_status=$?; printf 'exit_code=%s\\n' \"$compile_status\" >> artifacts/venture-compilation.log; exit \"$compile_status\"",
+      "pid": 319215,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvovu9o6_pk3021.log",
+      "status": "exited",
+      "startedAt": "2026-10-26T06:35:31.062Z",
+      "updatedAt": "2026-10-26T06:37:06.949Z"
+    }
+  ],
+  "classification": "direct_local_synthetic_fixture_execution; provider_transport_test_double_only",
+  "actual_model_inference_calls": 0,
+  "independent_acceptance": false,
+  "adv_universe": 49
+}
