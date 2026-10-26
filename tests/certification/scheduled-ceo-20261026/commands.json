@@ -1,0 +1,52 @@
+[
+  {
+    "command": "python3 -m unittest tests.test_scheduled_ceo_exercise -v",
+    "exit_code": 0,
+    "result": "10 tests OK",
+    "raw": "focused.log",
+    "bridge_process_id": "proc_mvp0btf4_pneidi",
+    "pid": 382871
+  },
+  {
+    "command": "python3 -m unittest discover -s tests -v",
+    "exit_code": 0,
+    "result": "677 tests OK",
+    "raw": "regression.log",
+    "bridge_process_id": "proc_mvp0cj3c_y99nm4",
+    "pid": 383066
+  },
+  {
+    "command": "python3 -m py_compile agents/ceo/scheduled_exercise.py tests/test_scheduled_ceo_exercise.py",
+    "exit_code": 0
+  },
+  {
+    "command": "systemd-analyze verify infrastructure/systemd/venture-ceo-exercise.service infrastructure/systemd/venture-ceo-exercise.timer",
+    "exit_code": 0,
+    "raw": "units-verify.log"
+  },
+  {
+    "command": "sudo -n systemctl start venture-ceo-exercise.service",
+    "exit_code": 0,
+    "result": "REPLAYED; zero inference requests",
+    "raw": "service.log",
+    "bridge_process_id": "proc_mvp0d3mb_92wds5",
+    "pid": 384270
+  },
+  {
+    "command": "sudo -n systemctl enable --now venture-ceo-exercise.timer && sudo -n systemctl start venture-ceo-exercise.service",
+    "exit_code": 0,
+    "result": "timer enabled active; second replay zero inference",
+    "raw": "service.log",
+    "bridge_process_id": "proc_mvp0emaj_yqobk1",
+    "pid": 385217
+  },
+  {
+    "command": "sha256sum -c artifacts/scheduled-ceo-original.sha256",
+    "exit_code": 0,
+    "raw": "originals-check.log"
+  },
+  {
+    "command": "git diff --check",
+    "exit_code": 0
+  }
+]
