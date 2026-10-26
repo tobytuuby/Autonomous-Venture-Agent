@@ -1,0 +1,24 @@
+FragmentPath=/etc/systemd/system/venture-ceo-exercise.service
+TimeoutStartUSec=3min
+Result=success
+ExecMainStatus=0
+UMask=0077
+User=venture-ceo
+Group=venture-ceo
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo
+ProtectHome=read-only
+ProtectSystem=strict
+NoNewPrivileges=yes
+ActiveState=active
+SubState=waiting
+FragmentPath=/etc/systemd/system/venture-ceo-exercise.timer
+UnitFileState=enabled
+NextElapseUSecRealtime=Mon 2026-10-26 09:00:37 UTC
+Oct 26 08:42:09 venture-control systemd[1]: Starting venture-ceo-exercise.service - Bounded provider-backed advisory CEO workflow and durable replay...
+Oct 26 08:42:09 venture-control python3[384459]: {"ai_inference_independently_verified":false,"artifacts":["workflow.sqlite","workflow.decisions.sqlite","workflow.decisions.jsonl","report.json","attempt.json","status.json"],"exercise_status":"ADVISORY_REVIEW_RECORDED","external_action_count":0,"finished_at":"2026-10-26T08:42:09.248709+00:00","inference_requests_this_tick":0,"report_sha256":"4c2bbbd8a47131e9fa184fb43a86594ace5ac04fc4eb1d534e3ec456b1810ba7","started_at":"2026-10-26T08:42:09.219518+00:00","status":"REPLAYED","workflow":"venture-exercise-v4"}
+Oct 26 08:42:09 venture-control systemd[1]: venture-ceo-exercise.service: Deactivated successfully.
+Oct 26 08:42:09 venture-control systemd[1]: Finished venture-ceo-exercise.service - Bounded provider-backed advisory CEO workflow and durable replay.
+Oct 26 08:43:19 venture-control systemd[1]: Starting venture-ceo-exercise.service - Bounded provider-backed advisory CEO workflow and durable replay...
+Oct 26 08:43:19 venture-control python3[385294]: {"ai_inference_independently_verified":false,"artifacts":["workflow.sqlite","workflow.decisions.sqlite","workflow.decisions.jsonl","report.json","attempt.json","status.json"],"exercise_status":"ADVISORY_REVIEW_RECORDED","external_action_count":0,"finished_at":"2026-10-26T08:43:19.639891+00:00","inference_requests_this_tick":0,"report_sha256":"4c2bbbd8a47131e9fa184fb43a86594ace5ac04fc4eb1d534e3ec456b1810ba7","started_at":"2026-10-26T08:43:19.608414+00:00","status":"REPLAYED","workflow":"venture-exercise-v4"}
+Oct 26 08:43:19 venture-control systemd[1]: venture-ceo-exercise.service: Deactivated successfully.
+Oct 26 08:43:19 venture-control systemd[1]: Finished venture-ceo-exercise.service - Bounded provider-backed advisory CEO workflow and durable replay.

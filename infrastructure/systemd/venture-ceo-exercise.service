@@ -1,0 +1,31 @@
+[Unit]
+Description=Bounded provider-backed advisory CEO workflow and durable replay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=venture-ceo
+Group=venture-ceo
+WorkingDirectory=/home/epsilon/venture-control-workspace
+EnvironmentFile=/etc/venture-ceo.env
+EnvironmentFile=/etc/venture-ceo-shadow.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --gate-file infrastructure/venture-ceo-kernel-gate.runtime.json
+TimeoutStartSec=180
+Restart=no
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo
+CapabilityBoundingSet=
+RestrictSUIDSGID=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+StandardOutput=journal
+StandardError=null

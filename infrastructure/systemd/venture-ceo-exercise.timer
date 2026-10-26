@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly check and replay of one bounded advisory CEO workflow
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=60
+Unit=venture-ceo-exercise.service
+
+[Install]
+WantedBy=timers.target

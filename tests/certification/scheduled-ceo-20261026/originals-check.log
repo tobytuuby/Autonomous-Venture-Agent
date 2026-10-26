@@ -1,0 +1,5 @@
+artifacts/provider-venture-v2.decisions.jsonl: OK
+artifacts/provider-venture-v2.decisions.sqlite: OK
+artifacts/provider-venture-v2.json: OK
+artifacts/provider-venture-v2.sqlite: OK
+infrastructure/venture-ceo-kernel-gate.runtime.json: OK

@@ -83,3 +83,17 @@ idempotent. Focused checks passed 51/51; full regression 652/652; compileall and
 diff checks passed. Evidence is local synthetic execution only: provider settings
 were absent, and no actual inference or external action occurred. No phase or
 authority boundary changes. See [evidence and limitations](reports/ceo-venture-flow-v1.0.md).
+
+## Scheduled advisory workflow — 2026-10-26
+
+The new venture-ceo-exercise oneshot and hourly timer replay one fixed durable
+provider-backed advisory workflow. A persistent attempt guard prevents timer
+retries from issuing another paid sequence; there is no automatic new cycle.
+The VM service successfully replayed copies of the operator's completed run with
+zero new inference requests, and the timer is enabled. Original root-owned
+artifacts and the untracked legitimate gate remain unchanged. Focused checks
+passed 10/10 and full regression 677/677. This verifies local scheduling and
+replay, not independently verified provider inference or fresh certification;
+no live authority or phase status changed. See the
+[operator guide](ceo-scheduled-exercise-v1.0.md) and
+[implementation evidence](reports/ceo-scheduled-exercise-v1.0.md).

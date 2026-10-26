@@ -1,0 +1,15 @@
+test_completed_workflow_replays_across_ticks_without_paid_requests (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_completed_workflow_replays_across_ticks_without_paid_requests) ... ok
+test_configuration_changes_never_dispatch_again (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_configuration_changes_never_dispatch_again) ... ok
+test_crash_marker_and_empty_imported_database_block_inference (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_crash_marker_and_empty_imported_database_block_inference) ... ok
+test_gate_and_missing_provider_fail_closed (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_gate_and_missing_provider_fail_closed) ... ok
+test_overlapping_tick_is_busy_without_dispatch (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_overlapping_tick_is_busy_without_dispatch) ... ok
+test_preexisting_database_without_marker_cannot_dispatch (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_preexisting_database_without_marker_cannot_dispatch) ... ok
+test_shelved_workflow_replays_without_new_call (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_shelved_workflow_replays_without_new_call) ... ok
+test_symlink_paths_and_hardlinked_files_cannot_alias_original_artifacts (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_symlink_paths_and_hardlinked_files_cannot_alias_original_artifacts) ... ok
+test_uncertain_transport_failure_is_never_retried_by_timer (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_uncertain_transport_failure_is_never_retried_by_timer) ... ok
+test_unchanged_state_report_includes_artifacts_and_timestamps (tests.test_scheduled_ceo_exercise.ScheduledExerciseTests.test_unchanged_state_report_includes_artifacts_and_timestamps) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.735s
+
+OK
