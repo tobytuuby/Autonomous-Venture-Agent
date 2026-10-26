@@ -321,7 +321,7 @@ class AgentRuntimeTests(unittest.TestCase):
 
                 def respond(provider, request, schemas):
                     self.assertIs(provider, adapter)
-                    self.assertEqual(provider.timeout, 120.0)
+                    self.assertEqual(provider.timeout, 240.0)
                     self.assertEqual(schemas, ())
                     self.assertEqual(request["opportunity"]["task_id"], identity)
                     # Synthetic trace only; the adapter's network method is replaced.
@@ -337,7 +337,7 @@ class AgentRuntimeTests(unittest.TestCase):
                 factory.assert_called_once()
                 self.assertTrue(factory.call_args.kwargs["required"])
                 invoke.assert_called_once()
-                expected = {**original, "timeout": 120.0,
+                expected = {**original, "timeout": 240.0,
                             "trace_path": self.manager.home / "inference" / identity / "provider-trace.jsonl"}
                 self.assertEqual(adapter.__dict__, expected)
                 self.assertEqual(default_adapter.timeout, 30.0)

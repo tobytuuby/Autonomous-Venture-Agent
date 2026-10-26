@@ -189,7 +189,7 @@ class AgentManager(Manager):
                 provider = configured_provider(env, required=True)
                 if type(provider) is not OpenAICompatibleShadowModel:
                     raise ModelProviderError("approved provider required")
-                provider.timeout = 120.0
+                provider.timeout = 240.0
                 provider.trace_path = folder / "provider-trace.jsonl"
             attempt["provider_invoked"] = True
             self.save("calls", calls)
