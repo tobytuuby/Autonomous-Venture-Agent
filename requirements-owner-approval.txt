@@ -1,0 +1,2 @@
+# Only public-key verification is used in the runtime; no signing keys are loaded.
+cryptography>=3.4

@@ -1,6 +1,12 @@
 # Autonomous Venture Agent — Project Status
 
-## Current status — 2026-09-29
+## Core owner approval change — 2026-10-26
+
+Every new venture now requires human owner discussion and explicit durable approval tied to the exact proposal/version and authorized scope before CEO greenlight, funding, launch or operational manager execution. CEO research and proposal preparation remain allowed. After approval, managers may autonomously delegate within approved bounds; all live authority checks remain denied. Venture #1 is an unapproved pilot, with no grandfathered funding or launch.
+
+The existing local venture store now includes a signed owner-receipt verifier and durable admission gate. Synthetic rehearsal remains nonspendable and non-authorizing. No owner key has been enrolled, no real venture approval has been created, and no production integration is claimed. Current references: [binding policy](owner-venture-approval-policy-v1.0.md), [roadmap v2.3](../project-phase-plan-v2.3.md), operating policy v1.1, platform plan v1.4, finance addendum v1.2 and synthetic orchestration v1.1. Prior versions and certification evidence are preserved. Validation and limitations are recorded in [implementation report](reports/owner-approval-20261026.md).
+
+## Prior status — 2026-09-29
 
 P8.4 is accepted and merged to `main` at `0f8df0f00f15207afdf7bfe74bb466aa3d6dd386`. Its combined P8 focused suite passed 59/59 and full regression passed 453/453. The P8.4 evidence branch remains preserved at `7276c6566af5a21527c8f42c33adb0d9567aace1`.
 
@@ -23,7 +29,8 @@ P0 through P11 are complete for their defined scopes. P8.4 closes synthetic pilo
 - `project-phase-plan-v1.4.md` — previous project-wide phase registry; retained unchanged.
 - `project-phase-plan-v2.1.md` — prior roadmap draft; retained unchanged.
 - `project-phase-plan-v2.2-DRAFT.md` — review draft; retained unchanged.
-- `project-phase-plan-v2.2.md` — approved canonical roadmap through proposed P14.
+- `project-phase-plan-v2.2.md` — prior approved roadmap, retained unchanged.
+- `project-phase-plan-v2.3.md` — current roadmap with mandatory owner venture approval; P12–P14 boundaries unchanged.
 - `docs/reviews/PROJECT-ROADMAP-v2.2-approval.md` — roadmap approval decision record.
 - `phase0-policy-kernel-spec-v11.md` — current P0 governing specification.
 - `phase0-implementation-plan-v3.2.md` — current P0 implementation plan.

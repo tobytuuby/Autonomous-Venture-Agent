@@ -12,6 +12,11 @@ This file is an operational index. Detailed policy requirements remain in the ca
 
 ## Canonical documents
 
+- `docs/owner-venture-approval-policy-v1.0.md` — binding owner discussion and venture approval gate; supersedes prior CEO autonomous approval authority.
+- `project-phase-plan-v2.3.md` — current roadmap amendment; prior phase acceptance unchanged.
+- `docs/venture-operating-policy-v1.1-DRAFT.md`, `docs/venture-to-first-profit-plan-v1.4-DRAFT.md`, `docs/venture-finance-control-and-transaction-visibility-v1.2-DRAFT.md`, and `docs/core-synthetic-orchestration-plan-v1.1.md` — current core policy and plans.
+- Every new venture requires human owner discussion and durable proposal/version/scope approval before greenlight, funding, launch or operational manager execution. Research/proposals may precede approval; managers may autonomously delegate afterward within bounds. Live authority checks remain denied. Venture #1 is an unapproved pilot.
+
 - `phase0-policy-kernel-spec-v11.md` — canonical Phase 0 policy kernel specification.
 - `phase0-implementation-plan-v3.2.md` — current Phase 0 implementation plan.
 - `project-phase-plan-v1.0.md` — canonical project-wide phase map, document topology, phase boundaries, and cross-phase gates.

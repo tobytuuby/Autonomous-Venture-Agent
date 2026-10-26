@@ -8,6 +8,7 @@ from typing import Any, Mapping
 
 from kernel.p6.registry import LIVE_FIELDS, canonical, digest
 from kernel.synthetic_orchestration import OrchestrationDenied, run_synthetic_orchestration
+from kernel.venture_admission import VentureAdmissionRegistry, OwnerApprovalDenied
 
 MAX_SEED_CENTS = 10_000
 
@@ -19,7 +20,7 @@ class SyntheticStoreDenied(ValueError):
 class SyntheticVentureStore:
     """Caller-selected SQLite fixture store. No network or provider integration."""
 
-    def __init__(self, path: str | Path):
+    def __init__(self, path: str | Path, *, owner_public_key: bytes | None = None):
         self.db = sqlite3.connect(str(path))
         self.db.execute("PRAGMA foreign_keys = ON")
         self.db.executescript("""
@@ -42,6 +43,29 @@ class SyntheticVentureStore:
                 entry_hash TEXT NOT NULL
             );
         """)
+
+        self.admission = VentureAdmissionRegistry(self.db, owner_public_key=owner_public_key)
+
+    def admit(self, venture_id: str, *, portfolio_id: str,
+              task_id: str | None = None, **request: Any) -> dict[str, Any]:
+        """Operational admission boundary; synthetic registration never grants admission."""
+        record = self.read(venture_id, portfolio_id=portfolio_id)
+        proposal = self.admission.proposal(venture_id)
+        if proposal["proposal"] != {"flow_hash": digest(canonical(record["flow"])),
+                                    "portfolio_id": portfolio_id}:
+            raise OwnerApprovalDenied("owner proposal differs from registered venture")
+        if (proposal["scope"]["manager_id"] != record["manager_id"]
+                or proposal["scope"]["seed_cents"] > record["seed_allocation_cents"]):
+            raise OwnerApprovalDenied("owner scope exceeds registry bounds")
+        if request.get("action") == "manager_execute":
+            workers = {item["task_id"]: item for item in record["flow"]["worker_results"]}
+            worker = workers.get(task_id)
+            expected_operation = {"summarize_evidence": "research",
+                                  "calculate": "build", "checklist": "review"}
+            if (worker is None or request.get("operation") != expected_operation[
+                    json.loads(worker["artifact"]["content"])["worker_type"]]):
+                raise OwnerApprovalDenied("manager task is outside the approved registered flow")
+        return self.admission.admit(venture_id, task_id=task_id, **request)
 
     def close(self) -> None:
         self.db.close()
@@ -200,6 +224,13 @@ class SyntheticVentureStore:
                 "INSERT INTO ledger(sequence, venture_id, event_type, amount_cents, idempotency_key, previous_hash, entry_hash) VALUES (?,?,?,?,?,?,?)",
                 (sequence, venture_id, "SYNTHETIC_SEED_ALLOCATION", seed_cents,
                  idempotency_key, previous_hash, entry_hash))
+        self.admission.propose({
+            "venture_id": venture_id, "version": 1,
+            "proposal": {"flow_hash": flow_hash, "portfolio_id": portfolio_id},
+            "scope": {"manager_id": flow["manager_assignment"]["manager_id"],
+                      "seed_cents": seed_cents, "operations": ["research", "build", "review"],
+                      "bounds": "Only the exact registered flow; no live actions."},
+        })
         return self.read(venture_id, portfolio_id=portfolio_id)
 
     def verify_ledger(self) -> bool:
@@ -240,6 +271,11 @@ class SyntheticVentureStore:
             "manager_id": flow["manager_assignment"]["manager_id"],
             "seed_allocation_cents": row[3],
             "available_to_spend_cents": 0,
+            "operational_admission": False,
+            "owner_approval_status": (
+                self.admission.status(venture_id) if self.db.execute(
+                    "SELECT 1 FROM owner_proposals WHERE venture_id=?", (venture_id,)).fetchone()
+                else "PENDING"),
             "synthetic_only": True, "effect": "none",
             **{field: False for field in LIVE_FIELDS},
             "flow": flow,
