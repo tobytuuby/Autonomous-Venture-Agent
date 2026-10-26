@@ -15,7 +15,7 @@ from agents.ceo.durable_state import DurableDecisionStore
 from agents.ceo.provider import ModelProviderError
 from agents.ceo.venture_exercise import SYSTEM, exact, strict_json, text
 from kernel.p6.registry import canonical, digest
-from kernel.synthetic_orchestration import run_synthetic_orchestration
+from kernel.synthetic_orchestration import _envelope, run_synthetic_orchestration
 
 ASSIGNMENT = {"title": "nonempty text <=200",
               "objective": "nonempty text <=500"}
@@ -96,7 +96,9 @@ def advance(state, configured, prior, cycle=None):
         if db.execute("SELECT 1 FROM cycles WHERE status != 'COMPLETED'").fetchone():
             return 4, {"status": "QUEUE_BLOCKED", "inference_requests_this_tick": 0}
         if db.execute("SELECT 1 FROM cycles WHERE id=?", (cycle,)).fetchone():
-            return 0, {"status": "QUEUE_REPLAYED", "inference_requests_this_tick": 0}
+            pending = db.execute("SELECT id FROM items WHERE status='QUEUED'").fetchone()
+            return 0, {"status": "QUEUE_REPLAYED", "inference_requests_this_tick": 0,
+                       "cycle_id": cycle, "queued_item_id": pending[0] if pending else None}
         decisions = DurableDecisionStore(state / "queue.decisions.sqlite")
         if not decisions.verify_chain():
             raise ValueError("invalid queue decision chain")
@@ -185,10 +187,9 @@ def advance(state, configured, prior, cycle=None):
                 next_result = role("queue_proposal", {"prior_completed_result": prior},
                                    NEXT, lambda value: validate_next(value, seen))
 
-        result = dict(next_result, flow=flow, decision_ids=evidence,
-                      source="configured_provider_response_not_independently_verified",
-                      ai_inference_independently_verified=False,
-                      external_action_count=0)
+        result = _envelope(**next_result, flow=flow, decision_ids=evidence,
+                           source="configured_provider_response_not_independently_verified",
+                           ai_inference_independently_verified=False)
         # Completion, successor insertion, and cycle acknowledgement share one commit.
         with db:
             if work_key:

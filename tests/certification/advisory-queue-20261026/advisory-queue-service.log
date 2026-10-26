@@ -1,0 +1,4 @@
+exit_code=0
+Result=success
+ExecMainStatus=0
+{"ai_inference_independently_verified":false,"artifacts":["workflow.sqlite","workflow.decisions.sqlite","workflow.decisions.jsonl","report.json","attempt.json","status.json","queue.started.json","queue.sqlite","queue.decisions.sqlite","queue.decisions.jsonl"],"completed_item_id":null,"cycle_id":"2026-10-26T08","exercise_status":"ADVISORY_REVIEW_RECORDED","external_action_count":0,"finished_at":"2026-10-26T08:50:39.177258+00:00","inference_requests_this_tick":1,"queued_item_id":"advisory-10a5549d44d11b7a7894f860","report_sha256":"4c2bbbd8a47131e9fa184fb43a86594ace5ac04fc4eb1d534e3ec456b1810ba7","started_at":"2026-10-26T08:50:32.095914+00:00","status":"QUEUE_ADVANCED","workflow":"venture-exercise-v4"}
