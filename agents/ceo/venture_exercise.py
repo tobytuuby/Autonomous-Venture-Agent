@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 
-from agents.ceo.agent import CEOAgent
+from agents.ceo.agent import CEOAgent, ResponseValidationError
 from agents.ceo.durable_state import DurableDecisionStore
 from agents.ceo.gates import CertificationGateError, require_pre_model_gate
 from agents.ceo.provider import ModelProviderError, OpenAICompatibleShadowModel
@@ -62,13 +62,16 @@ SCHEMAS = {
                          "landing_page_copy": "nonempty text <=600",
                          "validation_experiment": "nonempty text <=600"},
         "plan": {"tasks": [
-            {"task_id": "bounded unique ID", "worker_type": "summarize_evidence",
+            {"task_id": "unique ASCII ID matching [A-Za-z0-9][A-Za-z0-9_.-]{0,63}", "worker_type": "summarize_evidence",
              "title": "text <=200", "objective": "text <=500",
-             "inputs": {"evidence": ["the three deliverable texts in contract order"]}},
-            {"task_id": "bounded unique ID", "worker_type": "calculate",
+             "inputs": {"evidence": [
+                 "Copy deliverables.offer verbatim as this first string",
+                 "Copy deliverables.landing_page_copy verbatim as this second string",
+                 "Copy deliverables.validation_experiment verbatim as this third string"]}},
+            {"task_id": "unique ASCII ID matching [A-Za-z0-9][A-Za-z0-9_.-]{0,63}", "worker_type": "calculate",
              "title": "text <=200", "objective": "text <=500",
              "inputs": {"values": ["projected revenue cents", "negative cost cents"]}},
-            {"task_id": "bounded unique ID", "worker_type": "checklist",
+            {"task_id": "unique ASCII ID matching [A-Za-z0-9][A-Za-z0-9_.-]{0,63}", "worker_type": "checklist",
              "title": "text <=200", "objective": "text <=500",
              "inputs": {"checks": ["1..10 unverified research checks, text <=300"]}},
         ]},
@@ -89,8 +92,31 @@ SYSTEM = (
 )
 
 
-def denied(message):
-    raise OrchestrationDenied("ADVISORY_RESPONSE_DENIED", message)
+def denied(message, code="ADVISORY_RESPONSE_DENIED"):
+    raise OrchestrationDenied(code, message)
+
+
+def response_contract(stage, context):
+    """Bind deterministic amounts to this request; never alter model output."""
+    contract = copy.deepcopy(SCHEMAS[stage])
+    if stage == "manager":
+        c = context["candidate"]
+        contract["plan"]["tasks"][1]["inputs"]["values"] = [
+            c["price_cents"] * c["units"], -c["cost_cents"]]
+    return contract
+
+
+MANAGER_GUIDANCE = (
+    "Return exactly the two top-level fields deliverables and plan. "
+    "Write the three deliverables first, then copy their complete strings verbatim "
+    "into tasks[0].inputs.evidence in offer, landing_page_copy, validation_experiment order. "
+    "Do not use field names, references, placeholders, summaries or objects as evidence. "
+    "JSON key order does not define evidence order. "
+    "Return exactly three tasks in the supplied worker order with unique bounded IDs. "
+    "Copy tasks[1].inputs.values from response_contract as JSON numbers in integer cents; "
+    "do not return expressions, dollar amounts, strings or the net surplus. "
+    "Checklist items describe unverified offline research only. No extra fields or tools."
+)
 
 
 def exact(value, keys):
@@ -105,23 +131,23 @@ def text(value):
 
 def strict_json(raw):
     if not isinstance(raw, str) or len(raw.encode()) > 16000:
-        denied("response must be bounded JSON text")
+        denied("response must be bounded JSON text", "JSON_INVALID")
 
     def pairs(items):
         result = {}
         for key, value in items:
             if key in result:
-                denied("duplicate JSON key")
+                denied("duplicate JSON key", "JSON_INVALID")
             result[key] = value
         return result
 
     def invalid(_):
-        denied("nonfinite JSON number")
+        denied("nonfinite JSON number", "JSON_INVALID")
 
     try:
         return json.loads(raw, object_pairs_hook=pairs, parse_constant=invalid)
     except (ValueError, RecursionError) as exc:
-        raise OrchestrationDenied("ADVISORY_RESPONSE_DENIED", "invalid JSON response") from exc
+        raise OrchestrationDenied("JSON_INVALID", "invalid JSON response") from exc
 
 
 def fixture(stage, context):
@@ -214,10 +240,10 @@ def validate_manager(manager, c):
         denied("worker types and order are fixed")
     if tasks[0].get("inputs") != {"evidence": [manager["deliverables"][key] for key in
                                              ("offer", "landing_page_copy", "validation_experiment")]}:
-        denied("evidence worker must carry the validated deliverables")
+        denied("evidence worker must carry the validated deliverables", "MANAGER_EVIDENCE_MISMATCH")
     values = tasks[1].get("inputs")
     if values != {"values": [revenue, -c["cost_cents"]]}:
-        denied("arithmetic worker must use supplied scenario amounts")
+        denied("arithmetic worker must use supplied scenario amounts", "MANAGER_ARITHMETIC_MISMATCH")
     proposal = {"venture_id": "exercise-" + c["idea_id"], "title": c["title"],
                 "problem": c["problem"], "hypothesis": c["hypothesis"]}
     flow = run_synthetic_orchestration(ceo_proposal=proposal, manager_plan=manager["plan"])
@@ -261,7 +287,9 @@ def run_exercise(store, provider=None, *, ceo_agent=None):
     def role(stage, context):
         nonlocal model_calls
         request = {"system": SYSTEM, "opportunity": {
-            "stage": stage, "response_contract": SCHEMAS[stage], "context": context}}
+            "stage": stage, "response_contract": response_contract(stage, context), "context": context}}
+        if stage == "manager":
+            request["opportunity"]["response_guidance"] = MANAGER_GUIDANCE
         lineage = {}
         if ceo_agent is not None:
             request["opportunity"].update(
@@ -274,8 +302,14 @@ def run_exercise(store, provider=None, *, ceo_agent=None):
                 if raw["tool_call"] is not None:
                     denied("model tool calls are forbidden")
                 exact(raw["decision"], ("content",))
-                parsed = strict_json(raw["decision"]["content"])
-                validate_stage(stage, parsed, context)
+                try:
+                    parsed = strict_json(raw["decision"]["content"])
+                    validate_stage(stage, parsed, context)
+                except OrchestrationDenied as exc:
+                    reason = exc.code
+                    if reason not in ResponseValidationError.REASONS:
+                        reason = "MANAGER_PACKETS_INVALID" if stage == "manager" else "RESPONSE_INVALID"
+                    raise ResponseValidationError(reason) from None
             identity = digest(json.dumps(request["opportunity"], sort_keys=True))[:16]
             try:
                 previous = ceo_agent.durable_store.get(identity)
@@ -408,7 +442,7 @@ def main():
         local_model.exercise_source = "handcrafted_fixture_no_inference"
         agent = CEOAgent(provider if provider is not None else local_model, SYSTEM,
                          database.with_suffix(".decisions.jsonl"), durable_store=decisions,
-                         advisory_only=True, runner_version="venture-exercise-v3")
+                         advisory_only=True, runner_version="venture-exercise-v4")
         try:
             with SyntheticVentureStore(database) as store:
                 result = run_exercise(store, ceo_agent=agent)
@@ -433,6 +467,9 @@ def cli():
     except ModelProviderError:
         print("CEO_PROVIDER_DENIED: check configuration or transport; no fixture fallback")
         return 2
+    except ResponseValidationError as exc:
+        print("CEO_RESPONSE_DENIED: " + exc.reason_code + "; quarantine is terminal; use a fresh database")
+        return 4
     except (ValueError, OSError):
         print("CEO_EXERCISE_DENIED: inspect local paths and durable decision state")
         return 4

@@ -20,6 +20,19 @@ CEO_TOOL_SCHEMAS = (
 FORBIDDEN_TOOL_NAMES = frozenset({"shell", "browser", "file_read", "file_write", "exec", "web_search"})
 
 
+class ResponseValidationError(ValueError):
+    """Only trusted, bounded reason codes may reach durable or operator logs."""
+
+    REASONS = frozenset({
+        "RESPONSE_INVALID", "JSON_INVALID", "MANAGER_EVIDENCE_MISMATCH",
+        "MANAGER_ARITHMETIC_MISMATCH", "MANAGER_PACKETS_INVALID",
+    })
+
+    def __init__(self, reason_code):
+        self.reason_code = reason_code if reason_code in self.REASONS else "RESPONSE_INVALID"
+        super().__init__(self.reason_code)
+
+
 @dataclass(frozen=True)
 class ShadowDecision:
     decision_id: str
@@ -133,9 +146,11 @@ class CEOAgent:
                 raise ValueError("CEO proposed a forbidden tool")
             if response_validator is not None:
                 response_validator(response)
-        except Exception:
+        except Exception as exc:
             if self.durable_store is not None:
-                self.durable_store.transition(decision_id, "quarantined", detail="response validation failed")
+                detail = (exc.reason_code if isinstance(exc, ResponseValidationError)
+                          else "response validation failed")
+                self.durable_store.transition(decision_id, "quarantined", detail=detail)
             raise
         decision = ShadowDecision(
             decision_id=decision_id,

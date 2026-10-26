@@ -1,0 +1,8 @@
+{
+  "agents/ceo/agent.py": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+  "agents/ceo/venture_exercise.py": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+  "tests/test_ceo_venture_flow.py": "3c81efb1f188b59aca8987e053d2edc29110bd38891a2bef1a1ac453597ea734",
+  "docs/reports/manager-contract-fix-20261026.md": "3b782a12f80c6e0ee5f9711aab1ad5fa416f317094fef3f5d069d5adbfe425da",
+  "tests/certification/manager-contract-fix-20261026/focused.log": "a1c7891aff652d07177adb7251f74b87df1189f8964a913106b8e2db4266d482",
+  "tests/certification/manager-contract-fix-20261026/regression.log": "aa100d8a2af51ff91f07f336d9a5ee5deb50c43384cf5e789b00b38c6be4f0e3"
+}

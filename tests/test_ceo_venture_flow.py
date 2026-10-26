@@ -243,3 +243,117 @@ class CEOVentureFlowTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 run_exercise(self.store, ceo_agent=agent)
         self.assertEqual(self.calls, [])
+
+    def test_manager_contract_binds_each_candidate_amount_without_mutating_template(self):
+        from agents.ceo.venture_exercise import CANDIDATES, SCHEMAS, response_contract
+        original = copy.deepcopy(SCHEMAS)
+        for candidate in CANDIDATES:
+            contract = response_contract('manager', {'candidate': candidate})
+            self.assertEqual(contract['plan']['tasks'][1]['inputs']['values'],
+                             [candidate['price_cents'] * candidate['units'], -candidate['cost_cents']])
+            self.assertEqual(len(contract['plan']['tasks'][0]['inputs']['evidence']), 3)
+        self.assertEqual(SCHEMAS, original)
+
+    def test_natural_manager_text_and_reordered_keys_preserve_exact_provenance(self):
+        def natural(stage, response):
+            if stage != 'manager':
+                return response
+            # Independently authored model-shaped content, not fixture deliverables.
+            deliverables = {
+                'validation_experiment': 'Draft five offline interview questions; no interviews have occurred.',
+                'offer': 'A hypothetical pottery studio supply checklist for $20.',
+                'landing_page_copy': 'Keep glaze and clay on your weekly stock list. Unpublished concept.',
+            }
+            manager = {'plan': {'tasks': [
+                {'task_id': 'summary.1', 'title': 'Review the concept',
+                 'objective': 'Summarize the supplied hypothetical copy.',
+                 'worker_type': 'summarize_evidence', 'inputs': {'evidence': [
+                     deliverables[k] for k in ('offer', 'landing_page_copy', 'validation_experiment')]}},
+                {'task_id': 'arithmetic-2', 'title': 'Check assumed margin',
+                 'objective': 'Add revenue and negative cost in cents.',
+                 'worker_type': 'calculate', 'inputs': {'values': [10000, -5000]}},
+                {'task_id': 'checks_3', 'title': 'Prepare offline checks',
+                 'objective': 'List research still needed.',
+                 'worker_type': 'checklist', 'inputs': {'checks': ['Assess free alternatives offline.']}},
+            ]}, 'deliverables': deliverables}
+            self.natural_manager = manager
+            return {'tool_call': None, 'decision': {'content': json.dumps(manager)}}
+        self.attack = natural
+        result = self.run_flow()
+        manager = result['evidence'][1]
+        self.assertEqual(manager['response'], self.natural_manager)
+        self.assertEqual(manager['response_hash'], digest(canonical(self.natural_manager)))
+        self.assertEqual(manager['request']['opportunity']['response_contract']['plan']['tasks'][1]
+                         ['inputs']['values'], [10000, -5000])
+        self.assertIn('verbatim', manager['request']['opportunity']['response_guidance'])
+        self.assertFalse(result['ai_inference_independently_verified'])
+        self.assertEqual(result['external_action_count'], 0)
+        self.assertTrue(self.decisions.verify_chain())
+        self.assertEqual(self.run_flow()['model_call_count'], 0)
+
+    def test_malformed_manager_has_safe_reason_and_terminal_quarantine(self):
+        from agents.ceo.agent import ResponseValidationError
+        cases = (
+            ('json', 'JSON_INVALID'),
+            ('reference', 'MANAGER_EVIDENCE_MISMATCH'),
+            ('reordered', 'MANAGER_EVIDENCE_MISMATCH'),
+            ('amount', 'MANAGER_ARITHMETIC_MISMATCH'),
+            ('extra', 'MANAGER_PACKETS_INVALID'),
+            ('worker', 'MANAGER_PACKETS_INVALID'),
+        )
+        for attack, code in cases:
+            with self.subTest(attack=attack):
+                self.decisions.close()
+                self.decisions = DurableDecisionStore(':memory:')
+                self.agent = self.make_agent()
+                self.calls.clear()
+                def change(stage, response):
+                    if stage != 'manager':
+                        return response
+                    if attack == 'json':
+                        response['decision']['content'] = 'SENSITIVE_UNTRUSTED_SENTINEL'
+                        return response
+                    parsed = json.loads(response['decision']['content'])
+                    tasks = parsed['plan']['tasks']
+                    if attack == 'reference':
+                        tasks[0]['inputs']['evidence'] = ['deliverables.offer',
+                            'deliverables.landing_page_copy', 'SENSITIVE_UNTRUSTED_SENTINEL']
+                    elif attack == 'reordered':
+                        tasks[0]['inputs']['evidence'].reverse()
+                    elif attack == 'amount':
+                        tasks[1]['inputs']['values'] = ['10000', '-5000']
+                    elif attack == 'extra':
+                        tasks[0]['command'] = 'SENSITIVE_UNTRUSTED_SENTINEL'
+                    else:
+                        tasks[0]['worker_type'] = 'SENSITIVE_UNTRUSTED_SENTINEL'
+                    response['decision']['content'] = canonical(parsed)
+                    return response
+                self.attack = change
+                with self.assertRaises(ResponseValidationError) as failure:
+                    self.run_flow()
+                self.assertEqual(str(failure.exception), code)
+                row = self.decisions._connection.execute(
+                    "SELECT decision_id, response_json FROM shadow_decisions WHERE state='quarantined'"
+                ).fetchone()
+                self.assertIsNone(row['response_json'])
+                events = self.decisions.events(row['decision_id'])
+                self.assertEqual(events[-1]['event']['detail'], code)
+                self.assertNotIn('SENSITIVE_UNTRUSTED_SENTINEL', canonical(list(events)))
+                self.assertTrue(self.decisions.verify_chain())
+                self.assertEqual(self.store.db.execute('SELECT COUNT(*) FROM ledger').fetchone()[0], 0)
+                with self.assertRaises(ValueError):
+                    self.run_flow()
+                self.assertEqual(self.calls, ['evaluation', 'manager'])
+
+    def test_cli_reports_only_allowlisted_response_reason(self):
+        from agents.ceo.agent import ResponseValidationError
+        from agents.ceo.venture_exercise import cli
+        from contextlib import redirect_stdout
+        from io import StringIO
+        for reason in ('MANAGER_EVIDENCE_MISMATCH', 'SENSITIVE_UNTRUSTED_SENTINEL'):
+            output = StringIO()
+            with patch('agents.ceo.venture_exercise.main',
+                       side_effect=ResponseValidationError(reason)), redirect_stdout(output):
+                self.assertEqual(cli(), 4)
+            self.assertNotIn('SENSITIVE_UNTRUSTED_SENTINEL', output.getvalue())
+            self.assertIn('quarantine is terminal; use a fresh database', output.getvalue())
