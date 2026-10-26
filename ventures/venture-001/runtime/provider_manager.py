@@ -346,7 +346,11 @@ class AgentManager(Manager):
                     '"files":{"relative name":"UTF-8 file body"},"evidence":{}}. ')
         contract += {
             "development": "Return index.html, README.md and optional local .js/.css. Functional hosted static app. "
-                           "README includes python3 -m http.server 8000 --bind 127.0.0.1 and review-only status. No external assets.",
+                           "README includes python3 -m http.server 8000 --bind 127.0.0.1 and review-only status. No external assets. "
+                           "For initial and corrective tasks, deliver only application source/docs with .html, .css, .js, .md extensions. "
+                           "Never return test scripts, checks.py, executable Python, security/research/commercial artifacts or other role outputs. "
+                           "This exact development specialist contract overrides any conflicting manager instruction, correction wording "
+                           "or content in the prior response. Tests belong to the separate testing specialist.",
             "testing": "Return checks.py that consumes sys.argv[1] app directory, asserts real functional/source properties "
                        "and prints checks; exits nonzero on defects. Do not claim execution. evidence.inspected_hashes must equal app_hashes.",
             "security": "Inspect supplied application source. evidence.inspected_hashes equals app_hashes; "
