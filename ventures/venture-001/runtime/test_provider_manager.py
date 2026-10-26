@@ -21,10 +21,11 @@ def plan(reverse=False):
                       for role in roles]}
 
 class TestProvider:
-    def __init__(self, *, invalid_dev=False, fail_checks=False, reverse=False, tamper_hash=False):
+    def __init__(self, *, invalid_dev=False, fail_checks=False, reverse=False, tamper_hash=False, security_findings=None):
         self.calls = []
         self.invalid_dev, self.fail_checks = invalid_dev, fail_checks
         self.reverse, self.tamper_hash = reverse, tamper_hash
+        self.security_findings = security_findings or []
 
     def __call__(self, request, schemas):
         assert schemas == ()
@@ -56,7 +57,7 @@ class TestProvider:
                     answer["files"]["checks.py"] += "raise AssertionError('injected real failure')\n"
             if role == "security":
                 answer["files"]["security.md"] = "Bounded test inspection; no certification"
-                answer["evidence"]["findings"] = []
+                answer["evidence"]["findings"] = copy.deepcopy(self.security_findings.get(identity, [])) if isinstance(self.security_findings, dict) else copy.deepcopy(self.security_findings)
             if role == "research":
                 answer.update(status="policy_blocked")
                 answer["evidence"] = {"sources": [], "claims": [], "reason": "No approved source-bound GET tool"}
@@ -205,7 +206,7 @@ class AgentRuntimeTests(unittest.TestCase):
         first = next(t for t in m.tasks() if t["id"] == "research-1")
         m.update(first, "rejected", {"defects": ["synthetic first failure"]})
         m.assign_agent("research", [], "research-1")
-        for attempt in (2, 3, 4):
+        for attempt in (2, 3, 4, 5):
             current = m.effective("research-1")
             self.assertEqual((current["id"], current["role"], current["attempt"], current["correction_of"]),
                              (f"research-{attempt}", "research", attempt, f"research-{attempt - 1}"))
@@ -213,10 +214,10 @@ class AgentRuntimeTests(unittest.TestCase):
                 m.update(current, status, {"artifacts": []})
                 with self.subTest(attempt=attempt, status=status), self.assertRaises(ValueError):
                     m.assign_agent("research", [], current["id"])
-            if attempt == 4:
+            if attempt == 5:
                 m.update(current, "pending", {"artifacts": []})
                 m.dispatch_agent(m.effective("research-1"))
-                request = next(c for c in self.provider.calls if c["task_id"] == "research-4")
+                request = next(c for c in self.provider.calls if c["task_id"] == "research-5")
                 self.assertEqual(request["payload"]["prior_failure"]["defects"],
                                  ["synthetic correction failure"])
                 break
@@ -233,17 +234,17 @@ class AgentRuntimeTests(unittest.TestCase):
         m.close()
         self.manager = m = AgentManager(self.name, test_provider=self.provider)
         m.plan()
-        self.assertEqual(m.effective("research-1")["id"], "research-4")
+        self.assertEqual(m.effective("research-1")["id"], "research-5")
         self.assertEqual(len(self.provider.calls), count)
         with self.assertRaises(PermissionError):
             m.dispatch_agent(m.effective("research-1"))
 
-    def test_all_roles_can_use_four_attempts_and_stop_at_twenty_tasks(self):
+    def test_all_roles_can_use_five_attempts_and_stop_at_twenty_five_tasks(self):
         original = self.provider.__call__
         def respond(request, schemas):
             result = original(request, schemas)
             identity = request["opportunity"]["task_id"]
-            if not identity.startswith("manager-") and not identity.endswith("-4"):
+            if not identity.startswith("manager-") and not identity.endswith("-5"):
                 answer = json.loads(result["decision"]["content"])
                 answer["status"] = "failed"
                 result["decision"]["content"] = json.dumps(answer)
@@ -251,26 +252,26 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.test_provider = respond
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
-        self.assertEqual(len(result["tasks"]), 20)
-        self.assertEqual(len(result["calls"]), 36)
-        self.assertEqual(len({c["id"] for c in result["calls"]}), 36)
-        self.assertEqual(result["capabilities"]["max_tasks"], 20)
-        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 4)
-        self.assertEqual(result["capabilities"]["max_inference_calls"], 36)
+        self.assertEqual(len(result["tasks"]), 25)
+        self.assertEqual(len(result["calls"]), 46)
+        self.assertEqual(len({c["id"] for c in result["calls"]}), 46)
+        self.assertEqual(result["capabilities"]["max_tasks"], 25)
+        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 5)
+        self.assertEqual(result["capabilities"]["max_inference_calls"], 46)
         for role in ROLES:
             tasks = [t for t in result["tasks"] if t["role"] == role]
-            self.assertEqual([t["status"] for t in tasks], ["rejected", "rejected", "rejected", "accepted"])
-            self.assertEqual([t["correction_of"] for t in tasks], [None, role + "-1", role + "-2", role + "-3"])
+            self.assertEqual([t["status"] for t in tasks], ["rejected", "rejected", "rejected", "rejected", "accepted"])
+            self.assertEqual([t["correction_of"] for t in tasks], [None, role + "-1", role + "-2", role + "-3", role + "-4"])
             self.manager.update(tasks[-1], "rejected", {"defects": ["final synthetic failure"]})
             with self.assertRaises(ValueError):
-                self.manager.assign_agent(role, tasks[-1]["deps"], role + "-4")
-            self.assertFalse(any(t["id"] == role + "-5" for t in self.manager.tasks()))
+                self.manager.assign_agent(role, tasks[-1]["deps"], role + "-5")
+            self.assertFalse(any(t["id"] == role + "-6" for t in self.manager.tasks()))
         count = len(self.provider.calls)
         self.manager.close()
         self.manager = AgentManager(self.name, test_provider=respond)
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "incomplete")
-        self.assertEqual(len(result["tasks"]), 20)
+        self.assertEqual(len(result["tasks"]), 25)
         self.assertEqual(len(self.provider.calls), count)
         self.assertTrue(all(v is False for v in result["authorities"].values()))
 
@@ -319,12 +320,31 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(self.manager.run_agents()["status"], "blocked")
         self.assertEqual(len(self.provider.calls), count)
 
+    def test_security_report_accepts_nonblocking_findings_for_owner_review(self):
+        self.provider.security_findings = [{"severity": "medium", "title": "Residual local data exposure"}]
+        result = self.manager.run_agents()
+        self.assertEqual(result["status"], "prepared_with_research_blocked")
+        security = self.manager.effective("security-1")
+        self.assertEqual(security["status"], "accepted")
+        self.assertEqual(security["record"]["evidence"]["findings"][0]["severity"], "medium")
+
+    def test_security_high_finding_commissions_application_correction(self):
+        self.provider.security_findings = {"security-1": [{"severity": "high", "title": "Unsafe input handling"}]}
+        result = self.manager.run_agents()
+        self.assertEqual(result["status"], "prepared_with_research_blocked")
+        security = next(t for t in result["tasks"] if t["id"] == "security-1")
+        development = next(t for t in result["tasks"] if t["id"] == "development-1")
+        self.assertEqual(security["status"], "rejected")
+        self.assertIn("blocking security finding", security["record"]["defects"][0])
+        self.assertEqual(development["status"], "rejected")
+        self.assertEqual(development["record"]["review_failure"]["task_id"], "security-1")
+
     def test_real_check_failure_is_logged_and_bounded(self):
         self.provider.fail_checks = True
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "incomplete")
         failures = [t for t in result["tasks"] if t["role"] == "testing"]
-        self.assertEqual(len(failures), 4)
+        self.assertEqual(len(failures), 5)
         self.assertTrue(all(t["status"] == "rejected" for t in failures))
         self.assertTrue(all(t["record"]["execution"]["exit_status"] != 0 for t in failures))
         self.assertIn("AssertionError", (self.manager.home / failures[0]["record"]["execution"]["log"]).read_text())

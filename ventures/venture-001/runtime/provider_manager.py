@@ -32,8 +32,8 @@ OBJECTIVE = ("Prepare Studio Restock Kit as a usable hosted static web applicati
              "research limitations and concrete commercial draft collateral for owner review.")
 CAPABILITIES = {
     "mode": MODE, "approval": "UNAPPROVED_PILOT", "authorities": DENIED,
-    "workers": list(ROLES), "max_tasks": 20, "max_attempts_per_role": 4,
-    "max_inference_calls": 36, "max_response_bytes": 262144,
+    "workers": list(ROLES), "max_tasks": 25, "max_attempts_per_role": 5,
+    "max_inference_calls": 46, "max_response_bytes": 262144,
     "execution": "contained Python checks only; no shell or CLI agents",
     "public_research": "POLICY_BLOCKED: no approved source-bound read-only GET facility",
     "publication": False, "spend": False,
@@ -421,8 +421,17 @@ class AgentManager(Manager):
                 if execution["exit_status"] != 0:
                     defects.append("actual generated checks failed")
             if task["role"] == "security":
-                if evidence.get("findings") != [] or "security.md" not in files:
-                    raise ValueError("security findings or missing review")
+                findings = evidence.get("findings")
+                if not isinstance(findings, list) or "security.md" not in files:
+                    raise ValueError("security findings list or review missing")
+                severities = {"critical", "high", "medium", "low", "info"}
+                blocking = [finding for finding in findings
+                            if not isinstance(finding, dict)
+                            or finding.get("severity") not in severities
+                            or finding.get("severity") in {"critical", "high"}
+                            or finding.get("blocking") is True]
+                if blocking:
+                    defects.append(f"{len(blocking)} blocking security finding(s) require correction")
             if task["role"] == "research":
                 if evidence.get("sources") != [] or evidence.get("claims") != []:
                     raise ValueError("unverified public research denied")
