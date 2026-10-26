@@ -48,7 +48,7 @@ class ScheduledExerciseTests(unittest.TestCase):
     def invoke(self):
         with patch("agents.ceo.provider.urllib.request.OpenerDirector.open",
                    side_effect=self.transport):
-            return run(self.state, self.gate, self.env)
+            return run(self.state, self.gate, self.env, queue=False)
 
     def test_completed_workflow_replays_across_ticks_without_paid_requests(self):
         self.assertEqual(self.invoke()[0], 0)

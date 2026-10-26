@@ -1,8 +1,7 @@
-"""Schedule one fixed advisory workflow, never a fresh venture on each tick.
+"""Hourly bounded advisory progression over a preserved synthetic bootstrap.
 
-Only a pristine state directory permits up to three provider requests, once.
-Existing state permits durable replay only. Interrupted/failed requests require
-operator investigation; no timer retry can dispatch another request.
+Bootstrap permits three calls once; subsequent hourly queue cycles permit two.
+Interrupted inference fails closed without automatic paid retries.
 """
 from __future__ import annotations
 
@@ -24,6 +23,8 @@ from kernel.synthetic_venture_store import SyntheticVentureStore
 
 FILES = ("workflow.sqlite", "workflow.decisions.sqlite", "workflow.decisions.jsonl",
          "report.json", "attempt.json", "status.json", "runner.lock")
+QUEUE_FILES = ("queue.started.json", "queue.sqlite", "queue.decisions.sqlite",
+               "queue.decisions.jsonl")
 
 
 def now():
@@ -73,7 +74,7 @@ class BoundedProvider:
         return self.provider(request, ())
 
 
-def run(state_dir, gate_file, environ=None):
+def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None):
     raw = Path(state_dir).absolute()
     # Reject aliases to other project artifacts, including the original run.
     if any(p.is_symlink() for p in (raw, *raw.parents)):
@@ -82,7 +83,9 @@ def run(state_dir, gate_file, environ=None):
     if state == inside_root("."):
         raise ValueError("dedicated state directory required")
     state.mkdir(parents=True, exist_ok=True, mode=0o700)
-    for name in FILES:
+    for name in (*FILES, *QUEUE_FILES,
+                 *(name + suffix for name in ("workflow.sqlite", "workflow.decisions.sqlite",
+                    "queue.sqlite", "queue.decisions.sqlite") for suffix in ("-journal", "-wal", "-shm"))):
         path = state / name
         if path.is_symlink() or (path.exists() and
                                  (not path.is_file() or path.stat().st_nlink != 1)):
@@ -96,7 +99,7 @@ def run(state_dir, gate_file, environ=None):
         started = now()
         summary = {"started_at": started, "workflow": "venture-exercise-v4",
                    "external_action_count": 0, "inference_requests_this_tick": 0,
-                   "artifacts": list(FILES[:-1]),
+                   "artifacts": list(FILES[:-1]) + (list(QUEUE_FILES) if queue else []),
                    "ai_inference_independently_verified": False}
         provider = None
         decisions = None
@@ -105,7 +108,7 @@ def run(state_dir, gate_file, environ=None):
             env["CEO_KERNEL_GATE_FILE"] = str(inside_root(gate_file))
             configured = configured_provider(env, required=True)
             # Never infer on imported, partially written or previously attempted state.
-            pristine = not any((state / name).exists() for name in FILES[:-1])
+            pristine = not any((state / name).exists() for name in (*FILES[:-1], *QUEUE_FILES))
             provider = BoundedProvider(configured, state / "attempt.json", pristine)
             decisions = DurableDecisionStore(state / "workflow.decisions.sqlite")
             if not decisions.verify_chain():
@@ -115,11 +118,30 @@ def run(state_dir, gate_file, environ=None):
                              runner_version="venture-exercise-v4")
             with SyntheticVentureStore(state / "workflow.sqlite") as store:
                 result = run_exercise(store, ceo_agent=agent)
+            queue_code, queue_summary = 0, {}
+            if queue and not provider.calls:
+                from agents.ceo.advisory_queue import advance
+                marker = state / "queue.started.json"
+                database = state / "queue.sqlite"
+                if not marker.exists():
+                    if any((state / name).exists() for name in QUEUE_FILES):
+                        raise ValueError("partial imported queue state")
+                    write_json(marker, {"started_at": now(), "version": "advisory-queue-v1"},
+                               exclusive=True)
+                elif not database.exists():
+                    raise ValueError("interrupted queue initialization")
+                queue_code, queue_summary = advance(state, configured, result, cycle)
+                summary.update(queue_summary)
+                if queue_code:
+                    summary.update(finished_at=now())
+                    write_json(state / "status.json", summary)
+                    return queue_code, summary
             write_json(state / "report.json", result)
-            summary.update(status="COMPLETED" if provider.calls else "REPLAYED",
+            summary.update(status=queue_summary.get("status", "COMPLETED" if provider.calls else "REPLAYED"),
                            exercise_status=result["status"],
                            report_sha256=hashlib.sha256((state / "report.json").read_bytes()).hexdigest())
-            code = 0
+            summary.update(queue_summary)
+            code = queue_code
         except CertificationGateError:
             summary["status"] = "GATE_DENIED"
             code = 3
@@ -137,7 +159,8 @@ def run(state_dir, gate_file, environ=None):
             if decisions is not None:
                 decisions.close()
         summary.update(finished_at=now(),
-                       inference_requests_this_tick=provider.calls if provider else 0)
+                       inference_requests_this_tick=(provider.calls if provider else 0) +
+                       summary.get("inference_requests_this_tick", 0))
         write_json(state / "status.json", summary)
         return code, summary
 
