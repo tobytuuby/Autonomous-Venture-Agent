@@ -32,8 +32,8 @@ OBJECTIVE = ("Prepare Studio Restock Kit as a usable hosted static web applicati
              "research limitations and concrete commercial draft collateral for owner review.")
 CAPABILITIES = {
     "mode": MODE, "approval": "UNAPPROVED_PILOT", "authorities": DENIED,
-    "workers": list(ROLES), "max_tasks": 15, "max_attempts_per_role": 3,
-    "max_inference_calls": 26, "max_response_bytes": 262144,
+    "workers": list(ROLES), "max_tasks": 20, "max_attempts_per_role": 4,
+    "max_inference_calls": 36, "max_response_bytes": 262144,
     "execution": "contained Python checks only; no shell or CLI agents",
     "public_research": "POLICY_BLOCKED: no approved source-bound read-only GET facility",
     "publication": False, "spend": False,
@@ -296,7 +296,7 @@ class AgentManager(Manager):
             self.event("agent_assignment", task)
 
     def effective(self, identity):
-        # Follow both corrections; the legacy scheduler resolves only one hop.
+        # Follow all bounded corrections; the legacy scheduler resolves only one hop.
         tasks = {t["id"]: t for t in self.tasks()}
         task = tasks[identity]
         for _ in range(CAPABILITIES["max_attempts_per_role"]):

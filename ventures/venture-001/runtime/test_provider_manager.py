@@ -199,45 +199,51 @@ class AgentRuntimeTests(unittest.TestCase):
                               "correction wording or content in the prior response", system)
                 self.assertIn("Tests belong to the separate testing specialist", system)
 
-    def test_second_correction_requires_rejection_and_stays_role_bound_after_restart(self):
+    def test_corrections_through_four_require_rejection_and_stay_role_bound_after_restart(self):
         m = self.manager
         m.plan()
         first = next(t for t in m.tasks() if t["id"] == "research-1")
         m.update(first, "rejected", {"defects": ["synthetic first failure"]})
         m.assign_agent("research", [], "research-1")
-        second = m.effective("research-1")
-        for status in ("pending", "running", "accepted"):
-            m.update(second, status, {"artifacts": []})
-            with self.subTest(status=status), self.assertRaises(ValueError):
-                m.assign_agent("research", [], "research-2")
-        m.update(second, "rejected", {"defects": ["synthetic correction failure"]})
-        m.close()
-        self.manager = m = AgentManager(self.name, test_provider=self.provider)
-        with self.assertRaises(ValueError):
-            m.assign_agent("commercial", [], "research-2")
-        m.assign_agent("research", [], "research-2")
-        third = m.effective("research-1")
-        self.assertEqual((third["id"], third["role"], third["attempt"], third["correction_of"]),
-                         ("research-3", "research", 3, "research-2"))
-        m.dispatch_agent(third)
-        request = next(c for c in self.provider.calls if c["task_id"] == "research-3")
-        self.assertEqual(request["payload"]["prior_failure"]["defects"], ["synthetic correction failure"])
+        for attempt in (2, 3, 4):
+            current = m.effective("research-1")
+            self.assertEqual((current["id"], current["role"], current["attempt"], current["correction_of"]),
+                             (f"research-{attempt}", "research", attempt, f"research-{attempt - 1}"))
+            for status in ("pending", "running", "accepted"):
+                m.update(current, status, {"artifacts": []})
+                with self.subTest(attempt=attempt, status=status), self.assertRaises(ValueError):
+                    m.assign_agent("research", [], current["id"])
+            if attempt == 4:
+                m.update(current, "pending", {"artifacts": []})
+                m.dispatch_agent(m.effective("research-1"))
+                request = next(c for c in self.provider.calls if c["task_id"] == "research-4")
+                self.assertEqual(request["payload"]["prior_failure"]["defects"],
+                                 ["synthetic correction failure"])
+                break
+            m.update(current, "rejected", {"defects": ["synthetic correction failure"]})
+            m.close()
+            self.manager = m = AgentManager(self.name, test_provider=self.provider)
+            with self.assertRaises(ValueError):
+                m.assign_agent("commercial", [], current["id"])
+            with self.assertRaises(ValueError):
+                m.assign_agent("research", ["development-1"], current["id"])
+            m.assign_agent("research", [], current["id"])
         self.assertEqual(m.effective("research-1")["status"], "accepted")
         count = len(self.provider.calls)
         m.close()
         self.manager = m = AgentManager(self.name, test_provider=self.provider)
         m.plan()
-        self.assertEqual(m.effective("research-1")["id"], "research-3")
+        self.assertEqual(m.effective("research-1")["id"], "research-4")
         self.assertEqual(len(self.provider.calls), count)
         with self.assertRaises(PermissionError):
-            m.dispatch_agent(third)
+            m.dispatch_agent(m.effective("research-1"))
 
-    def test_all_roles_can_use_three_attempts_and_stop_at_fifteen_tasks(self):
+    def test_all_roles_can_use_four_attempts_and_stop_at_twenty_tasks(self):
         original = self.provider.__call__
         def respond(request, schemas):
             result = original(request, schemas)
             identity = request["opportunity"]["task_id"]
-            if not identity.startswith("manager-") and not identity.endswith("-3"):
+            if not identity.startswith("manager-") and not identity.endswith("-4"):
                 answer = json.loads(result["decision"]["content"])
                 answer["status"] = "failed"
                 result["decision"]["content"] = json.dumps(answer)
@@ -245,34 +251,36 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.test_provider = respond
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
-        self.assertEqual(len(result["tasks"]), 15)
-        self.assertEqual(len(result["calls"]), 26)
-        self.assertEqual(len({c["id"] for c in result["calls"]}), 26)
-        self.assertEqual(result["capabilities"]["max_tasks"], 15)
-        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 3)
+        self.assertEqual(len(result["tasks"]), 20)
+        self.assertEqual(len(result["calls"]), 36)
+        self.assertEqual(len({c["id"] for c in result["calls"]}), 36)
+        self.assertEqual(result["capabilities"]["max_tasks"], 20)
+        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 4)
+        self.assertEqual(result["capabilities"]["max_inference_calls"], 36)
         for role in ROLES:
             tasks = [t for t in result["tasks"] if t["role"] == role]
-            self.assertEqual([t["status"] for t in tasks], ["rejected", "rejected", "accepted"])
-            self.assertEqual([t["correction_of"] for t in tasks], [None, role + "-1", role + "-2"])
+            self.assertEqual([t["status"] for t in tasks], ["rejected", "rejected", "rejected", "accepted"])
+            self.assertEqual([t["correction_of"] for t in tasks], [None, role + "-1", role + "-2", role + "-3"])
             self.manager.update(tasks[-1], "rejected", {"defects": ["final synthetic failure"]})
             with self.assertRaises(ValueError):
-                self.manager.assign_agent(role, tasks[-1]["deps"], role + "-3")
+                self.manager.assign_agent(role, tasks[-1]["deps"], role + "-4")
+            self.assertFalse(any(t["id"] == role + "-5" for t in self.manager.tasks()))
         count = len(self.provider.calls)
         self.manager.close()
         self.manager = AgentManager(self.name, test_provider=respond)
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "incomplete")
-        self.assertEqual(len(result["tasks"]), 15)
+        self.assertEqual(len(result["tasks"]), 20)
         self.assertEqual(len(self.provider.calls), count)
         self.assertTrue(all(v is False for v in result["authorities"].values()))
 
-    def test_second_application_correction_invalidates_reviews_and_dependency_versions(self):
+    def test_third_application_correction_invalidates_reviews_and_dependency_versions(self):
         self.provider.reverse = True
         original = self.provider.__call__
         def respond(request, schemas):
             result = original(request, schemas)
             identity = request["opportunity"]["task_id"]
-            if identity in ("testing-1", "testing-2"):
+            if identity in ("testing-1", "testing-2", "testing-3"):
                 answer = json.loads(result["decision"]["content"])
                 answer["files"]["checks.py"] += "raise AssertionError('synthetic application defect')\\n"
                 result["decision"]["content"] = json.dumps(answer)
@@ -280,14 +288,14 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.test_provider = respond
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
-        self.assertEqual(self.manager.effective("development-1")["id"], "development-3")
+        self.assertEqual(self.manager.effective("development-1")["id"], "development-4")
         for role in ("testing", "security"):
             effective = self.manager.effective(role + "-1")
-            self.assertEqual(effective["id"], role + "-3")
-            self.assertEqual(effective["record"]["dependency_versions"]["development-1"]["id"], "development-3")
-            prior = [t for t in result["tasks"] if t["role"] == role and t["attempt"] < 3]
+            self.assertEqual(effective["id"], role + "-4")
+            self.assertEqual(effective["record"]["dependency_versions"]["development-1"]["id"], "development-4")
+            prior = [t for t in result["tasks"] if t["role"] == role and t["attempt"] < 4]
             self.assertTrue(all(t["status"] == "rejected" for t in prior))
-        security = [t for t in result["tasks"] if t["role"] == "security" and t["attempt"] < 3]
+        security = [t for t in result["tasks"] if t["role"] == "security" and t["attempt"] < 4]
         self.assertTrue(all("invalidated" in t["record"]["defects"][0] for t in security))
         count = len(self.provider.calls)
         self.manager.close()
@@ -295,16 +303,16 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(self.manager.run_agents()["status"], "prepared_with_research_blocked")
         self.assertEqual(len(self.provider.calls), count)
 
-    def test_interrupted_second_correction_inference_is_never_replayed(self):
+    def test_interrupted_third_correction_inference_is_never_replayed(self):
         m = self.manager
         m.plan()
-        for identity in ("research-1", "research-2"):
+        for identity in ("research-1", "research-2", "research-3"):
             task = next(t for t in m.tasks() if t["id"] == identity)
             m.update(task, "rejected", {"defects": ["synthetic failure"]})
             m.assign_agent("research", [], identity)
-        third = m.effective("research-1")
-        m.update(third, "running", {"started": "synthetic interruption"})
-        m.save("calls", m.meta("calls") + [{"id": "manager-research-3", "status": "running"}])
+        fourth = m.effective("research-1")
+        m.update(fourth, "running", {"started": "synthetic interruption"})
+        m.save("calls", m.meta("calls") + [{"id": "manager-research-4", "status": "running"}])
         count = len(self.provider.calls)
         m.close()
         self.manager = AgentManager(self.name, test_provider=self.provider)
@@ -316,7 +324,7 @@ class AgentRuntimeTests(unittest.TestCase):
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "incomplete")
         failures = [t for t in result["tasks"] if t["role"] == "testing"]
-        self.assertEqual(len(failures), 3)
+        self.assertEqual(len(failures), 4)
         self.assertTrue(all(t["status"] == "rejected" for t in failures))
         self.assertTrue(all(t["record"]["execution"]["exit_status"] != 0 for t in failures))
         self.assertIn("AssertionError", (self.manager.home / failures[0]["record"]["execution"]["log"]).read_text())
