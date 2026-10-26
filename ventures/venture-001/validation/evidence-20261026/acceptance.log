@@ -1,0 +1,18 @@
+PASS START-HERE offline instructions and save/reimport limitations
+PASS First file open offline: fictional examples and total 90.00
+PASS Start blank and validation blocks invalid CSV exports
+PASS Enter buyer item: 3 packs, 37.5 kg, 66.00
+PASS Inclusive threshold and inbound suppress unnecessary orders
+PASS Add row and combined money total
+PASS Inputs CSV download: exact entered values and escaping
+PASS Results CSV download: exact quantities, costs, statuses
+PASS Reload then import downloaded inputs restores all buyer data
+PASS Print button invokes native print; printed table fits page width
+PASS Invalid negative, zero pack and target errors; recovery
+PASS Malformed import preserves existing rows and reports error
+PASS Decimal threshold: 0.1 + 0.2 at point 0.3 orders 2 packs
+PASS Decimal full packs: 0.07 target / 0.01 pack orders 7
+PASS Remove row and empty-table export validation
+PASS No network requests or browser runtime errors during offline journey
+{"out":"/home/epsilon/venture-control-workspace/artifacts/venture-001-browser/acceptance-rkCJsK","passed":16,"failed":0,"sha256":"e54d5ad724f195d423579cc2a00976299da03246a99761f3f31070e9240a9ff4"}
+exit_code=0

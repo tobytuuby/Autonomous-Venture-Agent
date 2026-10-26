@@ -1,0 +1,77 @@
+{
+  "zip": "ventures/venture-001/Studio-Restock-Kit-v1.0.zip",
+  "sha256": "a0758ebfaf79361c2109cab67109a849e21c3d77a15d602c60b88c4534053d58",
+  "cases": [
+    {
+      "name": "START-HERE offline instructions and save/reimport limitations",
+      "status": "PASS"
+    },
+    {
+      "name": "First file open offline: fictional examples and total 90.00",
+      "status": "PASS"
+    },
+    {
+      "name": "Start blank and validation blocks invalid CSV exports",
+      "status": "PASS"
+    },
+    {
+      "name": "Enter buyer item: 3 packs, 37.5 kg, 66.00",
+      "status": "PASS"
+    },
+    {
+      "name": "Inclusive threshold and inbound suppress unnecessary orders",
+      "status": "PASS"
+    },
+    {
+      "name": "Add row and combined money total",
+      "status": "PASS"
+    },
+    {
+      "name": "Inputs CSV download: exact entered values and escaping",
+      "status": "PASS"
+    },
+    {
+      "name": "Results CSV download: exact quantities, costs, statuses",
+      "status": "PASS"
+    },
+    {
+      "name": "Reload then import downloaded inputs restores all buyer data",
+      "status": "PASS"
+    },
+    {
+      "name": "Print button invokes native print; printed table fits page width",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Print table clipped: {\"x\":0,\"y\":242.875,\"width\":1886.3125,\"height\":156.34375}\n    at /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:67:45\n    at runNextTicks (node:internal/process/task_queues:60:5)\n    at process.processImmediate (node:internal/timers:454:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)\n    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:60:2"
+    },
+    {
+      "name": "Invalid negative, zero pack and target errors; recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "Malformed import preserves existing rows and reports error",
+      "status": "PASS"
+    },
+    {
+      "name": "Decimal threshold: 0.1 + 0.2 at point 0.3 orders 2 packs",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: {\"inputs\":[\"Glaze\",\"litre\",\"\",\"\",\"0.1\",\"0.2\",\"0.3\",\"0.5\",\"0.1\",\"1\"],\"errors\":[]}\n+ actual - expected\n\n  [\n+   '0.30000000000000004',\n+   '0',\n+   '0',\n+   '0.00',\n+   'NO ORDER'\n-   '0.3',\n-   '2',\n-   '0.2',\n-   '2.00',\n-   'REVIEW ORDER'\n  ]\n    at result (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:48:106)\n    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:74:143\n    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)\n    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:74:2"
+    },
+    {
+      "name": "Decimal full packs: 0.07 target / 0.01 pack orders 7",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: {\"inputs\":[\"Glaze\",\"litre\",\"\",\"\",\"0\",\"0\",\"0\",\"0.07\",\"0.01\",\"1\"],\"errors\":[]}\n+ actual - expected\n\n  [\n    '0',\n+   '8',\n+   '0.08',\n+   '8.00',\n-   '7',\n-   '0.07',\n-   '7.00',\n    'REVIEW ORDER'\n  ]\n    at result (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:48:106)\n    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:75:135\n    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)\n    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:75:2"
+    },
+    {
+      "name": "Remove row and empty-table export validation",
+      "status": "PASS"
+    },
+    {
+      "name": "No network requests or browser runtime errors during offline journey",
+      "status": "PASS"
+    }
+  ],
+  "out": "/home/epsilon/venture-control-workspace/artifacts/venture-001-browser/acceptance-ecqXh8",
+  "chromium": "156.0.8078.4",
+  "passed": 13,
+  "failed": 3
+}

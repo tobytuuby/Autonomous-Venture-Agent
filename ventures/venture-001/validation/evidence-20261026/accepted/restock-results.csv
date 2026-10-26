@@ -1,0 +1,3 @@
+"Item","Unit","Supplier","Location","On hand","Inbound","Reorder point","Target","Pack size","Pack price","Position","Packs","Order quantity","Estimate","Status"
+"Clay, ""white""","kg","Local supplier","Shelf A","12","0","15","40","12.5","22","12","3","37.5","66.00","REVIEW ORDER"
+"Boxes","piece","Box supplier","Cupboard","0","0","10","25","10","8","0","3","30","24.00","REVIEW ORDER"

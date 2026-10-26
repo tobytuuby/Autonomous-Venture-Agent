@@ -3,6 +3,8 @@
 A self-contained, offline weekly restock worksheet for independent pottery studios. It does not send information to a server or place supplier orders. Open `restock.html` in a modern browser; no installation or account is necessary.
 
 ## First use
+Extract the ZIP using your computer's built-in **Extract All** or **Extract** command first. Read this guide, then double-click `restock.html` in the extracted folder. Keep both files together. No internet connection is needed.
+
 1. Select **Load fictional example** to explore, or **Start blank** to enter your own studio supplies.
 2. Enter one inventory item per row, including consistent unit (kg, litre or piece), on-hand usable amount, confirmed inbound, reorder point, desired target, supplier pack size and pack price in your preferred currency.
 3. The tool flags a reorder whenever **on hand + inbound <= reorder point**. It rounds the shortfall to the nearest full supplier pack to reach or exceed the target.
@@ -19,6 +21,7 @@ Stoneware clay: on hand 12 kg; inbound 0; reorder point 15; target 40; pack size
 - This is a planning aid, not stock forecasting. Verify physical counts and actual supplier packaging/pricing.
 - Input stays in the browser tab, unless you download a CSV. Clearing the page or closing the tab loses unsaved inputs.
 - Up to 200 rows per import. Never put passwords, customer information or confidential supplier agreements in examples.
+- Print uses a landscape checklist with wrapped text. Review the browser print preview and choose landscape if your printer overrides the page setting.
 - CSV spreadsheet output guards against leading formula characters, but inspect files before opening in other software.
 
 ## Typical weekly rhythm (10–20 minutes)

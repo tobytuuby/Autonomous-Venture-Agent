@@ -1,0 +1,35 @@
+{
+  "bridge": "venture-control",
+  "root": "/home/epsilon/venture-control-workspace",
+  "records": [
+    {
+      "process": "proc_mvpe17pl_4owmmr",
+      "pid": 511715,
+      "bridgeLog": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvpe17pl_4owmmr.log",
+      "command": "node artifacts/venture-001-browser/probe.cjs && node ventures/venture-001/validation/browser-journey.cjs",
+      "result": "exited; baseline-fonts.log exit_code=1, 13 PASS / 3 FAIL",
+      "raw": "baseline.log"
+    },
+    {
+      "process": "proc_mvpe2e5z_y5zgxw",
+      "pid": 512476,
+      "bridgeLog": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvpe2e5z_y5zgxw.log",
+      "command": "TMPDIR=\"$PWD/artifacts/venture-001-browser/regression-tmp\" PYTHONPATH=. python3 -m unittest discover -s tests -v",
+      "result": "exited; exit_code=0, 686 tests OK",
+      "raw": "regression.log"
+    },
+    {
+      "process": "proc_mvpe3eal_ya2fsx",
+      "pid": 513997,
+      "bridgeLog": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvpe3eal_ya2fsx.log",
+      "command": "python3 ventures/venture-001/validation/prepare-browser.py && node ventures/venture-001/validation/test-restock.js && node ventures/venture-001/validation/browser-journey.cjs",
+      "result": "exited; exit_code=0, 16 PASS / 0 FAIL",
+      "raw": [
+        "setup-reproduction.log",
+        "focused.log",
+        "acceptance.log"
+      ]
+    }
+  ],
+  "note": "Commands above omit only shell output redirection and exit-code logging wrappers. All processes polled to exited before completed logs were read through venture-control from inside artifacts. Bridge-generated log paths recorded as metadata; evidence was read from project-local redirected logs."
+}

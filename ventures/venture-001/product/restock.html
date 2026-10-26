@@ -2,7 +2,12 @@
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Studio Restock Kit — worksheet</title>
 <style>
-body{font:16px system-ui;margin:2rem;color:#173b3c;background:#f7f5ef}h1{font-size:2rem}button,a{margin:.3rem;padding:.6rem}button{cursor:pointer}input{width:9rem;padding:.4rem}table{border-collapse:collapse;background:white}th,td{border:1px solid #b6c4bf;padding:.4rem;text-align:left}th{background:#e1ece5} .scroll{overflow:auto}#message{font-weight:bold;white-space:pre-wrap} @media print{button,.controls{display:none}body{margin:0;background:white}input{border:0;width:7rem}}
+body{font:16px system-ui;margin:2rem;color:#173b3c;background:#f7f5ef}h1{font-size:2rem}button,a{margin:.3rem;padding:.6rem}button{cursor:pointer}input{width:9rem;padding:.4rem}table{border-collapse:collapse;background:white}th,td{border:1px solid #b6c4bf;padding:.4rem;text-align:left}th{background:#e1ece5} .scroll{overflow:auto}#message{font-weight:bold;white-space:pre-wrap} #print-table{display:none}
+@page{size:A4 landscape;margin:10mm}
+@media print{button,.controls,.scroll{display:none}body{margin:0;background:white;font-size:9pt}
+#print-table{display:table;width:100%;table-layout:fixed;font-size:7pt}
+#print-table th,#print-table td{padding:3pt;overflow-wrap:anywhere}
+#print-table tr{break-inside:avoid}thead{display:table-header-group}}
 </style>
 <h1>Studio Restock Kit</h1>
 <p>Weekly supplies worksheet · v1.0 · One row per item and unit. Work in base units (e.g. kg); pack size uses that same unit.</p>
@@ -14,6 +19,7 @@ Numbers are planning suggestions; inspect every order. Prices below are fictiona
 <button id="save">Download inputs CSV</button><button id="results">Download results CSV</button><button id="print">Print</button></p>
 <p>Changes stay in this tab until downloaded. Save inputs before closing. Import replaces all rows. No automatic orders or network connections.</p>
 <div class="scroll"><table><thead><tr id="headers"></tr></thead><tbody id="rows"></tbody></table></div>
+<table id="print-table" aria-label="Printable restock checklist"></table>
 <p id="message" role="status" aria-live="polite"></p>
 <p>Estimate excludes delivery, tax, discounts and supplier minimum orders. Do not add kg, litres and pieces together.
 The total adds money only. Read START-HERE.md for setup, checks and limitations.</p>
@@ -33,14 +39,26 @@ function calculate(row){
   if(String(v).trim()===""||!/^\d+(\.\d+)?$/.test(String(v).trim()))throw Error("Use nonnegative plain numbers");
   const x=Number(v);if(!Number.isFinite(x)||x>1000000000)throw Error("Number out of range");return x;
  });
- const [hand,inbound,point,target,pack,price]=n;
- if(pack<=0)throw Error("Pack size must exceed zero");
+ // Use the entered decimal digits exactly for thresholds, pack ceilings and cents.
+ // Binary floats can miss 0.1 + 0.2 <= 0.3 or ceil 0.07 / 0.01 to 8.
+ const decimals=row.slice(4).map(v=>String(v).trim());
+ const places=Math.max(...decimals.map(v=>(v.split(".")[1]||"").length));
+ const scale=10n**BigInt(places);
+ const exact=decimals.map(v=>{const [whole,fraction=""]=v.split(".");return BigInt(whole+fraction.padEnd(places,"0"));});
+ const [hand,inbound,point,target,pack,price]=exact;
+ if(pack<=0n)throw Error("Pack size must exceed zero");
  if(target<point)throw Error("Target must be at least reorder point");
- const position=hand+inbound;
- const packs=position<=point?Math.ceil(Math.max(0,target-position)/pack):0;
- const quantity=packs*pack;
- const cost=Math.round((packs*price+Number.EPSILON)*100)/100;
- if(!Number.isSafeInteger(packs)||cost>1000000000)throw Error("Result too large");
+ const stock=hand+inbound;
+ const shortfall=target>stock?target-stock:0n;
+ const count=stock<=point?(shortfall+pack-1n)/pack:0n;
+ const cents=(count*price*100n+scale/2n)/scale;
+ if(count>BigInt(Number.MAX_SAFE_INTEGER)||cents>100000000000n)throw Error("Result too large");
+ function decimal(value){
+  const digits=String(value).padStart(places+1,"0");
+  return Number(places?digits.slice(0,-places)+"."+digits.slice(-places):digits);
+ }
+ const position=decimal(stock),packs=Number(count),quantity=decimal(count*pack),cost=Number(cents)/100;
+
  return {position,packs,quantity,cost,status:packs?"REVIEW ORDER":"NO ORDER"};
 }
 function parseCSV(text){
@@ -107,6 +125,19 @@ if(typeof document!=="undefined"){
   try{const rows=values().map(r=>{const x=calculate(r);return [...r,x.position,x.packs,x.quantity,x.cost.toFixed(2),x.status];});download("restock-results.csv",[[...HEADERS,"Position","Packs","Order quantity","Estimate","Status"],...rows]);}catch(e){msg.textContent=e.message;}
  };
  document.getElementById("file").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>200000)throw Error("File exceeds 200 KB");const rows=importRows(await f.text());if(confirm("Replace current rows with imported data?"))load(rows);}catch(err){msg.textContent=err.message;}finally{e.target.value="";}};
+ function preparePrint(){
+  const table=document.getElementById("print-table");table.textContent="";
+  const header=table.createTHead().insertRow();
+  [...HEADERS,"Position","Packs","Order quantity","Estimate","Status"].forEach(h=>{const th=document.createElement("th");th.textContent=h;header.append(th);});
+  const rows=table.createTBody();
+  values().forEach(row=>{
+   let results;
+   try{const r=calculate(row);results=[r.position,r.packs,r.quantity,r.cost.toFixed(2),r.status];}
+   catch(e){results=["","","","",e.message];}
+   const tr=rows.insertRow();[...row,...results].forEach(v=>tr.insertCell().textContent=v);
+  });
+ }
+ window.addEventListener("beforeprint",preparePrint);
  document.getElementById("print").onclick=()=>window.print();
  load(SAMPLE);
 }

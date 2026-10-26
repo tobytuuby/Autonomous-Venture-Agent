@@ -1,0 +1,3 @@
+"Item","Unit","Supplier","Location","On hand","Inbound","Reorder point","Target","Pack size","Pack price"
+"Clay, ""white""","kg","Local supplier","Shelf A","12","0","15","40","12.5","22"
+"Boxes","piece","Box supplier","Cupboard","0","0","10","25","10","8"

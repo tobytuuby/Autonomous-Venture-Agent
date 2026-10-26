@@ -1,0 +1,58 @@
+PASS START-HERE offline instructions and save/reimport limitations 
+PASS First file open offline: fictional examples and total 90.00 
+PASS Start blank and validation blocks invalid CSV exports 
+PASS Enter buyer item: 3 packs, 37.5 kg, 66.00 
+PASS Inclusive threshold and inbound suppress unnecessary orders 
+PASS Add row and combined money total 
+PASS Inputs CSV download: exact entered values and escaping 
+PASS Results CSV download: exact quantities, costs, statuses 
+PASS Reload then import downloaded inputs restores all buyer data 
+FAIL Print button invokes native print; printed table fits page width AssertionError [ERR_ASSERTION]: Print table clipped: {"x":0,"y":242.875,"width":1886.3125,"height":156.34375}
+    at /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:67:45
+    at runNextTicks (node:internal/process/task_queues:60:5)
+    at process.processImmediate (node:internal/timers:454:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17)
+    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)
+    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:60:2
+PASS Invalid negative, zero pack and target errors; recovery 
+PASS Malformed import preserves existing rows and reports error 
+FAIL Decimal threshold: 0.1 + 0.2 at point 0.3 orders 2 packs AssertionError [ERR_ASSERTION]: {"inputs":["Glaze","litre","","","0.1","0.2","0.3","0.5","0.1","1"],"errors":[]}
++ actual - expected
+
+  [
++   '0.30000000000000004',
++   '0',
++   '0',
++   '0.00',
++   'NO ORDER'
+-   '0.3',
+-   '2',
+-   '0.2',
+-   '2.00',
+-   'REVIEW ORDER'
+  ]
+    at result (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:48:106)
+    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:74:143
+    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)
+    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:74:2
+FAIL Decimal full packs: 0.07 target / 0.01 pack orders 7 AssertionError [ERR_ASSERTION]: {"inputs":["Glaze","litre","","","0","0","0","0.07","0.01","1"],"errors":[]}
++ actual - expected
+
+  [
+    '0',
++   '8',
++   '0.08',
++   '8.00',
+-   '7',
+-   '0.07',
+-   '7.00',
+    'REVIEW ORDER'
+  ]
+    at result (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:48:106)
+    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:75:135
+    at async check (/home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:28:8)
+    at async /home/epsilon/venture-control-workspace/ventures/venture-001/validation/browser-journey.cjs:75:2
+PASS Remove row and empty-table export validation 
+PASS No network requests or browser runtime errors during offline journey 
+{"out":"/home/epsilon/venture-control-workspace/artifacts/venture-001-browser/acceptance-ecqXh8","passed":13,"failed":3,"sha256":"a0758ebfaf79361c2109cab67109a849e21c3d77a15d602c60b88c4534053d58"}
+exit_code=1
