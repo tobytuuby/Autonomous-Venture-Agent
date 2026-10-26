@@ -13,7 +13,7 @@ from pathlib import Path
 
 from agents.ceo.agent import CEOAgent
 from agents.ceo.durable_state import DurableDecisionStore
-from agents.ceo.gates import require_pre_model_gate
+from agents.ceo.gates import CertificationGateError, require_pre_model_gate
 from agents.ceo.provider import ModelProviderError, OpenAICompatibleShadowModel
 from kernel.p6.registry import canonical, digest
 from kernel.synthetic_orchestration import (
@@ -353,10 +353,12 @@ def inside_root(value):
     return path
 
 
-def configured_provider(environ):
+def configured_provider(environ, *, required=False):
     values = [environ.get(key, "") for key in
               ("CEO_MODEL_ENDPOINT", "CEO_MODEL_NAME", "CEO_MODEL_TOKEN")]
     if not any(values):
+        if required:
+            raise ModelProviderError("provider configuration required; fixtures forbidden")
         return None
     if not all(values):
         raise ModelProviderError("partial provider configuration; fixtures forbidden")
@@ -371,9 +373,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--durable-ceo", action="store_true",
                         help="Use existing CEOAgent with durable replay and registry provenance")
+    parser.add_argument("--require-provider", action="store_true",
+                        help="Require configured inference through the durable CEO; never use fixtures")
+    parser.add_argument("--check-provider", action="store_true",
+                        help="Validate required configuration and gate only; no inference or output files")
     parser.add_argument("--database", default="artifacts/venture-exercise.sqlite")
     parser.add_argument("--report", default="artifacts/venture-exercise.json")
     args = parser.parse_args()
+    if (args.require_provider or args.check_provider) and not args.durable_ceo:
+        parser.error("--require-provider and --check-provider require --durable-ceo")
     database, report = inside_root(args.database), inside_root(args.report)
     if database == report or database.exists() and not database.is_file():
         raise ValueError("database and report require distinct file paths")
@@ -384,7 +392,10 @@ def main():
             raise ValueError("durable exercise files require distinct paths without symlinks")
         for path in paths:
             inside_root(path)
-    provider = configured_provider(os.environ)
+    provider = configured_provider(os.environ, required=args.require_provider or args.check_provider)
+    if args.check_provider:
+        print("CEO_PROVIDER_CONFIGURATION_VALID: no inference attempted; reachability unverified")
+        return 0
     database.parent.mkdir(parents=True, exist_ok=True)
     report.parent.mkdir(parents=True, exist_ok=True)
     if args.durable_ceo:
@@ -397,7 +408,7 @@ def main():
         local_model.exercise_source = "handcrafted_fixture_no_inference"
         agent = CEOAgent(provider if provider is not None else local_model, SYSTEM,
                          database.with_suffix(".decisions.jsonl"), durable_store=decisions,
-                         advisory_only=True, runner_version="venture-exercise-v2")
+                         advisory_only=True, runner_version="venture-exercise-v3")
         try:
             with SyntheticVentureStore(database) as store:
                 result = run_exercise(store, ceo_agent=agent)
@@ -412,5 +423,20 @@ def main():
     return 0
 
 
+def cli():
+    """Keep provider exception chains and remote error bodies out of operator logs."""
+    try:
+        return main()
+    except CertificationGateError:
+        print("CEO_PRE_GATE_NOT_SATISFIED: existing certification required")
+        return 3
+    except ModelProviderError:
+        print("CEO_PROVIDER_DENIED: check configuration or transport; no fixture fallback")
+        return 2
+    except (ValueError, OSError):
+        print("CEO_EXERCISE_DENIED: inspect local paths and durable decision state")
+        return 4
+
+
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(cli())

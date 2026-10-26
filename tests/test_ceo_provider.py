@@ -42,7 +42,7 @@ class CEOProviderTests(unittest.TestCase):
                 "https://provider.example/v1", "test-model", "test-token", trace_path=trace
             )
             request = {"system": "system", "opportunity": {"adversarial_id": "ADV-001"}}
-            with patch("agents.ceo.provider.urllib.request.urlopen", return_value=Response()):
+            with patch.object(provider._opener, "open", return_value=Response()):
                 provider(request, ("capability-request.schema.json",))
             record = json.loads(trace.read_text().splitlines()[0])
             self.assertEqual(record["status"], "PASS")
@@ -65,7 +65,7 @@ class CEOProviderTests(unittest.TestCase):
                 "https://provider.example/v1", "test-model", "test-token", trace_path=trace
             )
             request = {"system": "system", "opportunity": {"adversarial_id": "ADV-002"}}
-            with patch("agents.ceo.provider.urllib.request.urlopen", return_value=Response()):
+            with patch.object(provider._opener, "open", return_value=Response()):
                 with self.assertRaises(ModelProviderError):
                     provider(request, ("capability-request.schema.json",))
             record = json.loads(trace.read_text().splitlines()[0])

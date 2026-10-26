@@ -231,10 +231,12 @@ class VentureExerciseTests(unittest.TestCase):
             return original(request, tools)
         def transport(request, **_):
             body = json.loads(request.data)
-            self.assertEqual(body["tools"], [])
+            self.assertNotIn("tools", body)
+            self.assertNotIn("tool_choice", body)
+            self.assertNotIn("reasoning_effort", body)
             self.assertEqual(len(body["messages"]), 2)
             return Response()
-        with patch("agents.ceo.provider.urllib.request.urlopen", side_effect=transport) as send:
+        with patch.object(provider._opener, "open", side_effect=transport) as send:
             result = run_exercise(self.store, invoke)
         self.assertEqual(send.call_count, 3)
         self.assertFalse(result["ai_inference_independently_verified"])

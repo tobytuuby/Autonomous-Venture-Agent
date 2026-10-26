@@ -1,0 +1,72 @@
+[
+  {
+    "name": "focused",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_ceo_provider",
+      "tests.test_venture_exercise",
+      "tests.test_ceo_venture_flow",
+      "tests.test_ceo_provider_entrypoint",
+      "tests.test_ceo_gates",
+      "tests.test_ceo_durable",
+      "tests.test_ceo_shadow",
+      "-v"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  },
+  {
+    "name": "regression",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-v"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  },
+  {
+    "name": "compileall",
+    "argv": [
+      "python3",
+      "-m",
+      "compileall",
+      "-q",
+      "agents",
+      "broker",
+      "kernel",
+      "tests"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  },
+  {
+    "name": "unconfigured-required",
+    "argv": [
+      "python3",
+      "-m",
+      "agents.ceo.venture_exercise",
+      "--durable-ceo",
+      "--require-provider",
+      "--check-provider"
+    ],
+    "exit_code": 2,
+    "expected_exit_code": 2
+  },
+  {
+    "name": "diff-check",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "expected_exit_code": 0
+  }
+]

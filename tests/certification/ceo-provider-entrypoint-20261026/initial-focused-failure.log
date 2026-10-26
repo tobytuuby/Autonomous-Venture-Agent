@@ -1,0 +1,78 @@
+test_ceo_schema_names_are_mapped_to_api_safe_function_names (tests.test_ceo_provider.CEOProviderTests.test_ceo_schema_names_are_mapped_to_api_safe_function_names) ... ok
+test_provider_has_no_generic_model_tools (tests.test_ceo_provider.CEOProviderTests.test_provider_has_no_generic_model_tools) ... ok
+test_provider_requires_explicit_configuration (tests.test_ceo_provider.CEOProviderTests.test_provider_requires_explicit_configuration) ... ok
+test_trace_fail_records_invalid_response_envelope (tests.test_ceo_provider.CEOProviderTests.test_trace_fail_records_invalid_response_envelope) ... ok
+test_trace_pass_requires_valid_response_envelope (tests.test_ceo_provider.CEOProviderTests.test_trace_pass_requires_valid_response_envelope) ... ok
+test_all_ideas_can_be_shelved_without_planning_or_allocation (tests.test_venture_exercise.VentureExerciseTests.test_all_ideas_can_be_shelved_without_planning_or_allocation) ... ok
+test_authority_fields_are_denied_at_every_role (tests.test_venture_exercise.VentureExerciseTests.test_authority_fields_are_denied_at_every_role) ... ok
+test_cli_reproduces_report_and_keeps_paths_in_root (tests.test_venture_exercise.VentureExerciseTests.test_cli_reproduces_report_and_keeps_paths_in_root) ... ok
+test_configuration_absence_partial_and_gate_do_not_silently_enable_provider (tests.test_venture_exercise.VentureExerciseTests.test_configuration_absence_partial_and_gate_do_not_silently_enable_provider) ... ok
+test_duplicate_or_unknown_candidate_denied (tests.test_venture_exercise.VentureExerciseTests.test_duplicate_or_unknown_candidate_denied) ... ok
+test_every_authority_envelope_remains_false (tests.test_venture_exercise.VentureExerciseTests.test_every_authority_envelope_remains_false) ... ok
+test_existing_provider_transport_receives_no_tools (tests.test_venture_exercise.VentureExerciseTests.test_existing_provider_transport_receives_no_tools) ... ok
+test_fixture_complete_business_exercise_and_reopen (tests.test_venture_exercise.VentureExerciseTests.test_fixture_complete_business_exercise_and_reopen) ... ok
+test_injected_provider_is_called_sequentially_and_not_independent_ai_evidence (tests.test_venture_exercise.VentureExerciseTests.test_injected_provider_is_called_sequentially_and_not_independent_ai_evidence) ... ok
+test_instruction_text_is_only_data (tests.test_venture_exercise.VentureExerciseTests.test_instruction_text_is_only_data) ... ok
+test_manager_cannot_choose_other_operations_or_change_amounts (tests.test_venture_exercise.VentureExerciseTests.test_manager_cannot_choose_other_operations_or_change_amounts) ... ok
+test_negative_surplus_selection_denied (tests.test_venture_exercise.VentureExerciseTests.test_negative_surplus_selection_denied) ... ok
+test_provider_choice_and_business_content_drive_the_flow (tests.test_venture_exercise.VentureExerciseTests.test_provider_choice_and_business_content_drive_the_flow) ... ok
+test_provider_failure_never_falls_back_or_writes_ledger (tests.test_venture_exercise.VentureExerciseTests.test_provider_failure_never_falls_back_or_writes_ledger) ... ok
+test_review_hash_and_disposition_fail_closed_before_persistence (tests.test_venture_exercise.VentureExerciseTests.test_review_hash_and_disposition_fail_closed_before_persistence) ... ok
+test_strict_json_rejects_ambiguous_oversized_nonfinite_and_malformed (tests.test_venture_exercise.VentureExerciseTests.test_strict_json_rejects_ambiguous_oversized_nonfinite_and_malformed) ... ok
+test_tool_proposal_rejected (tests.test_venture_exercise.VentureExerciseTests.test_tool_proposal_rejected) ... ok
+test_changed_configuration_rejected_before_replay_or_new_model_calls (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_changed_configuration_rejected_before_replay_or_new_model_calls) ... ok
+test_cli_durable_mode_and_path_collision (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_cli_durable_mode_and_path_collision) ... ok
+test_complete_flow_reopens_and_replays_without_inference_or_duplicate_allocation (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_complete_flow_reopens_and_replays_without_inference_or_duplicate_allocation) ... ok
+test_exercise_refuses_non_durable_or_tool_enabled_agent (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_exercise_refuses_non_durable_or_tool_enabled_agent) ... ok
+test_inflight_checkpoint_retries_only_unrecorded_advisory_call (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_inflight_checkpoint_retries_only_unrecorded_advisory_call) ... ok
+test_provenance_tampering_and_rebinding_detected (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_provenance_tampering_and_rebinding_detected) ... ok
+test_provider_failure_is_terminal_and_does_not_fallback (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_provider_failure_is_terminal_and_does_not_fallback) ... ok
+test_registry_interruption_recovers_from_completed_decisions (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_registry_interruption_recovers_from_completed_decisions) ... ok
+test_response_recorded_checkpoint_recovers_without_model_retry (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_response_recorded_checkpoint_recovers_without_model_retry) ... ok
+test_semantically_invalid_packets_and_review_are_quarantined (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_semantically_invalid_packets_and_review_are_quarantined) ... ok
+test_shelving_all_ideas_is_durable_without_workers_or_allocation (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_shelving_all_ideas_is_durable_without_workers_or_allocation) ... ok
+test_tools_and_authority_fields_are_quarantined_without_registry_writes (tests.test_ceo_venture_flow.CEOVentureFlowTests.test_tools_and_authority_fields_are_quarantined_without_registry_writes) ... ok
+test_absent_and_partial_configuration_fail_before_files_or_transport (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_absent_and_partial_configuration_fail_before_files_or_transport) ... ok
+test_endpoint_cannot_embed_credentials_or_use_cleartext (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_endpoint_cannot_embed_credentials_or_use_cleartext) ... ok
+test_gate_missing_failed_or_wrong_denominator_blocks_transport (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_gate_missing_failed_or_wrong_denominator_blocks_transport) ... ok
+test_missing_gate_configuration_denied (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_missing_gate_configuration_denied) ... ok
+test_model_authority_and_malformed_json_fail_closed (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_model_authority_and_malformed_json_fail_closed) ... ok
+test_preflight_checks_gate_but_creates_no_files_or_calls (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_preflight_checks_gate_but_creates_no_files_or_calls) ... /usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x74354a4d9c60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x74354a4da4d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_redirect_handler_blocks_cross_origin_and_same_origin_redirects (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_redirect_handler_blocks_cross_origin_and_same_origin_redirects) ... FAIL
+test_required_mode_refuses_non_durable_entry (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_mode_refuses_non_durable_entry) ... ok
+test_required_provider_uses_actual_adapter_three_stages_and_replays (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_provider_uses_actual_adapter_three_stages_and_replays) ... ok
+test_transport_failure_is_sanitized_terminal_and_never_allocates (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_transport_failure_is_sanitized_terminal_and_never_allocates) ... ok
+test_unsolicited_modern_and_legacy_tools_rejected_before_workers (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_unsolicited_modern_and_legacy_tools_rejected_before_workers) ... /usr/lib/python3.14/unittest/case.py:908: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x74354a4d9c60>
+  asserter = getattr(self, asserter)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/case.py:908: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x74354a4db3d0>
+  asserter = getattr(self, asserter)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/case.py:908: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x74354a4da4d0>
+  asserter = getattr(self, asserter)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+
+======================================================================
+FAIL: test_redirect_handler_blocks_cross_origin_and_same_origin_redirects (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_redirect_handler_blocks_cross_origin_and_same_origin_redirects)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_provider_entrypoint.py", line 224, in test_redirect_handler_blocks_cross_origin_and_same_origin_redirects
+    with self.assertRaises(urllib.error.HTTPError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: HTTPError not raised
+
+----------------------------------------------------------------------
+Ran 45 tests in 1.628s
+
+FAILED (failures=1)
+{"report_sha256":"775ce8565081ad57e6c4a82f86af8036fc49f8b16287962114300a4f21e27c73","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"775ce8565081ad57e6c4a82f86af8036fc49f8b16287962114300a4f21e27c73","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"5c6d7caa26e3b13d1ba9e2c2bb74926b22c530c44a17459c1fa77853d52ebe40","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"5c6d7caa26e3b13d1ba9e2c2bb74926b22c530c44a17459c1fa77853d52ebe40","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
