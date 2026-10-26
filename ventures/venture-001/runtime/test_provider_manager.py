@@ -10,7 +10,7 @@ import uuid
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from provider_manager import AgentManager, validate_plan, file_map, ROLES, DENIED, CAPABILITIES
+from provider_manager import AgentManager, validate_plan, file_map, ROLES, DENIED, CAPABILITIES, external_communication_denied
 from agents.ceo.provider import ModelProviderError, OpenAICompatibleShadowModel
 from agents.ceo.gates import CertificationGateError
 
@@ -89,6 +89,44 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(result["evidence_class"], "test_adapter_only")
         self.assertTrue(all(not t["record"]["agent_inference"] for t in result["tasks"]))
         self.assertTrue(all(v is False for v in result["authorities"].values()))
+
+    def test_dialog_form_permitted_and_reviews_dispatched(self):
+        original = self.provider.__call__
+        def respond(request, schemas):
+            result = original(request, schemas)
+            if request["opportunity"]["task_id"] == "development-1":
+                answer = json.loads(result["decision"]["content"])
+                answer["files"]["index.html"] += (
+                    '<dialog><form method="dialog"><button>Confirm</button></form></dialog>')
+                result["decision"]["content"] = json.dumps(answer)
+            return result
+        self.manager.test_provider = respond
+        result = self.manager.run_agents()
+        self.assertEqual(result["status"], "prepared_with_research_blocked")
+        for role in ("development", "testing", "security"):
+            task = self.manager.effective(role + "-1")
+            self.assertEqual(task["status"], "accepted")
+            self.assertEqual(task["attempt"], 1)
+
+    def test_static_dialog_form_attribute_variants_permitted(self):
+        for source in ('<form method="dialog"></form>', "<form method='dialog'></form>",
+                       '<FORM METHOD=DiAlOg></FORM>'):
+            with self.subTest(source=source):
+                self.assertFalse(external_communication_denied(source))
+
+    def test_static_external_communication_denied(self):
+        for source in (
+            '<form method="post"></form>', '<form></form>', '<form method="get"></form>',
+            '<form action="/submit"></form>', '<form method="dialog" action="/submit"></form>',
+            '<form method="dialog" method="post"></form>', '<form method="dialog"',
+            '<form method="dialog"><button formmethod="post">Send</button></form>',
+            '<form method="dialog"><button formaction="/submit">Send</button></form>',
+            '<form method="dialog"></form><form method="post"></form>',
+            '<a href="https://example.com">Link</a>', '<script>fetch("/send")</script>',
+            '<script>new XMLHttpRequest()</script>', '<script>new WebSocket("/socket")</script>',
+        ):
+            with self.subTest(source=source):
+                self.assertTrue(external_communication_denied(source))
 
     def test_manager_plan_changes_dispatch_order(self):
         self.provider.reverse = True

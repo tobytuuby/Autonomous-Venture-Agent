@@ -7,6 +7,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import hashlib
+from html.parser import HTMLParser
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -98,6 +99,34 @@ def file_map(value, role):
     if total > 196608:
         raise ValueError("artifact byte bound")
     return value
+
+
+class StaticFormValidator(HTMLParser):
+    """Only dialog forms without server submission attributes are permitted."""
+    def __init__(self):
+        super().__init__()
+        self.forms = 0
+        self.denied = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "form":
+            self.forms += 1
+            methods = [v for k, v in attrs if k == "method"]
+            if len(methods) != 1 or methods[0] is None or methods[0].lower() != "dialog":
+                self.denied = True
+        if any(k in ("action", "formaction") or
+               (k == "formmethod" and (v is None or v.lower() != "dialog"))
+               for k, v in attrs):
+            self.denied = True
+
+def external_communication_denied(body):
+    if re.search(r"https?://|\bfetch\s*\(|XMLHttpRequest|WebSocket", body, re.I):
+        return True
+    forms = StaticFormValidator()
+    forms.feed(body)
+    forms.close()
+    # Incomplete or otherwise unparsed form tags remain denied.
+    return forms.denied or forms.forms != len(re.findall(r"<form\b", body, re.I))
 
 class AgentManager(Manager):
     """The legacy Manager supplies locking/snapshots/SQLite, never its scheduler."""
@@ -379,7 +408,7 @@ class AgentManager(Manager):
                     raise ValueError("hosted source/preview instructions missing")
                 if "127.0.0.1" not in files["README.md"] or "http.server" not in files["README.md"]:
                     raise ValueError("local preview command missing")
-                if any(re.search(r"https?://|<form\b|\bfetch\s*\(|XMLHttpRequest|WebSocket", b, re.I)
+                if any(external_communication_denied(b)
                        for n, b in files.items() if not n.endswith(".md")):
                     raise ValueError("external communication denied")
             if task["role"] in ("testing", "security"):
