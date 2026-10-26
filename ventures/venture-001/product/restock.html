@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Studio Restock Kit — worksheet</title>
+<style>
+body{font:16px system-ui;margin:2rem;color:#173b3c;background:#f7f5ef}h1{font-size:2rem}button,a{margin:.3rem;padding:.6rem}button{cursor:pointer}input{width:9rem;padding:.4rem}table{border-collapse:collapse;background:white}th,td{border:1px solid #b6c4bf;padding:.4rem;text-align:left}th{background:#e1ece5} .scroll{overflow:auto}#message{font-weight:bold;white-space:pre-wrap} @media print{button,.controls{display:none}body{margin:0;background:white}input{border:0;width:7rem}}
+</style>
+<h1>Studio Restock Kit</h1>
+<p>Weekly supplies worksheet · v1.0 · One row per item and unit. Work in base units (e.g. kg); pack size uses that same unit.</p>
+<p>Enter physical usable stock, confirmed inbound stock, your reorder point, target, supplier pack size and pack price.
+A row at or below its reorder point orders up to target, rounded to whole packs. Inbound counts toward stock position.
+Numbers are planning suggestions; inspect every order. Prices below are fictional USD examples.</p>
+<p class="controls"><button id="sample">Load fictional example</button><button id="blank">Start blank</button><button id="add">Add row</button>
+<label>Import saved inputs CSV <input type="file" id="file" accept=".csv,text/csv"></label>
+<button id="save">Download inputs CSV</button><button id="results">Download results CSV</button><button id="print">Print</button></p>
+<p>Changes stay in this tab until downloaded. Save inputs before closing. Import replaces all rows. No automatic orders or network connections.</p>
+<div class="scroll"><table><thead><tr id="headers"></tr></thead><tbody id="rows"></tbody></table></div>
+<p id="message" role="status" aria-live="polite"></p>
+<p>Estimate excludes delivery, tax, discounts and supplier minimum orders. Do not add kg, litres and pieces together.
+The total adds money only. Read START-HERE.md for setup, checks and limitations.</p>
+<script>
+"use strict";
+const HEADERS=["Item","Unit","Supplier","Location","On hand","Inbound","Reorder point","Target","Pack size","Pack price"];
+const SAMPLE=[
+["Stoneware clay","kg","Example Clay Co","Shelf A",12,0,15,40,12.5,22],
+["Clear glaze","litre","Example Glaze Co","Shelf B",2,3,4,8,5,45],
+["Packing boxes","piece","Example Packing Co","Cupboard",0,0,10,25,10,8],
+["Sponges","piece","Example Tools Co","Drawer",5,0,5,5,1,2]
+];
+function calculate(row){
+ if(row.length!==10)throw Error("Expected 10 fields");
+ if(!row[0].trim()||!row[1].trim())throw Error("Item and unit required");
+ const n=row.slice(4).map(v=>{
+  if(String(v).trim()===""||!/^\d+(\.\d+)?$/.test(String(v).trim()))throw Error("Use nonnegative plain numbers");
+  const x=Number(v);if(!Number.isFinite(x)||x>1000000000)throw Error("Number out of range");return x;
+ });
+ const [hand,inbound,point,target,pack,price]=n;
+ if(pack<=0)throw Error("Pack size must exceed zero");
+ if(target<point)throw Error("Target must be at least reorder point");
+ const position=hand+inbound;
+ const packs=position<=point?Math.ceil(Math.max(0,target-position)/pack):0;
+ const quantity=packs*pack;
+ const cost=Math.round((packs*price+Number.EPSILON)*100)/100;
+ if(!Number.isSafeInteger(packs)||cost>1000000000)throw Error("Result too large");
+ return {position,packs,quantity,cost,status:packs?"REVIEW ORDER":"NO ORDER"};
+}
+function parseCSV(text){
+ text=text.replace(/^\uFEFF/,"");
+ const rows=[];let row=[],field="",quoted=false,after=false;
+ for(let i=0;i<text.length;i++){
+  const c=text[i];
+  if(quoted){if(c==='"'){if(text[i+1]==='"'){field+='"';i++;}else{quoted=false;after=true;}}else field+=c;continue;}
+  if(c==='"'){if(field||after)throw Error("Unexpected quote");quoted=true;}
+  else if(c===','){row.push(field);field="";after=false;}
+  else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(field);rows.push(row);row=[];field="";after=false;}
+  else{if(after)throw Error("Text after closing quote");field+=c;}
+ }
+ if(quoted)throw Error("Unclosed quote");
+ if(field||row.length||after){row.push(field);rows.push(row);}
+ return rows;
+}
+function csv(rows){
+ // Prevent spreadsheet formula execution in text fields; import removes this protective apostrophe.
+ return rows.map(r=>r.map(v=>{let s=String(v);if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"';}).join(",")).join("\r\n")+"\r\n";
+}
+function importRows(text){
+ const all=parseCSV(text);
+ if(JSON.stringify(all.shift())!==JSON.stringify(HEADERS))throw Error("Input headers do not match template");
+ if(!all.length||all.length>200)throw Error("Import 1–200 rows");
+ return all.map((r,i)=>{
+  r=r.map((v,j)=>j<4?v.replace(/^'(?=[\s]*[=+@-])/,""):v);
+  try{calculate(r);}catch(e){throw Error("CSV row "+(i+2)+": "+e.message);}return r;
+ });
+}
+if(typeof module!=="undefined")module.exports={calculate,parseCSV,csv,importRows,HEADERS,SAMPLE};
+if(typeof document!=="undefined"){
+ const body=document.getElementById("rows"),msg=document.getElementById("message");
+ for(const h of [...HEADERS,"Position","Packs","Order quantity","Estimate","Status","Remove"]){const th=document.createElement("th");th.textContent=h;document.getElementById("headers").append(th);}
+ function values(){return [...body.rows].map(tr=>[...tr.querySelectorAll("input")].map(x=>x.value));}
+ function update(){
+  let total=0,errors=0;
+  [...body.rows].forEach(tr=>{
+   const cells=[...tr.cells].slice(10,15);
+   try{const r=calculate([...tr.querySelectorAll("input")].map(x=>x.value));[r.position,r.packs,r.quantity,r.cost.toFixed(2),r.status].forEach((v,i)=>cells[i].textContent=v);total+=r.cost;}
+   catch(e){errors++;cells.forEach(c=>c.textContent="");cells[4].textContent=e.message;}
+  });
+  msg.textContent=errors?errors+" invalid row(s). Fix them before exporting.":"Estimated supplies total: "+total.toFixed(2)+" (one currency only). Review before ordering.";
+ }
+ function add(row=["","","","",0,0,0,0,1,0]){
+  if(body.rows.length>=200){msg.textContent="Maximum 200 rows";return;}
+  const tr=body.insertRow();
+  row.forEach((v,i)=>{const input=document.createElement("input");input.value=v;input.setAttribute("aria-label",HEADERS[i]);if(i>=4)input.inputMode="decimal";input.addEventListener("input",update);tr.insertCell().append(input);});
+  for(let i=0;i<5;i++)tr.insertCell();
+  const b=document.createElement("button");b.textContent="Remove";b.onclick=()=>{tr.remove();update();};tr.insertCell().append(b);update();
+ }
+ function load(rows){body.textContent="";rows.forEach(add);update();}
+ function download(name,rows){
+  try{values().forEach(calculate);if(!body.rows.length)throw Error("Add a row first");
+   const url=URL.createObjectURL(new Blob([csv(rows)],{type:"text/csv;charset=utf-8"}));
+   const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }catch(e){msg.textContent=e.message;}
+ }
+ document.getElementById("sample").onclick=()=>{if(confirm("Replace current rows? Save your inputs first."))load(SAMPLE);};
+ document.getElementById("blank").onclick=()=>{if(confirm("Replace current rows? Save your inputs first."))load([["","","","",0,0,0,0,1,0]]);};
+ document.getElementById("add").onclick=()=>add();
+ document.getElementById("save").onclick=()=>download("restock-inputs.csv",[HEADERS,...values()]);
+ document.getElementById("results").onclick=()=>{
+  try{const rows=values().map(r=>{const x=calculate(r);return [...r,x.position,x.packs,x.quantity,x.cost.toFixed(2),x.status];});download("restock-results.csv",[[...HEADERS,"Position","Packs","Order quantity","Estimate","Status"],...rows]);}catch(e){msg.textContent=e.message;}
+ };
+ document.getElementById("file").onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>200000)throw Error("File exceeds 200 KB");const rows=importRows(await f.text());if(confirm("Replace current rows with imported data?"))load(rows);}catch(err){msg.textContent=err.message;}finally{e.target.value="";}};
+ document.getElementById("print").onclick=()=>window.print();
+ load(SAMPLE);
+}
+</script></html>
