@@ -1,0 +1,105 @@
+{
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 tests/certification/milestone1-20261027/run_scenarios.py",
+  "tests_run": 19,
+  "failures": 0,
+  "errors": 0,
+  "classification": "SUPPLEMENTAL_LOCAL_SYNTHETIC_NO_PROVIDER",
+  "adv_universe": "ADV-001\u2013ADV-049 /49 unchanged",
+  "scenarios": [
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_advisory_rejection_holds_existing_assignment",
+      "result": "PASS",
+      "artifact": "test_advisory_rejection_holds_existing_assignment.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_busy_scheduler_lock_never_opens_or_mutates_source",
+      "result": "PASS",
+      "artifact": "test_busy_scheduler_lock_never_opens_or_mutates_source.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_changed_advisory_requires_review_and_no_reassignment",
+      "result": "PASS",
+      "artifact": "test_changed_advisory_requires_review_and_no_reassignment.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_cli_no_secrets_and_busy_lock",
+      "result": "PASS",
+      "artifact": "test_cli_no_secrets_and_busy_lock.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_crash_after_create_commit_recovers_without_duplicate_assignment",
+      "result": "PASS",
+      "artifact": "test_crash_after_create_commit_recovers_without_duplicate_assignment.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_crash_before_decision_commit_reuses_exact_signed_receipt",
+      "result": "PASS",
+      "artifact": "test_crash_before_decision_commit_reuses_exact_signed_receipt.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_historical_source_bytes_unchanged_and_read_only_connection",
+      "result": "PASS",
+      "artifact": "test_historical_source_bytes_unchanged_and_read_only_connection.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_manager_rejection_revision_and_worker_improvement_are_signed",
+      "result": "PASS",
+      "artifact": "test_manager_rejection_revision_and_worker_improvement_are_signed.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_missing_source_fails_closed_without_creating_database",
+      "result": "PASS",
+      "artifact": "test_missing_source_fails_closed_without_creating_database.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_model_instructions_cannot_select_scope_or_owner_authority",
+      "result": "PASS",
+      "artifact": "test_model_instructions_cannot_select_scope_or_owner_authority.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_no_owner_key_and_existing_or_partial_keys_never_rotate",
+      "result": "PASS",
+      "artifact": "test_no_owner_key_and_existing_or_partial_keys_never_rotate.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_packet_identity_mutation_denied",
+      "result": "PASS",
+      "artifact": "test_packet_identity_mutation_denied.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_permissions_alias_and_public_pin_mismatch_denied",
+      "result": "PASS",
+      "artifact": "test_permissions_alias_and_public_pin_mismatch_denied.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_repeated_tick_restart_preserves_exact_signed_assignment",
+      "result": "PASS",
+      "artifact": "test_repeated_tick_restart_preserves_exact_signed_assignment.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_scope_mismatch_worker_result_cannot_commit",
+      "result": "PASS",
+      "artifact": "test_scope_mismatch_worker_result_cannot_commit.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_service_is_network_denied_and_has_no_executor_or_owner_credentials",
+      "result": "PASS",
+      "artifact": "test_service_is_network_denied_and_has_no_executor_or_owner_credentials.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_signed_end_to_end_manager_worker_review_stops_before_owner",
+      "result": "PASS",
+      "artifact": "test_signed_end_to_end_manager_worker_review_stops_before_owner.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_unsigned_wrong_actor_stale_and_live_commands_denied",
+      "result": "PASS",
+      "artifact": "test_unsigned_wrong_actor_stale_and_live_commands_denied.json"
+    },
+    {
+      "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_validly_signed_expired_command_fails_without_renewal",
+      "result": "PASS",
+      "artifact": "test_validly_signed_expired_command_fails_without_renewal.json"
+    }
+  ]
+}

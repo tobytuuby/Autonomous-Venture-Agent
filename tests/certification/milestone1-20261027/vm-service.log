@@ -1,0 +1,13 @@
+ActiveState=inactive
+Result=success
+ExecMainStatus=0
+CapabilityBoundingSet=cap_dac_read_search
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/milestone1-service
+PrivateNetwork=yes
+ProtectSystem=strict
+ActiveState=active
+SubState=waiting
+NextElapseUSecMonotonic=1w 2d 6h 38min 59.708639s
+700 root artifacts/milestone1-service
+600 root artifacts/milestone1-service/identities.private.json
+PROVIDER_UID_CANNOT_READ_KEYS

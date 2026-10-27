@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly deterministic preparation handoff check
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+AccuracySec=1min
+Unit=venture-preparation-broker.service
+
+[Install]
+WantedBy=timers.target

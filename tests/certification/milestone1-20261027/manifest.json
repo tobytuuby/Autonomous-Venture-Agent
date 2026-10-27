@@ -1,0 +1,17 @@
+{
+  "classification": "SUPPLEMENTAL_LOCAL_SYNTHETIC_AND_VM_DETERMINISTIC_PREPARATION",
+  "baseline": "d5cdbd193970fc9db6f4e8b953f77589ee8ac747",
+  "focused": "92/92",
+  "regression": "812/812",
+  "scenarios": "19/19",
+  "adv": "ADV-001\u2013ADV-049 /49 unchanged",
+  "provider_calls": 0,
+  "independent_acceptance": false,
+  "remaining": [
+    "owner discussion and signed approval",
+    "valid signed provider grant and existing certification/configuration gates",
+    "no operational executor authorization",
+    "no verified online MVP",
+    "transient timer has no reboot persistence"
+  ]
+}

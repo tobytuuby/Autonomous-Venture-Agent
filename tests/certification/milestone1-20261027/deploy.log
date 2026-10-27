@@ -1,0 +1,3 @@
+Running timer as unit: venture-preparation-broker.timer
+Will run service as unit: venture-preparation-broker.service
+Transient preparation timer requested; verify service Result and status artifact.

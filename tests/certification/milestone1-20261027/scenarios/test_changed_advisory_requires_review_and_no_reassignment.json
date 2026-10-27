@@ -1,0 +1,318 @@
+{
+  "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_changed_advisory_requires_review_and_no_reassignment",
+  "result": "PASS",
+  "classification": "SUPPLEMENTAL_LOCAL_SYNTHETIC_NO_PROVIDER",
+  "public_actor_manifests": [
+    {
+      "actors": {
+        "service-ceo": {
+          "role": "ceo",
+          "public_key": "d26e60ec0ade39e9a07ea9a2cd3c3fa86502d6aab93dcf39f4413d201ed65084"
+        },
+        "service-manager": {
+          "role": "manager",
+          "public_key": "9982a120dd999685da5d5fb4117c3eac0f9aa1d021eded0472b23943519c94cc"
+        },
+        "service-worker": {
+          "role": "worker",
+          "public_key": "29c4aa82a5e6e76a70e4ef60b2e2213b2c988554628f6b0a67635e2d0b23e17a"
+        }
+      }
+    }
+  ],
+  "raw_events": [
+    {
+      "journal": "EscalationInbox",
+      "kind": "INGESTED",
+      "snapshot": {
+        "id": "studio-online",
+        "venture_id": "venture-001",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "status": "RECEIVED",
+        "ack": null,
+        "review": null,
+        "review_source": null,
+        "decision": null,
+        "handoff_exported": false
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "INGESTED",
+      "snapshot": {
+        "id": "studio-online",
+        "venture_id": "venture-001",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "status": "RECEIVED",
+        "ack": null,
+        "review": null,
+        "review_source": null,
+        "decision": null,
+        "handoff_exported": false
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "ACKNOWLEDGED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": null,
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": null,
+        "review_source": null,
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "ACKNOWLEDGED",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "REVIEW_RECORDED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": null,
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "item_id": "studio-online",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "disposition": "HANDOFF",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference.",
+          "manager_id": "service-manager",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "scope": "PREPARATION_ONLY"
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "REVIEWED",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "AUTHORIZED_DECISION_RECORDED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": {
+          "receipt": {
+            "venture_id": "venture-001",
+            "item_id": "studio-online",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+            "manager_id": "service-manager",
+            "decision": "HANDOFF",
+            "scope": "PREPARATION_ONLY",
+            "ceo_id": "service-ceo",
+            "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+            "issued_at": "2026-10-27T22:57:30.394065+00:00",
+            "expires_at": "2026-10-28T22:57:30.394065+00:00"
+          },
+          "signature": "c1bfc66c2ab7c6f4df6aab2e900f5e2fbe09f1707a95fd32c26cb8e463e2b945668fb077cd8d40e1b92e389b7559f31f100fe5637b8b7f2646afb8b7ffa3a20f",
+          "verifier_key_hash": "27b8ae44535f62c1c35ae871c7e6a76472f2716addd182b090651820c8d8025e"
+        },
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "disposition": "HANDOFF",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "scope": "PREPARATION_ONLY",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "HANDOFF_READY",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "HANDOFF_EXPORTED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": {
+          "receipt": {
+            "ceo_id": "service-ceo",
+            "decision": "HANDOFF",
+            "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+            "expires_at": "2026-10-28T22:57:30.394065+00:00",
+            "issued_at": "2026-10-27T22:57:30.394065+00:00",
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+            "scope": "PREPARATION_ONLY",
+            "venture_id": "venture-001"
+          },
+          "signature": "c1bfc66c2ab7c6f4df6aab2e900f5e2fbe09f1707a95fd32c26cb8e463e2b945668fb077cd8d40e1b92e389b7559f31f100fe5637b8b7f2646afb8b7ffa3a20f",
+          "verifier_key_hash": "27b8ae44535f62c1c35ae871c7e6a76472f2716addd182b090651820c8d8025e"
+        },
+        "handoff_exported": true,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "disposition": "HANDOFF",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "scope": "PREPARATION_ONLY",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "HANDOFF_READY",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "VentureWorkflow",
+      "kind": "create",
+      "snapshot": {
+        "id": "m1-2f2366519f2235258b5e3b74",
+        "venture_id": "venture-001",
+        "state": "MANAGER_PENDING",
+        "revision": 1,
+        "version": 1,
+        "scope": {
+          "mode": "PREPARATION_ONLY",
+          "manager_id": "service-manager",
+          "worker_id": "service-worker",
+          "tasks": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "budget_units": 3,
+          "seed_cents": 1
+        },
+        "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+        "mode": "PREPARATION_ONLY",
+        "used_units": 0,
+        "evidence": {
+          "bounded-preparation-attestation-v1": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "assessment": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea"
+        },
+        "handoff": {
+          "item_id": "studio-online",
+          "venture_id": "venture-001",
+          "manager_id": "service-manager",
+          "review": {
+            "disposition": "HANDOFF",
+            "instructions": [
+              "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+              "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+              "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+            ],
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "owner_action": "Human owner discussion and approval required before operational execution.",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "scope": "PREPARATION_ONLY",
+            "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+          },
+          "decision": {
+            "receipt": {
+              "ceo_id": "service-ceo",
+              "decision": "HANDOFF",
+              "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+              "expires_at": "2026-10-28T22:57:30.394065+00:00",
+              "issued_at": "2026-10-27T22:57:30.394065+00:00",
+              "item_id": "studio-online",
+              "manager_id": "service-manager",
+              "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+              "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+              "scope": "PREPARATION_ONLY",
+              "venture_id": "venture-001"
+            },
+            "signature": "c1bfc66c2ab7c6f4df6aab2e900f5e2fbe09f1707a95fd32c26cb8e463e2b945668fb077cd8d40e1b92e389b7559f31f100fe5637b8b7f2646afb8b7ffa3a20f",
+            "verifier_key_hash": "27b8ae44535f62c1c35ae871c7e6a76472f2716addd182b090651820c8d8025e"
+          },
+          "review_source": "operator_supplied",
+          "operational_authority": false,
+          "worker_autoexec": false,
+          "owner_approval_required": true,
+          "external_actions_allowed": false
+        },
+        "owner_receipt": null,
+        "finance_request": null,
+        "operational_authority": false,
+        "external_actions_allowed": false,
+        "execution_performed": false,
+        "money_released": false,
+        "last_command": {
+          "workflow_id": "m1-2f2366519f2235258b5e3b74",
+          "request_id": "m1-0-create",
+          "actor_id": "service-ceo",
+          "role": "ceo",
+          "origin": "control_plane",
+          "action": "create",
+          "revision": 0,
+          "previous_hash": "GENESIS",
+          "version": 1,
+          "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "evidence": [
+            {
+              "ref": "bounded-preparation-attestation-v1",
+              "sha256": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+            },
+            {
+              "ref": "assessment",
+              "sha256": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea"
+            }
+          ],
+          "payload": {
+            "venture_id": "venture-001",
+            "scope": {
+              "mode": "PREPARATION_ONLY",
+              "manager_id": "service-manager",
+              "worker_id": "service-worker",
+              "tasks": [
+                "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+                "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+                "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+              ],
+              "budget_units": 3,
+              "seed_cents": 1
+            },
+            "handoff_hash": "6e3f49301fdf821a9cbd4d2039ea955a6aa7a9bf1f60ac22a215e98a2a716e2f"
+          },
+          "issued_at": "2026-10-27T22:57:30.416279+00:00",
+          "expires_at": "2026-10-28T22:57:30.416279+00:00",
+          "live": false
+        },
+        "signature": "13ce6c7501698b069905b49b1479b09980421f85610923aa5da7a13ded36c91f202fefb4f7790d5707fd61872d336c75dc60782e9442e36ce62d9513a90b8002",
+        "verifier_key_hash": "27b8ae44535f62c1c35ae871c7e6a76472f2716addd182b090651820c8d8025e"
+      }
+    }
+  ]
+}

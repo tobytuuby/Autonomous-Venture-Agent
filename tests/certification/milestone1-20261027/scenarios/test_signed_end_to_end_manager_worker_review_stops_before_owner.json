@@ -1,0 +1,1393 @@
+{
+  "scenario": "tests.test_preparation_broker.PreparationBrokerTests.test_signed_end_to_end_manager_worker_review_stops_before_owner",
+  "result": "PASS",
+  "classification": "SUPPLEMENTAL_LOCAL_SYNTHETIC_NO_PROVIDER",
+  "public_actor_manifests": [
+    {
+      "actors": {
+        "service-ceo": {
+          "role": "ceo",
+          "public_key": "e4063fb45aed4321b55c78756096c553e3921b2ccb878e167ecd18f366c2c252"
+        },
+        "service-manager": {
+          "role": "manager",
+          "public_key": "fc04788d1f327e9b01fca7828121b0880d2c6829c3b8b981831e4f7db42daa34"
+        },
+        "service-worker": {
+          "role": "worker",
+          "public_key": "ebb729ad56f1e3c98bcab43c26800b2bd7019737e9826a1d052e9c93250fcb8d"
+        }
+      }
+    }
+  ],
+  "raw_events": [
+    {
+      "journal": "EscalationInbox",
+      "kind": "INGESTED",
+      "snapshot": {
+        "id": "studio-online",
+        "venture_id": "venture-001",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "status": "RECEIVED",
+        "ack": null,
+        "review": null,
+        "review_source": null,
+        "decision": null,
+        "handoff_exported": false
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "INGESTED",
+      "snapshot": {
+        "id": "studio-online",
+        "venture_id": "venture-001",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "status": "RECEIVED",
+        "ack": null,
+        "review": null,
+        "review_source": null,
+        "decision": null,
+        "handoff_exported": false
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "ACKNOWLEDGED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": null,
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": null,
+        "review_source": null,
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "ACKNOWLEDGED",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "REVIEW_RECORDED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": null,
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "item_id": "studio-online",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "disposition": "HANDOFF",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference.",
+          "manager_id": "service-manager",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "scope": "PREPARATION_ONLY"
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "REVIEWED",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "AUTHORIZED_DECISION_RECORDED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": {
+          "receipt": {
+            "venture_id": "venture-001",
+            "item_id": "studio-online",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+            "manager_id": "service-manager",
+            "decision": "HANDOFF",
+            "scope": "PREPARATION_ONLY",
+            "ceo_id": "service-ceo",
+            "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+            "issued_at": "2026-10-27T22:57:32.418843+00:00",
+            "expires_at": "2026-10-28T22:57:32.418843+00:00"
+          },
+          "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+          "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+        },
+        "handoff_exported": false,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "disposition": "HANDOFF",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "scope": "PREPARATION_ONLY",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "HANDOFF_READY",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "EscalationInbox",
+      "kind": "HANDOFF_EXPORTED",
+      "snapshot": {
+        "ack": "service-policy",
+        "decision": {
+          "receipt": {
+            "ceo_id": "service-ceo",
+            "decision": "HANDOFF",
+            "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+            "expires_at": "2026-10-28T22:57:32.418843+00:00",
+            "issued_at": "2026-10-27T22:57:32.418843+00:00",
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+            "scope": "PREPARATION_ONLY",
+            "venture_id": "venture-001"
+          },
+          "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+          "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+        },
+        "handoff_exported": true,
+        "id": "studio-online",
+        "packet": "# CEO escalation \u2014 Studio Restock Kit online MVP\n\n**Date:** 2026-10-27\n**To:** Venture CEO (venture-001)\n**From:** Owner review / acceptance rejection\n**Disposition:** RETURNED TO CEO \u2014 NOT ACCEPTED. Pending CEO processing; this file is an intake record, not an executed CEO decision.\n**Reference:** main commit 74fa2e20501da493d2fc9425115000d68226a41f; online-pilot-20261027-02.\n\n## Review finding\nThe offline prototype and hosted-static model are not the authorized target for further preparation. The online MVP is not accepted. See PRODUCT-REQUIREMENTS-v1.1.md for the revised product contract. Passing infrastructure tests (41 focused and 712 full regression) are not product acceptance. The provider-backed manager run exited 2 before inference with 'provider configuration required; fixtures forbidden'. No private staging browser acceptance or deployment exists.\n\n## CEO action requested\n1. Review scope conflict between historical offline OFFER.md and the revised online product requirements. Produce a bounded CEO scope decision and direct the venture manager; do not ask the owner to design or code the application.\n2. Resolve the manager's provider execution blocker using only already authorized configuration and budgets. If an actual VM permission, credential-injection, or deployment configuration change is necessary, produce a precise owner action request; do not read, print or copy secrets into records.\n3. Have the manager delegate backend/application development, independent HTTP/browser acceptance, and security/privacy/recovery review to specialized workers. The manager owns corrections and task sequencing.\n4. Require server-authenticated tenant isolation, durable CRUD and reorder calculations, CSV import/export, fresh-browser persistence after logout, backup/restore and deletion behavior. Static/offline-only delivery is a failure.\n5. Return to owner only an evidence-backed private-staging product for final review, or a precisely scoped VM-change request. No payments, public launch, outreach, actual customer data, or operational venture authority.\n\n## Governance\nVenture #1 remains unapproved for operational greenlight, funding and launch; the existing owner approval and all denied live-authority gates apply. Provider calls are permitted only through configured bounded advisory/preparation machinery; failures never authorize fixture substitution or unrestricted execution. This escalation does not open a new CEO inference cycle or authorize worker execution.\n\n## CEO intake status\nQUEUED_FOR_CEO_REVIEW \u2014 not consumed by existing fixed scheduled CEO replay. The CEO service presently has no verified dynamic intake mechanism. A separate bounded CEO intake/decision capability would be required to process this packet and create durable CEO-to-manager instructions.\n",
+        "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+        "review": {
+          "disposition": "HANDOFF",
+          "instructions": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "owner_action": "Human owner discussion and approval required before operational execution.",
+          "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+          "scope": "PREPARATION_ONLY",
+          "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+        },
+        "review_source": "operator_supplied",
+        "source": "ventures/venture-001/CEO-ESCALATION-ONLINE-20261027.md",
+        "status": "HANDOFF_READY",
+        "venture_id": "venture-001"
+      }
+    },
+    {
+      "journal": "VentureWorkflow",
+      "kind": "create",
+      "snapshot": {
+        "id": "m1-2f2366519f2235258b5e3b74",
+        "venture_id": "venture-001",
+        "state": "MANAGER_PENDING",
+        "revision": 1,
+        "version": 1,
+        "scope": {
+          "mode": "PREPARATION_ONLY",
+          "manager_id": "service-manager",
+          "worker_id": "service-worker",
+          "tasks": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "budget_units": 3,
+          "seed_cents": 1
+        },
+        "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+        "mode": "PREPARATION_ONLY",
+        "used_units": 0,
+        "evidence": {
+          "bounded-preparation-attestation-v1": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "assessment": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea"
+        },
+        "handoff": {
+          "item_id": "studio-online",
+          "venture_id": "venture-001",
+          "manager_id": "service-manager",
+          "review": {
+            "disposition": "HANDOFF",
+            "instructions": [
+              "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+              "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+              "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+            ],
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "owner_action": "Human owner discussion and approval required before operational execution.",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "scope": "PREPARATION_ONLY",
+            "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+          },
+          "decision": {
+            "receipt": {
+              "ceo_id": "service-ceo",
+              "decision": "HANDOFF",
+              "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+              "expires_at": "2026-10-28T22:57:32.418843+00:00",
+              "issued_at": "2026-10-27T22:57:32.418843+00:00",
+              "item_id": "studio-online",
+              "manager_id": "service-manager",
+              "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+              "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+              "scope": "PREPARATION_ONLY",
+              "venture_id": "venture-001"
+            },
+            "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+            "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+          },
+          "review_source": "operator_supplied",
+          "operational_authority": false,
+          "worker_autoexec": false,
+          "owner_approval_required": true,
+          "external_actions_allowed": false
+        },
+        "owner_receipt": null,
+        "finance_request": null,
+        "operational_authority": false,
+        "external_actions_allowed": false,
+        "execution_performed": false,
+        "money_released": false,
+        "last_command": {
+          "workflow_id": "m1-2f2366519f2235258b5e3b74",
+          "request_id": "m1-0-create",
+          "actor_id": "service-ceo",
+          "role": "ceo",
+          "origin": "control_plane",
+          "action": "create",
+          "revision": 0,
+          "previous_hash": "GENESIS",
+          "version": 1,
+          "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "evidence": [
+            {
+              "ref": "bounded-preparation-attestation-v1",
+              "sha256": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+            },
+            {
+              "ref": "assessment",
+              "sha256": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea"
+            }
+          ],
+          "payload": {
+            "venture_id": "venture-001",
+            "scope": {
+              "mode": "PREPARATION_ONLY",
+              "manager_id": "service-manager",
+              "worker_id": "service-worker",
+              "tasks": [
+                "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+                "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+                "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+              ],
+              "budget_units": 3,
+              "seed_cents": 1
+            },
+            "handoff_hash": "d33c5f359be3f5c07ddd233bc812080b2558613f8b04e192811d03f668ee255e"
+          },
+          "issued_at": "2026-10-27T22:57:32.445511+00:00",
+          "expires_at": "2026-10-28T22:57:32.445511+00:00",
+          "live": false
+        },
+        "signature": "82abca6ceec68909bad765693ef413d4abb072272724a4ba57a927a5ceed558495ef028c973340b02c6c2a7b8196b3b757b164850bac6e96c4020092c8445c06",
+        "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+      }
+    },
+    {
+      "journal": "VentureWorkflow",
+      "kind": "delegate",
+      "snapshot": {
+        "evidence": {
+          "assessment": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+          "bounded-preparation-attestation-v1": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+        },
+        "execution_performed": false,
+        "external_actions_allowed": false,
+        "finance_request": null,
+        "handoff": {
+          "decision": {
+            "receipt": {
+              "ceo_id": "service-ceo",
+              "decision": "HANDOFF",
+              "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+              "expires_at": "2026-10-28T22:57:32.418843+00:00",
+              "issued_at": "2026-10-27T22:57:32.418843+00:00",
+              "item_id": "studio-online",
+              "manager_id": "service-manager",
+              "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+              "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+              "scope": "PREPARATION_ONLY",
+              "venture_id": "venture-001"
+            },
+            "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+            "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+          },
+          "external_actions_allowed": false,
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "operational_authority": false,
+          "owner_approval_required": true,
+          "review": {
+            "disposition": "HANDOFF",
+            "instructions": [
+              "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+              "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+              "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+            ],
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "owner_action": "Human owner discussion and approval required before operational execution.",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "scope": "PREPARATION_ONLY",
+            "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+          },
+          "review_source": "operator_supplied",
+          "venture_id": "venture-001",
+          "worker_autoexec": false
+        },
+        "id": "m1-2f2366519f2235258b5e3b74",
+        "last_command": {
+          "workflow_id": "m1-2f2366519f2235258b5e3b74",
+          "request_id": "m1-1-delegate",
+          "actor_id": "service-manager",
+          "role": "manager",
+          "origin": "control_plane",
+          "action": "delegate",
+          "revision": 1,
+          "previous_hash": "732877074de5d01982d3ee2660fb15d2f16040bbd02b59f2fb2848898d3a920a",
+          "version": 1,
+          "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "evidence": [
+            {
+              "ref": "bounded-preparation-attestation-v1",
+              "sha256": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+            }
+          ],
+          "payload": {
+            "reason": "TEST ONLY"
+          },
+          "issued_at": "2026-10-27T22:57:32.465530+00:00",
+          "expires_at": "2026-10-28T22:57:32.465530+00:00",
+          "live": false
+        },
+        "mode": "PREPARATION_ONLY",
+        "money_released": false,
+        "operational_authority": false,
+        "owner_receipt": null,
+        "revision": 2,
+        "scope": {
+          "budget_units": 3,
+          "manager_id": "service-manager",
+          "mode": "PREPARATION_ONLY",
+          "seed_cents": 1,
+          "tasks": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "worker_id": "service-worker"
+        },
+        "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+        "signature": "24b7632d1d3f9d51c4eafca1851e53fbb9244fc058f11fa5688d9d9fca543b7fb972ecc0aa216cf3b1d4b86ed5bc981b801050d942b1e67183f9bec306ddf00b",
+        "state": "WORKER_PENDING",
+        "used_units": 0,
+        "venture_id": "venture-001",
+        "verifier_key_hash": "01761b06e6542a9603306a4ef013be6ad976dbacea311986494b48ef493e746e",
+        "version": 1
+      }
+    },
+    {
+      "journal": "VentureWorkflow",
+      "kind": "submit",
+      "snapshot": {
+        "evidence": {
+          "assessment": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+          "bounded-preparation-attestation-v1": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "synthetic-result-89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a": "89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a"
+        },
+        "execution_performed": false,
+        "external_actions_allowed": false,
+        "finance_request": null,
+        "handoff": {
+          "decision": {
+            "receipt": {
+              "ceo_id": "service-ceo",
+              "decision": "HANDOFF",
+              "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+              "expires_at": "2026-10-28T22:57:32.418843+00:00",
+              "issued_at": "2026-10-27T22:57:32.418843+00:00",
+              "item_id": "studio-online",
+              "manager_id": "service-manager",
+              "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+              "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+              "scope": "PREPARATION_ONLY",
+              "venture_id": "venture-001"
+            },
+            "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+            "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+          },
+          "external_actions_allowed": false,
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "operational_authority": false,
+          "owner_approval_required": true,
+          "review": {
+            "disposition": "HANDOFF",
+            "instructions": [
+              "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+              "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+              "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+            ],
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "owner_action": "Human owner discussion and approval required before operational execution.",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "scope": "PREPARATION_ONLY",
+            "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+          },
+          "review_source": "operator_supplied",
+          "venture_id": "venture-001",
+          "worker_autoexec": false
+        },
+        "id": "m1-2f2366519f2235258b5e3b74",
+        "last_command": {
+          "workflow_id": "m1-2f2366519f2235258b5e3b74",
+          "request_id": "m1-2-submit",
+          "actor_id": "service-worker",
+          "role": "worker",
+          "origin": "control_plane",
+          "action": "submit",
+          "revision": 2,
+          "previous_hash": "e4cac24299811cd2bb3faade6bb6566cbf9f6ec95b662976728c4b5b60506942",
+          "version": 1,
+          "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "evidence": [
+            {
+              "ref": "bounded-preparation-attestation-v1",
+              "sha256": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+            },
+            {
+              "ref": "synthetic-result-89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a",
+              "sha256": "89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a"
+            }
+          ],
+          "payload": {
+            "units": 1
+          },
+          "issued_at": "2026-10-27T22:57:32.482272+00:00",
+          "expires_at": "2026-10-28T22:57:32.482272+00:00",
+          "live": false
+        },
+        "mode": "PREPARATION_ONLY",
+        "money_released": false,
+        "operational_authority": false,
+        "owner_receipt": null,
+        "revision": 3,
+        "scope": {
+          "budget_units": 3,
+          "manager_id": "service-manager",
+          "mode": "PREPARATION_ONLY",
+          "seed_cents": 1,
+          "tasks": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "worker_id": "service-worker"
+        },
+        "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+        "signature": "ebda37f79064b1972fe971f79674de6b9a4a45173ac10cb1bddd3a5b1a9eb0649738083aed559a9dd970b47dc859a86d1e99cccf9c99f8d7f88d514c0146270f",
+        "state": "MANAGER_REVIEW",
+        "used_units": 1,
+        "venture_id": "venture-001",
+        "verifier_key_hash": "521044a6bb55e7be2c8aedf46444e0db1e0542cce4e0f7f08a24d9ebb1d292e0",
+        "version": 1,
+        "synthetic_results": {
+          "89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a": {
+            "flow_id": "flow-venture-001",
+            "stages": [
+              "CEO_PROPOSAL",
+              "MANAGER_ASSIGNMENT",
+              "WORKER_RESULTS",
+              "MANAGER_AGGREGATE",
+              "CEO_REVIEW_PACKAGE"
+            ],
+            "ceo_proposal": {
+              "venture_id": "venture-001",
+              "title": "TEST ONLY",
+              "problem": "Fixture evidence",
+              "hypothesis": "Unverified",
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "taint": [
+                "model_generated_proposal"
+              ],
+              "synthetic_only": true,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "external_action_authorized": false,
+              "payment_authorized": false,
+              "broker_execution_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "capital_allocation_authorized": false,
+              "deployment_authorized": false,
+              "venture_execution_authorized": false
+            },
+            "manager_assignment": {
+              "assignment_id": "assignment-venture-001",
+              "portfolio_id": "portfolio-synthetic",
+              "venture_id": "venture-001",
+              "manager_id": "manager-venture-001",
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "task_ids": [
+                "task-0",
+                "task-1",
+                "task-2"
+              ],
+              "taint": [
+                "model_generated_proposal"
+              ],
+              "synthetic_only": true,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "external_action_authorized": false,
+              "payment_authorized": false,
+              "broker_execution_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "capital_allocation_authorized": false,
+              "deployment_authorized": false,
+              "venture_execution_authorized": false
+            },
+            "worker_results": [
+              {
+                "task_id": "task-0",
+                "worker_id": "worker-checklist",
+                "venture_id": "venture-001",
+                "status": "RESULT_RECORDED",
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "artifact": {
+                  "artifact_id": "artifact-task-0",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                },
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "synthetic_only": true,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "external_action_authorized": false,
+                "payment_authorized": false,
+                "broker_execution_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "capital_allocation_authorized": false,
+                "deployment_authorized": false,
+                "venture_execution_authorized": false
+              },
+              {
+                "task_id": "task-1",
+                "worker_id": "worker-checklist",
+                "venture_id": "venture-001",
+                "status": "RESULT_RECORDED",
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "artifact": {
+                  "artifact_id": "artifact-task-1",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                },
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "synthetic_only": true,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "external_action_authorized": false,
+                "payment_authorized": false,
+                "broker_execution_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "capital_allocation_authorized": false,
+                "deployment_authorized": false,
+                "venture_execution_authorized": false
+              },
+              {
+                "task_id": "task-2",
+                "worker_id": "worker-checklist",
+                "venture_id": "venture-001",
+                "status": "RESULT_RECORDED",
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "artifact": {
+                  "artifact_id": "artifact-task-2",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                },
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "synthetic_only": true,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "external_action_authorized": false,
+                "payment_authorized": false,
+                "broker_execution_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "capital_allocation_authorized": false,
+                "deployment_authorized": false,
+                "venture_execution_authorized": false
+              }
+            ],
+            "manager_aggregate": {
+              "portfolio_id": "portfolio-synthetic",
+              "venture_id": "venture-001",
+              "manager_id": "manager-venture-001",
+              "completed_task_ids": [
+                "task-0",
+                "task-1",
+                "task-2"
+              ],
+              "result_hashes": [
+                "e7321f26b06e1281b8120daa516397c0aca856ce8684c4d57d27ed3d3034b92e",
+                "121e567e229c35292f2646b6b3ad6168eb0f498b9f1df9eb6c31b4513cddcaa6",
+                "fe598c33dcb93e974f00221aebdcdba61fa4dd1d6749f0270d7f7b49a77add2d"
+              ],
+              "results": [
+                {
+                  "task_id": "task-0",
+                  "worker_id": "worker-checklist",
+                  "venture_id": "venture-001",
+                  "status": "RESULT_RECORDED",
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "artifact": {
+                    "artifact_id": "artifact-task-0",
+                    "media_type": "application/json",
+                    "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                  },
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "synthetic_only": true,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "external_action_authorized": false,
+                  "payment_authorized": false,
+                  "broker_execution_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "deployment_authorized": false,
+                  "venture_execution_authorized": false
+                },
+                {
+                  "task_id": "task-1",
+                  "worker_id": "worker-checklist",
+                  "venture_id": "venture-001",
+                  "status": "RESULT_RECORDED",
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "artifact": {
+                    "artifact_id": "artifact-task-1",
+                    "media_type": "application/json",
+                    "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                  },
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "synthetic_only": true,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "external_action_authorized": false,
+                  "payment_authorized": false,
+                  "broker_execution_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "deployment_authorized": false,
+                  "venture_execution_authorized": false
+                },
+                {
+                  "task_id": "task-2",
+                  "worker_id": "worker-checklist",
+                  "venture_id": "venture-001",
+                  "status": "RESULT_RECORDED",
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "artifact": {
+                    "artifact_id": "artifact-task-2",
+                    "media_type": "application/json",
+                    "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                  },
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "synthetic_only": true,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "external_action_authorized": false,
+                  "payment_authorized": false,
+                  "broker_execution_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "deployment_authorized": false,
+                  "venture_execution_authorized": false
+                }
+              ],
+              "status": "AGGREGATED",
+              "taint": [
+                "model_generated_proposal",
+                "model_generated_task",
+                "synthetic_worker_result"
+              ],
+              "synthetic_only": true,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "external_action_authorized": false,
+              "payment_authorized": false,
+              "broker_execution_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "capital_allocation_authorized": false,
+              "deployment_authorized": false,
+              "venture_execution_authorized": false
+            },
+            "ceo_review_package": {
+              "report_id": "review-venture-001",
+              "portfolio_id": "portfolio-synthetic",
+              "venture_id": "venture-001",
+              "proposal": {
+                "venture_id": "venture-001",
+                "title": "TEST ONLY",
+                "problem": "Fixture evidence",
+                "hypothesis": "Unverified"
+              },
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "manager_id": "manager-venture-001",
+              "recommendation": "REVIEW_SYNTHETIC_RESULTS",
+              "recommendation_basis": "Synthetic worker outputs are attached for human review; no business decision was executed.",
+              "artifacts": [
+                {
+                  "artifact_id": "artifact-task-0",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                },
+                {
+                  "artifact_id": "artifact-task-1",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                },
+                {
+                  "artifact_id": "artifact-task-2",
+                  "media_type": "application/json",
+                  "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}"
+                }
+              ],
+              "aggregate_hash": "ac75149ca66633bc287f82c85adf0511c4f1b851974b930c8b9f019ae20d00af",
+              "taint": [
+                "model_generated_proposal",
+                "model_generated_task",
+                "synthetic_worker_result"
+              ],
+              "synthetic_only": true,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "external_action_authorized": false,
+              "payment_authorized": false,
+              "broker_execution_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "capital_allocation_authorized": false,
+              "deployment_authorized": false,
+              "venture_execution_authorized": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "journal": "VentureWorkflow",
+      "kind": "manager_approve",
+      "snapshot": {
+        "evidence": {
+          "assessment": "0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+          "bounded-preparation-attestation-v1": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "synthetic-result-89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a": "89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a"
+        },
+        "execution_performed": false,
+        "external_actions_allowed": false,
+        "finance_request": null,
+        "handoff": {
+          "decision": {
+            "receipt": {
+              "ceo_id": "service-ceo",
+              "decision": "HANDOFF",
+              "decision_reference": "service-policy-v1:0afa4b4bd037ca9b991c0565c147e6801149dfd1a6c349a4d83da6f9c05691ea",
+              "expires_at": "2026-10-28T22:57:32.418843+00:00",
+              "issued_at": "2026-10-27T22:57:32.418843+00:00",
+              "item_id": "studio-online",
+              "manager_id": "service-manager",
+              "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+              "review_hash": "a86ec9378dc093809b2223c74f2ee6fba6d7718363102a4347551e26ef3df23f",
+              "scope": "PREPARATION_ONLY",
+              "venture_id": "venture-001"
+            },
+            "signature": "17680d2feced89487d8aeb843d7df766649f4950bff144fdd37bda925fe04aab15bbb78ee187ccfe168467cd24afc3cea2249d24b56df5a4137d4af227a01308",
+            "verifier_key_hash": "395b0aba029c280f93ad1ded9968bce553f306cbc1f9ee25c69f9c789cd23086"
+          },
+          "external_actions_allowed": false,
+          "item_id": "studio-online",
+          "manager_id": "service-manager",
+          "operational_authority": false,
+          "owner_approval_required": true,
+          "review": {
+            "disposition": "HANDOFF",
+            "instructions": [
+              "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+              "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+              "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+            ],
+            "item_id": "studio-online",
+            "manager_id": "service-manager",
+            "owner_action": "Human owner discussion and approval required before operational execution.",
+            "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b",
+            "scope": "PREPARATION_ONLY",
+            "summary": "Deterministic binding/scope check only; no business assessment or provider inference."
+          },
+          "review_source": "operator_supplied",
+          "venture_id": "venture-001",
+          "worker_autoexec": false
+        },
+        "id": "m1-2f2366519f2235258b5e3b74",
+        "last_command": {
+          "workflow_id": "m1-2f2366519f2235258b5e3b74",
+          "request_id": "m1-3-manager_approve",
+          "actor_id": "service-manager",
+          "role": "manager",
+          "origin": "control_plane",
+          "action": "manager_approve",
+          "revision": 3,
+          "previous_hash": "f1ca78d14a239354b3c769091f2b759906658dad84d665cdc7602e3d31d04f40",
+          "version": 1,
+          "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+          "evidence": [
+            {
+              "ref": "bounded-preparation-attestation-v1",
+              "sha256": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c"
+            }
+          ],
+          "payload": {
+            "reason": "TEST ONLY"
+          },
+          "issued_at": "2026-10-27T22:57:32.502113+00:00",
+          "expires_at": "2026-10-28T22:57:32.502113+00:00",
+          "live": false
+        },
+        "mode": "PREPARATION_ONLY",
+        "money_released": false,
+        "operational_authority": false,
+        "owner_receipt": null,
+        "revision": 4,
+        "scope": {
+          "budget_units": 3,
+          "manager_id": "service-manager",
+          "mode": "PREPARATION_ONLY",
+          "seed_cents": 1,
+          "tasks": [
+            "Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.",
+            "Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.",
+            "Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone."
+          ],
+          "worker_id": "service-worker"
+        },
+        "scope_hash": "2133c090684916e36b69ec3078a339ac8d3bf8711625ecaf4a7e84c1a5d73a7c",
+        "signature": "0c209b3685b8c90059ba3169b9b4d56bc7c4b2d955841106b8759a07c83cfbc77c39205a7f5f63aaef19f85d02a09cb2216d4473bd9cb316cd3fcccad88c1004",
+        "state": "CEO_REVIEW",
+        "synthetic_results": {
+          "89a53ba9545c929d63112b64d9b1a43773b78e36d7445a9bb69b3ab607b2dc5a": {
+            "ceo_proposal": {
+              "broker_execution_authorized": false,
+              "capital_allocation_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "deployment_authorized": false,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_authorized": false,
+              "external_action_count": 0,
+              "hypothesis": "Unverified",
+              "live_mode": false,
+              "payment_authorized": false,
+              "problem": "Fixture evidence",
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "synthetic_only": true,
+              "taint": [
+                "model_generated_proposal"
+              ],
+              "title": "TEST ONLY",
+              "venture_execution_authorized": false,
+              "venture_id": "venture-001"
+            },
+            "ceo_review_package": {
+              "aggregate_hash": "ac75149ca66633bc287f82c85adf0511c4f1b851974b930c8b9f019ae20d00af",
+              "artifacts": [
+                {
+                  "artifact_id": "artifact-task-0",
+                  "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                },
+                {
+                  "artifact_id": "artifact-task-1",
+                  "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                },
+                {
+                  "artifact_id": "artifact-task-2",
+                  "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                }
+              ],
+              "broker_execution_authorized": false,
+              "capital_allocation_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "deployment_authorized": false,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_authorized": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "manager_id": "manager-venture-001",
+              "payment_authorized": false,
+              "portfolio_id": "portfolio-synthetic",
+              "proposal": {
+                "hypothesis": "Unverified",
+                "problem": "Fixture evidence",
+                "title": "TEST ONLY",
+                "venture_id": "venture-001"
+              },
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "recommendation": "REVIEW_SYNTHETIC_RESULTS",
+              "recommendation_basis": "Synthetic worker outputs are attached for human review; no business decision was executed.",
+              "report_id": "review-venture-001",
+              "synthetic_only": true,
+              "taint": [
+                "model_generated_proposal",
+                "model_generated_task",
+                "synthetic_worker_result"
+              ],
+              "venture_execution_authorized": false,
+              "venture_id": "venture-001"
+            },
+            "flow_id": "flow-venture-001",
+            "manager_aggregate": {
+              "broker_execution_authorized": false,
+              "capital_allocation_authorized": false,
+              "completed_task_ids": [
+                "task-0",
+                "task-1",
+                "task-2"
+              ],
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "deployment_authorized": false,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_authorized": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "manager_id": "manager-venture-001",
+              "payment_authorized": false,
+              "portfolio_id": "portfolio-synthetic",
+              "result_hashes": [
+                "e7321f26b06e1281b8120daa516397c0aca856ce8684c4d57d27ed3d3034b92e",
+                "121e567e229c35292f2646b6b3ad6168eb0f498b9f1df9eb6c31b4513cddcaa6",
+                "fe598c33dcb93e974f00221aebdcdba61fa4dd1d6749f0270d7f7b49a77add2d"
+              ],
+              "results": [
+                {
+                  "artifact": {
+                    "artifact_id": "artifact-task-0",
+                    "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                    "media_type": "application/json"
+                  },
+                  "broker_execution_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "deployment_authorized": false,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_authorized": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "payment_authorized": false,
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "status": "RESULT_RECORDED",
+                  "synthetic_only": true,
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "task_id": "task-0",
+                  "venture_execution_authorized": false,
+                  "venture_id": "venture-001",
+                  "worker_id": "worker-checklist"
+                },
+                {
+                  "artifact": {
+                    "artifact_id": "artifact-task-1",
+                    "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                    "media_type": "application/json"
+                  },
+                  "broker_execution_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "deployment_authorized": false,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_authorized": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "payment_authorized": false,
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "status": "RESULT_RECORDED",
+                  "synthetic_only": true,
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "task_id": "task-1",
+                  "venture_execution_authorized": false,
+                  "venture_id": "venture-001",
+                  "worker_id": "worker-checklist"
+                },
+                {
+                  "artifact": {
+                    "artifact_id": "artifact-task-2",
+                    "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                    "media_type": "application/json"
+                  },
+                  "broker_execution_authorized": false,
+                  "capital_allocation_authorized": false,
+                  "credential_access_authorized": false,
+                  "customer_contact_authorized": false,
+                  "deployment_authorized": false,
+                  "effect": "none",
+                  "execution_performed": false,
+                  "external_action_authorized": false,
+                  "external_action_count": 0,
+                  "live_mode": false,
+                  "payment_authorized": false,
+                  "result": {
+                    "checks": [
+                      {
+                        "item": "Synthetic evidence only",
+                        "status": "unverified"
+                      }
+                    ],
+                    "interpretation": "human review required"
+                  },
+                  "status": "RESULT_RECORDED",
+                  "synthetic_only": true,
+                  "taint": [
+                    "synthetic_input",
+                    "model_generated_task",
+                    "synthetic_worker_result"
+                  ],
+                  "task_id": "task-2",
+                  "venture_execution_authorized": false,
+                  "venture_id": "venture-001",
+                  "worker_id": "worker-checklist"
+                }
+              ],
+              "status": "AGGREGATED",
+              "synthetic_only": true,
+              "taint": [
+                "model_generated_proposal",
+                "model_generated_task",
+                "synthetic_worker_result"
+              ],
+              "venture_execution_authorized": false,
+              "venture_id": "venture-001"
+            },
+            "manager_assignment": {
+              "assignment_id": "assignment-venture-001",
+              "broker_execution_authorized": false,
+              "capital_allocation_authorized": false,
+              "credential_access_authorized": false,
+              "customer_contact_authorized": false,
+              "deployment_authorized": false,
+              "effect": "none",
+              "execution_performed": false,
+              "external_action_authorized": false,
+              "external_action_count": 0,
+              "live_mode": false,
+              "manager_id": "manager-venture-001",
+              "payment_authorized": false,
+              "portfolio_id": "portfolio-synthetic",
+              "proposal_hash": "f1e5afa6d8dc50e37b3e6cba2afacd959e749d780526fc244b147cc44f53cd29",
+              "synthetic_only": true,
+              "taint": [
+                "model_generated_proposal"
+              ],
+              "task_ids": [
+                "task-0",
+                "task-1",
+                "task-2"
+              ],
+              "venture_execution_authorized": false,
+              "venture_id": "venture-001"
+            },
+            "stages": [
+              "CEO_PROPOSAL",
+              "MANAGER_ASSIGNMENT",
+              "WORKER_RESULTS",
+              "MANAGER_AGGREGATE",
+              "CEO_REVIEW_PACKAGE"
+            ],
+            "worker_results": [
+              {
+                "artifact": {
+                  "artifact_id": "artifact-task-0",
+                  "content": "{\"objective\":\"Prepare online application scope against PRODUCT-REQUIREMENTS-v1.1; historical offline assets are reference only.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-0\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                },
+                "broker_execution_authorized": false,
+                "capital_allocation_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "deployment_authorized": false,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_authorized": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "payment_authorized": false,
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "status": "RESULT_RECORDED",
+                "synthetic_only": true,
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "task_id": "task-0",
+                "venture_execution_authorized": false,
+                "venture_id": "venture-001",
+                "worker_id": "worker-checklist"
+              },
+              {
+                "artifact": {
+                  "artifact_id": "artifact-task-1",
+                  "content": "{\"objective\":\"Identify authenticated tenant isolation, durable inventory, recovery and privacy acceptance evidence still needed.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-1\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                },
+                "broker_execution_authorized": false,
+                "capital_allocation_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "deployment_authorized": false,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_authorized": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "payment_authorized": false,
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "status": "RESULT_RECORDED",
+                "synthetic_only": true,
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "task_id": "task-1",
+                "venture_execution_authorized": false,
+                "venture_id": "venture-001",
+                "worker_id": "worker-checklist"
+              },
+              {
+                "artifact": {
+                  "artifact_id": "artifact-task-2",
+                  "content": "{\"objective\":\"Report missing signed provider budget/configuration gates; do not invoke provider, deploy, spend or contact anyone.\",\"result\":{\"checks\":[{\"item\":\"Synthetic evidence only\",\"status\":\"unverified\"}],\"interpretation\":\"human review required\"},\"taint\":[\"synthetic_input\",\"model_generated_task\"],\"task_id\":\"task-2\",\"title\":\"Fixture\",\"venture_id\":\"venture-001\",\"worker_type\":\"checklist\"}",
+                  "media_type": "application/json"
+                },
+                "broker_execution_authorized": false,
+                "capital_allocation_authorized": false,
+                "credential_access_authorized": false,
+                "customer_contact_authorized": false,
+                "deployment_authorized": false,
+                "effect": "none",
+                "execution_performed": false,
+                "external_action_authorized": false,
+                "external_action_count": 0,
+                "live_mode": false,
+                "payment_authorized": false,
+                "result": {
+                  "checks": [
+                    {
+                      "item": "Synthetic evidence only",
+                      "status": "unverified"
+                    }
+                  ],
+                  "interpretation": "human review required"
+                },
+                "status": "RESULT_RECORDED",
+                "synthetic_only": true,
+                "taint": [
+                  "synthetic_input",
+                  "model_generated_task",
+                  "synthetic_worker_result"
+                ],
+                "task_id": "task-2",
+                "venture_execution_authorized": false,
+                "venture_id": "venture-001",
+                "worker_id": "worker-checklist"
+              }
+            ]
+          }
+        },
+        "used_units": 1,
+        "venture_id": "venture-001",
+        "verifier_key_hash": "01761b06e6542a9603306a4ef013be6ad976dbacea311986494b48ef493e746e",
+        "version": 1
+      }
+    }
+  ]
+}

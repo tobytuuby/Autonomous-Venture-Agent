@@ -104,3 +104,15 @@ replay, not independently verified provider inference or fresh certification;
 no live authority or phase status changed. See the
 [operator guide](ceo-scheduled-exercise-v1.0.md) and
 [implementation evidence](reports/ceo-scheduled-exercise-v1.0.md).
+
+## Deterministic preparation handoff — 2026-10-27
+
+Milestone 1 now connects the pinned scheduled escalation inbox to an authenticated
+PREPARATION_ONLY manager queue through a deterministic service policy check. Three
+private service identities attest bounded preparation records; no owner key or
+production CEO is attached. The deployed transient hourly timer records
+MANAGER_PENDING with provider work blocked and zero inference/external actions.
+Manager/worker corrections and revisions are exercised through the existing pure
+synthetic worker path. Operational runtime dispatch and owner/live gates remain
+closed. See [implementation guide](milestone1-preparation-broker-v1.0.md) and
+[evidence and limitations](reports/milestone1-20261027.md).
