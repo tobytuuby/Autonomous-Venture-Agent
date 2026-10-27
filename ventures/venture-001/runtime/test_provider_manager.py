@@ -202,6 +202,9 @@ class AgentRuntimeTests(unittest.TestCase):
                 self.assertIn("within this development role boundary", system)
                 self.assertIn("If a manager instruction requests another role's artifacts or execution", system)
                 self.assertIn("Tests belong to the separate testing specialist", system)
+        security_system = requests["security-1"]["system"]
+        self.assertIn("Return exactly one file named security.md", security_system)
+        self.assertIn("Do not return scripts, executable files, or other artifacts", security_system)
 
     def test_corrections_through_four_require_rejection_and_stay_role_bound_after_restart(self):
         m = self.manager

@@ -423,7 +423,8 @@ class AgentManager(Manager):
             "testing": "Return checks.py that consumes sys.argv[1] app directory, asserts real functional/source properties "
                        "and prints checks; exits nonzero on defects. Do not claim execution. evidence.inspected_hashes must equal app_hashes.",
             "security": "Inspect supplied application source. evidence.inspected_hashes equals app_hashes; "
-                        "evidence.findings is list of concrete defects (empty only if none). Return security.md with limitations.",
+                        "evidence.findings is a list of concrete defects (empty only if none). Return exactly one file named "
+                        "security.md containing the review and limitations. Do not return scripts, executable files, or other artifacts.",
             "research": "Return status policy_blocked, evidence.sources=[], evidence.claims=[], evidence.reason explaining "
                         "no approved public GET tool. No local inventory or remembered market facts.",
             "commercial": "Return collateral.md with concrete landing-page and offer drafts; explicitly hypothetical price, "
