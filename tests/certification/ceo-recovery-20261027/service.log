@@ -1,0 +1,8 @@
+ActiveState=failed
+SubState=failed
+Result=exit-code
+ExecMainExitTimestamp=Tue 2026-10-27 18:00:52 UTC
+ExecMainStatus=4
+ActiveState=active
+SubState=waiting
+NextElapseUSecRealtime=Tue 2026-10-27 19:00:35 UTC

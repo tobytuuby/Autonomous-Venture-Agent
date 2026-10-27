@@ -1,0 +1,26 @@
+{
+  "focused": "python3 -m unittest tests.test_ceo_queue_recovery tests.test_scheduled_ceo_escalation tests.test_advisory_queue tests.test_scheduled_ceo_exercise tests.test_scheduled_escalation_intake tests.test_ceo_escalation_inbox tests.test_venture_workflow -v",
+  "full": "python3 -m unittest discover -s tests -v",
+  "operational": "sudo -n -u venture-ceo env -i PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --escalation-only",
+  "focused_count": 85,
+  "full_count": 778,
+  "focused_exit": 0,
+  "full_exit": 0,
+  "operational_exit": 3,
+  "bridge_processes": [
+    {
+      "id": "proc_mvr1bpgd_z67oaq",
+      "pid": 1267002
+    },
+    {
+      "id": "proc_mvr1bsnu_qus6vl",
+      "pid": 1267036
+    },
+    {
+      "id": "proc_mvr1c67j_guqnp9",
+      "pid": 1268056
+    }
+  ],
+  "bridge_logs": "Bridge-managed process logs recorded on start; all processes polled to exited. Completed outputs read from project-contained log files.",
+  "diff_check": "git diff --check"
+}

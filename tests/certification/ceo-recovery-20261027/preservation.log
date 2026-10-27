@@ -1,0 +1,7 @@
+Preserved accessible preexisting owner files: 580 changed: []
+Tracked owner changes retained:
+ M kernel/synthetic_venture_store.py
+ M kernel/venture_admission.py
+ M tests/test_owner_approval.py
+
+No staged changes: True
