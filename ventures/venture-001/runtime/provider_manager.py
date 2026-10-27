@@ -391,6 +391,14 @@ class AgentManager(Manager):
             raise PermissionError("unaccepted dependency")
         self.update(task, "running", {"started": now()})
         instruction = next(t["instruction"] for t in self.meta("plan")["tasks"] if t["role"] == task["role"])
+        if task["role"] == "development":
+            instruction += (
+                "\nThe hosted site root is index.html. The browser acceptance journey opens that exact file "
+                "and does not follow links to nested product files; index.html itself must be the complete "
+                "working application, with the product heading, planning guidance, and worksheet controls. "
+                "A link-only review entry is not an integrated web application. Keep any nested source copy "
+                "consistent with the root application, and do not change tests to hide interface failures."
+            )
         payload = {"instruction": instruction, "task_id": task["id"],
                    "app_files": self.development_files(),
                    "inputs": {str(p.relative_to(self.inputs)): p.read_text()
@@ -414,6 +422,9 @@ class AgentManager(Manager):
                     '"files":{"relative name":"UTF-8 file body"},"evidence":{}}. ')
         contract += {
             "development": "Return index.html, README.md and optional local .js/.css. Functional hosted static app. "
+                           "index.html must itself be the complete working product at the site root; browser acceptance opens "
+                           "that exact file and does not follow nested links. Put the product heading, planning guidance, and "
+                           "working application controls there. A link-only or review-entry page is not an integrated app. "
                            "README includes python3 -m http.server 8000 --bind 127.0.0.1 and review-only status. No external assets. "
                            "For initial and corrective tasks, deliver only application source/docs with .html, .css, .js, .md extensions. "
                            "Never return test scripts, checks.py, executable Python, security/research/commercial artifacts or other role outputs. "

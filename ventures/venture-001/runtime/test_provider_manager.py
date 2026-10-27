@@ -187,7 +187,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual((corrected["id"], corrected["correction_of"], corrected["status"]),
                          ("development-2", "development-1", "accepted"))
         payload = requests["development-2"]["opportunity"]["payload"]
-        self.assertEqual(payload["instruction"], conflict)
+        self.assertTrue(payload["instruction"].startswith(conflict))
         self.assertEqual(payload["correction"]["instruction"], conflict)
         self.assertIn("checks.py", payload["prior_response"]["files"])
         for identity in ("development-1", "development-2"):
@@ -195,6 +195,11 @@ class AgentRuntimeTests(unittest.TestCase):
                 system = requests[identity]["system"]
                 self.assertIn("ROLE: development", system)
                 self.assertIn("Functional hosted static app", system)
+                self.assertIn("index.html must itself be the complete working product at the site root", system)
+                self.assertIn("browser acceptance opens that exact file", system)
+                self.assertIn("A link-only or review-entry page is not an integrated app", system)
+                self.assertIn("The hosted site root is index.html", requests[identity]["opportunity"]["payload"]["instruction"])
+                self.assertIn("does not follow links to nested product files", requests[identity]["opportunity"]["payload"]["instruction"])
                 self.assertIn("only application source/docs with .html, .css, .js, .md extensions", system)
                 self.assertIn("Never return test scripts, checks.py, executable Python", system)
                 self.assertIn("security/research/commercial artifacts or other role outputs", system)
