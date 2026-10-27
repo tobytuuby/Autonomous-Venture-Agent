@@ -1,0 +1,29 @@
+[Unit]
+Description=Offline signed venture preparation control plane
+ConditionPathExists=/home/epsilon/venture-control-workspace/artifacts/preparation-control/trust.json
+
+[Service]
+Type=oneshot
+User=venture-ceo
+Group=venture-ceo
+WorkingDirectory=/home/epsilon/venture-control-workspace
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m agents.ceo.control_plane --state-dir artifacts/preparation-control/state --trust-file artifacts/preparation-control/trust.json --requests-dir artifacts/preparation-control/requests
+TimeoutStartSec=60
+Restart=no
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/preparation-control/state
+CapabilityBoundingSet=
+RestrictSUIDSGID=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+StandardOutput=journal
+StandardError=null

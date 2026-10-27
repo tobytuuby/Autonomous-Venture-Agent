@@ -111,6 +111,10 @@ class VentureWorkflow(EscalationInbox):
             item = json.loads(raw)["snapshot"]
             if item["state"] not in STATES or item["mode"] != "PREPARATION_ONLY":
                 raise ValueError("workflow integrity denied")
+            for result_hash, result in item.get("synthetic_results", {}).items():
+                if (hashed(result) != result_hash or item["evidence"].get(
+                        "synthetic-result-" + result_hash) != result_hash):
+                    raise ValueError("synthetic artifact integrity denied")
             command = item["last_command"]
             self._authenticate(command, item["signature"], current=False)
             prior_item = json.loads(latest[item["id"]]) if item["id"] in latest else None
@@ -120,10 +124,90 @@ class VentureWorkflow(EscalationInbox):
                     or command["previous_hash"] != (hashed(prior_item) if prior_item else "GENESIS")
                     or item["verifier_key_hash"] != digest(self.actors[command["actor_id"]][1])):
                 raise ValueError("signed lineage denied")
+            expected_evidence = dict(prior_item["evidence"]) if prior_item else {}
+            for ref in command["evidence"]:
+                if ref["ref"] in expected_evidence and expected_evidence[ref["ref"]] != ref["sha256"]:
+                    raise ValueError("signed evidence conflict")
+                expected_evidence[ref["ref"]] = ref["sha256"]
+            if item["evidence"] != expected_evidence or any(item[flag] is not False for flag in (
+                    "operational_authority", "external_actions_allowed", "execution_performed", "money_released")):
+                raise ValueError("signed snapshot boundary denied")
+            self._verify_transition(prior_item, item, command)
             latest[item["id"]] = canonical(item)
             previous = hashed_event
         if dict(self.db.execute("SELECT id,snapshot FROM inbox")) != latest:
             raise ValueError("snapshot integrity denied")
+
+    def _verify_transition(self, prior, item, command):
+        """Reconstruct security-relevant state from signed commands on restart.
+
+        Hashes alone cannot authenticate the final snapshot: a local attacker
+        could rewrite it and recompute the last audit hash without a signer.
+        """
+        action, role, payload = command["action"], command["role"], command["payload"]
+        if prior is None:
+            if action != "create" or role != "ceo":
+                raise ValueError("signed genesis denied")
+            scope_check(payload["scope"])
+            expected = dict(state="MANAGER_PENDING", used_units=0, version=1,
+                            scope=payload["scope"], scope_hash=hashed(payload["scope"]),
+                            venture_id=payload["venture_id"], owner_receipt=None, finance_request=None)
+            if hashed(item["handoff"]) != payload["handoff_hash"]:
+                raise ValueError("signed handoff denied")
+        else:
+            if prior["state"] == "TERMINATED":
+                raise ValueError("signed terminal transition denied")
+            if (command["version"] != prior["version"] or command["scope_hash"] != prior["scope_hash"]
+                    or (role in ("manager", "worker") and command["actor_id"] != prior["scope"][role + "_id"])):
+                raise ValueError("signed scope lineage denied")
+            expected = {key: prior[key] for key in (
+                "used_units", "version", "scope", "scope_hash", "venture_id", "owner_receipt", "finance_request")}
+            if item["handoff"] != prior["handoff"]:
+                raise ValueError("handoff immutable")
+            if action in ("hold", "security_hold", "terminate"):
+                allowed = {"hold": {"ceo", "manager", "owner"},
+                           "security_hold": {"ceo", "manager", "worker", "owner", "security"},
+                           "terminate": {"ceo", "owner"}}[action]
+                if role not in allowed or (action == "hold" and prior["state"] in {"SECURITY_HOLD", "FINANCE_REQUESTED"}):
+                    raise ValueError("signed control denied")
+                target = {"hold": "HOLD", "security_hold": "SECURITY_HOLD", "terminate": "TERMINATED"}[action]
+            elif action == "revise":
+                if role != "ceo" or prior["state"] not in REVISABLE or payload["version"] != prior["version"] + 1:
+                    raise ValueError("signed revision denied")
+                scope_check(payload["scope"])
+                expected.update(scope=payload["scope"], scope_hash=hashed(payload["scope"]),
+                                version=payload["version"], owner_receipt=None, finance_request=None)
+                target = "MANAGER_PENDING"
+            else:
+                required, target = TRANSITIONS.get((prior["state"], action), (None, None))
+                if required is None or role != required:
+                    raise ValueError("signed transition denied")
+                if action == "submit":
+                    if prior["used_units"] + payload["units"] > prior["scope"]["budget_units"]:
+                        target = "BUDGET_EXHAUSTED"
+                    else:
+                        expected["used_units"] += payload["units"]
+                elif action == "delegate" and prior["used_units"] >= prior["scope"]["budget_units"]:
+                    target = "BUDGET_EXHAUSTED"
+                elif action in ("owner_approve", "owner_reject"):
+                    expected["owner_receipt"] = dict(command=command, signature=item["signature"])
+                elif action == "finance_request":
+                    expected["finance_request"] = dict(amount_cents=payload["amount_cents"], status="REQUEST_ONLY",
+                        owner_receipt_hash=hashed(prior["owner_receipt"]),
+                        scope_hash=prior["scope_hash"], version=prior["version"])
+            expected["state"] = target
+            if target in {"HOLD", "SECURITY_HOLD", "TERMINATED", "CEO_REDIRECTION"}:
+                expected.update(owner_receipt=None, finance_request=None)
+        if any(item[key] != value for key, value in expected.items()):
+            raise ValueError("signed state reconstruction denied")
+        prior_results = prior.get("synthetic_results", {}) if prior else {}
+        results = item.get("synthetic_results", {})
+        if any(results.get(key) != value for key, value in prior_results.items()):
+            raise ValueError("result history immutable")
+        added = set(results) - set(prior_results)
+        if added and (action != "submit" or len(added) != 1 or any(
+                dict(ref="synthetic-result-" + key, sha256=key) not in command["evidence"] for key in added)):
+            raise ValueError("signed worker result denied")
 
     def _authenticate(self, command, signature, *, current=True):
         exact(command, COMMAND_FIELDS)
@@ -216,11 +300,24 @@ class VentureWorkflow(EscalationInbox):
                         execution_performed=False, money_released=False)
             return self._record(item, command, signature)
 
-    def apply(self, command, signature):
+    def apply(self, command, signature, *, synthetic_input=None):
         self._authenticate(command, signature)
+        result = None
+        if synthetic_input is not None:
+            if command["action"] != "submit" or command["role"] != "worker":
+                raise ValueError("synthetic submission required")
+            exact(synthetic_input, ("proposal", "manager_plan"))
+            from kernel.synthetic_orchestration import run_synthetic_orchestration
+            result = run_synthetic_orchestration(
+                ceo_proposal=synthetic_input["proposal"], manager_plan=synthetic_input["manager_plan"])
+            result_hash = hashed(result)
+            if dict(ref="synthetic-result-" + result_hash, sha256=result_hash) not in command["evidence"]:
+                raise ValueError("signed result binding required")
         with self.transaction():
             retry = self._retry(command)
             if retry is not None:
+                if result is not None and retry.get("synthetic_results", {}).get(hashed(result)) != result:
+                    raise ValueError("synthetic retry conflict")
                 return retry
             item = self._get(command["workflow_id"])
             if (command["revision"] != item["revision"] or command["previous_hash"] != hashed(item)
@@ -295,6 +392,20 @@ class VentureWorkflow(EscalationInbox):
                     bounded(payload["reason"])
                     if action == "delegate" and item["used_units"] >= item["scope"]["budget_units"]:
                         target = "BUDGET_EXHAUSTED"
+            if synthetic_input is not None:
+                # Pure existing workers only. Never load a callable, code, path or
+                # provider from a command. Persist output and transition atomically.
+                if action != "submit" or role != "worker" or target != "MANAGER_REVIEW":
+                    raise ValueError("synthetic execution transition denied")
+                objectives = [t["objective"] for t in synthetic_input["manager_plan"]["tasks"]]
+                if (result["ceo_proposal"]["venture_id"] != item["venture_id"]
+                        or objectives != item["scope"]["tasks"]):
+                    raise ValueError("synthetic task scope denied")
+                result_hash = hashed(result)
+                results = item.setdefault("synthetic_results", {})
+                if len(results) >= 8 and result_hash not in results:
+                    raise ValueError("synthetic result capacity")
+                results[result_hash] = result
             item.update(state=target, revision=item["revision"] + 1)
             # Any control/revision invalidates prior approval; no resume past review gates.
             if target in {"HOLD", "SECURITY_HOLD", "TERMINATED", "CEO_REDIRECTION"}:
