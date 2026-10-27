@@ -92,6 +92,12 @@ const server = http.createServer((req, res) => {
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
     page.on("dialog", dialog => dialog.accept());
     await page.goto(origin + "/", { waitUntil: "domcontentloaded" });
+    const resultsButton = page.getByRole("button", { name: /(?:export|download).*results/i });
+    const worksheetLink = page.getByRole("link", { name: /open.*worksheet|worksheet/i }).first();
+    if (!(await resultsButton.count()) && await worksheetLink.count()) {
+      await worksheetLink.click();
+      await page.waitForLoadState("domcontentloaded");
+    }
 
     await check("hosted page has the product title, planning guidance, and worksheet", async () => {
       if (!(await page.title()).includes("Studio Restock Kit")) throw new Error("wrong title");
