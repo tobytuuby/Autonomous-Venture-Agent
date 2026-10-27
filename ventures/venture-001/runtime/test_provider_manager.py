@@ -44,7 +44,8 @@ class TestProvider:
             answer = {"task_id": identity, "status": "ok", "files": {}, "evidence": {}}
             if role == "development":
                 answer["files"] = {"index.html": "<!doctype html><title>Kit</title><main>Restock app</main>",
-                                   "README.md": "UNAPPROVED PILOT. Local preview: python3 -m http.server 8000 --bind 127.0.0.1"}
+                                   "README.md": "UNAPPROVED PILOT. Trusted online_checks.py 127.0.0.1 preview; recovery/privacy draft",
+                                   "app.py": "def application(environ, start_response):\n    start_response('501 Not Implemented', [])\n    return [b'contract fixture only']\n"}
                 if self.invalid_dev and identity.endswith("-1"):
                     del answer["files"]["index.html"]
             if role in ("testing", "security"):
@@ -67,8 +68,8 @@ class TestProvider:
                 answer.update(status="policy_blocked")
                 answer["evidence"] = {"sources": [], "claims": [], "reason": "No approved source-bound GET tool"}
             if role == "commercial":
-                answer["files"]["collateral.md"] = "Draft: Restock your studio. Hypothetical $9. Demand unverified."
-                answer["evidence"] = {"demand_verified": False, "publication_authorized": False}
+                answer["files"]["collateral.md"] = "Draft: Restock your studio. Pricing undecided. Demand unverified."
+                answer["evidence"] = {"pricing_status": "undecided", "demand_verified": False, "publication_authorized": False}
         return {"decision": {"content": json.dumps(answer)}, "tool_call": None}
 
 class AgentRuntimeTests(unittest.TestCase):
@@ -95,6 +96,7 @@ class AgentRuntimeTests(unittest.TestCase):
                       (self.manager.home / testing["record"]["execution"]["log"]).read_text())
         self.assertTrue((self.manager.home / "hosted-app/index.html").is_file())
         self.assertEqual(result["evidence_class"], "test_adapter_only")
+        self.assertEqual(result["online_acceptance"], "NOT_VERIFIED_TEST_ADAPTER")
         self.assertTrue(all(not t["record"]["agent_inference"] for t in result["tasks"]))
         self.assertTrue(all(v is False for v in result["authorities"].values()))
 
@@ -199,14 +201,14 @@ class AgentRuntimeTests(unittest.TestCase):
             with self.subTest(identity=identity):
                 system = requests[identity]["system"]
                 self.assertIn("ROLE: development", system)
-                self.assertIn("Functional hosted static app", system)
-                self.assertIn("index.html must itself be the complete working product at the site root", system)
-                self.assertIn("browser acceptance opens that exact file", system)
-                self.assertIn("A link-only or review-entry page is not an integrated app", system)
+                self.assertIn("Functional authenticated ONLINE app", system)
+                self.assertIn("Durable server-side tenant inventory", system)
+                self.assertIn("exact HTTP API", system)
+                self.assertIn("recovery/backup/deletion/privacy", system)
                 self.assertIn("The hosted site root is index.html", requests[identity]["opportunity"]["payload"]["instruction"])
-                self.assertIn("does not follow links to nested product files", requests[identity]["opportunity"]["payload"]["instruction"])
-                self.assertIn("only application source/docs with .html, .css, .js, .md extensions", system)
-                self.assertIn("Never return test scripts, checks.py, executable Python", system)
+                self.assertIn("never static/localStorage-only inventory", requests[identity]["opportunity"]["payload"]["instruction"])
+                self.assertIn("optional backend/*.py, backend/*.sql", system)
+                self.assertIn("Never return test scripts, checks.py", system)
                 self.assertIn("security/research/commercial artifacts or other role outputs", system)
                 self.assertIn("Follow the manager's task-specific product requirements and correction instructions", system)
                 self.assertIn("within this development role boundary", system)
@@ -466,7 +468,7 @@ class AgentRuntimeTests(unittest.TestCase):
             validate_plan(bad)
 
     def test_path_command_and_oversized_files_denied(self):
-        for files in ({"../escape.md": "x"}, {"checks.py": "x"}, {"app.py": "x"}, {"/tmp/x.html": "x"},
+        for files in ({"../escape.md": "x"}, {"checks.py": "x"}, {"checks.py": "x"}, {"/tmp/x.html": "x"},
                       {"index.html": "x" * 200000}):
             with self.assertRaises(ValueError):
                 file_map(files, "development")
