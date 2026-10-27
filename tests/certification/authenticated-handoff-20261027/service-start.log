@@ -1,0 +1,3 @@
+Running timer as unit: venture-authenticated-handoff.timer
+Will run service as unit: venture-authenticated-handoff.service
+Transient verification-only timer requested; verify Result and private status artifact.

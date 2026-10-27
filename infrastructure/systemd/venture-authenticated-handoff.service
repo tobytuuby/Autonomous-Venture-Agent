@@ -1,0 +1,34 @@
+[Unit]
+Description=Authenticated shadow advisory to preparation handoff
+After=venture-ceo-exercise.service
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+WorkingDirectory=/home/epsilon/venture-control-workspace
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m agents.ceo.authenticated_handoff --state-dir artifacts/authenticated-handoff/state --trust-file artifacts/authenticated-handoff/ingress/trust.json --source-state artifacts/scheduled-ceo --authorization-file artifacts/authenticated-handoff/ingress/authorization.json --requests-dir artifacts/authenticated-handoff/requests
+TimeoutStartSec=60
+Restart=no
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/authenticated-handoff/state
+ReadOnlyPaths=/home/epsilon/venture-control-workspace/artifacts/authenticated-handoff/ingress /home/epsilon/venture-control-workspace/artifacts/authenticated-handoff/requests /home/epsilon/venture-control-workspace/artifacts/scheduled-ceo
+InaccessiblePaths=-/etc/venture-ceo.env -/etc/venture-ceo-shadow.env -/var/lib/venture-ceo /home/epsilon/venture-control-workspace/.git /home/epsilon/venture-control-workspace/ventures -/home/epsilon/venture-control-workspace/artifacts/milestone1-service -/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo/queue.sqlite -/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo/queue.decisions.sqlite -/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo/queue.decisions.jsonl
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+RestrictSUIDSGID=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+LockPersonality=true
+RestrictAddressFamilies=AF_UNIX
+IPAddressDeny=any
+StandardOutput=journal
+StandardError=null

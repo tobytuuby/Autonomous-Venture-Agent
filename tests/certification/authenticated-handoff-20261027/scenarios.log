@@ -1,0 +1,14 @@
+test_end_to_end_review_improvement_rejection_pivot_restart (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_end_to_end_review_improvement_rejection_pivot_restart) ... ok
+test_production_empty_trust_persists_precise_pending (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_production_empty_trust_persists_precise_pending) ... ok
+test_advisory_is_never_signed_or_promoted (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_advisory_is_never_signed_or_promoted) ... ok
+test_assignment_forgery_and_widened_scope_denied (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_assignment_forgery_and_widened_scope_denied) ... ok
+test_forged_decision_and_identity_denied (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_forged_decision_and_identity_denied) ... ok
+test_authenticated_rejection_stops_before_assignment (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_authenticated_rejection_stops_before_assignment) ... ok
+test_crash_after_commit_replays_exact_assignment (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_crash_after_commit_replays_exact_assignment) ... ok
+test_budget_exhaustion_and_worker_signature_denial (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_budget_exhaustion_and_worker_signature_denial) ... ok
+test_archived_signature_tampering_denied (tests.test_authenticated_handoff.AuthenticatedHandoffTests.test_archived_signature_tampering_denied) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 4.457s
+
+OK

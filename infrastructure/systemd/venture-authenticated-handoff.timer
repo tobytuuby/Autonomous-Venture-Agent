@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly authenticated preparation handoff verification
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+AccuracySec=1min
+Unit=venture-authenticated-handoff.service
+
+[Install]
+WantedBy=timers.target
