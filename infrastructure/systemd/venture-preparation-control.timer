@@ -1,0 +1,11 @@
+[Unit]
+Description=Hourly offline preparation command spool check
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=1h
+AccuracySec=1min
+Unit=venture-preparation-control.service
+
+[Install]
+WantedBy=timers.target

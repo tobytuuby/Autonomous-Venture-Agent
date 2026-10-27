@@ -1,0 +1,1 @@
+{"external_action_count":0,"inbox_count":1,"inference_requests":0,"operational_authority":false,"required_gates":["SIGNED_BUDGET_GRANT_FOR_PROVIDER_REVIEW","AUTHENTICATED_CEO_AND_ACTOR_COMMANDS","HUMAN_OWNER_DISCUSSION_AND_APPROVAL","SEPARATE_LIVE_AUTHORITY"],"status":"PREPARATION_ONLY","workflow_count":0}

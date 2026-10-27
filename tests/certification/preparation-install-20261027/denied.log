@@ -1,0 +1,1 @@
+{"external_action_count":0,"inference_requests":0,"operational_authority":false,"outcomes":[{"operation":"ingest","request_sha256":"fbc5fa51cdb6360c405db797174b435e9c8e6991fcb4ea3192c8565c91ee991a","status":"RECORDED"},{"request_sha256":"696fbfd62f92604671ceab5b120fffebe6030f09fb93bcb94b6067d48c783408","status":"DENIED"}],"status":"TICK_COMPLETE"}
