@@ -23,7 +23,9 @@ def plan(reverse=False):
 class TestProvider:
     def __init__(self, *, invalid_dev=False, fail_checks=False, reverse=False, tamper_hash=False, security_findings=None):
         self.calls = []
+        self.requests = []
         self.invalid_dev, self.fail_checks = invalid_dev, fail_checks
+        self.fail_first_testing = False
         self.reverse, self.tamper_hash = reverse, tamper_hash
         self.security_findings = security_findings or []
 
@@ -32,6 +34,7 @@ class TestProvider:
         opportunity = request["opportunity"]
         identity = opportunity["task_id"]
         self.calls.append(copy.deepcopy(opportunity))
+        self.requests.append(copy.deepcopy(request))
         if identity == "manager-plan":
             answer = plan(self.reverse)
         elif identity.startswith("manager-"):
@@ -55,6 +58,8 @@ class TestProvider:
                     "assert 'Restock app' in body\nprint('actual generated source checked')\n")
                 if self.fail_checks:
                     answer["files"]["checks.py"] += "raise AssertionError('injected real failure')\n"
+                if self.fail_first_testing and identity == "testing-1":
+                    answer["files"]["checks.py"] += "raise AssertionError('actionable correction evidence')\n"
             if role == "security":
                 answer["files"]["security.md"] = "Bounded test inspection; no certification"
                 answer["evidence"]["findings"] = copy.deepcopy(self.security_findings.get(identity, [])) if isinstance(self.security_findings, dict) else copy.deepcopy(self.security_findings)
@@ -250,7 +255,35 @@ class AgentRuntimeTests(unittest.TestCase):
         with self.assertRaises(PermissionError):
             m.dispatch_agent(m.effective("research-1"))
 
-    def test_all_roles_can_use_five_attempts_and_stop_at_twenty_five_tasks(self):
+    def test_correction_chain_can_exceed_six_attempts_within_run_budget(self):
+        m = self.manager
+        m.plan()
+        for _ in range(7):
+            current = m.effective("research-1")
+            m.update(current, "rejected", {"defects": ["bounded synthetic failure"]})
+            m.assign_agent("research", [], current["id"])
+        self.assertEqual(m.effective("research-1")["attempt"], 8)
+        self.assertLessEqual(len(m.tasks()), CAPABILITIES["max_tasks"])
+        self.assertNotIn("max_attempts_per_role", CAPABILITIES)
+
+    def test_failure_logs_reach_manager_and_worker_corrections(self):
+        self.provider.fail_first_testing = True
+        result = self.manager.run_agents()
+        self.assertEqual(result["status"], "prepared_with_research_blocked")
+        requests = {r["opportunity"]["task_id"]: r for r in self.provider.requests}
+        for identity in ("manager-development-2", "development-2", "manager-testing-2", "testing-2"):
+            self.assertIn(identity, requests)
+            payload = requests[identity]["opportunity"]["payload"]
+            logs = payload["prior_failure_logs"]
+            check_log = next(x for x in logs if x["task_id"] == "testing-1" and x["path"] == "testing-1/checks.log" and x["stage"] == "checks")
+            self.assertTrue(check_log["verified"])
+            self.assertIn("actionable correction evidence", check_log["excerpt"])
+            self.assertLessEqual(len(check_log["excerpt"].encode()), 12000)
+        self.assertEqual(result["budget"]["tasks_limit"], 25)
+        self.assertEqual(result["budget"]["calls_limit"], 46)
+        self.assertFalse(result["budget"]["task_budget_exhausted"])
+
+    def test_all_roles_can_use_run_wide_budget_of_twenty_five_tasks(self):
         original = self.provider.__call__
         def respond(request, schemas):
             result = original(request, schemas)
@@ -267,8 +300,9 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(len(result["calls"]), 46)
         self.assertEqual(len({c["id"] for c in result["calls"]}), 46)
         self.assertEqual(result["capabilities"]["max_tasks"], 25)
-        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 6)
+        self.assertNotIn("max_attempts_per_role", result["capabilities"])
         self.assertEqual(result["capabilities"]["max_inference_calls"], 46)
+        self.assertTrue(result["budget"]["tasks_used"] <= result["budget"]["tasks_limit"])
         for role in ROLES:
             tasks = [t for t in result["tasks"] if t["role"] == role]
             self.assertEqual([t["status"] for t in tasks], ["rejected", "rejected", "rejected", "rejected", "accepted"])
@@ -339,6 +373,28 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(security["status"], "accepted")
         self.assertEqual(security["record"]["evidence"]["findings"][0]["severity"], "medium")
 
+    def test_failed_security_worker_does_not_reject_the_application(self):
+        self.provider.security_findings = [{"severity": "medium", "title": "Unverified finding"}]
+        original = self.provider.__call__
+
+        def respond(request, schemas):
+            result = original(request, schemas)
+            if request["opportunity"]["task_id"] == "security-1":
+                answer = json.loads(result["decision"]["content"])
+                answer["status"] = "failed"
+                result["decision"]["content"] = json.dumps(answer)
+            return result
+
+        self.manager.test_provider = respond
+        result = self.manager.run_agents()
+        security1 = next(t for t in result["tasks"] if t["id"] == "security-1")
+        development1 = next(t for t in result["tasks"] if t["id"] == "development-1")
+        security2 = next(t for t in result["tasks"] if t["id"] == "security-2")
+        self.assertEqual(security1["status"], "rejected")
+        self.assertTrue(any("worker reported failure" in defect for defect in security1["record"]["defects"]))
+        self.assertEqual(development1["status"], "accepted")
+        self.assertEqual(security2["status"], "accepted")
+
     def test_security_high_finding_commissions_application_correction(self):
         self.provider.security_findings = {"security-1": [{"severity": "high", "title": "Unsafe input handling"}]}
         result = self.manager.run_agents()
@@ -353,9 +409,11 @@ class AgentRuntimeTests(unittest.TestCase):
     def test_real_check_failure_is_logged_and_bounded(self):
         self.provider.fail_checks = True
         result = self.manager.run_agents()
-        self.assertEqual(result["status"], "incomplete")
+        self.assertEqual(result["status"], "blocked")
+        self.assertTrue(result["budget"]["task_budget_exhausted"])
         failures = [t for t in result["tasks"] if t["role"] == "testing"]
-        self.assertEqual(len(failures), 6)
+        self.assertGreater(len(failures), 6)
+        self.assertLessEqual(len(result["tasks"]), CAPABILITIES["max_tasks"])
         self.assertTrue(all(t["status"] == "rejected" for t in failures))
         self.assertTrue(all(t["record"]["execution"]["exit_status"] != 0 for t in failures))
         self.assertIn("AssertionError", (self.manager.home / failures[0]["record"]["execution"]["log"]).read_text())
@@ -363,7 +421,8 @@ class AgentRuntimeTests(unittest.TestCase):
     def test_hash_mismatch_rejects_inspection(self):
         self.provider.tamper_hash = True
         result = self.manager.run_agents()
-        self.assertEqual(result["status"], "incomplete")
+        self.assertEqual(result["status"], "blocked")
+        self.assertTrue(result["budget"]["task_budget_exhausted"])
         self.assertTrue(all(t["status"] == "rejected" for t in result["tasks"]
                             if t["role"] in ("testing", "security")))
 
