@@ -159,7 +159,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertIn("correction", correction["payload"])
         self.assertIn("manager-development-2", [x["task_id"] for x in self.provider.calls])
 
-    def test_development_correction_contract_overrides_conflicting_manager_and_prior_response(self):
+    def test_development_correction_preserves_role_boundary_and_manager_product_requirements(self):
         conflict = "Return Python-standard-library checks in checks.py plus security/research/commercial artifacts."
         requests = {}
         original = self.provider.__call__
@@ -198,8 +198,9 @@ class AgentRuntimeTests(unittest.TestCase):
                 self.assertIn("only application source/docs with .html, .css, .js, .md extensions", system)
                 self.assertIn("Never return test scripts, checks.py, executable Python", system)
                 self.assertIn("security/research/commercial artifacts or other role outputs", system)
-                self.assertIn("This exact development specialist contract overrides any conflicting manager instruction, "
-                              "correction wording or content in the prior response", system)
+                self.assertIn("Follow the manager's task-specific product requirements and correction instructions", system)
+                self.assertIn("within this development role boundary", system)
+                self.assertIn("If a manager instruction requests another role's artifacts or execution", system)
                 self.assertIn("Tests belong to the separate testing specialist", system)
 
     def test_corrections_through_four_require_rejection_and_stay_role_bound_after_restart(self):
