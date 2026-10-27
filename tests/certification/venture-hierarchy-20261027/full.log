@@ -1,0 +1,930 @@
+test_01_valid_synthetic_ownership (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_01_valid_synthetic_ownership)
+P10 case 01_valid_synthetic_ownership ... ok
+test_02_valid_control_attestation (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_02_val...................................................................................................................................................................................................................................................................................................................../usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7062442e23e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x706244661f30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x70624435c8b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x70624435c9a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x70624435c040>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x70624309f010>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...../usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 302: 'redirect'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+..............................................................................................................................................
+----------------------------------------------------------------------
+Ran 739 tests in 13.786s
+
+OK
+{"report_sha256":"93a206bcdff0af2838b5bbb1a78dd9b6b91d8e2da5a27417f03fd2d7fc77fd98","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"93a206bcdff0af2838b5bbb1a78dd9b6b91d8e2da5a27417f03fd2d7fc77fd98","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"e168e82094fc2e1a09ff645a2e035cb78154236621c0f59dfc21461b331da0a1","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"e168e82094fc2e1a09ff645a2e035cb78154236621c0f59dfc21461b331da0a1","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+_model_authorization_flag_is_denied)
+P10 case 15_model_authorization_flag_is_denied ... ok
+test_16_model_text_cannot_override_failed_control (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_16_model_text_cannot_override_failed_control)
+P10 case 16_model_text_cannot_override_failed_control ... ok
+test_17_missing_owner_role_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_17_missing_owner_role_blocks)
+P10 case 17_missing_owner_role_blocks ... ok
+test_18_duplicate_owner_roles_block (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_18_duplicate_owner_roles_block)
+P10 case 18_duplicate_owner_roles_block ... ok
+test_19_real_person_owner_identity_blocked (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_19_real_person_owner_identity_blocked)
+P10 case 19_real_person_owner_identity_blocked ... ok
+test_20_cadence_daily_financial_reconciliation_accepted (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_20_cadence_daily_financial_reconciliation_accepted)
+P10 case 20_cadence_daily_financial_reconciliation_accepted ... ok
+test_21_cadence_incident_material_change_recertification_accepted (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_21_cadence_incident_material_change_recertification_accepted)
+P10 case 21_cadence_incident_material_change_recertification_accepted ... ok
+test_22_cadence_monthly_recovery_access_accepted (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_22_cadence_monthly_recovery_access_accepted)
+P10 case 22_cadence_monthly_recovery_access_accepted ... ok
+test_23_cadence_weekly_authority_configuration_anomaly_accepted (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_23_cadence_weekly_authority_configuration_anomaly_accepted)
+P10 case 23_cadence_weekly_authority_configuration_anomaly_accepted ... ok
+test_24_failed_recurring_control_blocks_and_stops (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_24_failed_recurring_control_blocks_and_stops)
+P10 case 24_failed_recurring_control_blocks_and_stops ... ok
+test_25_missing_change_impact_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_25_missing_change_impact_blocks)
+P10 case 25_missing_change_impact_blocks ... ok
+test_26_failed_change_tests_block (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_26_failed_change_tests_block)
+P10 case 26_failed_change_tests_block ... ok
+test_27_live_rollout_mode_blocked (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_27_live_rollout_mode_blocked)
+P10 case 27_live_rollout_mode_blocked ... ok
+test_28_incident_only_simulates_terminal_suspension (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_28_incident_only_simulates_terminal_suspension)
+P10 case 28_incident_only_simulates_terminal_suspension ... ok
+test_29_incident_without_suspension_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_29_incident_without_suspension_blocks)
+P10 case 29_incident_without_suspension_blocks ... ok
+test_30_review_without_prerequisites_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_30_review_without_prerequisites_blocks)
+P10 case 30_review_without_prerequisites_blocks ... ok
+test_31_evidence_does_not_cross_runs (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_31_evidence_does_not_cross_runs)
+P10 case 31_evidence_does_not_cross_runs ... ok
+test_32_pass_result_never_authorizes_production (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_32_pass_result_never_authorizes_production)
+P10 case 32_pass_result_never_authorizes_production ... ok
+test_33_go_live_designation_field_is_rejected (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_33_go_live_designation_field_is_rejected)
+P10 case 33_go_live_designation_field_is_rejected ... ok
+test_34_exact_replay_returns_same_result (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_34_exact_replay_returns_same_result)
+P10 case 34_exact_replay_returns_same_result ... ok
+test_35_changed_material_collision_stops (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_35_changed_material_collision_stops)
+P10 case 35_changed_material_collision_stops ... ok
+test_36_out_of_order_sequence_stops (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_36_out_of_order_sequence_stops)
+P10 case 36_out_of_order_sequence_stops ... ok
+test_37_tampered_evidence_hash_stops (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_37_tampered_evidence_hash_stops)
+P10 case 37_tampered_evidence_hash_stops ... ok
+test_38_malformed_payload_type_blocks_without_type_error (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_38_malformed_payload_type_blocks_without_type_error)
+P10 case 38_malformed_payload_type_blocks_without_type_error ... ok
+test_39_injected_failure_is_terminal (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_39_injected_failure_is_terminal)
+P10 case 39_injected_failure_is_terminal ... ok
+test_40_schema_requires_all_nine_false_authorities (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_40_schema_requires_all_nine_false_authorities)
+P10 case 40_schema_requires_all_nine_false_authorities ... ok
+test_41_configuration_fingerprint_mismatch_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_41_configuration_fingerprint_mismatch_blocks)
+P10 case 41_configuration_fingerprint_mismatch_blocks ... ok
+test_42_source_commit_mismatch_blocks (p10.test_p10_synthetic_governance.TestP10SyntheticGovernance.test_42_source_commit_mismatch_blocks)
+P10 case 42_source_commit_mismatch_blocks ... ok
+test_01_complete_package_is_ready_for_review_only (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_01_complete_package_is_ready_for_review_only)
+P11 case 01_complete_package_is_ready_for_review_only ... ok
+test_02_production_candidate_label_does_not_authorize_a_test (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_02_production_candidate_label_does_not_authorize_a_test)
+P11 case 02_production_candidate_label_does_not_authorize_a_test ... ok
+test_03_schema_enforces_all_authority_and_action_false_constants (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_03_schema_enforces_all_authority_and_action_false_constants)
+P11 case 03_schema_enforces_all_authority_and_action_false_constants ... ok
+test_04_input_hash_is_returned_and_bound (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_04_input_hash_is_returned_and_bound)
+P11 case 04_input_hash_is_returned_and_bound ... ok
+test_05_approval_text_is_inert (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_05_approval_text_is_inert)
+P11 case 05_approval_text_is_inert ... ok
+test_06_model_output_authorization_true_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_06_model_output_authorization_true_blocks)
+P11 case 06_model_output_authorization_true_blocks ... ok
+test_07_non_text_model_output_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_07_non_text_model_output_blocks)
+P11 case 07_non_text_model_output_blocks ... ok
+test_08_execution_mode_drift_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_08_execution_mode_drift_blocks)
+P11 case 08_execution_mode_drift_blocks ... ok
+test_09_non_production_candidate_mode_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_09_non_production_candidate_mode_blocks)
+P11 case 09_non_production_candidate_mode_blocks ... ok
+test_10_real_target_identifier_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_10_real_target_identifier_blocks)
+P11 case 10_real_target_identifier_blocks ... ok
+test_11_multiple_ventures_block (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_11_multiple_ventures_block)
+P11 case 11_multiple_ventures_block ... ok
+test_12_mutating_operation_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_12_mutating_operation_blocks)
+P11 case 12_mutating_operation_blocks ... ok
+test_13_non_synthetic_data_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_13_non_synthetic_data_blocks)
+P11 case 13_non_synthetic_data_blocks ... ok
+test_14_duration_over_30_minutes_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_14_duration_over_30_minutes_blocks)
+P11 case 14_duration_over_30_minutes_blocks ... ok
+test_15_concurrency_above_one_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_15_concurrency_above_one_blocks)
+P11 case 15_concurrency_above_one_blocks ... ok
+test_16_write_operations_block (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_16_write_operations_block)
+P11 case 16_write_operations_block ... ok
+test_17_customer_data_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_17_customer_data_blocks)
+P11 case 17_customer_data_blocks ... ok
+test_18_customer_contact_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_18_customer_contact_blocks)
+P11 case 18_customer_contact_blocks ... ok
+test_19_external_actions_block (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_19_external_actions_block)
+P11 case 19_external_actions_block ... ok
+test_20_nonempty_authority_request_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_20_nonempty_authority_request_blocks)
+P11 case 20_nonempty_authority_request_blocks ... ok
+test_21_nonzero_exposure_or_loss_limit_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_21_nonzero_exposure_or_loss_limit_blocks)
+P11 case 21_nonzero_exposure_or_loss_limit_blocks ... ok
+test_22_network_access_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_22_network_access_blocks)
+P11 case 22_network_access_blocks ... ok
+test_23_credential_access_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_23_credential_access_blocks)
+P11 case 23_credential_access_blocks ... ok
+test_24_provider_access_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_24_provider_access_blocks)
+P11 case 24_provider_access_blocks ... ok
+test_25_missing_safeguard_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_25_missing_safeguard_blocks)
+P11 case 25_missing_safeguard_blocks ... ok
+test_26_missing_monitor_metric_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_26_missing_monitor_metric_blocks)
+P11 case 26_missing_monitor_metric_blocks ... ok
+test_27_duplicate_monitor_metrics_block (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_27_duplicate_monitor_metrics_block)
+P11 case 27_duplicate_monitor_metrics_block ... ok
+test_28_missing_stop_condition_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_28_missing_stop_condition_blocks)
+P11 case 28_missing_stop_condition_blocks ... ok
+test_29_duplicate_stop_conditions_block (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_29_duplicate_stop_conditions_block)
+P11 case 29_duplicate_stop_conditions_block ... ok
+test_30_monitor_heartbeat_over_60_seconds_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_30_monitor_heartbeat_over_60_seconds_blocks)
+P11 case 30_monitor_heartbeat_over_60_seconds_blocks ... ok
+test_31_automatic_stop_must_be_enabled (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_31_automatic_stop_must_be_enabled)
+P11 case 31_automatic_stop_must_be_enabled ... ok
+test_32_live_alert_route_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_32_live_alert_route_blocks)
+P11 case 32_live_alert_route_blocks ... ok
+test_33_mutating_rollback_plan_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_33_mutating_rollback_plan_blocks)
+P11 case 33_mutating_rollback_plan_blocks ... ok
+test_34_unrehearsed_recovery_plan_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_34_unrehearsed_recovery_plan_blocks)
+P11 case 34_unrehearsed_recovery_plan_blocks ... ok
+test_35_reviewer_must_differ_from_implementer (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_35_reviewer_must_differ_from_implementer)
+P11 case 35_reviewer_must_differ_from_implementer ... ok
+test_36_independent_review_required (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_36_independent_review_required)
+P11 case 36_independent_review_required ... ok
+test_37_configuration_fingerprint_mismatch_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_37_configuration_fingerprint_mismatch_blocks)
+P11 case 37_configuration_fingerprint_mismatch_blocks ... ok
+test_38_source_commit_mismatch_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_38_source_commit_mismatch_blocks)
+P11 case 38_source_commit_mismatch_blocks ... ok
+test_39_tampered_evidence_hash_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_39_tampered_evidence_hash_blocks)
+P11 case 39_tampered_evidence_hash_blocks ... ok
+test_40_malformed_candidate_type_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_40_malformed_candidate_type_blocks)
+P11 case 40_malformed_candidate_type_blocks ... ok
+test_41_unknown_top_level_field_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_41_unknown_top_level_field_blocks)
+P11 case 41_unknown_top_level_field_blocks ... ok
+test_42_injected_failure_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_42_injected_failure_blocks)
+P11 case 42_injected_failure_blocks ... ok
+test_43_noncanonical_nan_blocks (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_43_noncanonical_nan_blocks)
+P11 case 43_noncanonical_nan_blocks ... ok
+test_44_exact_replay_is_idempotent (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_44_exact_replay_is_idempotent)
+P11 case 44_exact_replay_is_idempotent ... ok
+test_45_changed_material_under_review_id_stops (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_45_changed_material_under_review_id_stops)
+P11 case 45_changed_material_under_review_id_stops ... ok
+test_46_live_authority_broker_execution_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_46_live_authority_broker_execution_authorized_denied)
+P11 case 46_live_authority_broker_execution_authorized_denied ... ok
+test_47_live_authority_capital_allocation_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_47_live_authority_capital_allocation_authorized_denied)
+P11 case 47_live_authority_capital_allocation_authorized_denied ... ok
+test_48_live_authority_credential_access_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_48_live_authority_credential_access_authorized_denied)
+P11 case 48_live_authority_credential_access_authorized_denied ... ok
+test_49_live_authority_customer_contact_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_49_live_authority_customer_contact_authorized_denied)
+P11 case 49_live_authority_customer_contact_authorized_denied ... ok
+test_50_live_authority_deployment_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_50_live_authority_deployment_authorized_denied)
+P11 case 50_live_authority_deployment_authorized_denied ... ok
+test_51_live_authority_external_action_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_51_live_authority_external_action_authorized_denied)
+P11 case 51_live_authority_external_action_authorized_denied ... ok
+test_52_live_authority_live_mode_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_52_live_authority_live_mode_denied)
+P11 case 52_live_authority_live_mode_denied ... ok
+test_53_live_authority_payment_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_53_live_authority_payment_authorized_denied)
+P11 case 53_live_authority_payment_authorized_denied ... ok
+test_54_live_authority_venture_execution_authorized_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_54_live_authority_venture_execution_authorized_denied)
+P11 case 54_live_authority_venture_execution_authorized_denied ... ok
+test_55_action_broker_action_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_55_action_broker_action_performed_denied)
+P11 case 55_action_broker_action_performed_denied ... ok
+test_56_action_capital_action_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_56_action_capital_action_performed_denied)
+P11 case 56_action_capital_action_performed_denied ... ok
+test_57_action_customer_contact_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_57_action_customer_contact_performed_denied)
+P11 case 57_action_customer_contact_performed_denied ... ok
+test_58_action_deployment_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_58_action_deployment_performed_denied)
+P11 case 58_action_deployment_performed_denied ... ok
+test_59_action_execution_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_59_action_execution_performed_denied)
+P11 case 59_action_execution_performed_denied ... ok
+test_60_action_external_action_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_60_action_external_action_denied)
+P11 case 60_action_external_action_denied ... ok
+test_61_action_live_action_permitted_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_61_action_live_action_permitted_denied)
+P11 case 61_action_live_action_permitted_denied ... ok
+test_62_action_live_credential_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_62_action_live_credential_denied)
+P11 case 62_action_live_credential_denied ... ok
+test_63_action_model_output_authorization_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_63_action_model_output_authorization_denied)
+P11 case 63_action_model_output_authorization_denied ... ok
+test_64_action_network_call_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_64_action_network_call_denied)
+P11 case 64_action_network_call_denied ... ok
+test_65_action_payment_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_65_action_payment_performed_denied)
+P11 case 65_action_payment_performed_denied ... ok
+test_66_action_provider_call_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_66_action_provider_call_denied)
+P11 case 66_action_provider_call_denied ... ok
+test_67_action_unauthorized_action_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_67_action_unauthorized_action_denied)
+P11 case 67_action_unauthorized_action_denied ... ok
+test_68_action_venture_action_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_68_action_venture_action_performed_denied)
+P11 case 68_action_venture_action_performed_denied ... ok
+test_69_action_worker_action_performed_denied (p11.test_readiness_gate.TestP11SyntheticReadinessGate.test_69_action_worker_action_performed_denied)
+P11 case 69_action_worker_action_performed_denied ... ok
+test_all_contracts_validate_synthetic_fixtures (p2.test_p2_contracts.P2ContractTests.test_all_contracts_validate_synthetic_fixtures) ... ok
+test_every_contract_requires_policy_and_scope_envelope (p2.test_p2_contracts.P2ContractTests.test_every_contract_requires_policy_and_scope_envelope) ... ok
+test_no_p2_schema_declares_authorizing_capabilities (p2.test_p2_contracts.P2ContractTests.test_no_p2_schema_declares_authorizing_capabilities) ... ok
+test_replay_cannot_authorize_external_action (p2.test_p2_contracts.P2ContractTests.test_replay_cannot_authorize_external_action) ... ok
+test_review_cannot_authorize_launch_capital_or_external_action (p2.test_p2_contracts.P2ContractTests.test_review_cannot_authorize_launch_capital_or_external_action) ... ok
+test_undeclared_venture_authority_is_rejected (p2.test_p2_contracts.P2ContractTests.test_undeclared_venture_authority_is_rejected) ... ok
+test_all_source_types_are_typed_and_accepted (p2.test_p2_intake.P2OpportunityIntakeTests.test_all_source_types_are_typed_and_accepted) ... ok
+test_cross_scope_evidence_is_rejected (p2.test_p2_intake.P2OpportunityIntakeTests.test_cross_scope_evidence_is_rejected) ... ok
+test_duplicate_identity_with_changed_content_is_rejected (p2.test_p2_intake.P2OpportunityIntakeTests.test_duplicate_identity_with_changed_content_is_rejected) ... ok
+test_exact_duplicate_delivery_converges_to_one_record (p2.test_p2_intake.P2OpportunityIntakeTests.test_exact_duplicate_delivery_converges_to_one_record) ... ok
+test_idempotency_key_conflict_is_rejected (p2.test_p2_intake.P2OpportunityIntakeTests.test_idempotency_key_conflict_is_rejected) ... ok
+test_stale_evidence_is_rejected (p2.test_p2_intake.P2OpportunityIntakeTests.test_stale_evidence_is_rejected) ... ok
+test_tampered_source_is_rejected (p2.test_p2_intake.P2OpportunityIntakeTests.test_tampered_source_is_rejected) ... ok
+test_lifecycle_event_log_is_append_only_and_tamper_evident (p2.test_p2_lifecycle.P2LifecycleTests.test_lifecycle_event_log_is_append_only_and_tamper_evident) ... ok
+test_lifecycle_replay_is_deterministic_from_durable_state (p2.test_p2_lifecycle.P2LifecycleTests.test_lifecycle_replay_is_deterministic_from_durable_state) ... ok
+test_lifecycle_schemas_contain_no_authorization_fields (p2.test_p2_lifecycle.P2LifecycleTests.test_lifecycle_schemas_contain_no_authorization_fields) ... ok
+test_lifecycle_valid_and_invalid_transitions (p2.test_p2_lifecycle.P2LifecycleTests.test_lifecycle_valid_and_invalid_transitions) ... ok
+test_all_source_types_normalize_with_taint_preservation (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_all_source_types_normalize_with_taint_preservation) ... ok
+test_contradictions_are_detected_without_overwrite (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_contradictions_are_detected_without_overwrite) ... ok
+test_cross_scope_normalization_is_rejected (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_cross_scope_normalization_is_rejected) ... ok
+test_duplicate_raw_evidence_converges_by_lineage (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_duplicate_raw_evidence_converges_by_lineage) ... ok
+test_raw_envelope_taint_and_instruction_content_cannot_widen_authority (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_raw_envelope_taint_and_instruction_content_cannot_widen_authority) ... ok
+test_stale_evidence_is_not_normalized (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_stale_evidence_is_not_normalized) ... ok
+test_transformation_chain_is_append_only (p2.test_p2_normalization.P2EvidenceNormalizationTests.test_transformation_chain_is_append_only) ... ok
+test_authority_widening_is_denied (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_authority_widening_is_denied) ... ok
+test_contradictory_evidence_is_preserved_and_not_silently_replayed (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_contradictory_evidence_is_preserved_and_not_silently_replayed) ... ok
+test_cross_portfolio_replay_is_denied (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_cross_portfolio_replay_is_denied) ... ok
+test_durable_replay_reproduces_and_converges_duplicate_request (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_durable_replay_reproduces_and_converges_duplicate_request) ... ok
+test_stale_evidence_is_rejected_before_replay_inputs_are_created (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_stale_evidence_is_rejected_before_replay_inputs_are_created) ... ok
+test_tampered_replay_result_is_detected (p2.test_p2_replay_adversarial.P2ReplayAdversarialTests.test_tampered_replay_result_is_detected) ... ok
+test_confidence_interval_reflects_taint_and_contradiction (p2.test_p2_scoring.P2ScoringTests.test_confidence_interval_reflects_taint_and_contradiction) ... ok
+test_deterministic_scoring_is_reproducible (p2.test_p2_scoring.P2ScoringTests.test_deterministic_scoring_is_reproducible) ... ok
+test_score_explainability_has_breakdown_reasoning_and_interval (p2.test_p2_scoring.P2ScoringTests.test_score_explainability_has_breakdown_reasoning_and_interval) ... ok
+test_scoring_policy_version_is_enforced (p2.test_p2_scoring.P2ScoringTests.test_scoring_policy_version_is_enforced) ... ok
+test_all_evidence_types_map_to_dimensions_with_lineage (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_all_evidence_types_map_to_dimensions_with_lineage) ... ok
+test_contradictory_evidence_is_surfaced_before_thesis_creation (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_contradictory_evidence_is_surfaced_before_thesis_creation) ... ok
+test_cross_scope_thesis_derivation_is_rejected (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_cross_scope_thesis_derivation_is_rejected) ... ok
+test_evidence_lineage_is_preserved_through_assignments (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_evidence_lineage_is_preserved_through_assignments) ... ok
+test_fingerprint_is_deterministic_and_reproducible (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_fingerprint_is_deterministic_and_reproducible) ... ok
+test_thesis_identity_is_immutable_and_idempotent (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_thesis_identity_is_immutable_and_idempotent) ... ok
+test_thesis_schemas_contain_no_authorization_fields (p2.test_p2_thesis_identity.P2ThesisIdentityTests.test_thesis_schemas_contain_no_authorization_fields) ... ok
+test_cross_scope_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_cross_scope_is_rejected) ... ok
+test_duplicate_delivery_converges_to_one_durable_record (p3.test_p3_1_intake.P31IntakeTests.test_duplicate_delivery_converges_to_one_durable_record) ... ok
+test_duplicate_identity_in_one_set_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_duplicate_identity_in_one_set_is_rejected) ... ok
+test_fixture_manifest_has_ten_or_more_scenarios (p3.test_p3_1_intake.P31IntakeTests.test_fixture_manifest_has_ten_or_more_scenarios) ... ok
+test_idempotency_collision_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_idempotency_collision_is_rejected) ... ok
+test_invalid_p2_contract_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_invalid_p2_contract_is_rejected) ... ok
+test_missing_opportunity_thesis_reference_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_missing_opportunity_thesis_reference_is_rejected) ... ok
+test_normal_multi_record_intake_and_normalization (p3.test_p3_1_intake.P31IntakeTests.test_normal_multi_record_intake_and_normalization) ... ok
+test_p2_source_inputs_are_read_only (p3.test_p3_1_intake.P31IntakeTests.test_p2_source_inputs_are_read_only) ... ok
+test_source_hash_mutation_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_source_hash_mutation_is_rejected) ... ok
+test_stale_evidence_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_stale_evidence_is_rejected) ... ok
+test_stale_opportunity_set_is_rejected (p3.test_p3_1_intake.P31IntakeTests.test_stale_opportunity_set_is_rejected) ... ok
+test_taint_lineage_and_event_chain_are_reconstructible (p3.test_p3_1_intake.P31IntakeTests.test_taint_lineage_and_event_chain_are_reconstructible) ... ok
+test_authority_widening_denial (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_authority_widening_denial) ... ok
+test_candidate_is_not_auto_accepted (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_candidate_is_not_auto_accepted) ... ok
+test_configuration_denial (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_configuration_denial) ... ok
+test_contradictory_signals_are_quarantined (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_contradictory_signals_are_quarantined) ... ok
+test_deterministic_repeat_returns_same_candidate (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_deterministic_repeat_returns_same_candidate) ... ok
+test_expiration_after_documented_window (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_expiration_after_documented_window) ... ok
+test_fixture_manifest_has_twenty_or_more_scenarios (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_fixture_manifest_has_twenty_or_more_scenarios) ... ok
+test_frozen_weight_snapshot_is_versioned (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_frozen_weight_snapshot_is_versioned) ... ok
+test_high_score_and_confidence_are_deterministic (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_high_score_and_confidence_are_deterministic) ... ok
+test_human_acceptance_is_the_only_acceptance_path (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_human_acceptance_is_the_only_acceptance_path) ... ok
+test_input_range_denial (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_input_range_denial) ... ok
+test_invalid_transition_is_denied (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_invalid_transition_is_denied) ... ok
+test_lifecycle_audit_log_reconstructs (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_lifecycle_audit_log_reconstructs) ... ok
+test_no_capital_venture_or_broker_authority (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_no_capital_venture_or_broker_authority) ... ok
+test_non_human_review_is_denied (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_non_human_review_is_denied) ... ok
+test_poor_fit_can_be_human_rejected (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_poor_fit_can_be_human_rejected) ... ok
+test_reasoning_chain_preserves_inputs_weights_and_contributions (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_reasoning_chain_preserves_inputs_weights_and_contributions) ... ok
+test_repeated_quarantine_escalates (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_repeated_quarantine_escalates) ... ok
+test_review_schema_requires_human_role (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_review_schema_requires_human_role) ... ok
+test_scope_denial (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_scope_denial) ... ok
+test_scout_self_acceptance_is_denied (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_scout_self_acceptance_is_denied) ... ok
+test_tainted_input_increases_uncertainty (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_tainted_input_increases_uncertainty) ... ok
+test_weight_version_is_on_candidate_reasoning (p3.test_p3_2_scoring.P32ScoringLifecycleTests.test_weight_version_is_on_candidate_reasoning) ... ok
+test_all_p30_contracts_validate_synthetic_fixtures (p3.test_p3_contracts.P3ContractTests.test_all_p30_contracts_validate_synthetic_fixtures) ... ok
+test_authority_widening_is_rejected (p3.test_p3_contracts.P3ContractTests.test_authority_widening_is_rejected) ... ok
+test_contracts_require_scope_and_provenance_envelope (p3.test_p3_contracts.P3ContractTests.test_contracts_require_scope_and_provenance_envelope) ... ok
+test_cross_venture_and_escalation_denials_are_schema_bound (p3.test_p3_contracts.P3ContractTests.test_cross_venture_and_escalation_denials_are_schema_bound) ... ok
+test_no_p3_contract_declares_live_capability (p3.test_p3_contracts.P3ContractTests.test_no_p3_contract_declares_live_capability) ... ok
+test_undeclared_authority_properties_are_rejected (p3.test_p3_contracts.P3ContractTests.test_undeclared_authority_properties_are_rejected) ... ok
+test_configuration_fingerprint_is_enforced (p4.test_p4_0_recording.P40RecordingTests.test_configuration_fingerprint_is_enforced) ... ok
+test_duplicate_delivery_converges (p4.test_p4_0_recording.P40RecordingTests.test_duplicate_delivery_converges) ... ok
+test_effectful_mode_is_denied (p4.test_p4_0_recording.P40RecordingTests.test_effectful_mode_is_denied) ... ok
+test_external_authority_is_denied (p4.test_p4_0_recording.P40RecordingTests.test_external_authority_is_denied) ... ok
+test_idempotency_collision_is_denied (p4.test_p4_0_recording.P40RecordingTests.test_idempotency_collision_is_denied) ... ok
+test_live_mode_is_denied (p4.test_p4_0_recording.P40RecordingTests.test_live_mode_is_denied) ... ok
+test_provenance_is_required (p4.test_p4_0_recording.P40RecordingTests.test_provenance_is_required) ... ok
+test_schema_rejects_unknown_capability (p4.test_p4_0_recording.P40RecordingTests.test_schema_rejects_unknown_capability) ... ok
+test_valid_record_is_durable_and_no_effect (p4.test_p4_0_recording.P40RecordingTests.test_valid_record_is_durable_and_no_effect) ... ok
+test_all_live_authorities_are_denied (p5.test_p5_0_revenue.P50RevenueTests.test_all_live_authorities_are_denied) ... ok
+test_changed_content_collision_is_denied (p5.test_p5_0_revenue.P50RevenueTests.test_changed_content_collision_is_denied) ... ok
+test_configuration_fingerprint_is_required (p5.test_p5_0_revenue.P50RevenueTests.test_configuration_fingerprint_is_required) ... ok
+test_duplicate_delivery_converges (p5.test_p5_0_revenue.P50RevenueTests.test_duplicate_delivery_converges) ... ok
+test_negative_amount_is_denied (p5.test_p5_0_revenue.P50RevenueTests.test_negative_amount_is_denied) ... ok
+test_provenance_is_required (p5.test_p5_0_revenue.P50RevenueTests.test_provenance_is_required) ... ok
+test_schema_authority_is_denied (p5.test_p5_0_revenue.P50RevenueTests.test_schema_authority_is_denied) ... ok
+test_sqlite_reopen_preserves_event (p5.test_p5_0_revenue.P50RevenueTests.test_sqlite_reopen_preserves_event) ... ok
+test_valid_event_is_recorded_without_effect (p5.test_p5_0_revenue.P50RevenueTests.test_valid_event_is_recorded_without_effect) ... ok
+test_authority_bearing_result_is_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_authority_bearing_result_is_denied) ... ok
+test_changed_content_collision_is_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_changed_content_collision_is_denied) ... ok
+test_cross_configuration_is_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_cross_configuration_is_denied) ... ok
+test_cross_venture_is_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_cross_venture_is_denied) ... ok
+test_duplicate_source_identity_is_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_duplicate_source_identity_is_denied) ... ok
+test_durable_receipt_replays_after_reopen (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_durable_receipt_replays_after_reopen) ... ok
+test_missing_sources_are_denied (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_missing_sources_are_denied) ... ok
+test_order_independent_convergence (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_order_independent_convergence) ... ok
+test_provenance_and_taint_are_preserved (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_provenance_and_taint_are_preserved) ... ok
+test_valid_reconciliation (p5.test_p5_1_reconciliation.P51ReconciliationTests.test_valid_reconciliation) ... ok
+test_collision_denial (p5.test_p5_2_treasury.P52TreasuryTests.test_collision_denial) ... ok
+test_crash_recovery (p5.test_p5_2_treasury.P52TreasuryTests.test_crash_recovery) ... ok
+test_cross_configuration_denial (p5.test_p5_2_treasury.P52TreasuryTests.test_cross_configuration_denial) ... ok
+test_cross_venture_denial (p5.test_p5_2_treasury.P52TreasuryTests.test_cross_venture_denial) ... ok
+test_deployable_ceiling_enforcement (p5.test_p5_2_treasury.P52TreasuryTests.test_deployable_ceiling_enforcement) ... ok
+test_deterministic_reordering (p5.test_p5_2_treasury.P52TreasuryTests.test_deterministic_reordering) ... ok
+test_duplicate_convergence (p5.test_p5_2_treasury.P52TreasuryTests.test_duplicate_convergence) ... ok
+test_live_authority_denial (p5.test_p5_2_treasury.P52TreasuryTests.test_live_authority_denial) ... ok
+test_monotonic_ratchet_enforcement (p5.test_p5_2_treasury.P52TreasuryTests.test_monotonic_ratchet_enforcement) ... ok
+test_non_spendable_result_denial (p5.test_p5_2_treasury.P52TreasuryTests.test_non_spendable_result_denial) ... ok
+test_provenance_taint_preservation (p5.test_p5_2_treasury.P52TreasuryTests.test_provenance_taint_preservation) ... ok
+test_reserve_floor_enforcement (p5.test_p5_2_treasury.P52TreasuryTests.test_reserve_floor_enforcement) ... ok
+test_valid_calculation (p5.test_p5_2_treasury.P52TreasuryTests.test_valid_calculation) ... ok
+test_changed_decision_collision_is_denied (p5.test_p5_3_review.P53ReviewTests.test_changed_decision_collision_is_denied) ... ok
+test_cross_configuration_is_denied (p5.test_p5_3_review.P53ReviewTests.test_cross_configuration_is_denied) ... ok
+test_duplicate_review_converges (p5.test_p5_3_review.P53ReviewTests.test_duplicate_review_converges) ... ok
+test_durable_review_replays_after_reopen (p5.test_p5_3_review.P53ReviewTests.test_durable_review_replays_after_reopen) ... ok
+test_invalid_evidence_hash_is_denied (p5.test_p5_3_review.P53ReviewTests.test_invalid_evidence_hash_is_denied) ... ok
+test_live_authority_is_denied (p5.test_p5_3_review.P53ReviewTests.test_live_authority_is_denied) ... ok
+test_non_human_approver_is_denied (p5.test_p5_3_review.P53ReviewTests.test_non_human_approver_is_denied) ... ok
+test_review_cannot_grant_capability (p5.test_p5_3_review.P53ReviewTests.test_review_cannot_grant_capability) ... ok
+test_valid_human_review_is_recorded (p5.test_p5_3_review.P53ReviewTests.test_valid_human_review_is_recorded) ... ok
+test_complete_p50_to_p53_composition (p5.test_p5_4_integration.P54IntegrationTests.test_complete_p50_to_p53_composition) ... ok
+test_complete_replay_converges (p5.test_p5_4_integration.P54IntegrationTests.test_complete_replay_converges) ... ok
+test_configuration_fingerprint_continuity (p5.test_p5_4_integration.P54IntegrationTests.test_configuration_fingerprint_continuity) ... ok
+test_cross_configuration_composition_is_denied (p5.test_p5_4_integration.P54IntegrationTests.test_cross_configuration_composition_is_denied) ... ok
+test_cross_venture_composition_is_denied (p5.test_p5_4_integration.P54IntegrationTests.test_cross_venture_composition_is_denied) ... ok
+test_each_boundary_survives_reopen (p5.test_p5_4_integration.P54IntegrationTests.test_each_boundary_survives_reopen) ... ok
+test_live_authority_denial_at_revenue_boundary (p5.test_p5_4_integration.P54IntegrationTests.test_live_authority_denial_at_revenue_boundary) ... ok
+test_provenance_and_taint_continuity (p5.test_p5_4_integration.P54IntegrationTests.test_provenance_and_taint_continuity) ... ok
+test_review_result_is_capability_free (p5.test_p5_4_integration.P54IntegrationTests.test_review_result_is_capability_free) ... ok
+test_treasury_result_is_non_spendable (p5.test_p5_4_integration.P54IntegrationTests.test_treasury_result_is_non_spendable) ... ok
+test_01_valid_portfolio_identity (p6.test_p6_0_registry.P60RegistryTests.test_01_valid_portfolio_identity) ... ok
+test_02_sqlite_reopen_preserves_identity (p6.test_p6_0_registry.P60RegistryTests.test_02_sqlite_reopen_preserves_identity) ... ok
+test_03_duplicate_identity_converges (p6.test_p6_0_registry.P60RegistryTests.test_03_duplicate_identity_converges) ... ok
+test_04_identity_collision_denied (p6.test_p6_0_registry.P60RegistryTests.test_04_identity_collision_denied) ... ok
+test_05_fingerprint_mismatch_denied (p6.test_p6_0_registry.P60RegistryTests.test_05_fingerprint_mismatch_denied) ... ok
+test_06_live_authority_denied (p6.test_p6_0_registry.P60RegistryTests.test_06_live_authority_denied) ... ok
+test_07_membership_identity_and_scope (p6.test_p6_0_registry.P60RegistryTests.test_07_membership_identity_and_scope) ... ok
+test_08_cross_portfolio_scope_denied (p6.test_p6_0_registry.P60RegistryTests.test_08_cross_portfolio_scope_denied) ... ok
+test_09_membership_collision_denied (p6.test_p6_0_registry.P60RegistryTests.test_09_membership_collision_denied) ... ok
+test_10_stale_lifecycle_version_denied (p6.test_p6_0_registry.P60RegistryTests.test_10_stale_lifecycle_version_denied) ... ok
+test_11_lifecycle_transition_is_durable (p6.test_p6_0_registry.P60RegistryTests.test_11_lifecycle_transition_is_durable) ... ok
+test_12_aggregate_view_is_read_only_and_filtered (p6.test_p6_0_registry.P60RegistryTests.test_12_aggregate_view_is_read_only_and_filtered) ... ok
+test_13_cross_scope_membership_rejected_before_storage (p6.test_p6_0_registry.P60RegistryTests.test_13_cross_scope_membership_rejected_before_storage) ... ok
+test_14_non_synthetic_effect_denied (p6.test_p6_0_registry.P60RegistryTests.test_14_non_synthetic_effect_denied) ... ok
+test_15_configuration_manifest_fingerprint_is_canonical (p6.test_p6_0_registry.P60RegistryTests.test_15_configuration_manifest_fingerprint_is_canonical) ... ok
+test_16_json_schemas_validate_and_reject_authority (p6.test_p6_0_registry.P60RegistryTests.test_16_json_schemas_validate_and_reject_authority) ... ok
+test_01_valid_typed_packet (p6.test_p6_1_coordination.P61CoordinationTests.test_01_valid_typed_packet) ... ok
+test_02_required_identity_and_scope_fields (p6.test_p6_1_coordination.P61CoordinationTests.test_02_required_identity_and_scope_fields) ... ok
+test_03_locked_fingerprint_continuity (p6.test_p6_1_coordination.P61CoordinationTests.test_03_locked_fingerprint_continuity) ... ok
+test_04_fingerprint_mismatch_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_04_fingerprint_mismatch_denial) ... ok
+test_05_missing_provenance_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_05_missing_provenance_denial) ... ok
+test_06_exact_duplicate_convergence (p6.test_p6_1_coordination.P61CoordinationTests.test_06_exact_duplicate_convergence) ... ok
+test_07_changed_content_collision_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_07_changed_content_collision_denial) ... ok
+test_08_deterministic_replay_hash_convergence (p6.test_p6_1_coordination.P61CoordinationTests.test_08_deterministic_replay_hash_convergence) ... ok
+test_09_expiry_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_09_expiry_denial) ... ok
+test_10_stale_time_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_10_stale_time_denial) ... ok
+test_11_cross_portfolio_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_11_cross_portfolio_denial) ... ok
+test_12_cross_venture_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_12_cross_venture_denial) ... ok
+test_13_self_escalation_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_13_self_escalation_denial) ... ok
+test_14_capability_envelope_widening_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_14_capability_envelope_widening_denial) ... ok
+test_15_all_nine_live_authority_fields_denied (p6.test_p6_1_coordination.P61CoordinationTests.test_15_all_nine_live_authority_fields_denied) ... ok
+test_16_effectful_non_synthetic_coordination_denial (p6.test_p6_1_coordination.P61CoordinationTests.test_16_effectful_non_synthetic_coordination_denial) ... ok
+test_17_sqlite_reopen_durability (p6.test_p6_1_coordination.P61CoordinationTests.test_17_sqlite_reopen_durability) ... ok
+test_18_schema_and_authority_rejection (p6.test_p6_1_coordination.P61CoordinationTests.test_18_schema_and_authority_rejection) ... ok
+test_01_valid_demand (p6.test_p6_2_shared_service.P62SharedServiceTests.test_01_valid_demand) ... ok
+test_02_required_fields (p6.test_p6_2_shared_service.P62SharedServiceTests.test_02_required_fields) ... ok
+test_03_registry_scope (p6.test_p6_2_shared_service.P62SharedServiceTests.test_03_registry_scope) ... ok
+test_04_coordination_identity (p6.test_p6_2_shared_service.P62SharedServiceTests.test_04_coordination_identity) ... ok
+test_05_quota_under_limit (p6.test_p6_2_shared_service.P62SharedServiceTests.test_05_quota_under_limit) ... ok
+test_06_quota_exceeded_denial (p6.test_p6_2_shared_service.P62SharedServiceTests.test_06_quota_exceeded_denial) ... ok
+test_07_service_class_eligibility_denial (p6.test_p6_2_shared_service.P62SharedServiceTests.test_07_service_class_eligibility_denial) ... ok
+test_08_expiry_denial (p6.test_p6_2_shared_service.P62SharedServiceTests.test_08_expiry_denial) ... ok
+test_09_stale_time_denial (p6.test_p6_2_shared_service.P62SharedServiceTests.test_09_stale_time_denial) ... ok
+test_10_fingerprint_mismatch (p6.test_p6_2_shared_service.P62SharedServiceTests.test_10_fingerprint_mismatch) ... ok
+test_11_missing_provenance (p6.test_p6_2_shared_service.P62SharedServiceTests.test_11_missing_provenance) ... ok
+test_12_all_nine_live_authority_fields_denied (p6.test_p6_2_shared_service.P62SharedServiceTests.test_12_all_nine_live_authority_fields_denied) ... ok
+test_13_effectful_non_synthetic_denial (p6.test_p6_2_shared_service.P62SharedServiceTests.test_13_effectful_non_synthetic_denial) ... ok
+test_14_output_attribution (p6.test_p6_2_shared_service.P62SharedServiceTests.test_14_output_attribution) ... ok
+test_15_deterministic_stateless_replay (p6.test_p6_2_shared_service.P62SharedServiceTests.test_15_deterministic_stateless_replay) ... ok
+test_16_cross_venture_isolation (p6.test_p6_2_shared_service.P62SharedServiceTests.test_16_cross_venture_isolation) ... ok
+test_01_clean_aggregate (p6.test_p6_3_anomaly.P63AnomalyTests.test_01_clean_aggregate) ... ok
+test_02_cross_venture_leakage (p6.test_p6_3_anomaly.P63AnomalyTests.test_02_cross_venture_leakage) ... ok
+test_03_slow_drift (p6.test_p6_3_anomaly.P63AnomalyTests.test_03_slow_drift) ... ok
+test_04_duplicate_pattern (p6.test_p6_3_anomaly.P63AnomalyTests.test_04_duplicate_pattern) ... ok
+test_05_structuring_pattern (p6.test_p6_3_anomaly.P63AnomalyTests.test_05_structuring_pattern) ... ok
+test_06_stale_evidence (p6.test_p6_3_anomaly.P63AnomalyTests.test_06_stale_evidence) ... ok
+test_07_quota_exhaustion (p6.test_p6_3_anomaly.P63AnomalyTests.test_07_quota_exhaustion) ... ok
+test_08_configuration_mismatch_denial (p6.test_p6_3_anomaly.P63AnomalyTests.test_08_configuration_mismatch_denial) ... ok
+test_09_counterparty_reuse (p6.test_p6_3_anomaly.P63AnomalyTests.test_09_counterparty_reuse) ... ok
+test_10_beneficiary_reuse (p6.test_p6_3_anomaly.P63AnomalyTests.test_10_beneficiary_reuse) ... ok
+test_11_missing_provenance (p6.test_p6_3_anomaly.P63AnomalyTests.test_11_missing_provenance) ... ok
+test_12_canonical_hash_mismatch (p6.test_p6_3_anomaly.P63AnomalyTests.test_12_canonical_hash_mismatch) ... ok
+test_13_deterministic_replay (p6.test_p6_3_anomaly.P63AnomalyTests.test_13_deterministic_replay) ... ok
+test_14_quarantine_finding (p6.test_p6_3_anomaly.P63AnomalyTests.test_14_quarantine_finding) ... ok
+test_15_review_required_finding (p6.test_p6_3_anomaly.P63AnomalyTests.test_15_review_required_finding) ... ok
+test_16_all_nine_live_authority_fields_denied (p6.test_p6_3_anomaly.P63AnomalyTests.test_16_all_nine_live_authority_fields_denied) ... ok
+test_17_effectful_input_denied (p6.test_p6_3_anomaly.P63AnomalyTests.test_17_effectful_input_denied) ... ok
+test_18_input_order_independence (p6.test_p6_3_anomaly.P63AnomalyTests.test_18_input_order_independence) ... ok
+test_01_valid_venture_freeze (p6.test_p6_4_operations.P64OperationsTests.test_01_valid_venture_freeze) ... ok
+test_02_service_freeze_is_selective (p6.test_p6_4_operations.P64OperationsTests.test_02_service_freeze_is_selective) ... ok
+test_03_venture_freeze_is_selective (p6.test_p6_4_operations.P64OperationsTests.test_03_venture_freeze_is_selective) ... ok
+test_04_scope_denial (p6.test_p6_4_operations.P64OperationsTests.test_04_scope_denial) ... ok
+test_05_exact_duplicate_converges (p6.test_p6_4_operations.P64OperationsTests.test_05_exact_duplicate_converges) ... ok
+test_06_changed_content_collision_denies (p6.test_p6_4_operations.P64OperationsTests.test_06_changed_content_collision_denies) ... ok
+test_07_quarantine_revokes_grant_and_preserves_evidence (p6.test_p6_4_operations.P64OperationsTests.test_07_quarantine_revokes_grant_and_preserves_evidence) ... ok
+test_08_recovery_requires_quarantine (p6.test_p6_4_operations.P64OperationsTests.test_08_recovery_requires_quarantine) ... ok
+test_09_recovery_is_idempotent_and_replayable (p6.test_p6_4_operations.P64OperationsTests.test_09_recovery_is_idempotent_and_replayable) ... ok
+test_10_harvest_is_synthetic_record (p6.test_p6_4_operations.P64OperationsTests.test_10_harvest_is_synthetic_record) ... ok
+test_11_reinvestment_is_proposal_only (p6.test_p6_4_operations.P64OperationsTests.test_11_reinvestment_is_proposal_only) ... ok
+test_12_wind_down_is_evidence_only (p6.test_p6_4_operations.P64OperationsTests.test_12_wind_down_is_evidence_only) ... ok
+test_13_unrelated_venture_isolation (p6.test_p6_4_operations.P64OperationsTests.test_13_unrelated_venture_isolation) ... ok
+test_14_missing_provenance_denies (p6.test_p6_4_operations.P64OperationsTests.test_14_missing_provenance_denies) ... ok
+test_15_fingerprint_mismatch_denies (p6.test_p6_4_operations.P64OperationsTests.test_15_fingerprint_mismatch_denies) ... ok
+test_16_all_live_authorities_denied (p6.test_p6_4_operations.P64OperationsTests.test_16_all_live_authorities_denied) ... ok
+test_17_effectful_input_denies (p6.test_p6_4_operations.P64OperationsTests.test_17_effectful_input_denies) ... ok
+test_18_sqlite_reopen_preserves_replay (p6.test_p6_4_operations.P64OperationsTests.test_18_sqlite_reopen_preserves_replay) ... ok
+test_19_evidence_hash_is_distinct_and_verified (p6.test_p6_4_operations.P64OperationsTests.test_19_evidence_hash_is_distinct_and_verified) ... ok
+test_20_quarantine_creates_explicit_revocation_record (p6.test_p6_4_operations.P64OperationsTests.test_20_quarantine_creates_explicit_revocation_record) ... ok
+test_21_idempotency_key_collision_denies (p6.test_p6_4_operations.P64OperationsTests.test_21_idempotency_key_collision_denies) ... ok
+test_22_scope_is_mandatory (p6.test_p6_4_operations.P64OperationsTests.test_22_scope_is_mandatory) ... ok
+test_23_recovery_cannot_restore_authority (p6.test_p6_4_operations.P64OperationsTests.test_23_recovery_cannot_restore_authority) ... ok
+test_24_tampered_evidence_hash_denies (p6.test_p6_4_operations.P64OperationsTests.test_24_tampered_evidence_hash_denies) ... ok
+test_25_grant_revocation_requires_parent (p6.test_p6_4_operations.P64OperationsTests.test_25_grant_revocation_requires_parent) ... ok
+test_25b_grant_revocation_requires_existing_parent (p6.test_p6_4_operations.P64OperationsTests.test_25b_grant_revocation_requires_existing_parent) ... ok
+test_25c_grant_revocation_parent_scope_must_match (p6.test_p6_4_operations.P64OperationsTests.test_25c_grant_revocation_parent_scope_must_match) ... ok
+test_26_operation_record_matches_schema (p6.test_p6_4_operations.P64OperationsTests.test_26_operation_record_matches_schema) ... ok
+test_27_replay_rejects_stale_configuration (p6.test_p6_4_operations.P64OperationsTests.test_27_replay_rejects_stale_configuration) ... ok
+test_28_replay_rejects_corrupt_record_hash (p6.test_p6_4_operations.P64OperationsTests.test_28_replay_rejects_corrupt_record_hash) ... ok
+test_29_replay_rejects_malformed_json (p6.test_p6_4_operations.P64OperationsTests.test_29_replay_rejects_malformed_json) ... ok
+test_30_crash_rollback_then_retry_converges (p6.test_p6_4_operations.P64OperationsTests.test_30_crash_rollback_then_retry_converges) ... ok
+test_31_cross_portfolio_scope_does_not_leak (p6.test_p6_4_operations.P64OperationsTests.test_31_cross_portfolio_scope_does_not_leak) ... ok
+test_32_all_operation_types_validate_against_schema (p6.test_p6_4_operations.P64OperationsTests.test_32_all_operation_types_validate_against_schema) ... ok
+test_33_is_frozen_requires_portfolio_scope (p6.test_p6_4_operations.P64OperationsTests.test_33_is_frozen_requires_portfolio_scope) ... ok
+test_34_recovery_does_not_use_corrupt_quarantine (p6.test_p6_4_operations.P64OperationsTests.test_34_recovery_does_not_use_corrupt_quarantine) ... ok
+test_01_composes_two_ventures_and_one_shared_service (p6.test_p6_5_certification.P65CertificationTests.test_01_composes_two_ventures_and_one_shared_service) ... ok
+test_02_coordination_is_attributable_per_venture (p6.test_p6_5_certification.P65CertificationTests.test_02_coordination_is_attributable_per_venture) ... ok
+test_03_shared_outputs_preserve_scope_and_lineage (p6.test_p6_5_certification.P65CertificationTests.test_03_shared_outputs_preserve_scope_and_lineage) ... ok
+test_04_anomaly_detects_cross_venture_leakage (p6.test_p6_5_certification.P65CertificationTests.test_04_anomaly_detects_cross_venture_leakage) ... ok
+test_05_selective_quarantine_and_recovery (p6.test_p6_5_certification.P65CertificationTests.test_05_selective_quarantine_and_recovery) ... ok
+test_06_harvest_and_reinvestment_are_non_authoritative (p6.test_p6_5_certification.P65CertificationTests.test_06_harvest_and_reinvestment_are_non_authoritative) ... ok
+test_07_report_is_read_only_and_hides_private_metadata (p6.test_p6_5_certification.P65CertificationTests.test_07_report_is_read_only_and_hides_private_metadata) ... ok
+test_08_all_nine_live_authority_fields_remain_denied (p6.test_p6_5_certification.P65CertificationTests.test_08_all_nine_live_authority_fields_remain_denied) ... ok
+test_09_fingerprint_continuity_across_report (p6.test_p6_5_certification.P65CertificationTests.test_09_fingerprint_continuity_across_report) ... ok
+test_10_deterministic_end_to_end_report (p6.test_p6_5_certification.P65CertificationTests.test_10_deterministic_end_to_end_report) ... ok
+test_11_report_has_no_effectful_flags (p6.test_p6_5_certification.P65CertificationTests.test_11_report_has_no_effectful_flags) ... ok
+test_12_analyzer_input_isolated_to_one_portfolio (p6.test_p6_5_certification.P65CertificationTests.test_12_analyzer_input_isolated_to_one_portfolio) ... ok
+test_admission_and_negative_cases (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_admission_and_negative_cases) ... ok
+test_case_registry_has_minimum_53_individual_cases (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_case_registry_has_minimum_53_individual_cases) ... ok
+test_identity_separation_cases (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_identity_separation_cases) ... ok
+test_invalid_topology_and_rollback_fail_closed (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_invalid_topology_and_rollback_fail_closed) ... ok
+test_no_external_side_effects (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_no_external_side_effects) ... ok
+test_recovery_and_rollback_cases (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_recovery_and_rollback_cases) ... ok
+test_topology_contract_cases (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_topology_contract_cases) ... ok
+test_two_consecutive_clean_rehearsals (p7.test_p7_1_topology.P71TopologyDeploymentTests.test_two_consecutive_clean_rehearsals) ... ok
+test_authority_and_authorization_denial_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_authority_and_authorization_denial_cases) ... ok
+test_backup_restore_contract_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_backup_restore_contract_cases) ... ok
+test_case_registry_has_30_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_case_registry_has_30_cases) ... ok
+test_corruption_and_mismatch_rejection_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_corruption_and_mismatch_rejection_cases) ... ok
+test_injected_failure_and_recovery_objectives_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_injected_failure_and_recovery_objectives_cases) ... ok
+test_no_external_side_effects (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_no_external_side_effects) ... ok
+test_service_and_host_recovery_cases (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_service_and_host_recovery_cases) ... ok
+test_state_hash_is_deterministic (p7.test_p7_2_backup_restore.TestP72BackupRestore.test_state_hash_is_deterministic) ... ok
+test_authority_and_model_denial_cases (p7.test_p7_3_observability.TestP73Observability.test_authority_and_model_denial_cases) ... ok
+test_case_registry_has_32_cases (p7.test_p7_3_observability.TestP73Observability.test_case_registry_has_32_cases) ... ok
+test_event_binding_rejects_wrong_source_and_environment (p7.test_p7_3_observability.TestP73Observability.test_event_binding_rejects_wrong_source_and_environment) ... ok
+test_event_integrity_and_provenance_cases (p7.test_p7_3_observability.TestP73Observability.test_event_integrity_and_provenance_cases) ... ok
+test_incident_classification_and_escalation_cases (p7.test_p7_3_observability.TestP73Observability.test_incident_classification_and_escalation_cases) ... ok
+test_injected_failure_paths_are_fail_closed (p7.test_p7_3_observability.TestP73Observability.test_injected_failure_paths_are_fail_closed) ... ok
+test_metrics_and_alerting_cases (p7.test_p7_3_observability.TestP73Observability.test_metrics_and_alerting_cases) ... ok
+test_no_external_side_effects (p7.test_p7_3_observability.TestP73Observability.test_no_external_side_effects) ... ok
+test_retention_and_preservation_cases (p7.test_p7_3_observability.TestP73Observability.test_retention_and_preservation_cases) ... ok
+test_allowlist_and_dependency_negative_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_allowlist_and_dependency_negative_cases) ... ok
+test_authority_and_model_denial_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_authority_and_model_denial_cases) ... ok
+test_case_registry_has_40_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_case_registry_has_40_cases) ... ok
+test_identity_binding_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_identity_binding_cases) ... ok
+test_injected_failure_paths_are_fail_closed (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_injected_failure_paths_are_fail_closed) ... ok
+test_redaction_and_no_secret_leak_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_redaction_and_no_secret_leak_cases) ... ok
+test_revocation_and_recovery_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_revocation_and_recovery_cases) ... ok
+test_rotation_and_lineage_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_rotation_and_lineage_cases) ... ok
+test_synthetic_custody_and_binding_cases (p7.test_p7_4_provider_boundary.TestP74ProviderBoundary.test_synthetic_custody_and_binding_cases) ... ok
+test_admission_identity_capability_and_provenance_denials (p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_admission_identity_capability_and_provenance_denials) ... ok
+test_authority_matrix_81_cases (p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_authority_matrix_81_cases) ... ok
+test_recovery_matrix_12_cases (p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_recovery_matrix_12_cases) ... ok
+test_task_identity_scope_replay_and_revocation_denials (p7.test_p7_5_worker_boundary.TestP75WorkerBoundary.test_task_identity_scope_replay_and_revocation_denials) ... ok
+test_artifact_presence_and_commit_lineage (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_artifact_presence_and_commit_lineage) ... ok
+test_case_denominator_and_envelopes (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_case_denominator_and_envelopes) ... ok
+test_certification_remains_non_authorizing (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_certification_remains_non_authorizing) ... ok
+test_manifest_counts_and_boundary (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_manifest_counts_and_boundary) ... ok
+test_runtime_logs_and_no_external_io (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_runtime_logs_and_no_external_io) ... ok
+test_source_and_test_inventory_integrity (p7.test_p7_6_independent_certification.TestP76IndependentCertification.test_source_and_test_inventory_integrity) ... ok
+test_case_id_is_preserved_in_evidence_filename_and_envelope (p7.test_p7_blocking_drift.BlockingDriftTests.test_case_id_is_preserved_in_evidence_filename_and_envelope) ... ok
+test_freeze_failure_preserves_blocking_evidence (p7.test_p7_blocking_drift.BlockingDriftTests.test_freeze_failure_preserves_blocking_evidence) ... ok
+test_ledger_drift_also_blocks (p7.test_p7_blocking_drift.BlockingDriftTests.test_ledger_drift_also_blocks) ... ok
+test_preservation_sla_rejects_late_evidence (p7.test_p7_blocking_drift.BlockingDriftTests.test_preservation_sla_rejects_late_evidence) ... ok
+test_tolerated_non_authority_drift_requires_bound (p7.test_p7_blocking_drift.BlockingDriftTests.test_tolerated_non_authority_drift_requires_bound) ... ok
+test_unexplained_authority_drift_freezes_and_preserves (p7.test_p7_blocking_drift.BlockingDriftTests.test_unexplained_authority_drift_freezes_and_preserves) ... ok
+test_zero_drift_requires_no_freeze_or_evidence (p7.test_p7_blocking_drift.BlockingDriftTests.test_zero_drift_requires_no_freeze_or_evidence) ... ok
+test_one_hundred_blocking_events_preserve_individual_evidence (p7.test_p7_event_volume.P7BlockingDriftVolumeTests.test_one_hundred_blocking_events_preserve_individual_evidence) ... ok
+test_authority_ledger_and_credential_drift_are_independently_frozen (p7.test_p7_integration.P7BlockingDriftIntegrationTests.test_authority_ledger_and_credential_drift_are_independently_frozen) ... ok
+test_authority_matrix_emits_individual_blocking_evidence (p7.test_p7_matrix.P75MatrixTests.test_authority_matrix_emits_individual_blocking_evidence) ... ok
+test_authority_matrix_has_exact_81_unique_cases (p7.test_p7_matrix.P75MatrixTests.test_authority_matrix_has_exact_81_unique_cases) ... ok
+test_recovery_matrix_emits_individual_blocking_evidence (p7.test_p7_matrix.P75MatrixTests.test_recovery_matrix_emits_individual_blocking_evidence) ... ok
+test_recovery_matrix_has_exact_12_unique_cases (p7.test_p7_matrix.P75MatrixTests.test_recovery_matrix_has_exact_12_unique_cases) ... ok
+test_all_nine_live_authorities_are_denied (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_all_nine_live_authorities_are_denied) ... ok
+test_approvers_monitoring_reconciliation_and_stops_are_required (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_approvers_monitoring_reconciliation_and_stops_are_required) ... ok
+test_automatic_stop_is_fail_closed (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_automatic_stop_is_fail_closed) ... ok
+test_charter_collision_and_snapshot_are_deterministic (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_charter_collision_and_snapshot_are_deterministic) ... ok
+test_live_action_request_is_always_denied (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_live_action_request_is_always_denied) ... ok
+test_live_credentials_and_live_mode_are_denied (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_live_credentials_and_live_mode_are_denied) ... ok
+test_model_output_cannot_authorize_pilot (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_model_output_cannot_authorize_pilot) ... ok
+test_multiple_ventures_or_authority_classes_are_denied (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_multiple_ventures_or_authority_classes_are_denied) ... ok
+test_numeric_ceilings_are_finite_and_ordered (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_numeric_ceilings_are_finite_and_ordered) ... ok
+test_operating_window_is_bounded_and_ordered (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_operating_window_is_bounded_and_ordered) ... ok
+test_result_authority_fingerprint_is_all_false (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_result_authority_fingerprint_is_all_false) ... ok
+test_valid_single_venture_charter_is_preflight_ready (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_valid_single_venture_charter_is_preflight_ready) ... ok
+test_written_live_action_approval_must_remain_pending (p8.test_p8_0_pilot_gate.TestP80PilotGate.test_written_live_action_approval_must_remain_pending) ... ok
+test_all_nine_live_authorities_are_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_all_nine_live_authorities_are_denied) ... ok
+test_automatic_stop_is_terminal (p8.test_p8_1_action_gate.TestP81ActionGate.test_automatic_stop_is_terminal) ... ok
+test_execution_is_always_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_execution_is_always_denied) ... ok
+test_live_credentials_and_live_mode_are_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_live_credentials_and_live_mode_are_denied) ... ok
+test_model_output_and_approval_text_are_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_model_output_and_approval_text_are_denied) ... ok
+test_non_synthetic_execution_is_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_non_synthetic_execution_is_denied) ... ok
+test_replay_is_idempotent (p8.test_p8_1_action_gate.TestP81ActionGate.test_replay_is_idempotent) ... ok
+test_request_scope_must_match_charter (p8.test_p8_1_action_gate.TestP81ActionGate.test_request_scope_must_match_charter) ... ok
+test_schema_requires_all_false_authorities_and_rejects_true (p8.test_p8_1_action_gate.TestP81ActionGate.test_schema_requires_all_false_authorities_and_rejects_true) ... ok
+test_unknown_charter_hash_is_denied (p8.test_p8_1_action_gate.TestP81ActionGate.test_unknown_charter_hash_is_denied) ... ok
+test_valid_request_is_denied_without_effect (p8.test_p8_1_action_gate.TestP81ActionGate.test_valid_request_is_denied_without_effect) ... ok
+test_action_credential_and_model_drifts_quarantine (p8.test_p8_2_monitor.TestP82Monitor.test_action_credential_and_model_drifts_quarantine) ... ok
+test_all_nine_authority_drifts_quarantine (p8.test_p8_2_monitor.TestP82Monitor.test_all_nine_authority_drifts_quarantine) ... ok
+test_automatic_stop_is_terminal (p8.test_p8_2_monitor.TestP82Monitor.test_automatic_stop_is_terminal) ... ok
+test_ceiling_breaches_quarantine (p8.test_p8_2_monitor.TestP82Monitor.test_ceiling_breaches_quarantine) ... ok
+test_non_synthetic_and_malformed_numeric_inputs (p8.test_p8_2_monitor.TestP82Monitor.test_non_synthetic_and_malformed_numeric_inputs) ... ok
+test_replay_is_idempotent_and_collision_fails_closed (p8.test_p8_2_monitor.TestP82Monitor.test_replay_is_idempotent_and_collision_fails_closed) ... ok
+test_schema_requires_false_authorities (p8.test_p8_2_monitor.TestP82Monitor.test_schema_requires_false_authorities) ... ok
+test_scope_mismatch_is_denied (p8.test_p8_2_monitor.TestP82Monitor.test_scope_mismatch_is_denied) ... ok
+test_unknown_charter_is_denied (p8.test_p8_2_monitor.TestP82Monitor.test_unknown_charter_is_denied) ... ok
+test_valid_synthetic_observation (p8.test_p8_2_monitor.TestP82Monitor.test_valid_synthetic_observation) ... ok
+test_action_credential_and_model_drift_is_denied (p8.test_p8_3_recovery.TestP83Recovery.test_action_credential_and_model_drift_is_denied) ... ok
+test_all_nine_authority_drift_is_denied (p8.test_p8_3_recovery.TestP83Recovery.test_all_nine_authority_drift_is_denied) ... ok
+test_automatic_stop_and_malformed_input_fail_closed (p8.test_p8_3_recovery.TestP83Recovery.test_automatic_stop_and_malformed_input_fail_closed) ... ok
+test_bounded_revoke_quarantine_and_wind_down_records (p8.test_p8_3_recovery.TestP83Recovery.test_bounded_revoke_quarantine_and_wind_down_records) ... ok
+test_charter_scope_mismatch_is_denied (p8.test_p8_3_recovery.TestP83Recovery.test_charter_scope_mismatch_is_denied) ... ok
+test_injected_failure_is_terminal_and_contained (p8.test_p8_3_recovery.TestP83Recovery.test_injected_failure_is_terminal_and_contained) ... ok
+test_replay_is_idempotent_and_collision_fails_closed (p8.test_p8_3_recovery.TestP83Recovery.test_replay_is_idempotent_and_collision_fails_closed) ... ok
+test_restore_and_rollback_are_denied (p8.test_p8_3_recovery.TestP83Recovery.test_restore_and_rollback_are_denied) ... ok
+test_schema_requires_false_authorities (p8.test_p8_3_recovery.TestP83Recovery.test_schema_requires_false_authorities) ... ok
+test_terminal_states_cannot_reopen (p8.test_p8_3_recovery.TestP83Recovery.test_terminal_states_cannot_reopen) ... ok
+test_unknown_charter_is_denied (p8.test_p8_3_recovery.TestP83Recovery.test_unknown_charter_is_denied) ... ok
+test_valid_synthetic_freeze_record (p8.test_p8_3_recovery.TestP83Recovery.test_valid_synthetic_freeze_record) ... ok
+test_action_credential_execution_and_model_drift_blocks (p8.test_p8_4_certification.TestP84Certification.test_action_credential_execution_and_model_drift_blocks) ... ok
+test_all_nine_authority_drift_blocks_certification (p8.test_p8_4_certification.TestP84Certification.test_all_nine_authority_drift_blocks_certification) ... ok
+test_automatic_stop_is_terminal_and_live_scope_remains_denied (p8.test_p8_4_certification.TestP84Certification.test_automatic_stop_is_terminal_and_live_scope_remains_denied) ... ok
+test_charter_scope_mismatch_is_denied (p8.test_p8_4_certification.TestP84Certification.test_charter_scope_mismatch_is_denied) ... ok
+test_evidence_hash_and_replay_collision_fail_closed (p8.test_p8_4_certification.TestP84Certification.test_evidence_hash_and_replay_collision_fail_closed) ... ok
+test_incomplete_evidence_blocks_certification (p8.test_p8_4_certification.TestP84Certification.test_incomplete_evidence_blocks_certification) ... ok
+test_independent_human_review_and_model_source_are_required (p8.test_p8_4_certification.TestP84Certification.test_independent_human_review_and_model_source_are_required) ... ok
+test_malformed_and_unsupported_packets_fail_closed (p8.test_p8_4_certification.TestP84Certification.test_malformed_and_unsupported_packets_fail_closed) ... ok
+test_phase_denominator_completeness_is_required (p8.test_p8_4_certification.TestP84Certification.test_phase_denominator_completeness_is_required) ... ok
+test_phase_denominators_must_match (p8.test_p8_4_certification.TestP84Certification.test_phase_denominators_must_match) ... ok
+test_schema_requires_false_authorities_and_scope (p8.test_p8_4_certification.TestP84Certification.test_schema_requires_false_authorities_and_scope) ... ok
+test_unknown_charter_is_denied (p8.test_p8_4_certification.TestP84Certification.test_unknown_charter_is_denied) ... ok
+test_valid_synthetic_certification (p8.test_p8_4_certification.TestP84Certification.test_valid_synthetic_certification) ... ok
+test_01_valid_numeric_limit (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_01_valid_numeric_limit)
+P9 case 01_valid_numeric_limit ... ok
+test_02_valid_operating_window (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_02_valid_operating_window)
+P9 case 02_valid_operating_window ... ok
+test_03_valid_fixture_venture_count (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_03_valid_fixture_venture_count)
+P9 case 03_valid_fixture_venture_count ... ok
+test_04_valid_concurrency (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_04_valid_concurrency)
+P9 case 04_valid_concurrency ... ok
+test_05_valid_observation (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_05_valid_observation)
+P9 case 05_valid_observation ... ok
+test_06_recovery_freeze (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_06_recovery_freeze)
+P9 case 06_recovery_freeze ... ok
+test_07_recovery_revoke (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_07_recovery_revoke)
+P9 case 07_recovery_revoke ... ok
+test_08_recovery_quarantine (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_08_recovery_quarantine)
+P9 case 08_recovery_quarantine ... ok
+test_09_authority_live_mode (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_09_authority_live_mode)
+P9 case 09_authority_live_mode ... ok
+test_10_authority_external_action_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_10_authority_external_action_authorized)
+P9 case 10_authority_external_action_authorized ... ok
+test_11_authority_payment_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_11_authority_payment_authorized)
+P9 case 11_authority_payment_authorized ... ok
+test_12_authority_broker_execution_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_12_authority_broker_execution_authorized)
+P9 case 12_authority_broker_execution_authorized ... ok
+test_13_authority_credential_access_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_13_authority_credential_access_authorized)
+P9 case 13_authority_credential_access_authorized ... ok
+test_14_authority_customer_contact_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_14_authority_customer_contact_authorized)
+P9 case 14_authority_customer_contact_authorized ... ok
+test_15_authority_capital_allocation_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_15_authority_capital_allocation_authorized)
+P9 case 15_authority_capital_allocation_authorized ... ok
+test_16_authority_deployment_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_16_authority_deployment_authorized)
+P9 case 16_authority_deployment_authorized ... ok
+test_17_authority_venture_execution_authorized (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_17_authority_venture_execution_authorized)
+P9 case 17_authority_venture_execution_authorized ... ok
+test_18_model_approval_text_is_inert (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_18_model_approval_text_is_inert)
+P9 case 18_model_approval_text_is_inert ... ok
+test_19_model_override_text_is_inert (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_19_model_override_text_is_inert)
+P9 case 19_model_override_text_is_inert ... ok
+test_20_malformed_model_recommendation_is_inert (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_20_malformed_model_recommendation_is_inert)
+P9 case 20_malformed_model_recommendation_is_inert ... ok
+test_21_prompt_injection_text_is_inert (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_21_prompt_injection_text_is_inert)
+P9 case 21_prompt_injection_text_is_inert ... ok
+test_22_model_authorization_bit_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_22_model_authorization_bit_is_denied)
+P9 case 22_model_authorization_bit_is_denied ... ok
+test_23_unknown_charter_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_23_unknown_charter_is_denied)
+P9 case 23_unknown_charter_is_denied ... ok
+test_24_stale_charter_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_24_stale_charter_is_denied)
+P9 case 24_stale_charter_is_denied ... ok
+test_25_venture_charter_mismatch_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_25_venture_charter_mismatch_is_denied)
+P9 case 25_venture_charter_mismatch_is_denied ... ok
+test_26_portfolio_charter_mismatch_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_26_portfolio_charter_mismatch_is_denied)
+P9 case 26_portfolio_charter_mismatch_is_denied ... ok
+test_27_replay_identity_cannot_cross_venture (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_27_replay_identity_cannot_cross_venture)
+P9 case 27_replay_identity_cannot_cross_venture ... ok
+test_28_venture_sequences_are_isolated (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_28_venture_sequences_are_isolated)
+P9 case 28_venture_sequences_are_isolated ... ok
+test_29_missing_charter_binding_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_29_missing_charter_binding_is_denied)
+P9 case 29_missing_charter_binding_is_denied ... ok
+test_30_model_context_does_not_cross_scope (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_30_model_context_does_not_cross_scope)
+P9 case 30_model_context_does_not_cross_scope ... ok
+test_31_identical_replay_is_idempotent (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_31_identical_replay_is_idempotent)
+P9 case 31_identical_replay_is_idempotent ... ok
+test_32_changed_material_collision_stops_boundary (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_32_changed_material_collision_stops_boundary)
+P9 case 32_changed_material_collision_stops_boundary ... ok
+test_33_duplicate_sequence_fails_closed (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_33_duplicate_sequence_fails_closed)
+P9 case 33_duplicate_sequence_fails_closed ... ok
+test_34_out_of_order_sequence_fails_closed (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_34_out_of_order_sequence_fails_closed)
+P9 case 34_out_of_order_sequence_fails_closed ... ok
+test_35_tampered_evidence_hash_stops_boundary (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_35_tampered_evidence_hash_stops_boundary)
+P9 case 35_tampered_evidence_hash_stops_boundary ... ok
+test_36_missing_or_malformed_evidence_hash_is_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_36_missing_or_malformed_evidence_hash_is_denied)
+P9 case 36_missing_or_malformed_evidence_hash_is_denied ... ok
+test_37_recovery_freeze_state (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_37_recovery_freeze_state)
+P9 case 37_recovery_freeze_state ... ok
+test_38_recovery_revoke_state (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_38_recovery_revoke_state)
+P9 case 38_recovery_revoke_state ... ok
+test_39_recovery_quarantine_state (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_39_recovery_quarantine_state)
+P9 case 39_recovery_quarantine_state ... ok
+test_40_recovery_wind_down_state (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_40_recovery_wind_down_state)
+P9 case 40_recovery_wind_down_state ... ok
+test_41_restore_rollback_and_terminal_reopen_are_denied (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_41_restore_rollback_and_terminal_reopen_are_denied)
+P9 case 41_restore_rollback_and_terminal_reopen_are_denied ... ok
+test_42_injected_failure_is_terminal (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_42_injected_failure_is_terminal)
+P9 case 42_injected_failure_is_terminal ... ok
+test_43_invalid_execution_mode_is_quarantined (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_43_invalid_execution_mode_is_quarantined)
+P9 case 43_invalid_execution_mode_is_quarantined ... ok
+test_44_non_synthetic_input_is_quarantined (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_44_non_synthetic_input_is_quarantined)
+P9 case 44_non_synthetic_input_is_quarantined ... ok
+test_45_effectful_input_is_quarantined (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_45_effectful_input_is_quarantined)
+P9 case 45_effectful_input_is_quarantined ... ok
+test_46_schema_requires_all_nine_false_authorities (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_46_schema_requires_all_nine_false_authorities)
+P9 case 46_schema_requires_all_nine_false_authorities ... ok
+test_47_provider_network_and_credential_flags_fail_closed (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_47_provider_network_and_credential_flags_fail_closed)
+P9 case 47_provider_network_and_credential_flags_fail_closed ... ok
+test_48_automatic_stop_is_terminal (p9.test_p9_synthetic_boundary.TestP9SyntheticBoundary.test_48_automatic_stop_is_terminal)
+P9 case 48_automatic_stop_is_terminal ... ok
+test_deleted_queue_database_cannot_restart_work (test_advisory_queue.AdvisoryQueueTests.test_deleted_queue_database_cannot_restart_work) ... ok
+test_duplicate_next_objective_denies_atomic_completion (test_advisory_queue.AdvisoryQueueTests.test_duplicate_next_objective_denies_atomic_completion) ... ok
+test_identical_worker_inputs_denied_even_with_distinct_assignment (test_advisory_queue.AdvisoryQueueTests.test_identical_worker_inputs_denied_even_with_distinct_assignment) ... ok
+test_interrupted_attempt_blocks_future_hours_and_preserves_prior_report (test_advisory_queue.AdvisoryQueueTests.test_interrupted_attempt_blocks_future_hours_and_preserves_prior_report) ... ok
+test_model_can_stop_queue_without_restarting_initial_work (test_advisory_queue.AdvisoryQueueTests.test_model_can_stop_queue_without_restarting_initial_work) ... ok
+test_queue_tool_attack_and_wrong_review_hash_fail_closed (test_advisory_queue.AdvisoryQueueTests.test_queue_tool_attack_and_wrong_review_hash_fail_closed) ... ok
+test_queue_transport_error_is_terminal_and_redacted (test_advisory_queue.AdvisoryQueueTests.test_queue_transport_error_is_terminal_and_redacted) ... ok
+test_successor_executes_only_next_hour_and_replay_is_free (test_advisory_queue.AdvisoryQueueTests.test_successor_executes_only_next_hour_and_replay_is_free) ... ok
+test_unknown_worker_is_denied_before_execution (test_advisory_queue.AdvisoryQueueTests.test_unknown_worker_is_denied_before_execution) ... ok
+test_BOOT_001_entry_uses_v11_parameters_and_10_percent_cap (test_bootstrap.BootstrapTreasuryTests.test_BOOT_001_entry_uses_v11_parameters_and_10_percent_cap) ... ok
+test_BOOT_002_zero_negative_and_pending_do_not_exit (test_bootstrap.BootstrapTreasuryTests.test_BOOT_002_zero_negative_and_pending_do_not_exit) ... ok
+test_BOOT_003_first_strictly_positive_sweep_exits_once (test_bootstrap.BootstrapTreasuryTests.test_BOOT_003_first_strictly_positive_sweep_exits_once) ... ok
+test_BOOT_004_entry_exit_and_allocation_are_idempotent (test_bootstrap.BootstrapTreasuryTests.test_BOOT_004_entry_exit_and_allocation_are_idempotent) ... ok
+test_BOOT_005_crash_recovery_reconstructs_durable_state (test_bootstrap.BootstrapTreasuryTests.test_BOOT_005_crash_recovery_reconstructs_durable_state) ... ok
+test_BOOT_006_ratchet_preserves_committed_allocations_and_freezes_new_ones (test_bootstrap.BootstrapTreasuryTests.test_BOOT_006_ratchet_preserves_committed_allocations_and_freezes_new_ones) ... ok
+test_real_adapter_denies_default_and_role_identities (test_bootstrap.RealPaymentAdapterTests.test_real_adapter_denies_default_and_role_identities) ... ok
+test_real_adapter_enforces_idempotency_and_five_to_twenty_exposure (test_bootstrap.RealPaymentAdapterTests.test_real_adapter_enforces_idempotency_and_five_to_twenty_exposure) ... ok
+test_red_team_path_wires_treasury_and_adapter (test_bootstrap.RealPaymentAdapterTests.test_red_team_path_wires_treasury_and_adapter) ... ok
+test_cap_001_no_ambient_credentials (test_broker.CapabilityBrokerTests.test_cap_001_no_ambient_credentials) ... ok
+test_cap_002_velocity_per_agent_capability (test_broker.CapabilityBrokerTests.test_cap_002_velocity_per_agent_capability) ... ok
+test_cap_003_cross_counterparty_rolling_aggregation (test_broker.CapabilityBrokerTests.test_cap_003_cross_counterparty_rolling_aggregation) ... ok
+test_cap_004_structuring (test_broker.CapabilityBrokerTests.test_cap_004_structuring) ... ok
+test_cap_005_ultimate_beneficiary_not_vendor_name (test_broker.CapabilityBrokerTests.test_cap_005_ultimate_beneficiary_not_vendor_name) ... ok
+test_cap_006_novelty_and_cap_007_baseline (test_broker.CapabilityBrokerTests.test_cap_006_novelty_and_cap_007_baseline) ... ok
+test_cap_008_escalates_not_flat_allows (test_broker.CapabilityBrokerTests.test_cap_008_escalates_not_flat_allows) ... ok
+test_cap_009_composite_confused_deputy_chain_denied (test_broker.CapabilityBrokerTests.test_cap_009_composite_confused_deputy_chain_denied) ... ok
+test_cap_010_delegation_beyond_policy_denied (test_broker.CapabilityBrokerTests.test_cap_010_delegation_beyond_policy_denied) ... ok
+test_cap_011_never_standing_and_single_use (test_broker.CapabilityBrokerTests.test_cap_011_never_standing_and_single_use) ... ok
+test_opa_outage_denies_closed (test_broker.CapabilityBrokerTests.test_opa_outage_denies_closed) ... ok
+test_schemas_are_parseable_and_frozen_fields_present (test_broker.CapabilityBrokerTests.test_schemas_are_parseable_and_frozen_fields_present) ... ok
+test_configuration_fingerprint_contains_no_secret_material (test_ceo_durable.DurableDecisionStateTests.test_configuration_fingerprint_contains_no_secret_material) ... ok
+test_idempotent_terminal_decision_and_tamper_evident_chain (test_ceo_durable.DurableDecisionStateTests.test_idempotent_terminal_decision_and_tamper_evident_chain) ... ok
+test_interrupted_dispatch_recovers_to_retryable_without_model_history (test_ceo_durable.DurableDecisionStateTests.test_interrupted_dispatch_recovers_to_retryable_without_model_history) ... ok
+test_atomic_concurrent_ingestion_conflict_and_capacity (test_ceo_escalation_inbox.EscalationInboxTests.test_atomic_concurrent_ingestion_conflict_and_capacity) ... ok
+test_cli_ingest_read_ack_and_path_bounds (test_ceo_escalation_inbox.EscalationInboxTests.test_cli_ingest_read_ack_and_path_bounds) ... ok
+test_denied_is_terminal (test_ceo_escalation_inbox.EscalationInboxTests.test_denied_is_terminal) ... ok
+test_existing_escalation_durable_roundtrip_and_ack_is_not_decision (test_ceo_escalation_inbox.EscalationInboxTests.test_existing_escalation_durable_roundtrip_and_ack_is_not_decision) ... ok
+test_expiry_rechecked_at_handoff_and_key_rotation_denies (test_ceo_escalation_inbox.EscalationInboxTests.test_expiry_rechecked_at_handoff_and_key_rotation_denies) ... ok
+test_hold_denied_and_invalid_receipts_never_handoff (test_ceo_escalation_inbox.EscalationInboxTests.test_hold_denied_and_invalid_receipts_never_handoff) ... ok
+test_input_bounds_and_ack_conflict (test_ceo_escalation_inbox.EscalationInboxTests.test_input_bounds_and_ack_conflict) ... ok
+test_receipt_validity_bound_and_database_mode (test_ceo_escalation_inbox.EscalationInboxTests.test_receipt_validity_bound_and_database_mode) ... ok
+test_review_alone_cannot_handoff_and_signed_fixture_can_export_only (test_ceo_escalation_inbox.EscalationInboxTests.test_review_alone_cannot_handoff_and_signed_fixture_can_export_only) ... ok
+test_review_replay_provenance_immutability_and_event_bound (test_ceo_escalation_inbox.EscalationInboxTests.test_review_replay_provenance_immutability_and_event_bound) ... ok
+test_strict_review_schema_and_bindings (test_ceo_escalation_inbox.EscalationInboxTests.test_strict_review_schema_and_bindings) ... ok
+test_tampered_snapshot_event_and_missing_tail_block_reads (test_ceo_escalation_inbox.EscalationInboxTests.test_tampered_snapshot_event_and_missing_tail_block_reads) ... ok
+test_transaction_failure_rolls_back_snapshot_and_event (test_ceo_escalation_inbox.EscalationInboxTests.test_transaction_failure_rolls_back_snapshot_and_event) ... ok
+test_unconfigured_or_wrong_authority_denied (test_ceo_escalation_inbox.EscalationInboxTests.test_unconfigured_or_wrong_authority_denied) ... ok
+test_committed_stage0_manifest_matches_raw_report (test_ceo_gates.CEOGateTests.test_committed_stage0_manifest_matches_raw_report) ... ok
+test_pre_model_gate_accepts_only_explicit_49_of_49 (test_ceo_gates.CEOGateTests.test_pre_model_gate_accepts_only_explicit_49_of_49) ... ok
+test_pre_model_gate_rejects_fixture_record (test_ceo_gates.CEOGateTests.test_pre_model_gate_rejects_fixture_record) ... ok
+test_stage0_exit_requires_real_fingerprint_and_adv040 (test_ceo_gates.CEOGateTests.test_stage0_exit_requires_real_fingerprint_and_adv040) ... ok
+test_ceo_schema_names_are_mapped_to_api_safe_function_names (test_ceo_provider.CEOProviderTests.test_ceo_schema_names_are_mapped_to_api_safe_function_names) ... ok
+test_provider_has_no_generic_model_tools (test_ceo_provider.CEOProviderTests.test_provider_has_no_generic_model_tools) ... ok
+test_provider_requires_explicit_configuration (test_ceo_provider.CEOProviderTests.test_provider_requires_explicit_configuration) ... ok
+test_trace_fail_records_invalid_response_envelope (test_ceo_provider.CEOProviderTests.test_trace_fail_records_invalid_response_envelope) ... ok
+test_trace_pass_requires_valid_response_envelope (test_ceo_provider.CEOProviderTests.test_trace_pass_requires_valid_response_envelope) ... ok
+test_absent_and_partial_configuration_fail_before_files_or_transport (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_absent_and_partial_configuration_fail_before_files_or_transport) ... ok
+test_endpoint_cannot_embed_credentials_or_use_cleartext (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_endpoint_cannot_embed_credentials_or_use_cleartext) ... ok
+test_gate_missing_failed_or_wrong_denominator_blocks_transport (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_gate_missing_failed_or_wrong_denominator_blocks_transport) ... /usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb480df23e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb481195f30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb480e6c8b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb480e6c9a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb480e6c040>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7cb47fbf7010>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_json_object_mode_is_explicit_and_disallowed_with_tools (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_json_object_mode_is_explicit_and_disallowed_with_tools) ... ok
+test_missing_gate_configuration_denied (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_missing_gate_configuration_denied) ... ok
+test_model_authority_and_malformed_json_fail_closed (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_model_authority_and_malformed_json_fail_closed) ... ok
+test_preflight_checks_gate_but_creates_no_files_or_calls (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_preflight_checks_gate_but_creates_no_files_or_calls) ... ok
+test_redirect_handler_blocks_cross_origin_and_same_origin_redirects (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_redirect_handler_blocks_cross_origin_and_same_origin_redirects) ... /usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 302: 'redirect'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_required_mode_refuses_non_durable_entry (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_mode_refuses_non_durable_entry) ... ok
+test_required_provider_uses_actual_adapter_three_stages_and_replays (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_provider_uses_actual_adapter_three_stages_and_replays) ... ok
+test_transport_failure_is_sanitized_terminal_and_never_allocates (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_transport_failure_is_sanitized_terminal_and_never_allocates) ... ok
+test_unsolicited_modern_and_legacy_tools_rejected_before_workers (test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_unsolicited_modern_and_legacy_tools_rejected_before_workers) ... ok
+test_low_evidence_does_not_propose_launch (test_ceo_shadow.CEOShadowTests.test_low_evidence_does_not_propose_launch) ... ok
+test_shadow_decision_logs_without_execution (test_ceo_shadow.CEOShadowTests.test_shadow_decision_logs_without_execution) ... ok
+test_tool_list_is_broker_only (test_ceo_shadow.CEOShadowTests.test_tool_list_is_broker_only) ... ok
+test_changed_configuration_rejected_before_replay_or_new_model_calls (test_ceo_venture_flow.CEOVentureFlowTests.test_changed_configuration_rejected_before_replay_or_new_model_calls) ... ok
+test_cli_durable_mode_and_path_collision (test_ceo_venture_flow.CEOVentureFlowTests.test_cli_durable_mode_and_path_collision) ... ok
+test_cli_reports_only_allowlisted_response_reason (test_ceo_venture_flow.CEOVentureFlowTests.test_cli_reports_only_allowlisted_response_reason) ... ok
+test_complete_flow_reopens_and_replays_without_inference_or_duplicate_allocation (test_ceo_venture_flow.CEOVentureFlowTests.test_complete_flow_reopens_and_replays_without_inference_or_duplicate_allocation) ... ok
+test_exercise_refuses_non_durable_or_tool_enabled_agent (test_ceo_venture_flow.CEOVentureFlowTests.test_exercise_refuses_non_durable_or_tool_enabled_agent) ... ok
+test_inflight_checkpoint_retries_only_unrecorded_advisory_call (test_ceo_venture_flow.CEOVentureFlowTests.test_inflight_checkpoint_retries_only_unrecorded_advisory_call) ... ok
+test_malformed_manager_has_safe_reason_and_terminal_quarantine (test_ceo_venture_flow.CEOVentureFlowTests.test_malformed_manager_has_safe_reason_and_terminal_quarantine) ... ok
+test_manager_contract_binds_each_candidate_amount_without_mutating_template (test_ceo_venture_flow.CEOVentureFlowTests.test_manager_contract_binds_each_candidate_amount_without_mutating_template) ... ok
+test_natural_manager_text_and_reordered_keys_preserve_exact_provenance (test_ceo_venture_flow.CEOVentureFlowTests.test_natural_manager_text_and_reordered_keys_preserve_exact_provenance) ... ok
+test_provenance_tampering_and_rebinding_detected (test_ceo_venture_flow.CEOVentureFlowTests.test_provenance_tampering_and_rebinding_detected) ... ok
+test_provider_failure_is_terminal_and_does_not_fallback (test_ceo_venture_flow.CEOVentureFlowTests.test_provider_failure_is_terminal_and_does_not_fallback) ... ok
+test_registry_interruption_recovers_from_completed_decisions (test_ceo_venture_flow.CEOVentureFlowTests.test_registry_interruption_recovers_from_completed_decisions) ... ok
+test_response_recorded_checkpoint_recovers_without_model_retry (test_ceo_venture_flow.CEOVentureFlowTests.test_response_recorded_checkpoint_recovers_without_model_retry) ... ok
+test_semantically_invalid_packets_and_review_are_quarantined (test_ceo_venture_flow.CEOVentureFlowTests.test_semantically_invalid_packets_and_review_are_quarantined) ... ok
+test_shelving_all_ideas_is_durable_without_workers_or_allocation (test_ceo_venture_flow.CEOVentureFlowTests.test_shelving_all_ideas_is_durable_without_workers_or_allocation) ... ok
+test_tools_and_authority_fields_are_quarantined_without_registry_writes (test_ceo_venture_flow.CEOVentureFlowTests.test_tools_and_authority_fields_are_quarantined_without_registry_writes) ... ok
+test_audit_sampler_has_operator_independent_selection (test_compliance.ComplianceTests.test_audit_sampler_has_operator_independent_selection) ... ok
+test_cooldown_requires_clean_window (test_compliance.ComplianceTests.test_cooldown_requires_clean_window) ... ok
+test_expired_manifest_denies_without_grace_period (test_compliance.ComplianceTests.test_expired_manifest_denies_without_grace_period) ... ok
+test_latching_requires_human_reset (test_compliance.ComplianceTests.test_latching_requires_human_reset) ... ok
+test_progressive_requires_staged_clean_recovery (test_compliance.ComplianceTests.test_progressive_requires_staged_clean_recovery) ... ok
+test_prohibited_action_overrides_permitted_action (test_compliance.ComplianceTests.test_prohibited_action_overrides_permitted_action) ... ok
+test_concurrent_requests_respect_global_ceiling (test_compute.ComputeGovernorTests.test_concurrent_requests_respect_global_ceiling) ... ok
+test_expensive_request_debits_all_levels_atomically (test_compute.ComputeGovernorTests.test_expensive_request_debits_all_levels_atomically) ... ok
+test_invalid_cost_is_denied (test_compute.ComputeGovernorTests.test_invalid_cost_is_denied) ... ok
+test_one_level_denial_does_not_debit_other_levels (test_compute.ComputeGovernorTests.test_one_level_denial_does_not_debit_other_levels) ... ok
+test_agent_cannot_reach_execution_service (test_execution.ExecutionServiceTests.test_agent_cannot_reach_execution_service) ... ok
+test_execution_returns_result_without_secret (test_execution.ExecutionServiceTests.test_execution_returns_result_without_secret) ... ok
+test_unapproved_or_unknown_execution_is_denied (test_execution.ExecutionServiceTests.test_unapproved_or_unknown_execution_is_denied) ... ok
+test_concurrent_allocations_hold_ceiling (test_finance.FinanceTests.test_concurrent_allocations_hold_ceiling) ... ok
+test_deployable_and_new_venture_ceiling (test_finance.FinanceTests.test_deployable_and_new_venture_ceiling) ... ok
+test_payment_adapter_is_simulated_and_freezable (test_finance.FinanceTests.test_payment_adapter_is_simulated_and_freezable) ... ok
+test_profit_sweep_nets_reserves_and_costs (test_finance.FinanceTests.test_profit_sweep_nets_reserves_and_costs) ... ok
+test_ratchet_freezes_new_allocations_after_shrink (test_finance.FinanceTests.test_ratchet_freezes_new_allocations_after_shrink) ... ok
+test_unlisted_expense_denied (test_finance.FinanceTests.test_unlisted_expense_denied) ... ok
+test_action_fires_after_latency_without_stop (test_kill_switch.KillSwitchTests.test_action_fires_after_latency_without_stop) ... ok
+test_agent_cannot_trigger_stop (test_kill_switch.KillSwitchTests.test_agent_cannot_trigger_stop) ... ok
+test_hard_stop_intercepts_delayed_irreversible_action (test_kill_switch.KillSwitchTests.test_hard_stop_intercepts_delayed_irreversible_action) ... ok
+test_hard_stop_revokes_external_lease (test_kill_switch.KillSwitchTests.test_hard_stop_revokes_external_lease) ... ok
+test_corrective_attempt_and_verified_wind_down (test_lifecycle.LifecycleTests.test_corrective_attempt_and_verified_wind_down) ... ok
+test_repair_requires_parent_relationship (test_lifecycle.LifecycleTests.test_repair_requires_parent_relationship) ... ok
+test_role_and_venture_isolation (test_lifecycle.LifecycleTests.test_role_and_venture_isolation) ... ok
+test_shared_service_demand_statelessness_and_quarantine (test_lifecycle.LifecycleTests.test_shared_service_demand_statelessness_and_quarantine) ... ok
+test_spawn_and_capital_roles_are_bounded (test_lifecycle.LifecycleTests.test_spawn_and_capital_roles_are_bounded) ... ok
+test_worker_envelope_ttl_and_taint_boundary (test_lifecycle.LifecycleTests.test_worker_envelope_ttl_and_taint_boundary) ... ok
+test_admission_rejects_proposal_changed_since_registry_scope_check (test_owner_approval.OwnerApprovalTests.test_admission_rejects_proposal_changed_since_registry_scope_check) ... ok
+test_approved_is_durable_and_revocation_is_immediate (test_owner_approval.OwnerApprovalTests.test_approved_is_durable_and_revocation_is_immediate) ... ok
+test_ceo_model_claim_cannot_bypass_admission (test_owner_approval.OwnerApprovalTests.test_ceo_model_claim_cannot_bypass_admission) ... ok
+test_changed_proposal_or_scope_requires_new_version_and_discussion (test_owner_approval.OwnerApprovalTests.test_changed_proposal_or_scope_requires_new_version_and_discussion) ... ok
+test_database_receipt_tamper_even_with_recomputed_hash_fails (test_owner_approval.OwnerApprovalTests.test_database_receipt_tamper_even_with_recomputed_hash_fails) ... ok
+test_denied_blocks_and_approved_allows_only_local_admission (test_owner_approval.OwnerApprovalTests.test_denied_blocks_and_approved_allows_only_local_admission) ... ok
+test_expiry_rechecked_at_admission (test_owner_approval.OwnerApprovalTests.test_expiry_rechecked_at_admission) ... ok
+test_forged_tampered_and_model_origin_receipts_rejected (test_owner_approval.OwnerApprovalTests.test_forged_tampered_and_model_origin_receipts_rejected) ... ok
+test_manager_delegation_must_match_registered_task_and_operation (test_owner_approval.OwnerApprovalTests.test_manager_delegation_must_match_registered_task_and_operation) ... ok
+test_missing_key_and_agent_supplied_key_cannot_authorize (test_owner_approval.OwnerApprovalTests.test_missing_key_and_agent_supplied_key_cannot_authorize) ... ok
+test_pending_blocks_every_action_and_preserves_synthetic_replay (test_owner_approval.OwnerApprovalTests.test_pending_blocks_every_action_and_preserves_synthetic_replay) ... ok
+test_proposal_tamper_even_with_recomputed_hash_invalidates_approval (test_owner_approval.OwnerApprovalTests.test_proposal_tamper_even_with_recomputed_hash_invalidates_approval) ... ok
+test_proposal_versions_remain_auditable (test_owner_approval.OwnerApprovalTests.test_proposal_versions_remain_auditable) ... ok
+test_registered_flow_cannot_be_replaced_by_approved_unrelated_proposal (test_owner_approval.OwnerApprovalTests.test_registered_flow_cannot_be_replaced_by_approved_unrelated_proposal) ... ok
+test_scope_manager_budget_and_live_checks_remain_denied (test_owner_approval.OwnerApprovalTests.test_scope_manager_budget_and_live_checks_remain_denied) ... ok
+test_signed_model_origin_receipt_inserted_directly_is_still_denied (test_owner_approval.OwnerApprovalTests.test_signed_model_origin_receipt_inserted_directly_is_still_denied) ... ok
+test_stale_expired_future_and_replayed_receipts_fail_closed (test_owner_approval.OwnerApprovalTests.test_stale_expired_future_and_replayed_receipts_fail_closed) ... ok
+test_all_cases_are_attempted_and_no_gate_on_failures (test_pre_model_harness.PreModelHarnessTests.test_all_cases_are_attempted_and_no_gate_on_failures) ... ok
+test_suite_has_exactly_49_explicit_scenarios (test_pre_model_harness.PreModelHarnessTests.test_suite_has_exactly_49_explicit_scenarios) ... ok
+test_agent_cannot_declassify (test_provenance.ProvenanceTests.test_agent_cannot_declassify) ... ok
+test_elapsed_turns_do_not_lower_taint (test_provenance.ProvenanceTests.test_elapsed_turns_do_not_lower_taint) ... ok
+test_human_declassification_is_explicit_and_auditable (test_provenance.ProvenanceTests.test_human_declassification_is_explicit_and_auditable) ... ok
+test_taint_propagates_through_summary_and_aggregation (test_provenance.ProvenanceTests.test_taint_propagates_through_summary_and_aggregation) ... ok
+test_trusted_lineage_remains_trusted (test_provenance.ProvenanceTests.test_trusted_lineage_remains_trusted) ... ok
+test_completed_workflow_replays_across_ticks_without_paid_requests (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_completed_workflow_replays_across_ticks_without_paid_requests) ... ok
+test_configuration_changes_never_dispatch_again (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_configuration_changes_never_dispatch_again) ... ok
+test_crash_marker_and_empty_imported_database_block_inference (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_crash_marker_and_empty_imported_database_block_inference) ... ok
+test_gate_and_missing_provider_fail_closed (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_gate_and_missing_provider_fail_closed) ... ok
+test_overlapping_tick_is_busy_without_dispatch (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_overlapping_tick_is_busy_without_dispatch) ... ok
+test_preexisting_database_without_marker_cannot_dispatch (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_preexisting_database_without_marker_cannot_dispatch) ... ok
+test_shelved_workflow_replays_without_new_call (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_shelved_workflow_replays_without_new_call) ... ok
+test_symlink_paths_and_hardlinked_files_cannot_alias_original_artifacts (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_symlink_paths_and_hardlinked_files_cannot_alias_original_artifacts) ... ok
+test_uncertain_transport_failure_is_never_retried_by_timer (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_uncertain_transport_failure_is_never_retried_by_timer) ... ok
+test_unchanged_state_report_includes_artifacts_and_timestamps (test_scheduled_ceo_exercise.ScheduledExerciseTests.test_unchanged_state_report_includes_artifacts_and_timestamps) ... ok
+test_backend_source_is_bounded_and_tests_stay_role_separate (test_studio_online.OnlineBoundaryTests.test_backend_source_is_bounded_and_tests_stay_role_separate) ... ok
+test_existing_delegation_fixture_cannot_claim_online_acceptance (test_studio_online.OnlineBoundaryTests.test_existing_delegation_fixture_cannot_claim_online_acceptance) ... ok
+test_http_adapter_runs_backend_with_durable_state_and_containment (test_studio_online.OnlineBoundaryTests.test_http_adapter_runs_backend_with_durable_state_and_containment) ... ok
+test_no_backend_and_symlink_sources_fail_closed (test_studio_online.OnlineBoundaryTests.test_no_backend_and_symlink_sources_fail_closed) ... ok
+test_only_literal_same_origin_api_fetch_is_newly_permitted (test_studio_online.OnlineBoundaryTests.test_only_literal_same_origin_api_fetch_is_newly_permitted) ... ok
+test_static_localstorage_product_is_rejected_by_real_http_gate (test_studio_online.OnlineBoundaryTests.test_static_localstorage_product_is_rejected_by_real_http_gate) ... ok
+test_static_worker_cannot_pass_development_admission (test_studio_online.OnlineBoundaryTests.test_static_worker_cannot_pass_development_admission) ... ok
+test_versioned_requirements_bind_online_acceptance_and_owner_hold (test_studio_online.OnlineBoundaryTests.test_versioned_requirements_bind_online_acceptance_and_owner_hold) ... ok
+test_crash_reclaim_and_single_effect (test_supervisor.SupervisorTests.test_crash_reclaim_and_single_effect) ... ok
+test_duplicate_enqueue_is_idempotent (test_supervisor.SupervisorTests.test_duplicate_enqueue_is_idempotent) ... ok
+test_prohibited_change_cannot_hide_in_repair (test_supervisor.SupervisorTests.test_prohibited_change_cannot_hide_in_repair) ... ok
+test_recovery_never_widens_authority (test_supervisor.SupervisorTests.test_recovery_never_widens_authority) ... ok
+test_repair_budget_quarantines (test_supervisor.SupervisorTests.test_repair_budget_quarantines) ... ok
+test_repeated_fingerprint_escalates (test_supervisor.SupervisorTests.test_repeated_fingerprint_escalates) ... ok
+test_end_to_end_flow_produces_bounded_review_artifacts (test_synthetic_orchestration.SyntheticOrchestrationTests.test_end_to_end_flow_produces_bounded_review_artifacts) ... ok
+test_instruction_like_content_is_preserved_as_data_and_cannot_authorize (test_synthetic_orchestration.SyntheticOrchestrationTests.test_instruction_like_content_is_preserved_as_data_and_cannot_authorize) ... ok
+test_manager_packet_count_and_duplicate_ids_are_rejected (test_synthetic_orchestration.SyntheticOrchestrationTests.test_manager_packet_count_and_duplicate_ids_are_rejected) ... ok
+test_model_response_cannot_supply_authority_fields (test_synthetic_orchestration.SyntheticOrchestrationTests.test_model_response_cannot_supply_authority_fields) ... ok
+test_offline_demo_runs_ceo_manager_and_workers_in_sequence (test_synthetic_orchestration.SyntheticOrchestrationTests.test_offline_demo_runs_ceo_manager_and_workers_in_sequence) ... ok
+test_unknown_worker_and_malformed_inputs_fail_closed (test_synthetic_orchestration.SyntheticOrchestrationTests.test_unknown_worker_and_malformed_inputs_fail_closed) ... ok
+test_cross_portfolio_and_over_cap_denied (test_synthetic_venture_store.SyntheticVentureStoreTests.test_cross_portfolio_and_over_cap_denied) ... ok
+test_detects_ledger_and_review_tampering (test_synthetic_venture_store.SyntheticVentureStoreTests.test_detects_ledger_and_review_tampering) ... ok
+test_idempotent_same_input_but_rejects_conflicts_and_duplicate_venture (test_synthetic_venture_store.SyntheticVentureStoreTests.test_idempotent_same_input_but_rejects_conflicts_and_duplicate_venture) ... ok
+test_model_cannot_add_authority (test_synthetic_venture_store.SyntheticVentureStoreTests.test_model_cannot_add_authority) ... ok
+test_persists_full_review_and_nonspendable_allocation (test_synthetic_venture_store.SyntheticVentureStoreTests.test_persists_full_review_and_nonspendable_allocation) ... ok
+test_all_ideas_can_be_shelved_without_planning_or_allocation (test_venture_exercise.VentureExerciseTests.test_all_ideas_can_be_shelved_without_planning_or_allocation) ... ok
+test_authority_fields_are_denied_at_every_role (test_venture_exercise.VentureExerciseTests.test_authority_fields_are_denied_at_every_role) ... ok
+test_cli_reproduces_report_and_keeps_paths_in_root (test_venture_exercise.VentureExerciseTests.test_cli_reproduces_report_and_keeps_paths_in_root) ... ok
+test_configuration_absence_partial_and_gate_do_not_silently_enable_provider (test_venture_exercise.VentureExerciseTests.test_configuration_absence_partial_and_gate_do_not_silently_enable_provider) ... ok
+test_duplicate_or_unknown_candidate_denied (test_venture_exercise.VentureExerciseTests.test_duplicate_or_unknown_candidate_denied) ... ok
+test_every_authority_envelope_remains_false (test_venture_exercise.VentureExerciseTests.test_every_authority_envelope_remains_false) ... ok
+test_existing_provider_transport_receives_no_tools (test_venture_exercise.VentureExerciseTests.test_existing_provider_transport_receives_no_tools) ... ok
+test_fixture_complete_business_exercise_and_reopen (test_venture_exercise.VentureExerciseTests.test_fixture_complete_business_exercise_and_reopen) ... ok
+test_injected_provider_is_called_sequentially_and_not_independent_ai_evidence (test_venture_exercise.VentureExerciseTests.test_injected_provider_is_called_sequentially_and_not_independent_ai_evidence) ... ok
+test_instruction_text_is_only_data (test_venture_exercise.VentureExerciseTests.test_instruction_text_is_only_data) ... ok
+test_manager_cannot_choose_other_operations_or_change_amounts (test_venture_exercise.VentureExerciseTests.test_manager_cannot_choose_other_operations_or_change_amounts) ... ok
+test_negative_surplus_selection_denied (test_venture_exercise.VentureExerciseTests.test_negative_surplus_selection_denied) ... ok
+test_provider_choice_and_business_content_drive_the_flow (test_venture_exercise.VentureExerciseTests.test_provider_choice_and_business_content_drive_the_flow) ... ok
+test_provider_failure_never_falls_back_or_writes_ledger (test_venture_exercise.VentureExerciseTests.test_provider_failure_never_falls_back_or_writes_ledger) ... ok
+test_review_hash_and_disposition_fail_closed_before_persistence (test_venture_exercise.VentureExerciseTests.test_review_hash_and_disposition_fail_closed_before_persistence) ... ok
+test_strict_json_rejects_ambiguous_oversized_nonfinite_and_malformed (test_venture_exercise.VentureExerciseTests.test_strict_json_rejects_ambiguous_oversized_nonfinite_and_malformed) ... ok
+test_tool_proposal_rejected (test_venture_exercise.VentureExerciseTests.test_tool_proposal_rejected) ... ok
+test_actor_role_origin_and_signature_bypasses (test_venture_workflow.WorkflowTests.test_actor_role_origin_and_signature_bypasses) ... ok
+test_changed_scope_revision_restarts_gate_and_old_commands_stale (test_venture_workflow.WorkflowTests.test_changed_scope_revision_restarts_gate_and_old_commands_stale) ... ok
+test_crash_tamper_capacity_and_inherited_api_denied (test_venture_workflow.WorkflowTests.test_crash_tamper_capacity_and_inherited_api_denied) ... ok
+test_every_unlisted_transition_fails_closed (test_venture_workflow.WorkflowTests.test_every_unlisted_transition_fails_closed) ... ok
+test_exhaustion_is_durable_and_cannot_be_approved (test_venture_workflow.WorkflowTests.test_exhaustion_is_durable_and_cannot_be_approved) ... ok
+test_hold_security_and_termination_invalidate_approval (test_venture_workflow.WorkflowTests.test_hold_security_and_termination_invalidate_approval) ... ok
+test_inbox_requires_actual_signed_handoff_not_advisory_review (test_venture_workflow.WorkflowTests.test_inbox_requires_actual_signed_handoff_not_advisory_review) ... ok
+test_owner_expiry_and_finance_ceiling (test_venture_workflow.WorkflowTests.test_owner_expiry_and_finance_ceiling) ... ok
+test_owner_rejection_correction_cannot_skip_gates (test_venture_workflow.WorkflowTests.test_owner_rejection_correction_cannot_skip_gates) ... ok
+test_positive_improvement_final_owner_and_finance_request_only (test_venture_workflow.WorkflowTests.test_positive_improvement_final_owner_and_finance_request_only) ... ok
+test_premise_rejection_requires_ceo_new_version_and_all_reviews (test_venture_workflow.WorkflowTests.test_premise_rejection_requires_ceo_new_version_and_all_reviews) ... ok
+test_retry_conflict_concurrency_and_correction (test_venture_workflow.WorkflowTests.test_retry_conflict_concurrency_and_correction) ... ok
+test_scope_version_budget_and_evidence_binding (test_venture_workflow.WorkflowTests.test_scope_version_budget_and_evidence_binding) ... ok
+
+----------------------------------------------------------------------
+Ran 739 tests in 13.828s
+
+OK
+{"report_sha256":"22adb92d1ea48a9899f0cd3768fc97b4118cf34c169c7850a2d584699c64efb4","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"22adb92d1ea48a9899f0cd3768fc97b4118cf34c169c7850a2d584699c64efb4","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"e168e82094fc2e1a09ff645a2e035cb78154236621c0f59dfc21461b331da0a1","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}
+{"report_sha256":"e168e82094fc2e1a09ff645a2e035cb78154236621c0f59dfc21461b331da0a1","source":"handcrafted_fixture_no_inference","status":"ADVISORY_REVIEW_RECORDED"}

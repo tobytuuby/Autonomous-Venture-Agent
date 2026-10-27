@@ -253,7 +253,7 @@ class VentureWorkflow(EscalationInbox):
                 bounded(payload["reason"])
                 if type(payload["version"]) is not int or payload["version"] != item["version"] + 1:
                     raise ValueError("next version required")
-                # Preparation budget can never be refilled across correction loops.
+                # Corrections retain consumption; a larger ceiling needs an explicit new scope.
                 if payload["scope"]["budget_units"] < item["used_units"]:
                     raise ValueError("budget below consumption")
                 for actor_role in ("manager", "worker"):

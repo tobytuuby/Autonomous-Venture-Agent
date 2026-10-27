@@ -299,6 +299,68 @@ class WorkflowTests(unittest.TestCase):
             self.create()
         self.assertEqual(self.workflow.read(), [])
 
+    def test_no_payment_or_operational_admission_is_called(self):
+        with patch("kernel.venture_admission.VentureAdmissionRegistry.admit",
+                   side_effect=AssertionError("no admission")), patch(
+                       "kernel.finance.finance.FinancialGovernor.allocate",
+                       side_effect=AssertionError("no allocation")), patch(
+                           "integrations.payment_adapter.RealPaymentAdapter.capture",
+                           side_effect=AssertionError("no payment")):
+            self.create()
+            self.to_owner()
+            self.act("owner_approve", "owner", dict(discussion_reference="TEST"))
+            self.act("finance_request", "ceo", dict(amount_cents=100))
+
+    def test_absent_keys_forged_signatures_and_expired_commands(self):
+        self.create()
+        cmd = self.command("delegate", "manager")
+        with self.assertRaises(Exception):
+            self.workflow.apply(cmd, self.sign(cmd, "worker"))
+        for changes in (
+                dict(issued_at="2000-01-01T00:00:00+00:00",
+                     expires_at="2000-01-02T00:00:00+00:00"),
+                dict(issued_at="2099-01-01T00:00:00+00:00",
+                     expires_at="2099-01-02T00:00:00+00:00"),
+                dict(issued_at="2026-01-01T00:00:00", expires_at="2026-01-02T00:00:00"),
+                dict(expires_at=(datetime.now(timezone.utc) + timedelta(days=3)).isoformat())):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                self.act("delegate", "manager", **changes)
+        self.workflow.actors = {}
+        with self.assertRaises(ValueError):
+            self.workflow.apply(cmd, self.sign(cmd, "manager"))
+
+    def test_creation_binds_real_inbox_manager_ceo_and_packet(self):
+        handoff = self.inbox.handoff("studio", "manager")
+        for changes in (dict(venture_id="another"), dict(handoff_hash="invented"),
+                        dict(scope=dict(self.scope, manager_id="other"))):
+            payload = dict(venture_id="venture-001", scope=self.scope,
+                           handoff_hash=hashed(handoff), **{})
+            payload.update(changes)
+            cmd = self.command("create", "ceo", payload,
+                               scope_hash=hashed(payload["scope"]))
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                self.workflow.create(cmd, self.sign(cmd, "ceo"),
+                                     inbox=self.inbox, item_id="studio")
+        self.assertEqual(self.workflow.read(), [])
+        item = self.create()
+        command = item["last_command"]
+        self.assertEqual(self.workflow.create(command, self.sign(command, "ceo"),
+                         inbox=self.inbox, item_id="studio"), item)
+
+    def test_signed_history_rejects_command_rewrite_with_rehashed_event(self):
+        self.create()
+        import json
+        row = self.workflow.db.execute("SELECT event FROM audit WHERE sequence=1").fetchone()
+        event = json.loads(row[0])
+        event["snapshot"]["last_command"]["actor_id"] = "owner"
+        raw = canonical(event)
+        self.workflow.db.execute("UPDATE audit SET event=?,event_hash=? WHERE sequence=1",
+                                 (raw, digest(canonical([1, "GENESIS", raw]).encode())))
+        self.workflow.db.execute("UPDATE inbox SET snapshot=?",
+                                 (canonical(event["snapshot"]),))
+        with self.assertRaises(Exception):
+            self.workflow.read()
+
     def test_changed_scope_revision_restarts_gate_and_old_commands_stale(self):
         self.create()
         old = self.command("delegate", "manager")
