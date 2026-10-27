@@ -84,6 +84,8 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual({t["role"] for t in result["tasks"]}, set(ROLES))
         testing = next(t for t in result["tasks"] if t["role"] == "testing")
         self.assertEqual(testing["record"]["execution"]["exit_status"], 0)
+        self.assertEqual(testing["record"]["execution"]["browser"]["status"], "test_adapter_skipped")
+        self.assertNotIn("browser-checks.log", str(testing["record"]["artifacts"]))
         self.assertIn("actual generated source checked",
                       (self.manager.home / testing["record"]["execution"]["log"]).read_text())
         self.assertTrue((self.manager.home / "hosted-app/index.html").is_file())

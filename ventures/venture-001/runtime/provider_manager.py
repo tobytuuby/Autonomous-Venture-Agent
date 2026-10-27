@@ -34,7 +34,7 @@ CAPABILITIES = {
     "mode": MODE, "approval": "UNAPPROVED_PILOT", "authorities": DENIED,
     "workers": list(ROLES), "max_tasks": 25, "max_attempts_per_role": 5,
     "max_inference_calls": 46, "max_response_bytes": 262144,
-    "execution": "contained Python checks only; no shell or CLI agents",
+    "execution": "contained Python checks plus trusted Playwright/Chromium browser journey; worker scripts cannot launch processes",
     "public_research": "POLICY_BLOCKED: no approved source-bound read-only GET facility",
     "publication": False, "spend": False,
 }
@@ -133,7 +133,8 @@ class AgentManager(Manager):
     def __init__(self, run_id, *, test_provider=None):
         super().__init__(run_id)
         self.test_provider = test_provider
-        self.code_hash = hashlib.sha256((digest(Path(__file__)) + digest(CODE / "sandbox_checks.py")).encode()).hexdigest()
+        self.code_hash = hashlib.sha256((digest(Path(__file__)) + digest(CODE / "sandbox_checks.py") +
+                                        digest(CODE / "browser_acceptance.js")).encode()).hexdigest()
         row = self.db.execute("SELECT value FROM metadata WHERE key='agent_code'").fetchone()
         if row and row[0] != self.code_hash:
             self.close()
@@ -345,6 +346,43 @@ class AgentManager(Manager):
                 "log_sha256": digest(log), "input_hashes": {n: hashlib.sha256(b.encode()).hexdigest()
                                                            for n, b in app.items()}}
 
+    def browser_checks(self, task, app):
+        if self.test_provider is not None:
+            return {"status": "test_adapter_skipped", "exit_status": 0}
+        root = safe(self.home, task["id"])
+        source, output = root / "browser-inputs", root / "browser-output"
+        source.mkdir()
+        output.mkdir()
+        for name, body in app.items():
+            target = safe(source, name)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(body)
+        node = shutil.which("node")
+        playwright = ROOT / "artifacts/venture-001-browser/node_modules"
+        chromium = ROOT / ("artifacts/venture-001-browser/browsers/"
+                           "chromium-1248/chrome-linux64/chrome")
+        log = root / "browser-checks.log"
+        if not node or not playwright.is_dir() or not chromium.is_file():
+            log.write_text("FAIL: existing Playwright/Chromium runtime is unavailable\n")
+            return {"status": "runtime_missing", "exit_status": 127,
+                    "log": str(log.relative_to(self.home)), "log_sha256": digest(log)}
+        command = [node, str(CODE / "browser_acceptance.js"), str(source), str(output)]
+        env = {"PATH": "/usr/bin:/bin", "LANG": "C.UTF-8", "NODE_PATH": str(playwright),
+               "VENTURE_CHROMIUM_EXECUTABLE": str(chromium)}
+        with log.open("wb") as stream:
+            proc = subprocess.Popen(command, cwd=output, stdout=stream, stderr=subprocess.STDOUT,
+                                    env=env, start_new_session=True)
+            try:
+                code = proc.wait(timeout=90)
+            except subprocess.TimeoutExpired:
+                os.killpg(proc.pid, signal.SIGKILL)
+                proc.wait()
+                code = -9
+        return {"status": "passed" if code == 0 else "failed", "command": command,
+                "exit_status": code, "log": str(log.relative_to(self.home)),
+                "log_sha256": digest(log), "input_hashes": {n: hashlib.sha256(b.encode()).hexdigest()
+                                                           for n, b in app.items()}}
+
     def dispatch_agent(self, task):
         if task not in self.tasks() or task["status"] != "pending":
             raise PermissionError("unregistered assignment")
@@ -418,8 +456,11 @@ class AgentManager(Manager):
                 if "checks.py" not in files:
                     raise ValueError("executable checks missing")
                 execution = self.check_script(task, files, payload["app_files"])
+                execution["browser"] = self.browser_checks(task, payload["app_files"])
                 if execution["exit_status"] != 0:
                     defects.append("actual generated checks failed")
+                if execution["browser"]["exit_status"] != 0:
+                    defects.append("actual Playwright browser journey failed")
             if task["role"] == "security":
                 findings = evidence.get("findings")
                 if not isinstance(findings, list) or "security.md" not in files:
@@ -455,6 +496,9 @@ class AgentManager(Manager):
                                   "sha256": digest(evidence_file), "worker_file": False})
         if execution:
             artifacts.append({"path": execution["log"], "sha256": execution["log_sha256"], "worker_file": False})
+            browser = execution.get("browser", {})
+            if browser.get("log"):
+                artifacts.append({"path": browser["log"], "sha256": browser["log_sha256"], "worker_file": False})
         self.update(task, "rejected" if defects else "accepted",
                     {"defects": defects, "artifacts": artifacts, "execution": execution,
                      "evidence": result.get("evidence"), "inference_id": task["id"],
@@ -466,7 +510,9 @@ class AgentManager(Manager):
                      "research_status": "policy_blocked" if task["role"] == "research" else None})
         # Failed checks/findings commission an application correction as well;
         # accepted reviews of the old bytes must never approve corrected bytes.
-        app_defect = (execution is not None and execution["exit_status"] != 0
+        app_defect = (execution is not None and (
+                          execution["exit_status"] != 0
+                          or execution.get("browser", {}).get("exit_status", 0) != 0)
                       or task["role"] == "security" and isinstance(result.get("evidence"), dict)
                       and isinstance(result["evidence"].get("findings"), list)
                       and bool(result["evidence"]["findings"]))
