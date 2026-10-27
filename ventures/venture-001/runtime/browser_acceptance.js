@@ -9,8 +9,9 @@ const outputArg = process.argv[3];
 const appDir = path.resolve(appArg || "");
 const outputDir = path.resolve(outputArg || "");
 const executablePath = process.env.VENTURE_CHROMIUM_EXECUTABLE;
-const required = ["index.html", "app.js", "styles.css"];
-if (!appArg || !outputArg || !executablePath || !required.every(name => fs.existsSync(path.join(appDir, name)))) {
+const required = ["index.html", "app.js"];
+const stylesheet = ["styles.css", "app.css"].find(name => fs.existsSync(path.join(appDir, name)));
+if (!appArg || !outputArg || !executablePath || !stylesheet || !required.every(name => fs.existsSync(path.join(appDir, name)))) {
   console.error("FAIL: browser harness inputs/runtime missing");
   process.exit(2);
 }
@@ -22,7 +23,7 @@ const server = http.createServer((req, res) => {
   try { name = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname); }
   catch { res.writeHead(400).end(); return; }
   name = name === "/" ? "index.html" : name.slice(1);
-  if (!required.includes(name)) { res.writeHead(404).end(); return; }
+  if (!required.includes(name) && name !== stylesheet) { res.writeHead(404).end(); return; }
   const body = fs.readFileSync(path.join(appDir, name));
   res.writeHead(200, { "Content-Type": mime[path.extname(name)], "X-Content-Type-Options": "nosniff" });
   res.end(req.method === "HEAD" ? undefined : body);
@@ -32,6 +33,7 @@ const server = http.createServer((req, res) => {
   let browser;
   const failures = [];
   const externalRequests = [];
+  const failedResponses = [];
   const errors = [];
   let passed = 0;
   const check = async (name, fn) => {
@@ -76,6 +78,9 @@ const server = http.createServer((req, res) => {
       if (url.startsWith(origin + "/")) return route.continue();
       externalRequests.push(url);
       return route.abort();
+    });
+    page.on("response", response => {
+      if (response.status() >= 400) failedResponses.push(response.status() + " " + response.url());
     });
     page.on("pageerror", error => errors.push(error.message));
     page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
@@ -143,6 +148,7 @@ const server = http.createServer((req, res) => {
 
     await check("browser journey remains on loopback with no runtime errors", async () => {
       if (externalRequests.length) throw new Error("external requests: " + externalRequests.join(", "));
+      if (failedResponses.length) throw new Error("failed HTTP responses: " + failedResponses.join("; "));
       if (errors.length) throw new Error("browser errors: " + errors.join("; "));
     });
     console.log("SUMMARY: " + passed + " passed; " + failures.length + " failed; browser=Chromium headless; host=127.0.0.1");
