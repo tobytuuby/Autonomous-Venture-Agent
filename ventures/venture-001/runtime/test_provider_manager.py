@@ -366,7 +366,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(len(self.provider.calls), count)
 
     def test_security_report_accepts_nonblocking_findings_for_owner_review(self):
-        self.provider.security_findings = [{"severity": "medium", "title": "Residual local data exposure"}]
+        self.provider.security_findings = [{"severity": "medium", "title": "Residual local data exposure", "file": "index.html", "defect": "Local data is visible to same-origin scripts."}]
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
         security = self.manager.effective("security-1")
@@ -374,7 +374,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(security["record"]["evidence"]["findings"][0]["severity"], "medium")
 
     def test_failed_security_worker_does_not_reject_the_application(self):
-        self.provider.security_findings = [{"severity": "medium", "title": "Unverified finding"}]
+        self.provider.security_findings = [{"severity": "medium", "title": "Unverified finding", "file": "index.html", "defect": "Unverified current-source issue."}]
         original = self.provider.__call__
 
         def respond(request, schemas):
@@ -395,8 +395,33 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(development1["status"], "accepted")
         self.assertEqual(security2["status"], "accepted")
 
+    def test_out_of_scope_security_finding_does_not_reject_application(self):
+        original = self.provider.__call__
+
+        def respond(request, schemas):
+            result = original(request, schemas)
+            if request["opportunity"]["task_id"] == "security-1":
+                answer = json.loads(result["decision"]["content"])
+                answer["evidence"]["findings"] = [{
+                    "severity": "high", "title": "Test harness concern",
+                    "file": "validation/test-restock.js",
+                    "defect": "The validation harness uses an isolated JavaScript VM."
+                }]
+                result["decision"]["content"] = json.dumps(answer)
+            return result
+
+        self.manager.test_provider = respond
+        result = self.manager.run_agents()
+        security1 = next(t for t in result["tasks"] if t["id"] == "security-1")
+        development1 = next(t for t in result["tasks"] if t["id"] == "development-1")
+        security2 = next(t for t in result["tasks"] if t["id"] == "security-2")
+        self.assertEqual(security1["status"], "rejected")
+        self.assertIn("security finding not bound", security1["record"]["defects"][0])
+        self.assertEqual(development1["status"], "accepted")
+        self.assertEqual(security2["status"], "accepted")
+
     def test_security_high_finding_commissions_application_correction(self):
-        self.provider.security_findings = {"security-1": [{"severity": "high", "title": "Unsafe input handling"}]}
+        self.provider.security_findings = {"security-1": [{"severity": "high", "title": "Unsafe input handling", "file": "index.html", "defect": "Untrusted stored input is parsed without a size guard."}]}
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
         security = next(t for t in result["tasks"] if t["id"] == "security-1")

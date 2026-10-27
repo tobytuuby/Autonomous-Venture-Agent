@@ -508,9 +508,12 @@ class AgentManager(Manager):
                            "do not perform that part. Tests belong to the separate testing specialist.",
             "testing": "Return checks.py that consumes sys.argv[1] app directory, asserts real functional/source properties "
                        "and prints checks; exits nonzero on defects. Do not claim execution. evidence.inspected_hashes must equal app_hashes.",
-            "security": "Inspect supplied application source. evidence.inspected_hashes equals app_hashes; "
-                        "evidence.findings is a list of concrete defects (empty only if none). Return exactly one file named "
-                        "security.md containing the review and limitations. Do not return scripts, executable files, or other artifacts.",
+            "security": "Inspect only the current application files named in app_hashes. evidence.inspected_hashes equals app_hashes; "
+                        "evidence.findings is a list of concrete application defects, each with id, severity, file (an exact "
+                        "app_hashes key), and defect tied to those bytes; use an empty list if none. Do not report test harness, "
+                        "release workflow, or tool behavior as an application vulnerability; put such observations in limitations. "
+                        "Return exactly one file named security.md containing the review and limitations. Do not return scripts, "
+                        "executable files, or other artifacts.",
             "research": "Return status policy_blocked, evidence.sources=[], evidence.claims=[], evidence.reason explaining "
                         "no approved public GET tool. No local inventory or remembered market facts.",
             "commercial": "Return collateral.md with concrete landing-page and offer drafts; explicitly hypothetical price, "
@@ -552,8 +555,14 @@ class AgentManager(Manager):
                     defects.append("actual Playwright browser journey failed")
             if task["role"] == "security":
                 findings = evidence.get("findings")
-                if not isinstance(findings, list) or "security.md" not in files:
+                if not isinstance(findings, list) or set(files) != {"security.md"}:
                     raise ValueError("security findings list or review missing")
+                if any(not isinstance(finding, dict)
+                       or finding.get("file") not in app_hashes
+                       or not isinstance(finding.get("defect"), str)
+                       or not finding["defect"].strip()
+                       for finding in findings):
+                    raise ValueError("security finding not bound to current application source")
                 severities = {"critical", "high", "medium", "low", "info"}
                 blocking = [finding for finding in findings
                             if not isinstance(finding, dict)
@@ -607,6 +616,11 @@ class AgentManager(Manager):
             and isinstance(evidence, dict)
             and evidence.get("inspected_hashes") == app_hashes
             and isinstance(evidence.get("findings"), list)
+            and all(isinstance(finding, dict)
+                    and finding.get("file") in app_hashes
+                    and isinstance(finding.get("defect"), str)
+                    and bool(finding["defect"].strip())
+                    for finding in evidence["findings"])
         )
         app_defect = (
             execution is not None and (
