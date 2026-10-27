@@ -262,7 +262,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(len(result["calls"]), 46)
         self.assertEqual(len({c["id"] for c in result["calls"]}), 46)
         self.assertEqual(result["capabilities"]["max_tasks"], 25)
-        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 5)
+        self.assertEqual(result["capabilities"]["max_attempts_per_role"], 6)
         self.assertEqual(result["capabilities"]["max_inference_calls"], 46)
         for role in ROLES:
             tasks = [t for t in result["tasks"] if t["role"] == role]
@@ -276,7 +276,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.close()
         self.manager = AgentManager(self.name, test_provider=respond)
         result = self.manager.run_agents()
-        self.assertEqual(result["status"], "incomplete")
+        self.assertEqual(result["status"], "blocked")
         self.assertEqual(len(result["tasks"]), 25)
         self.assertEqual(len(self.provider.calls), count)
         self.assertTrue(all(v is False for v in result["authorities"].values()))
@@ -350,7 +350,7 @@ class AgentRuntimeTests(unittest.TestCase):
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "incomplete")
         failures = [t for t in result["tasks"] if t["role"] == "testing"]
-        self.assertEqual(len(failures), 5)
+        self.assertEqual(len(failures), 6)
         self.assertTrue(all(t["status"] == "rejected" for t in failures))
         self.assertTrue(all(t["record"]["execution"]["exit_status"] != 0 for t in failures))
         self.assertIn("AssertionError", (self.manager.home / failures[0]["record"]["execution"]["log"]).read_text())

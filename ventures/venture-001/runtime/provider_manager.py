@@ -32,7 +32,7 @@ OBJECTIVE = ("Prepare Studio Restock Kit as a usable hosted static web applicati
              "research limitations and concrete commercial draft collateral for owner review.")
 CAPABILITIES = {
     "mode": MODE, "approval": "UNAPPROVED_PILOT", "authorities": DENIED,
-    "workers": list(ROLES), "max_tasks": 25, "max_attempts_per_role": 5,
+    "workers": list(ROLES), "max_tasks": 25, "max_attempts_per_role": 6,
     "max_inference_calls": 46, "max_response_bytes": 262144,
     "execution": "contained Python checks plus trusted Playwright/Chromium browser journey; worker scripts cannot launch processes",
     "public_research": "POLICY_BLOCKED: no approved source-bound read-only GET facility",
