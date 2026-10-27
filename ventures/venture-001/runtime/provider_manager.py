@@ -92,7 +92,7 @@ def file_map(value, role):
                 or ".." in PurePosixPath(name).parts or name.startswith("/")
                 or PurePosixPath(name).suffix not in (
                     (".html", ".css", ".js", ".md") if role == "development"
-                    else (".py", ".md") if role == "testing" else (".md",))):
+                    else (".py", ".js", ".cjs", ".md") if role == "testing" else (".md",))):
             raise ValueError("artifact path/type denied")
         bounded_text(body, 131072)
         total += len(body.encode())

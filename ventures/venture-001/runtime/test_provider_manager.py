@@ -378,6 +378,15 @@ class AgentRuntimeTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 file_map(files, "development")
 
+    def test_testing_worker_may_return_bounded_javascript_test_artifacts(self):
+        files = {"checks.py": "assert True", "browser-journey.cjs": "process.exit(0)",
+                 "browser-journey.js": "process.exit(0)", "TESTING.md": "bounded test artifact"}
+        self.assertEqual(file_map(files, "testing"), files)
+        for files in ({"payload.json": "{}"}, {"index.html": "<script></script>"},
+                      {"../escape.cjs": "process.exit(0)"}):
+            with self.assertRaises(ValueError):
+                file_map(files, "testing")
+
     def test_task_state_and_accepted_output_tamper_fail_closed(self):
         self.manager.run_agents()
         task = next(t for t in self.manager.tasks() if t["role"] == "development")
