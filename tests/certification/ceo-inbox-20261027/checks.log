@@ -1,0 +1,11 @@
+$ git diff --check
+exit=0
+
+$ sha256sum -c artifacts/ceo-inbox-unrelated-before.sha256
+kernel/synthetic_venture_store.py: OK
+kernel/venture_admission.py: OK
+tests/test_owner_approval.py: OK
+exit=0
+
+$ cmp artifacts/ceo-inbox-unrelated-before.patch artifacts/ceo-inbox-unrelated-after.patch
+exit=0

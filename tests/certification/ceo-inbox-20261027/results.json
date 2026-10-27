@@ -1,0 +1,18 @@
+{
+  "baseline": "d0c06a5bf2ec260a752f741a8bc923143ea63e18",
+  "classification": "local synthetic signing fixtures; no inference",
+  "initial_focused": "12 tests OK",
+  "exit_codes": {
+    "focused-final": 1,
+    "full": 1,
+    "focused-verified": 0,
+    "full-verified": 0,
+    "focused-bound": 0,
+    "full-bound": 0
+  },
+  "final_focused": 26,
+  "final_full": 726,
+  "new_inbox_tests": 14,
+  "adv_denominator": 49,
+  "adv_recertified": false
+}
