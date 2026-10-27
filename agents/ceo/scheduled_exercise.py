@@ -23,6 +23,7 @@ from kernel.synthetic_venture_store import SyntheticVentureStore
 
 FILES = ("workflow.sqlite", "workflow.decisions.sqlite", "workflow.decisions.jsonl",
          "report.json", "attempt.json", "status.json", "runner.lock")
+INTAKE_FILES = ("escalations.sqlite", "inbox-status.json")
 QUEUE_FILES = ("queue.started.json", "queue.sqlite", "queue.decisions.sqlite",
                "queue.decisions.jsonl")
 
@@ -74,7 +75,7 @@ class BoundedProvider:
         return self.provider(request, ())
 
 
-def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None):
+def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_only=False):
     raw = Path(state_dir).absolute()
     # Reject aliases to other project artifacts, including the original run.
     if any(p.is_symlink() for p in (raw, *raw.parents)):
@@ -83,9 +84,9 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None):
     if state == inside_root("."):
         raise ValueError("dedicated state directory required")
     state.mkdir(parents=True, exist_ok=True, mode=0o700)
-    for name in (*FILES, *QUEUE_FILES,
+    for name in (*FILES, *QUEUE_FILES, *INTAKE_FILES,
                  *(name + suffix for name in ("workflow.sqlite", "workflow.decisions.sqlite",
-                    "queue.sqlite", "queue.decisions.sqlite") for suffix in ("-journal", "-wal", "-shm"))):
+                    "queue.sqlite", "queue.decisions.sqlite", "escalations.sqlite") for suffix in ("-journal", "-wal", "-shm"))):
         path = state / name
         if path.is_symlink() or (path.exists() and
                                  (not path.is_file() or path.stat().st_nlink != 1)):
@@ -99,8 +100,16 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None):
         started = now()
         summary = {"started_at": started, "workflow": "venture-exercise-v4",
                    "external_action_count": 0, "inference_requests_this_tick": 0,
-                   "artifacts": list(FILES[:-1]) + (list(QUEUE_FILES) if queue else []),
+                   "artifacts": list(FILES[:-1]) + (list(QUEUE_FILES) if queue else []) + list(INTAKE_FILES),
                    "ai_inference_independently_verified": False}
+        from agents.ceo.scheduled_intake import ingest_pending
+        intake_code, summary["inbox"] = ingest_pending(state)
+        if intake_only:
+            summary.update(status="INTAKE_ONLY" if not intake_code else "INTAKE_DENIED",
+                           finished_at=now(), ceo_work_performed=False,
+                           queue_status="NOT_RUN", artifacts=list(INTAKE_FILES))
+            write_json(state / "inbox-status.json", summary)
+            return intake_code, summary
         provider = None
         decisions = None
         try:
@@ -162,16 +171,18 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None):
                        inference_requests_this_tick=(provider.calls if provider else 0) +
                        summary.get("inference_requests_this_tick", 0))
         write_json(state / "status.json", summary)
-        return code, summary
+        return code or intake_code, summary
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--state-dir", default="artifacts/scheduled-ceo")
     parser.add_argument("--gate-file", default="infrastructure/venture-ceo-kernel-gate.runtime.json")
+    parser.add_argument("--intake-only", action="store_true",
+                        help="Local inbox intake only; never configure or call inference")
     args = parser.parse_args()
     try:
-        code, summary = run(args.state_dir, args.gate_file)
+        code, summary = run(args.state_dir, args.gate_file, intake_only=args.intake_only)
     except Exception:
         code, summary = 4, {"status": "LOCAL_PATH_DENIED", "inference_requests_this_tick": 0}
     print(canonical(summary))
