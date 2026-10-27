@@ -78,6 +78,13 @@ class CycleProvider:
 
 def advance(state, configured, prior, cycle=None):
     """Caller holds scheduler lock and has checked the existing certification gate."""
+    from agents.ceo.queue_recovery import resolution
+    try:
+        if resolution(state) is not None:
+            return 0, {"status": "QUEUE_ADMIN_CLOSED", "inference_requests_this_tick": 0,
+                       "ceo_decision": False, "automatic_retry_allowed": False}
+    except Exception:
+        return 4, {"status": "QUEUE_RESOLUTION_DENIED", "inference_requests_this_tick": 0}
     cycle = cycle or datetime.now(timezone.utc).strftime("%Y-%m-%dT%H")
     db = sqlite3.connect(state / "queue.sqlite")
     db.execute("PRAGMA synchronous=FULL")

@@ -75,7 +75,8 @@ class BoundedProvider:
         return self.provider(request, ())
 
 
-def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_only=False):
+def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_only=False,
+        escalation_only=False, escalation_grant=None, operator_public_key=None):
     raw = Path(state_dir).absolute()
     # Reject aliases to other project artifacts, including the original run.
     if any(p.is_symlink() for p in (raw, *raw.parents)):
@@ -84,9 +85,12 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_on
     if state == inside_root("."):
         raise ValueError("dedicated state directory required")
     state.mkdir(parents=True, exist_ok=True, mode=0o700)
-    for name in (*FILES, *QUEUE_FILES, *INTAKE_FILES,
+    from agents.ceo.scheduled_escalation import FILES as ESCALATION_FILES
+    from agents.ceo.queue_recovery import RECORD
+    for name in (*FILES, *QUEUE_FILES, *INTAKE_FILES, *ESCALATION_FILES, RECORD,
                  *(name + suffix for name in ("workflow.sqlite", "workflow.decisions.sqlite",
-                    "queue.sqlite", "queue.decisions.sqlite", "escalations.sqlite") for suffix in ("-journal", "-wal", "-shm"))):
+                    "queue.sqlite", "queue.decisions.sqlite", "escalations.sqlite",
+                    "escalation.decisions.sqlite") for suffix in ("-journal", "-wal", "-shm"))):
         path = state / name
         if path.is_symlink() or (path.exists() and
                                  (not path.is_file() or path.stat().st_nlink != 1)):
@@ -100,7 +104,7 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_on
         started = now()
         summary = {"started_at": started, "workflow": "venture-exercise-v4",
                    "external_action_count": 0, "inference_requests_this_tick": 0,
-                   "artifacts": list(FILES[:-1]) + (list(QUEUE_FILES) if queue else []) + list(INTAKE_FILES),
+                   "artifacts": list(FILES[:-1]) + (list(QUEUE_FILES) if queue else []) + list(INTAKE_FILES) + list(ESCALATION_FILES) + [RECORD],
                    "ai_inference_independently_verified": False}
         from agents.ceo.scheduled_intake import ingest_pending
         intake_code, summary["inbox"] = ingest_pending(state)
@@ -110,10 +114,27 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_on
                            queue_status="NOT_RUN", artifacts=list(INTAKE_FILES))
             write_json(state / "inbox-status.json", summary)
             return intake_code, summary
+        from agents.ceo.scheduled_escalation import process_pending
+        env = dict(os.environ if environ is None else environ)
+        if intake_code:
+            escalation_code, summary["escalation"] = 4, {"status": "ESCALATION_INTAKE_DENIED",
+                "inference_requests_this_tick": 0, "ceo_work_performed": False}
+        else:
+            escalation_code, summary["escalation"] = process_pending(
+                state, inside_root(gate_file), env, grant_file=escalation_grant,
+                operator_public_key=operator_public_key)
+        escalation_calls = summary["escalation"]["inference_requests_this_tick"]
+        # An explicit escalation invocation never enters bootstrap/legacy queue.
+        # Any supplied grant also isolates this tick's budget, including denial.
+        if escalation_only or escalation_grant is not None:
+            summary.update(status=summary["escalation"]["status"], finished_at=now(),
+                           inference_requests_this_tick=escalation_calls, queue_status="NOT_RUN")
+            write_json(state / "inbox-status.json", summary)
+            missing = summary["escalation"]["status"] == "ESCALATION_AUTHORIZATION_REQUIRED"
+            return escalation_code or intake_code or (3 if missing else 0), summary
         provider = None
         decisions = None
         try:
-            env = dict(os.environ if environ is None else environ)
             env["CEO_KERNEL_GATE_FILE"] = str(inside_root(gate_file))
             configured = configured_provider(env, required=True)
             # Never infer on imported, partially written or previously attempted state.
@@ -171,7 +192,7 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_on
                        inference_requests_this_tick=(provider.calls if provider else 0) +
                        summary.get("inference_requests_this_tick", 0))
         write_json(state / "status.json", summary)
-        return code or intake_code, summary
+        return code or intake_code or escalation_code, summary
 
 
 def main():
@@ -180,9 +201,25 @@ def main():
     parser.add_argument("--gate-file", default="infrastructure/venture-ceo-kernel-gate.runtime.json")
     parser.add_argument("--intake-only", action="store_true",
                         help="Local inbox intake only; never configure or call inference")
+    parser.add_argument("--escalation-only", action="store_true",
+                        help="Independent advisory escalation lane; never run legacy queue")
+    parser.add_argument("--escalation-grant", help="Operator-signed one-call budget grant inside project")
+    parser.add_argument("--operator-public-key", help="Trusted operator public key file (hex); no enrollment")
     args = parser.parse_args()
+    if args.intake_only and (args.escalation_only or args.escalation_grant or args.operator_public_key):
+        parser.error("intake-only cannot process escalation")
+    if bool(args.escalation_grant) != bool(args.operator_public_key):
+        parser.error("both grant and trusted public key are required")
     try:
-        code, summary = run(args.state_dir, args.gate_file, intake_only=args.intake_only)
+        from agents.ceo.queue_recovery import regular
+        key = None
+        if args.operator_public_key:
+            with regular(Path(args.operator_public_key)).open("rb") as stream:
+                key = bytes.fromhex(stream.read(65).decode().strip())
+        code, summary = run(args.state_dir, args.gate_file, intake_only=args.intake_only,
+                            escalation_only=args.escalation_only,
+                            escalation_grant=Path(args.escalation_grant) if args.escalation_grant else None,
+                            operator_public_key=key)
     except Exception:
         code, summary = 4, {"status": "LOCAL_PATH_DENIED", "inference_requests_this_tick": 0}
     print(canonical(summary))
