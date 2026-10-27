@@ -380,9 +380,10 @@ class AgentRuntimeTests(unittest.TestCase):
 
     def test_testing_worker_may_return_bounded_javascript_test_artifacts(self):
         files = {"checks.py": "assert True", "browser-journey.cjs": "process.exit(0)",
-                 "browser-journey.js": "process.exit(0)", "TESTING.md": "bounded test artifact"}
+                 "browser-journey.js": "process.exit(0)", "browser-journey.mjs": "process.exit(0)",
+                 "RESULT-TEMPLATE.json": "{}", "TESTING.md": "bounded test artifact"}
         self.assertEqual(file_map(files, "testing"), files)
-        for files in ({"payload.json": "{}"}, {"index.html": "<script></script>"},
+        for files in ({"run.sh": "#!/bin/sh"}, {"index.html": "<script></script>"},
                       {"../escape.cjs": "process.exit(0)"}):
             with self.assertRaises(ValueError):
                 file_map(files, "testing")
