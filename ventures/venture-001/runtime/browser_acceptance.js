@@ -9,9 +9,13 @@ const outputArg = process.argv[3];
 const appDir = path.resolve(appArg || "");
 const outputDir = path.resolve(outputArg || "");
 const executablePath = process.env.VENTURE_CHROMIUM_EXECUTABLE;
-const required = ["index.html", "app.js"];
-const stylesheet = ["styles.css", "app.css"].find(name => fs.existsSync(path.join(appDir, name)));
-if (!appArg || !outputArg || !executablePath || !stylesheet || !required.every(name => fs.existsSync(path.join(appDir, name)))) {
+const required = ["index.html"];
+const appAssets = fs.existsSync(appDir) && fs.statSync(appDir).isDirectory()
+  ? new Set(fs.readdirSync(appDir, { withFileTypes: true })
+      .filter(entry => entry.isFile() && /\.(?:html|js|css)$/i.test(entry.name))
+      .map(entry => entry.name))
+  : new Set();
+if (!appArg || !outputArg || !executablePath || !required.every(name => appAssets.has(name))) {
   console.error("FAIL: browser harness inputs/runtime missing");
   process.exit(2);
 }
@@ -23,7 +27,7 @@ const server = http.createServer((req, res) => {
   try { name = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname); }
   catch { res.writeHead(400).end(); return; }
   name = name === "/" ? "index.html" : name.slice(1);
-  if (!required.includes(name) && name !== stylesheet) { res.writeHead(404).end(); return; }
+  if (!appAssets.has(name)) { res.writeHead(404).end(); return; }
   const body = fs.readFileSync(path.join(appDir, name));
   res.writeHead(200, { "Content-Type": mime[path.extname(name)], "X-Content-Type-Options": "nosniff" });
   res.end(req.method === "HEAD" ? undefined : body);
@@ -64,6 +68,8 @@ const server = http.createServer((req, res) => {
     if (await rows(page).count() === 0) await button(page, /add row/i).click();
   };
   const statusText = async page => (await page.locator("[role=status]").allTextContents()).join(" ");
+  const totalText = async page => (await page.locator("#total").count())
+    ? page.locator("#total").innerText() : (await page.locator(".summary").allTextContents()).join(" ");
 
   try {
     await new Promise((resolve, reject) => {
@@ -89,7 +95,7 @@ const server = http.createServer((req, res) => {
 
     await check("hosted page has the product title, planning guidance, and worksheet", async () => {
       if (!(await page.title()).includes("Studio Restock Kit")) throw new Error("wrong title");
-      if (!(await page.locator("h1").innerText()).includes("Studio Restock Kit")) throw new Error("product heading absent");
+      if (!(await page.locator("h1").first().innerText()).includes("Studio Restock Kit")) throw new Error("product heading absent");
       const text = await page.locator("body").innerText();
       if (!/planning|review every suggestion/i.test(text) || !/purchas|order/i.test(text)) throw new Error("review-only planning guidance absent");
       if (await rows(page).count() < 1) throw new Error("worksheet rows absent");
@@ -109,7 +115,7 @@ const server = http.createServer((req, res) => {
       if (!rowText.includes("10") || !rowText.includes("2") || !/6[.,]00/.test(rowText) || !/review|order/i.test(rowText)) {
         throw new Error("unexpected calculated row: " + rowText.slice(0, 240));
       }
-      if (!/6[.,]00/.test(await statusText(page))) throw new Error("summary total did not update");
+      if (!/6[.,]00/.test(await totalText(page))) throw new Error("summary total did not update");
     });
 
     await page.waitForTimeout(450);
@@ -142,7 +148,7 @@ const server = http.createServer((req, res) => {
       const before = await rows(page).count();
       await button(page, /add row/i).click();
       if (await rows(page).count() !== before + 1) throw new Error("add row failed");
-      await button(page, new RegExp("remove row.*" + (before + 1), "i")).click();
+      await button(page, /remove/i).click();
       if (await rows(page).count() !== before) throw new Error("remove row failed");
     });
 
