@@ -207,6 +207,7 @@ class AgentManager(Manager):
         folder = safe(self.home, "inference/" + identity)
         folder.mkdir(parents=True, exist_ok=False)
         request = {"system": SYSTEM + "\nROLE: " + role + "\nCONTRACT: " + contract,
+                   "json_object_mode": True,
                    "opportunity": {"task_id": identity, "objective": OBJECTIVE,
                                    "capabilities": CAPABILITIES, "payload": payload}}
         (folder / "request.json").write_text(json.dumps(request, indent=2))

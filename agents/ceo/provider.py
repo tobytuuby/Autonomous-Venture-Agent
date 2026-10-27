@@ -71,6 +71,11 @@ class OpenAICompatibleShadowModel:
                 {"role": "user", "content": json.dumps(request["opportunity"], sort_keys=True)},
             ],
         }
+        json_object_mode = request.get("json_object_mode", False)
+        if type(json_object_mode) is not bool or (json_object_mode and tool_schemas):
+            raise ModelProviderError("JSON object mode requires an explicit no-tools request")
+        if json_object_mode:
+            body["response_format"] = {"type": "json_object"}
         if tool_schemas:
             body["tools"] = [
                 {

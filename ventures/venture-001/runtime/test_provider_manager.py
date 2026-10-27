@@ -446,6 +446,7 @@ class AgentRuntimeTests(unittest.TestCase):
                     self.assertEqual(provider.timeout, 240.0)
                     self.assertEqual(schemas, ())
                     self.assertEqual(request["opportunity"]["task_id"], identity)
+                    self.assertIs(request["json_object_mode"], True)
                     # Synthetic trace only; the adapter's network method is replaced.
                     provider.trace_path.write_text(json.dumps({
                         "status": "PASS", "response_sha256": hashlib.sha256(b"{}").hexdigest()

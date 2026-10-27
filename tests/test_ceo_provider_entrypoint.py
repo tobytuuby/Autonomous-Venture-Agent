@@ -202,6 +202,32 @@ class CEOProviderEntrypointTests(unittest.TestCase):
                     "SELECT state FROM shadow_decisions").fetchall(), [("quarantined",)])
             self.database = self.path / "other.sqlite"
 
+    def test_json_object_mode_is_explicit_and_disallowed_with_tools(self):
+        provider = OpenAICompatibleShadowModel(
+            "https://provider.example/v1", "mock-model", "test-only-token")
+        observed = {}
+
+        def transport(request, timeout):
+            observed["body"] = json.loads(request.data)
+            observed["timeout"] = timeout
+            return Response({"id": "mock-json", "model": "mock-model", "choices": [{
+                "message": {"content": "{\"ok\":true}"}, "finish_reason": "stop",
+            }]})
+
+        with patch.object(provider._opener, "open", side_effect=transport):
+            result = provider({"system": "return JSON", "opportunity": {},
+                               "json_object_mode": True}, ())
+        self.assertEqual(result["decision"]["content"], "{\"ok\":true}")
+        self.assertEqual(observed["body"]["response_format"], {"type": "json_object"})
+        self.assertEqual(observed["body"]["model"], "mock-model")
+        self.assertEqual(observed["timeout"], 30.0)
+        for request, tools in (({"system": "x", "opportunity": {}, "json_object_mode": "yes"}, ()),
+                               ({"system": "x", "opportunity": {}, "json_object_mode": True},
+                                ("capital-allocation-request.schema.json",))):
+            with self.subTest(request=request, tools=tools):
+                with self.assertRaises(ModelProviderError):
+                    provider(request, tools)
+
     def test_endpoint_cannot_embed_credentials_or_use_cleartext(self):
         for endpoint in ["http://provider.example/v1", "file:///data",
                          "https://user:password@provider.example/v1",
