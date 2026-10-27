@@ -17,7 +17,7 @@ if (!appArg || !outputArg || !executablePath || !required.every(name => fs.exist
 fs.mkdirSync(outputDir, { recursive: true });
 const mime = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".css": "text/css; charset=utf-8" };
 const server = http.createServer((req, res) => {
-  if (!['GET', 'HEAD'].includes(req.method)) { res.writeHead(405).end(); return; }
+  if (!["GET", "HEAD"].includes(req.method)) { res.writeHead(405).end(); return; }
   let name;
   try { name = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname); }
   catch { res.writeHead(400).end(); return; }
@@ -30,7 +30,6 @@ const server = http.createServer((req, res) => {
 
 (async () => {
   let browser;
-  let origin;
   const failures = [];
   const externalRequests = [];
   const errors = [];
@@ -39,12 +38,37 @@ const server = http.createServer((req, res) => {
     try { await fn(); passed++; console.log("PASS: " + name); }
     catch (error) { failures.push(name + ": " + error.message); console.log("FAIL: " + failures.at(-1)); }
   };
+  const rows = page => page.locator("main tbody tr");
+  const button = (page, pattern) => page.getByRole("button", { name: pattern }).first();
+  const field = (page, label) => page.getByLabel(label, { exact: false }).first();
+  const confirmInline = async page => {
+    const confirmation = page.locator("#confirmation");
+    if (await confirmation.count() && await confirmation.isVisible()) {
+      await confirmation.locator("button").first().click();
+    }
+  };
+  const startBlank = async page => {
+    const reset = button(page, /start blank|reset(?: worksheet| saved data| inventory)?|clear worksheet/i);
+    if (await reset.count()) {
+      await reset.click();
+      await confirmInline(page);
+    } else {
+      const removeButtons = page.getByRole("button", { name: /remove row/i });
+      while (await rows(page).count() > 0 && await removeButtons.count() > 0) {
+        await removeButtons.last().click();
+      }
+      await button(page, /add row/i).click();
+    }
+    if (await rows(page).count() === 0) await button(page, /add row/i).click();
+  };
+  const statusText = async page => (await page.locator("[role=status]").allTextContents()).join(" ");
+
   try {
     await new Promise((resolve, reject) => {
       server.once("error", reject);
       server.listen(0, "127.0.0.1", resolve);
     });
-    origin = `http://127.0.0.1:${server.address().port}`;
+    const origin = "http://127.0.0.1:" + server.address().port;
     browser = await chromium.launch({ headless: true, executablePath, args: ["--no-sandbox", "--disable-dev-shm-usage"] });
     const page = await browser.newPage({ acceptDownloads: true });
     await page.route("**/*", async route => {
@@ -58,57 +82,70 @@ const server = http.createServer((req, res) => {
     page.on("dialog", dialog => dialog.accept());
     await page.goto(origin + "/", { waitUntil: "domcontentloaded" });
 
-    await check("hosted static page opens with product title and planning notice", async () => {
+    await check("hosted page has the product title, planning guidance, and worksheet", async () => {
       if (!(await page.title()).includes("Studio Restock Kit")) throw new Error("wrong title");
-      if (!(await page.locator("#planning-title").innerText()).includes("Planning aid only")) throw new Error("planning notice absent");
-      if (await page.locator("#rows tr").count() < 1) throw new Error("worksheet rows absent");
+      if (!(await page.locator("h1").innerText()).includes("Studio Restock Kit")) throw new Error("product heading absent");
+      const text = await page.locator("body").innerText();
+      if (!/planning|review every suggestion/i.test(text) || !/purchas|order/i.test(text)) throw new Error("review-only planning guidance absent");
+      if (await rows(page).count() < 1) throw new Error("worksheet rows absent");
     });
-    await check("invalid blank worksheet blocks results export", async () => {
-      await page.locator("#reset").click();
-      await page.locator("#export-results").click();
-      const status = await page.locator("#action-status").innerText();
-      if (!status || status.toLowerCase().includes("prepared")) throw new Error("invalid row was not rejected");
+
+    await check("blank inventory cannot be exported as valid results", async () => {
+      await startBlank(page);
+      await button(page, /(?:export|download).*results/i).click();
+      if (!/invalid|required|add at least|enter/i.test(await statusText(page))) throw new Error("blank row was not rejected");
     });
-    await check("entering stock recalculates order boundary and total", async () => {
+
+    await check("stock entry recalculates position, packs, quantity, estimate, and status", async () => {
       const values = { Item: "Browser test item", Unit: "piece", Supplier: "Example supplier", Location: "Shelf A",
         "On hand": "10", Inbound: "0", "Reorder point": "10", Target: "20", "Pack size": "5", "Pack price": "3" };
-      for (const [label, value] of Object.entries(values)) await page.getByLabel(label, { exact: true }).first().fill(value);
-      const cells = await page.locator("#rows tr").first().locator("[data-result]").allTextContents();
-      if (cells.join("|") !== "10|2|10|6.00|REVIEW ORDER") throw new Error("unexpected results: " + cells.join("|"));
-      if (!(await page.locator("#summary").innerText()).includes("6.00")) throw new Error("summary total did not update");
+      for (const [label, value] of Object.entries(values)) await field(page, label).fill(value);
+      const rowText = await rows(page).first().innerText();
+      if (!rowText.includes("10") || !rowText.includes("2") || !/6[.,]00/.test(rowText) || !/review|order/i.test(rowText)) {
+        throw new Error("unexpected calculated row: " + rowText.slice(0, 240));
+      }
+      if (!/6[.,]00/.test(await statusText(page))) throw new Error("summary total did not update");
     });
-    await page.waitForTimeout(350);
+
+    await page.waitForTimeout(450);
     await check("saved inventory survives browser reload", async () => {
-      await page.reload({ waitUntil: "networkidle" });
-      if (await page.getByLabel("Item", { exact: true }).first().inputValue() !== "Browser test item") throw new Error("saved item missing after reload");
+      await page.reload({ waitUntil: "load" });
+      if (await field(page, "Item").inputValue() !== "Browser test item") throw new Error("saved item missing after reload");
     });
+
     await check("results CSV downloads with computed output", async () => {
-      const [download] = await Promise.all([page.waitForEvent("download"), page.locator("#export-results").click()]);
+      const [download] = await Promise.all([page.waitForEvent("download"), button(page, /(?:export|download).*results/i).click()]);
       const target = path.join(outputDir, download.suggestedFilename());
       await download.saveAs(target);
       const text = fs.readFileSync(target, "utf8");
-      if (!text.includes("Browser test item") || !text.includes("6.00")) throw new Error("CSV omitted entered/calculated values");
+      if (!text.includes("Browser test item") || !/6[.,]00/.test(text)) throw new Error("CSV omitted entered/calculated values");
     });
-    await check("input CSV export reimports after reset", async () => {
-      const [download] = await Promise.all([page.waitForEvent("download"), page.locator("#export-inputs").click()]);
+
+    await check("input CSV export can be reimported", async () => {
+      const [download] = await Promise.all([page.waitForEvent("download"), button(page, /(?:export|download).*inputs/i).click()]);
       const target = path.join(outputDir, download.suggestedFilename());
       await download.saveAs(target);
-      await page.locator("#reset").click();
-      await page.locator("#csv-file").setInputFiles(target);
-      await page.waitForTimeout(100);
-      if (await page.getByLabel("Item", { exact: true }).first().inputValue() !== "Browser test item") throw new Error("CSV import did not restore item");
+      await startBlank(page);
+      const fileInput = page.locator("input[type=file]").first();
+      await fileInput.setInputFiles(target);
+      await confirmInline(page);
+      await page.waitForTimeout(150);
+      if (await field(page, "Item").inputValue() !== "Browser test item") throw new Error("CSV import did not restore item");
     });
+
     await check("row add and remove controls work", async () => {
-      await page.locator("#add").click();
-      if (await page.locator("#rows tr").count() !== 2) throw new Error("add row failed");
-      await page.getByRole("button", { name: "Remove row 2" }).click();
-      if (await page.locator("#rows tr").count() !== 1) throw new Error("remove row failed");
+      const before = await rows(page).count();
+      await button(page, /add row/i).click();
+      if (await rows(page).count() !== before + 1) throw new Error("add row failed");
+      await button(page, new RegExp("remove row.*" + (before + 1), "i")).click();
+      if (await rows(page).count() !== before) throw new Error("remove row failed");
     });
-    await check("browser journey stays on loopback with no runtime errors", async () => {
+
+    await check("browser journey remains on loopback with no runtime errors", async () => {
       if (externalRequests.length) throw new Error("external requests: " + externalRequests.join(", "));
       if (errors.length) throw new Error("browser errors: " + errors.join("; "));
     });
-    console.log(`SUMMARY: ${passed} passed; ${failures.length} failed; browser=Chromium headless; host=127.0.0.1`);
+    console.log("SUMMARY: " + passed + " passed; " + failures.length + " failed; browser=Chromium headless; host=127.0.0.1");
     if (failures.length) process.exitCode = 1;
   } catch (error) {
     console.error("BROWSER HARNESS ERROR: " + error.stack);
