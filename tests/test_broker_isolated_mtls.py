@@ -129,3 +129,116 @@ class BrokerMtlsTests(unittest.TestCase):
         with self.assertRaises((ssl.SSLError,OSError)):
             self.request(None,"GET","/health")
         self.assertEqual(self.request("cap","GET","/health")[0],200)
+
+    def test_wire_capability_decision_states(self):
+        from unittest.mock import patch
+        from kernel.broker.server import broker
+        from tests.test_broker import req
+        for policy_allowed, expected in ((False, "deny"), (True, "escalate")):
+            with self.subTest(expected=expected), patch.object(broker, "policy_evaluator", lambda _: policy_allowed):
+                status, response = self.request("cap", "POST", "/v1/capabilities/evaluate",
+                                               body=json.dumps(req()))
+                self.assertEqual(status, 200)
+                self.assertEqual(response["decision"], expected)
+                self.assertIsNone(response["grant"])
+        self.assertEqual(self.request("poll","POST","/v1/capabilities/evaluate",
+                                      body=json.dumps(req()))[0],403)
+
+    def test_expired_real_certificate_and_live_pin_rollover(self):
+        from datetime import datetime, timedelta, timezone
+        from cryptography import x509
+        from cryptography.hazmat.primitives import hashes, serialization
+        from cryptography.hazmat.primitives.asymmetric import rsa
+        from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
+        d=Path(self.temp.name)
+        ca_key=serialization.load_pem_private_key((d/"ca.key").read_bytes(),password=None)
+        ca_cert=x509.load_pem_x509_certificate(self.ca.read_bytes())
+        def signed_client(name, before, after):
+            key=rsa.generate_private_key(public_exponent=65537,key_size=2048)
+            cert=(x509.CertificateBuilder().subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,name)]))
+                  .issuer_name(ca_cert.subject).public_key(key.public_key())
+                  .serial_number(x509.random_serial_number())
+                  .not_valid_before(before).not_valid_after(after)
+                  .add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.CLIENT_AUTH]),critical=False)
+                  .sign(ca_key,hashes.SHA256()))
+            keyfile=d/f"{name}.key"
+            certfile=d/f"{name}.crt"
+            keyfile.write_bytes(key.private_bytes(serialization.Encoding.PEM,serialization.PrivateFormat.TraditionalOpenSSL,serialization.NoEncryption()))
+            certfile.write_bytes(cert.public_bytes(serialization.Encoding.PEM))
+            return str(certfile),str(keyfile),hashlib.sha256(cert.public_bytes(serialization.Encoding.DER)).hexdigest()
+        now=datetime.now(timezone.utc)
+        expired=signed_client("expired",(now-timedelta(days=3)),(now-timedelta(days=1)))
+        replacement=signed_client("replacement",(now-timedelta(minutes=5)),(now+timedelta(days=2)))
+        def request_port(port, crt, key):
+            ctx=ssl.create_default_context(cafile=str(self.ca))
+            ctx.load_cert_chain(crt,key)
+            conn=http.client.HTTPSConnection("localhost",port,context=ctx,timeout=3)
+            try:
+                conn.request("GET","/health")
+                resp=conn.getresponse()
+                return resp.status
+            finally:
+                conn.close()
+        oldpin=self.pin("cap")
+        for pins, old_status, new_status in (
+            ([oldpin],200,403),
+            ([oldpin,replacement[2]],200,200),
+            ([replacement[2]],403,200)
+        ):
+            server=isolated_server(host="127.0.0.1",port=0,
+                server_cert=self.paths["server"][0],server_key=self.paths["server"][1],
+                client_ca=self.ca,capability_pins=pins,polling_pins=[self.pin("poll")],pending=lambda: [])
+            thread=threading.Thread(target=server.serve_forever,daemon=True)
+            thread.start()
+            try:
+                self.assertEqual(request_port(server.server_port,*self.paths["cap"]),old_status)
+                self.assertEqual(request_port(server.server_port,*replacement[:2]),new_status)
+                with self.assertRaises((ssl.SSLError,OSError)):
+                    request_port(server.server_port,*expired[:2])
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join()
+
+    def test_secure_recovery_rehearsal(self):
+        # Simulate a failed cutover, fail closed, then recover to authenticated TLS.
+        server=isolated_server(host="127.0.0.1",port=0,
+            server_cert=self.paths["server"][0],server_key=self.paths["server"][1],
+            client_ca=self.ca,capability_pins=[self.pin("cap")],
+            polling_pins=[self.pin("poll")],pending=lambda: [])
+        port=server.server_port
+        thread=threading.Thread(target=server.serve_forever,daemon=True)
+        thread.start()
+        try:
+            context=ssl.create_default_context(cafile=str(self.ca))
+            context.load_cert_chain(*map(str,self.paths["cap"]))
+            conn=http.client.HTTPSConnection("localhost",port,context=context,timeout=2)
+            conn.request("GET","/health")
+            self.assertEqual(conn.getresponse().status,200)
+            conn.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+        # No listener (not plaintext rollback) after failure/shutdown.
+        with self.assertRaises(OSError):
+            conn=http.client.HTTPConnection("127.0.0.1",port,timeout=1)
+            conn.request("GET","/health")
+            conn.getresponse()
+        recovered=isolated_server(host="127.0.0.1",port=0,
+            server_cert=self.paths["server"][0],server_key=self.paths["server"][1],
+            client_ca=self.ca,capability_pins=[self.pin("cap")],
+            polling_pins=[self.pin("poll")],pending=lambda: [])
+        t=threading.Thread(target=recovered.serve_forever,daemon=True)
+        t.start()
+        try:
+            ctx=ssl.create_default_context(cafile=str(self.ca))
+            ctx.load_cert_chain(*map(str,self.paths["cap"]))
+            conn=http.client.HTTPSConnection("localhost",recovered.server_port,context=ctx,timeout=2)
+            conn.request("GET","/health")
+            self.assertEqual(conn.getresponse().status,200)
+            conn.close()
+        finally:
+            recovered.shutdown()
+            recovered.server_close()
+            t.join()
