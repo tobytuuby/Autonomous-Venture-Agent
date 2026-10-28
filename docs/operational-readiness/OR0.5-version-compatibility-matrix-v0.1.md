@@ -52,6 +52,15 @@ The installed Python distribution metadata was checked against declared `Require
 ### Explicit unresolved proofs
 A complete, reproducible Python lock for both host roles; browser executable revision and Ubuntu 26.04 shared-library compatibility; exact apt package versions and package-specific licenses/notices; controlled project-specific Python environments; dependency vulnerability/advisory verification; actual OpenBao active entrypoint use. **No packages were installed and OR0.6 installation authorization remains denied.**
 
+## Additional direct checks — 2026-10-28
+- System Python `python3 -m pip --version` returned `No module named pip` on Venture-Control. No `pip` or `uv` executable resolved in the inspected PATH. Therefore a lock that is *installable and verified here* cannot be claimed from metadata alone.
+- Captured the twelve observed Python direct/transitive distribution versions in `docs/operational-readiness/evidence/OR0.5-control-python-observed-versions.txt`. **This is evidence, not an install-ready lock:** missing hashes, environment/metadata reproducibility and isolated-environment verification remain open.
+- Reconfirmed local JS lockfile v3 has Playwright and playwright-core at exactly 1.64.1. Its root manifest still requests `^1.64.1`, and it remains untracked. This is not an approved reproducible browser installation.
+- Expected control user Playwright browser cache path `/home/epsilon/.cache/ms-playwright` produced no browser directory during inspection. Browser build, assets, system libraries and execution on Venture-Agents remain unverified.
+- Sample installed Ubuntu 26.04 browser library candidate versions observed on control: `libatk1.0-0t64 2.60.4-0ubuntu0.1`, `libatk-bridge2.0-0t64 2.60.4-0ubuntu0.1`, `libatspi2.0-0t64 2.60.4-0ubuntu0.1`, `libgbm1 26.0.8-1ubuntu0.3`, `libasound2t64 1.2.15.3-1ubuntu1.1`, `fonts-dejavu-core 2.37-8build1`. Package copyright files exist for several checked packages. This is **not** the full agent-side dependency/license BOM.
+- `openbao.service` and `opa.service` both reported **active**. Active services and source-unit relationships justify retaining existing services while tracing functionality, but do not demonstrate a real CEO-to-OpenBao request. No service was changed.
+- **Blockers remain:** hash-locked Python and JS artifacts with verified provenance; supported browser build and all Ubuntu 26.04 library versions/notices; actual isolated environments; software advisory review; active OpenBao call path. OR0.5 remains NOT COMPLETE and OR0.6 stays BLOCKED.
+
 ## Outstanding blockers before OR0.6
 - Produce a **complete trackable reproducible direct+transitive Python requirements/lock manifest**, identifying host-specific environment resolution and actual native dependencies.
 - Track and validate JS package-lock with integrity; verify selected browser revision is downloadable and runnable with the listed Ubuntu libraries, without executing installation before OR0.6.

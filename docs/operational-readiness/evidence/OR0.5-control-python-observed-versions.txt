@@ -1,0 +1,16 @@
+# Observed control Python distribution versions, not a reproducible installer lock.
+# Generated from system Python importlib.metadata on 2026-10-28.
+# Host: venture-control Ubuntu 26.04.1 / Python 3.14.4.
+# DO NOT INSTALL FROM THIS FILE before OR0.5 resolution and OR0.6 acceptance.
+attrs==25.4.0
+certifi==2026.1.4
+chardet==5.2.0
+cryptography==46.0.5
+idna==3.11
+jsonschema==4.19.2
+jsonschema-specifications==2023.12.1
+psycopg==3.3.2
+referencing==0.36.2
+requests==2.32.5
+rpds-py==0.27.1
+urllib3==2.6.3
