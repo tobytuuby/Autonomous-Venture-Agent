@@ -37,6 +37,21 @@ Status: **PARTIAL / NOT ACCEPTED AS INSTALLATION LOCK.** This is a concrete vers
 5. FOSS license classes permit LGPL and MPL, with notices, modification/distribution obligations documented by OR0.4. The four non-FOSS service exceptions remain OpenAI, PayPal, GitHub, LocalBridge; nothing else is introduced.
 6. Preserve existing Python/Node stack to avoid unnecessary upgrades. The distinction between setup tools and existing application deployment remains intact.
 
+## Follow-up evidence after independent OR0.5 review (2026-10-28)
+The auditor accepted the partial matrix, NOT installation readiness. This addendum tightens the outstanding dependencies without silently changing the operating design.
+
+### Dependency-chain verification
+The installed Python distribution metadata was checked against declared `Requires-Dist` entries. `requests 2.32.5` lists `chardet>=3.0.2`, `idna>=2.5,<4`, `urllib3>=1.21.1,<3`, and `certifi>=2017.4.17`. Observed `chardet==5.2.0` satisfies that dependency, so `charset-normalizer` is not a required replacement here. `jsonschema` uses `attrs`, `jsonschema-specifications`, `referencing`, and `rpds-py`, which are present at the versions already documented. Python-version-conditional and extra-only dependencies must be excluded from the actual lock unless activated. These package-level observations **do not** constitute a complete reproducible environment lock.
+
+### Definitive necessity decisions within existing architecture
+- **OPA: REQUIRED by currently installed broker service contract.** `infrastructure/systemd/venture-control-broker.service` has `Requires=opa.service` and `After=opa.service`; `kernel/broker/broker.py` assembles an `opa_input` and invokes `policy_evaluator`. The concrete deployment's evaluator adapter still needs an authenticated, read-only trace; do not delete or omit OPA from control readiness.
+- **OpenBao: RETAIN AS EXISTING CONTROL DEPENDENCY, DIRECT RUNTIME USE NOT PROVEN.** `venture-ceo-shadow.service` declares `After=openbao.service` but **not** `Requires=`; this ordering alone does not prove a functional secret-store call or that startup requires OpenBao. An existing `kernel/execution/openbao.py` integration also requires verification against the active entrypoint and configuration. Do not add OpenBao to agents or remove control deployment before that trace.
+- **Agents-side PostgreSQL: NOT REQUIRED by the selected deployment design.** There is no established agent-side database-client call; avoid installing PostgreSQL/psycopg on the agent VM pending a concrete source-to-runtime dependency. Persistent state and finance remain control-side.
+- **Node browser manifest:** The local lock records `playwright@1.64.1` and `playwright-core@1.64.1` with registry integrity hashes; both are Apache-2.0, Node >=20. This is a vetted *candidate*, not a tracked deployment artifact. The eventual tracked manifest must have verified provenance and matching browser binaries.
+
+### Explicit unresolved proofs
+A complete, reproducible Python lock for both host roles; browser executable revision and Ubuntu 26.04 shared-library compatibility; exact apt package versions and package-specific licenses/notices; controlled project-specific Python environments; dependency vulnerability/advisory verification; actual OpenBao active entrypoint use. **No packages were installed and OR0.6 installation authorization remains denied.**
+
 ## Outstanding blockers before OR0.6
 - Produce a **complete trackable reproducible direct+transitive Python requirements/lock manifest**, identifying host-specific environment resolution and actual native dependencies.
 - Track and validate JS package-lock with integrity; verify selected browser revision is downloadable and runnable with the listed Ubuntu libraries, without executing installation before OR0.6.
