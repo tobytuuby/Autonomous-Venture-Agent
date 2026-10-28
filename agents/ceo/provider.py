@@ -52,6 +52,7 @@ class OpenAICompatibleShadowModel:
         self.token = token
         self.timeout = timeout
         self.trace_path = Path(trace_path) if trace_path else None
+        self.maximum_output_tokens = None
 
     def _record_trace(self, record: dict[str, Any]) -> None:
         if self.trace_path is None:
@@ -88,6 +89,10 @@ class OpenAICompatibleShadowModel:
                 for schema in tool_schemas
             ]
             body["tool_choice"] = "auto"
+        if self.maximum_output_tokens is not None:
+            if type(self.maximum_output_tokens) is not int or not 1 <= self.maximum_output_tokens <= 16384:
+                raise ModelProviderError("output token bound denied")
+            body["max_tokens"] = self.maximum_output_tokens
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",
@@ -97,7 +102,9 @@ class OpenAICompatibleShadowModel:
         )
         try:
             with self._opener.open(req, timeout=self.timeout) as response:
-                response_bytes = response.read()
+                response_bytes = response.read(1048577)
+                if len(response_bytes) > 1048576:
+                    raise ModelProviderError("provider response byte bound")
                 result = json.loads(response_bytes)
         except Exception as exc:  # pragma: no cover - provider-specific integration
             self._record_trace({

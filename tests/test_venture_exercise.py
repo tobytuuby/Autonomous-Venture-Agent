@@ -217,7 +217,7 @@ class VentureExerciseTests(unittest.TestCase):
                 return self
             def __exit__(self, *_):
                 return False
-            def read(self):
+            def read(self, size=-1):
                 stage = self_request["opportunity"]["stage"]
                 context = self_request["opportunity"]["context"]
                 return json.dumps({"choices": [{"message": {

@@ -145,9 +145,11 @@ def external_communication_denied(body, *, online=False):
 
 class AgentManager(Manager):
     """The legacy Manager supplies locking/snapshots/SQLite, never its scheduler."""
-    def __init__(self, run_id, *, test_provider=None):
+    def __init__(self, run_id, *, test_provider=None, provider_factory=None, assignment=None):
         super().__init__(run_id)
         self.test_provider = test_provider
+        self.provider_factory = provider_factory
+        self.assignment = assignment
         self.code_hash = hashlib.sha256((digest(Path(__file__)) + digest(CODE / "sandbox_checks.py") +
                                         digest(CODE / "online_checks.py") + digest(CODE / "wsgi_request.py") +
                                         digest(CODE / "online_browser.cjs") + digest(REQUIREMENTS)).encode()).hexdigest()
@@ -179,6 +181,11 @@ class AgentManager(Manager):
             self.close()
             raise ValueError("product requirements snapshot integrity failure")
         self.verify_agent_state()
+        if self.meta("control_assignment") != assignment:
+            if self.meta("control_assignment") is not None or self.meta("calls"):
+                self.close()
+                raise ValueError("control assignment changed")
+            self.save("control_assignment", assignment)
 
     def meta(self, key):
         row = self.db.execute("SELECT value FROM metadata WHERE key=?", (key,)).fetchone()
@@ -245,10 +252,11 @@ class AgentManager(Manager):
                 # Match the existing scheduled CEO runner's explicit pre-model gate.
                 env = dict(os.environ)
                 env.setdefault("CEO_KERNEL_GATE_FILE", str(ROOT / "infrastructure/venture-ceo-kernel-gate.runtime.json"))
-                provider = configured_provider(env, required=True)
-                if type(provider) is not OpenAICompatibleShadowModel:
+                provider = (self.provider_factory(env) if self.provider_factory is not None
+                            else configured_provider(env, required=True))
+                if not isinstance(provider, OpenAICompatibleShadowModel):
                     raise ModelProviderError("approved provider required")
-                provider.timeout = 240.0
+                provider.timeout = min(provider.timeout, 240.0)
                 provider.trace_path = folder / "provider-trace.jsonl"
             attempt["provider_invoked"] = True
             self.save("calls", calls)
@@ -290,7 +298,7 @@ class AgentManager(Manager):
         if plan is None:
             if self.meta("calls"):
                 raise ValueError("interrupted or failed planning; explicit new run required")
-            payload = {"inputs": {str(p.relative_to(self.inputs)): p.read_text()
+            payload = {"control_assignment": self.assignment, "inputs": {str(p.relative_to(self.inputs)): p.read_text()
                                   for p in self.inputs.rglob("*") if p.is_file()}}
             plan = self.infer("manager-plan", "manager", payload,
                              '{"tasks":[{"role":"one of allowed workers","instruction":"concrete deliverable",'

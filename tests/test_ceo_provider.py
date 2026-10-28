@@ -29,7 +29,7 @@ class CEOProviderTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-            def read(self):
+            def read(self, size=-1):
                 return json.dumps({
                     "id": "response-1",
                     "model": "test-model",
@@ -56,7 +56,7 @@ class CEOProviderTests(unittest.TestCase):
             def __exit__(self, *args):
                 return False
 
-            def read(self):
+            def read(self, size=-1):
                 return b'{"choices": []}'
 
         with tempfile.TemporaryDirectory() as directory:

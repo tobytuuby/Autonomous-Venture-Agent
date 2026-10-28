@@ -526,18 +526,19 @@ class AgentRuntimeTests(unittest.TestCase):
             self.assertEqual(result["tasks"], [])
             self.assertFalse(any(c.get("agent_inference") for c in result["calls"]))
 
-    def test_approved_provider_uses_manager_timeout_only(self):
+    def test_approved_provider_preserves_shorter_timeout_and_caps_longer_timeout(self):
         self.manager.test_provider = None
         default_adapter = OpenAICompatibleShadowModel("https://example.invalid/v1", "test-model", "test-token")
 
-        for identity, role in (("research-1", "research"), ("manager-research-2", "manager")):
+        for identity, role, timeout in (("research-1", "research", 30.0), ("manager-research-2", "manager", 300.0)):
             with self.subTest(identity=identity):
                 adapter = OpenAICompatibleShadowModel("https://example.invalid/v1", "test-model", "test-token")
+                adapter.timeout = timeout
                 original = dict(adapter.__dict__)
 
                 def respond(provider, request, schemas):
                     self.assertIs(provider, adapter)
-                    self.assertEqual(provider.timeout, 240.0)
+                    self.assertEqual(provider.timeout, min(timeout, 240.0))
                     self.assertEqual(schemas, ())
                     self.assertEqual(request["opportunity"]["task_id"], identity)
                     self.assertIs(request["json_object_mode"], True)
@@ -554,7 +555,7 @@ class AgentRuntimeTests(unittest.TestCase):
                 factory.assert_called_once()
                 self.assertTrue(factory.call_args.kwargs["required"])
                 invoke.assert_called_once()
-                expected = {**original, "timeout": 240.0,
+                expected = {**original, "timeout": min(timeout, 240.0),
                             "trace_path": self.manager.home / "inference" / identity / "provider-trace.jsonl"}
                 self.assertEqual(adapter.__dict__, expected)
                 self.assertEqual(default_adapter.timeout, 30.0)

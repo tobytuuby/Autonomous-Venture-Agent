@@ -25,7 +25,7 @@ class Response:
     def __exit__(self, *_):
         return False
 
-    def read(self):
+    def read(self, size=-1):
         return self.data
 
 

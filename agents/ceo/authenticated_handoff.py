@@ -2,7 +2,8 @@
 
 The operator supplies independently signed CEO decision AND exact assignment
 command. This service automatically dispatches that assignment, never mints a
-CEO decision or signs model-selected instructions. No provider/executor exists.
+CEO decision or signs model-selected instructions. Provider preparation is an
+explicit opt-in with a separate signed grant; no operational executor exists.
 """
 from __future__ import annotations
 
@@ -41,14 +42,14 @@ def private_directory(path):
     return path
 
 
-def private_json(path):
+def private_json(path, limit=131072):
     path = inside_root(path)
     private_directory(path.parent)
     info = path.stat()
     if (not stat.S_ISREG(info.st_mode) or info.st_uid != os.geteuid()
             or info.st_mode & 0o077 or info.st_nlink != 1):
         raise ValueError("private operator input required")
-    return read_json(path)
+    return read_json(path, limit)
 
 
 def read_source(state):
@@ -240,6 +241,9 @@ def main(argv=None):
     parser.add_argument("--source-state", required=True)
     parser.add_argument("--authorization-file")
     parser.add_argument("--requests-dir")
+    parser.add_argument("--provider-state-dir")
+    parser.add_argument("--provider-grant-file")
+    parser.add_argument("--operator-key-file")
     args = parser.parse_args(argv)
     service = None
     try:
@@ -263,6 +267,25 @@ def main(argv=None):
             if args.requests_dir and result["manager_assignment"]:
                 service.requests(args.requests_dir)
                 result = service.assigned(service.control.workflow.read(WORKFLOW_ID), historical=True)
+            if args.provider_state_dir and result["manager_assignment"]:
+                # Opt-in scheduler connection. The existing offline service has no
+                # such arguments or provider credentials; no authority is widened.
+                from agents.ceo.provider_dispatch import dispatch
+                target = private_directory(args.provider_state_dir)
+                if target == state or target in state.parents or state in target.parents:
+                    raise ValueError("separate provider state required")
+                provider_fd = os.open(target / "dispatch.lock", os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+                with os.fdopen(provider_fd, "r+") as provider_lock:
+                    fcntl.flock(provider_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    key = None
+                    if args.operator_key_file:
+                        pin = private_json(args.operator_key_file)
+                        exact(pin, ("operator_public_key",))
+                        key = bytes.fromhex(pin["operator_public_key"])
+                    result = dispatch(service, target,
+                        envelope=private_json(args.provider_grant_file) if args.provider_grant_file else None,
+                        operator_key=key)
+                    write_json(target / "status.json", result)
         print(canonical(result))
         return 0
     except BlockingIOError:
