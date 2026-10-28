@@ -85,6 +85,14 @@ The following are verified **choices and facts**, not a passed complete compatib
 - A complete exact-version transitive dependency/advisory report and selected browser Debian copyright/notice files are still required. No blanket "no vulnerabilities" claim can be made.
 - **Status remains NOT COMPLETE** because Ubuntu browser compatibility, full binary provenance/license records, and repeatable hash-locked installation have not been demonstrated. OR0.6 remains blocked.
 
+## Execution evidence — package prerequisites and controlled browser manifest (2026-10-28)
+
+- Cross-checked all **14 browser candidate Ubuntu packages** via `apt-cache show` directly on Venture-Agents. Versions: libatk1.0-0t64 2.60.4-0ubuntu0.1; libatk-bridge2.0-0t64 2.60.4-0ubuntu0.1; libxcomposite1 1:0.4.6-1build1; libxdamage1 1:1.1.7-1; libxfixes3 1:6.0.0-2build2; libxrandr2 2:1.5.4-1build1; libgbm1 26.0.8-1ubuntu0.3; libasound2t64 1.2.15.3-1ubuntu1.1; libatspi2.0-0t64 2.60.4-0ubuntu0.1; libxrender1 1:0.9.12-1build1; libxi6 2:1.8.2-2; libxres1 2:1.2.1-1build2; fonts-liberation 1:2.1.5-3build1; fonts-dejavu-core 2.37-8build1. Repository candidates are **not yet verified installed** on Venture-Agents, and Playwright may require additional libraries.
+- Reused the existing local npm registry-integrity lock and established a **tracked candidate manifest** at `infrastructure/browser-acceptance/package.json` and `package-lock.json`, pinned to exact `playwright==1.64.1` (npm version syntax `1.64.1`), with `playwright-core==1.64.1`. Read-only Node structural validation passed. `npm ci` and browser launch remain future acceptance checks.
+- The external release changelog confirms uv 0.13.5, 2026-10-21 and Python 3.14 support, but it is **not installed** and artifact checksums/platform attestation have not yet been independently validated.
+- Exact license notice files for the agent VM's **not-yet-installed** libraries, browser binary compatibility, and vulnerability advisory results remain open; package availability alone cannot pass the gate.
+- Underlying project runtime, owner approvals, and finances remain untouched. **OR-0.5 NOT COMPLETE; installation not authorized by this evidence alone.**
+
 ## Outstanding blockers before OR0.6
 - Produce a **complete trackable reproducible direct+transitive Python requirements/lock manifest**, identifying host-specific environment resolution and actual native dependencies.
 - Track and validate JS package-lock with integrity; verify selected browser revision is downloadable and runnable with the listed Ubuntu libraries, without executing installation before OR0.6.
