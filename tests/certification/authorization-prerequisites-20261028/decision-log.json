@@ -1,0 +1,72 @@
+{
+  "base_commit": "a6936031e01a75ab1100cc7f0a42dc7f7e863353",
+  "decision": "BLOCKED",
+  "real_provider_cycle_complete": false,
+  "provider_requests": 0,
+  "product_acceptance": false,
+  "checks": [
+    {
+      "id": "AUTH-TRUST",
+      "result": "BLOCKED",
+      "evidence": "prerequisites.jsonl",
+      "reason": "NO_OPERATOR_PINNED_CEO_KEY"
+    },
+    {
+      "id": "AUTH-DECISION",
+      "result": "BLOCKED",
+      "evidence": "prerequisites.jsonl",
+      "reason": "NO_ADVISORY_REVIEW_OR_SIGNED_DECISION"
+    },
+    {
+      "id": "AUTH-GRANT",
+      "result": "BLOCKED",
+      "evidence": "prerequisites.jsonl",
+      "reason": "NO_CONFIGURED_OPERATOR_PIN_OR_SIGNED_ALLOWANCE"
+    },
+    {
+      "id": "SERVICE-PREFLIGHT",
+      "result": "CONFIGURATION_ONLY",
+      "evidence": "prerequisites.jsonl",
+      "uid": 993
+    },
+    {
+      "id": "ACTUAL-DISPATCH",
+      "result": "BLOCKED",
+      "evidence": "dispatch-blocked.log",
+      "inference_requests": 0
+    },
+    {
+      "id": "FOCUSED",
+      "result": "62_TESTS_OK",
+      "evidence": "focused.log",
+      "classification": "supplemental_not_provider_acceptance"
+    },
+    {
+      "id": "BROWSER-INITIAL",
+      "result": "FAILED",
+      "evidence": "browser.log"
+    },
+    {
+      "id": "BROWSER-DIAGNOSTIC",
+      "result": "FAILED_SOCKET_PATH_LENGTH",
+      "evidence": "browser-diagnostic.log"
+    },
+    {
+      "id": "BROWSER-FINAL",
+      "result": "HISTORICAL_ASSET_PROBE_ONLY",
+      "evidence": "browser-final.log",
+      "online_ui_preconditions_met": false
+    },
+    {
+      "id": "PRESERVATION",
+      "result": "2279_FILES_UNCHANGED",
+      "evidence": "owner-preservation.json"
+    }
+  ],
+  "owner_approval_created": false,
+  "identity_generated": false,
+  "live_authority_changed": false,
+  "production_ceo_attached": false,
+  "external_immutable_anchor": false,
+  "review_decision": "Do not accept cycle; external signed prerequisites required. No automatic retry, signer generation or permission widening."
+}

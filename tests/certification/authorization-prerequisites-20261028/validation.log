@@ -1,0 +1,5 @@
+New Python inspection probes: syntax valid
+Guide/report relative references: valid
+Raw results: expected blocked dispatch, 62 focused tests OK, final browser probe complete
+New files checked against configured token values: no matches; no secret values emitted
+git diff --check: exit 0

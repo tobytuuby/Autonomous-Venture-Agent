@@ -1,0 +1,15 @@
+{"head": "a6936031e01a75ab1100cc7f0a42dc7f7e863353", "inspection_only": true}
+{"actor_count": 0, "path": "artifacts/authenticated-handoff/ingress/trust.json", "sha256": "6606fb0d470520145c3b1765b385f679e09c53d93c214f14b3c2f6a7856a8758"}
+{"actor_count": 0, "path": "artifacts/preparation-control/trust.json", "sha256": "6606fb0d470520145c3b1765b385f679e09c53d93c214f14b3c2f6a7856a8758"}
+{"escalation": null, "path": "artifacts/authenticated-handoff/state/status.json", "reason": "NO_OPERATOR_PINNED_CEO_KEY", "status": "PENDING_AUTHENTICATED_DECISION"}
+{"escalation": {"ai_inference_independently_verified": false, "ceo_work_performed": false, "inference_requests_this_tick": 0, "manager_handoff_performed": false, "operational_authority": false, "required_action": "PINNED_OPERATOR_BUDGET_GRANT_AND_AUTHENTICATED_CEO_DECISION", "status": "ESCALATION_AUTHORIZATION_REQUIRED"}, "path": "artifacts/scheduled-ceo/status.json", "reason": null, "status": "QUEUE_ADMIN_CLOSED"}
+{"decision_present": false, "review_present": false, "verified_source": {"id": "studio-online", "packet_hash": "2f2366519f2235258b5e3b746a965cf2f9652a2eec0a9f480e05b7a39ee2da4b", "review_source": null, "status": "RECEIVED"}}
+{"exists": false, "path": "artifacts/authenticated-handoff/ingress/authorization.json"}
+{"exists": false, "path": "artifacts/authenticated-handoff/state/authorization.json"}
+{"exists": false, "path": "artifacts/scheduled-ceo/escalation.attempt.json"}
+{"directory": "artifacts/authenticated-handoff/ingress", "grant_or_operator_pin_files": []}
+{"directory": "artifacts/scheduled-ceo", "grant_or_operator_pin_files": []}
+{"environment_file": "/etc/venture-ceo.env", "gid": 0, "mode": "0o600", "secure_regular_file": true, "uid": 0}
+{"environment_file": "/etc/venture-ceo-shadow.env", "gid": 0, "mode": "0o600", "secure_regular_file": true, "uid": 0}
+{"environment_present": {"CEO_KERNEL_GATE_FILE": true, "CEO_MODEL_ENDPOINT": true, "CEO_MODEL_NAME": true, "CEO_MODEL_TOKEN": true}, "inference_requests": 0, "provider_configuration_and_gate": "VALID_CONFIGURATION_ONLY", "runtime_boundary": "VALID_LOCAL_FILES_ONLY", "runtime_dependency_count": 24, "service_account": "venture-ceo", "uid": 993}
+{"decision": "BLOCKED_EXTERNAL_SIGNED_PREREQUISITES", "inference_requests": 0, "live_authority_changed": false, "new_identity_generated": false, "owner_approval_created": false, "production_ceo_attached": false, "trust_changed": false}

@@ -1,0 +1,68 @@
+Id=venture-ceo-exercise.service
+LoadState=loaded
+ActiveState=inactive
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --gate-file infrastructure/venture-ceo-kernel-gate.runtime.json ; ignore_errors=no ; start_time=[Wed 2026-10-28 03:00:22 UTC] ; stop_time=[Wed 2026-10-28 03:00:22 UTC] ; pid=1536354 ; code=exited ; status=0 }
+IPAddressDeny=
+EnvironmentFiles=/etc/venture-ceo.env (ignore_errors=no)
+EnvironmentFiles=/etc/venture-ceo-shadow.env (ignore_errors=no)
+WorkingDirectory=/home/epsilon/venture-control-workspace
+User=venture-ceo
+Group=venture-ceo
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo
+PrivateNetwork=no
+ProtectSystem=strict
+NoNewPrivileges=yes
+
+Id=venture-ceo-shadow.service
+LoadState=loaded
+ActiveState=inactive
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.runner ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+IPAddressDeny=
+EnvironmentFiles=/etc/venture-ceo.env (ignore_errors=yes)
+EnvironmentFiles=/etc/venture-ceo-shadow.env (ignore_errors=no)
+WorkingDirectory=/home/epsilon/venture-control-workspace
+User=venture-ceo
+Group=venture-ceo
+ReadWritePaths=/var/lib/venture-ceo
+PrivateNetwork=no
+ProtectSystem=strict
+NoNewPrivileges=yes
+
+Id=venture-authenticated-handoff.service
+LoadState=loaded
+ActiveState=inactive
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.authenticated_handoff --state-dir artifacts/authenticated-handoff/state --trust-file artifacts/authenticated-handoff/ingress/trust.json --source-state artifacts/scheduled-ceo --authorization-file artifacts/authenticated-handoff/ingress/authorization.json --requests-dir artifacts/authenticated-handoff/requests ; ignore_errors=no ; start_time=[Wed 2026-10-28 03:05:18 UTC] ; stop_time=[Wed 2026-10-28 03:05:19 UTC] ; pid=1540420 ; code=exited ; status=0 }
+IPAddressDeny=0.0.0.0/0 ::/0
+WorkingDirectory=/home/epsilon/venture-control-workspace
+User=root
+Group=root
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/authenticated-handoff/state
+PrivateNetwork=yes
+ProtectSystem=strict
+NoNewPrivileges=yes
+
+Id=venture-preparation-broker.service
+LoadState=loaded
+ActiveState=inactive
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.preparation_broker --state-dir artifacts/milestone1-service --source-state artifacts/scheduled-ceo ; ignore_errors=no ; start_time=[Wed 2026-10-28 02:57:14 UTC] ; stop_time=[Wed 2026-10-28 02:57:15 UTC] ; pid=1532999 ; code=exited ; status=0 }
+IPAddressDeny=0.0.0.0/0 ::/0
+WorkingDirectory=/home/epsilon/venture-control-workspace
+User=root
+Group=root
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/milestone1-service
+PrivateNetwork=yes
+ProtectSystem=strict
+NoNewPrivileges=yes
+
+Id=venture-preparation-control.service
+LoadState=loaded
+ActiveState=inactive
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.control_plane --state-dir artifacts/preparation-control/state --trust-file artifacts/preparation-control/trust.json --requests-dir artifacts/preparation-control/requests ; ignore_errors=no ; start_time=[Wed 2026-10-28 02:33:40 UTC] ; stop_time=[Wed 2026-10-28 02:33:41 UTC] ; pid=1460685 ; code=exited ; status=0 }
+IPAddressDeny=0.0.0.0/0 ::/0
+WorkingDirectory=/home/epsilon/venture-control-workspace
+User=venture-ceo
+Group=venture-ceo
+ReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/preparation-control/state
+PrivateNetwork=yes
+ProtectSystem=strict
+NoNewPrivileges=yes
