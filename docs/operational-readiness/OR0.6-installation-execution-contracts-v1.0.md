@@ -64,6 +64,11 @@ Install from **tracked** `infrastructure/browser-acceptance/package-lock.json` w
 ### OR0.6.6 — Full readiness certification (OR0.10–OR0.12)
 Control: PostgreSQL 18.6 read-only connectivity and controlled backup/restore to an isolated temporary database, OPA evaluation, broker health, OpenBao health/necessity trace. Agents: browser smoke, process containment, private staging capabilities. Cross-VM: authenticated handoff with synthetic signatures and denial of all live authority. Log sanitized test exit codes and versions to `docs/operational-readiness/evidence/`; verify fail-closed policy and no financial permissions. Any failure means NOT READY. OR0.12 concludes only after independent GitHub review.
 
+## First non-mutating execution checks (2026-10-28)
+- Ran the exact OR0.6.4 `apt-get -s install` package simulation on Venture-Agents. It produced Ubuntu 26.04 candidate configuration lines, including additional transitive X11/XCB/Mesa packages. No real `apt-get install` was performed. The invocation was piped to `tail`, so the shell's reported exit code is **not conclusive evidence** of the underlying apt process exit; re-run using `set -o pipefail` or direct capture during OR0.8 verification.
+- This demonstrates why OR0.8 must capture and classify the complete transitive apt resolution before executing privileged installation.
+- Source contract and the initial read-only dry run are not evidence of a successful browser launch or a complete software environment. The next execution task is the fixed uv artifact-verification contract, not application deployment.
+
 ## Execution stop conditions
 Wrong versions/OS; untrusted release hashes; apt dry-run adds unreviewed non-FOSS packages; incompatible Chromium libs; tests unexpectedly contact public APIs; unexpected privileged changes; nonzero health or security checks; unexpected dependency drift. Resolve failures as separately scoped correction tasks, not unbounded Codex prompts.
 
