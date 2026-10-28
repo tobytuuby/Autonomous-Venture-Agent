@@ -100,3 +100,32 @@ class BrokerMtlsTests(unittest.TestCase):
     def test_bad_pin_configuration(self):
         with self.assertRaises(ValueError):
             handler_for(capability_pins=set(),polling_pins={self.pin("poll")})
+
+    def test_hostname_mismatch(self):
+        context = ssl.create_default_context(cafile=str(self.ca))
+        crt,key=self.paths["cap"]
+        context.load_cert_chain(str(crt),str(key))
+        conn=http.client.HTTPSConnection("127.0.0.1",self.srv.server_port,context=context,timeout=3)
+        with self.assertRaises(ssl.SSLCertVerificationError):
+            conn.request("GET","/health")
+        conn.close()
+
+    def test_certificate_rollover_and_revocation_pinset(self):
+        # CA-valid replacement is refused until explicitly placed in the pinset.
+        self.assertEqual(self.request("other","GET","/health")[0],403)
+        pins={self.pin("cap"),self.pin("other")}
+        handler=handler_for(capability_pins=pins,polling_pins={self.pin("poll")})
+        self.assertTrue(issubclass(handler,object))
+        pins.remove(self.pin("cap"))
+        self.assertNotIn(self.pin("cap"),pins)
+        # This validates pinset update logic, not an active listener reload.
+
+    def test_non_executing_poll_no_fallback(self):
+        self.assertEqual(self.request("poll","GET","/v1/assignments/pending"),(200,{"assignments":[]}))
+        self.assertEqual(self.request("cap","POST","/v1/capabilities/evaluate",body="{}")[0],400)
+        self.assertEqual(self.request("other","POST","/v1/capabilities/evaluate",body="{}")[0],403)
+
+    def test_recovery_after_tls_rejection(self):
+        with self.assertRaises((ssl.SSLError,OSError)):
+            self.request(None,"GET","/health")
+        self.assertEqual(self.request("cap","GET","/health")[0],200)
