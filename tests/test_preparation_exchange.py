@@ -3,6 +3,7 @@ from copy import deepcopy
 from datetime import timedelta
 import json
 import os
+import sqlite3
 from pathlib import Path
 import tempfile
 import threading
@@ -14,9 +15,9 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from agents.ceo.cross_vm_outbox import PreparationOutbox
 from agents.ceo.cross_vm_poll_client import PreparationPollClient, ACK_PATH
-from agents.ceo.escalation_inbox import canonical, digest
+from agents.ceo.escalation_inbox import canonical, digest, ROOT
 from agents.ceo.preparation_exchange import (
-    ExchangeState, GrantedModel, PreparationExchange, RoleSigner, utc, main,
+    ExchangeState, StandingModel, PreparationExchange, RoleSigner, utc, main,
 )
 from kernel.broker.isolated_mtls import isolated_server, handler_for
 from tests import test_broker_isolated_mtls as tls_fixture
@@ -25,7 +26,7 @@ from tests import test_broker_isolated_mtls as tls_fixture
 class FixtureProvider:
     """In-process synthetic output, NOT an inference provider."""
     endpoint = "https://fixture.invalid/v1"
-    model = "fixture-model"
+    model = "gpt-6-sol"
     maximum_output_tokens = None
 
     def __init__(self, role):
@@ -52,16 +53,25 @@ class ExchangeTests(unittest.TestCase):
         cls.tls.tearDownClass()
 
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory()
+        self.temp = tempfile.TemporaryDirectory(dir=ROOT / "artifacts")
         self.home = Path(self.temp.name)
         self.keys = {role: Ed25519PrivateKey.generate() for role in ("ceo", "manager")}
-        self.operator = Ed25519PrivateKey.generate()
         self.actors = {role: (role, key.public_key().public_bytes(
             serialization.Encoding.Raw, serialization.PublicFormat.Raw))
             for role, key in self.keys.items()}
         self.context = dict(session_id="isolated-session", venture_id="test-venture",
                             ceo_id="ceo", manager_id="manager", objective="Preparation receipt rehearsal", rounds=2)
-        self.states, self.signers, self.providers, self.grants, self.exchanges = {}, {}, {}, {}, {}
+        self.states, self.signers, self.providers, self.exchanges = {}, {}, {}, {}
+        from agents.ceo import service_identity
+        self.authority_patch = patch.object(service_identity, "AUTHORITY_DIRECTORY", self.home / "authority")
+        self.authority_patch.start()
+        self.addCleanup(self.authority_patch.stop)
+        self.authority = service_identity.preparation_authority()
+        self.policy = dict(domain="preparation-exchange-usage-v1", enabled=True, epoch=1,
+            roles={role: dict(actor_id=role, endpoint=FixtureProvider.endpoint, model=FixtureProvider.model)
+                   for role in self.keys}, maximum_requests=4, maximum_output_tokens=512)
+        self.policy_path = self.authority.directory / "exchange-usage-policy.json"
+        self.write_policy()
         for role in self.keys:
             directory = self.home / role
             directory.mkdir(mode=0o700)
@@ -71,15 +81,6 @@ class ExchangeTests(unittest.TestCase):
             key_path.chmod(0o600)
             self.signers[role] = RoleSigner(key_path, role, role, self.actors)
             self.providers[role] = FixtureProvider(role)
-            now = utc()
-            grant = dict(domain="or010-preparation-inference-v1", grant_id=role+"-test-grant",
-                actor_id=role, role=role, context_sha256=digest(canonical(dict(context=self.context, state_directory=str(directory))).encode()),
-                provider_sha256=digest(canonical(dict(endpoint=self.providers[role].endpoint,
-                    model=self.providers[role].model)).encode()), maximum_requests=2,
-                maximum_output_tokens=512, issued_at=now.isoformat(),
-                expires_at=(now+timedelta(hours=1)).isoformat(),
-                budget_reference="synthetic allowance", reconciliation_reference="synthetic reconciliation")
-            self.grants[role] = dict(grant=grant, signature=self.operator.sign(canonical(grant).encode()).hex())
             self.open_role(role)
         self.outbox_path = self.home / "outbox.sqlite"
         self.outbox = PreparationOutbox(self.outbox_path)
@@ -107,11 +108,18 @@ class ExchangeTests(unittest.TestCase):
             client_key=str(self.tls.paths["poll"][1]), actors=self.actors,
             ceo_id="ceo", manager_id="manager", consume_nonce=lambda *_: False)
 
+    def write_policy(self):
+        self.policy_path.write_text(canonical(self.policy))
+        self.policy_path.chmod(0o600)
+
+    def reservations(self):
+        with sqlite3.connect(self.authority.directory / "resources.sqlite") as db:
+            return db.execute("SELECT COUNT(*),COALESCE(SUM(tokens),0) FROM reservations").fetchone()
+
     def open_role(self, role):
         state = ExchangeState(self.home / role)
         self.states[role] = state
-        model = GrantedModel(state, self.providers[role], self.grants[role],
-            self.operator.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw),
+        model = StandingModel(state, self.providers[role],
             context=self.context, actor=role, role=role)
         self.exchanges[role] = PreparationExchange(state, self.signers[role], self.actors, model, self.context)
 
@@ -228,14 +236,16 @@ class ExchangeTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             handler_for(capability_pins={"a"*64}, polling_pins={"a"*64})
 
-    def test_unsigned_grant_context_mutation_and_wrong_role_seed_denied(self):
+    def test_policy_provider_role_context_and_wrong_seed_denied(self):
         state = self.states["ceo"]
-        bad = deepcopy(self.grants["ceo"])
-        bad["grant"]["maximum_requests"] = 8
-        with self.assertRaises(Exception):
-            GrantedModel(state, self.providers["ceo"], bad,
-                self.operator.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw),
-                context=self.context, actor="ceo", role="ceo")
+        for field, value in (("endpoint", "https://other.invalid/v1"), ("model", "other")):
+            with patch.object(self.providers["ceo"], field, value):
+                with self.assertRaisesRegex(ValueError, "binding"):
+                    StandingModel(state, self.providers["ceo"],
+                                  context=self.context, actor="ceo", role="ceo")
+        with self.assertRaises(ValueError):
+            StandingModel(state, self.providers["ceo"],
+                          context=self.context, actor="manager", role="ceo")
         with self.assertRaises(ValueError):
             RoleSigner(self.home/"manager/role.seed", "ceo", "ceo", self.actors)
         with self.assertRaisesRegex(ValueError, "context changed"):
@@ -252,16 +262,104 @@ class ExchangeTests(unittest.TestCase):
         self.assertEqual(self.exchanges["ceo"].ceo_tick(self.outbox), "HELD")
         self.assertEqual(len(self.providers["ceo"].calls), 1)
 
-    def test_grant_ceiling_and_reserved_inference_survive_restart(self):
+    def test_standing_session_ceiling_and_reserved_inference_survive_restart(self):
         model = self.exchanges["ceo"].model
-        for identity in ("quota-1", "quota-2"):
+        for identity in ("quota-1", "quota-2", "quota-3", "quota-4"):
             model(identity, {}, {})
         self.states["ceo"].close()
         self.open_role("ceo")
         with self.assertRaisesRegex(ValueError, "ceiling"):
-            self.exchanges["ceo"].model("quota-3", {}, {})
-        self.assertEqual(len(self.providers["ceo"].calls), 2)
+            self.exchanges["ceo"].model("quota-5", {}, {})
+        self.assertEqual(len(self.providers["ceo"].calls), 4)
+        self.assertEqual(self.reservations(), (4, 2048))
         self.assertEqual(self.providers["ceo"].maximum_output_tokens, 512)
+
+    def test_no_grant_required_and_exact_cached_call_has_no_new_usage(self):
+        model = self.exchanges["ceo"].model
+        output = model("logical-1", {}, {})
+        self.states["ceo"].close()
+        self.open_role("ceo")
+        self.assertEqual(self.exchanges["ceo"].model("logical-1", {}, {}), output)
+        self.assertEqual(self.reservations(), (1, 512))
+        with self.assertRaisesRegex(ValueError, "changed"):
+            self.exchanges["ceo"].model("logical-1", {"changed": True}, {})
+        self.assertEqual(len(self.providers["ceo"].calls), 1)
+
+    def test_global_daily_request_and_token_quota_fail_closed(self):
+        from agents.ceo import service_identity
+        self.exchanges["ceo"].model("first", {}, {})
+        for field, limit in (("DAILY_REQUESTS", 1), ("DAILY_OUTPUT_TOKENS", 512)):
+            with patch.object(service_identity, field, limit):
+                with self.assertRaisesRegex(ValueError, "daily"):
+                    self.exchanges["manager"].model(field, {}, {})
+        self.assertEqual(self.reservations(), (1, 512))
+        self.assertEqual(len(self.providers["manager"].calls), 0)
+
+    def new_state_model(self):
+        directory = self.home / "new-state"
+        directory.mkdir(mode=0o700)
+        state = ExchangeState(directory)
+        self.addCleanup(state.close)
+        return StandingModel(state, self.providers["ceo"],
+                             context=self.context, actor="ceo", role="ceo")
+
+    def test_shared_session_ceiling_cannot_reset_with_new_state_directory(self):
+        for role in ("ceo", "manager"):
+            for i in range(2):
+                self.exchanges[role].model(role + str(i), {}, {})
+        with self.assertRaisesRegex(ValueError, "ceiling"):
+            self.new_state_model()("extra", {}, {})
+        self.assertEqual(self.reservations(), (4, 2048))
+
+    def test_crash_after_session_reservation_blocks_replay_from_new_state(self):
+        model = self.exchanges["ceo"].model
+        with patch.object(model.authority, "reserve_provider", side_effect=OSError("crash")):
+            with self.assertRaises(OSError):
+                model("crash-call", {}, {})
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.new_state_model()("crash-call", {}, {})
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            model("crash-call", {}, {})
+        self.assertEqual(len(self.providers["ceo"].calls), 0)
+
+    def test_tools_invalid_json_burn_reservations(self):
+        model = self.exchanges["ceo"].model
+        for i, response in enumerate((
+                dict(tool_call={"name": "bad"}),
+                dict(tool_call=None, decision=dict(content="not json")))):
+            with patch.object(FixtureProvider, "__call__", return_value=response):
+                with self.assertRaises(Exception):
+                    model("bad-" + str(i), {}, {})
+            with self.assertRaisesRegex(ValueError, "ambiguous"):
+                model("bad-" + str(i), {}, {})
+        self.assertEqual(self.reservations(), (2, 1024))
+
+    def test_policy_absent_insecure_disabled_changed_and_authority_revoked(self):
+        model = self.exchanges["ceo"].model
+        self.policy_path.unlink()
+        with self.assertRaises(FileNotFoundError):
+            model("absent", {}, {})
+        self.write_policy()
+        self.policy_path.chmod(0o644)
+        with self.assertRaisesRegex(ValueError, "operator-owned"):
+            model("insecure", {}, {})
+        self.write_policy()
+        self.policy["enabled"] = False
+        self.write_policy()
+        with self.assertRaises(ValueError):
+            model("disabled", {}, {})
+        self.policy["enabled"] = True
+        self.policy["maximum_requests"] = 8
+        self.write_policy()
+        with self.assertRaisesRegex(ValueError, "changed"):
+            model("changed", {}, {})
+        self.policy["maximum_requests"] = 4
+        self.write_policy()
+        (self.authority.directory / "authority.json").write_text(
+            canonical(dict(epoch=1, enabled=True, revoked=["service-ceo"])))
+        with self.assertRaisesRegex(ValueError, "revoked"):
+            model("revoked", {}, {})
+        self.assertEqual(len(self.providers["ceo"].calls), 0)
 
     def test_ack_certificate_overlap_and_retirement_with_persisted_outbox(self):
         assignment = self.issue()
@@ -292,6 +390,55 @@ class ExchangeTests(unittest.TestCase):
         restart({self.tls.pin("other")})
         self.assertEqual(fixture.request("poll", "POST", ACK_PATH, body=canonical(ack))[0], 403)
         self.assertEqual(fixture.request("other", "POST", ACK_PATH, body=canonical(ack))[0], 200)
+
+    def test_grant_free_entrypoint_uses_central_policy(self):
+        config = self.home / "standing-config.json"
+        config.write_text(canonical(dict(state_directory=str(self.home/"ceo"), role="ceo",
+            signing_key=str(self.home/"ceo/role.seed"), context=self.context,
+            trust=str(self.home/"trust.json"), outbox=str(self.outbox_path))))
+        (self.home/"trust.json").write_text(canonical(dict(actors={
+            actor: dict(role=role, public_key=key.hex())
+            for actor, (role, key) in self.actors.items()})))
+        with patch("agents.ceo.preparation_exchange.configured_provider", return_value=self.providers["ceo"]):
+            self.assertEqual(main(["--config", str(config), "--once"]), 0)
+        self.assertEqual(self.reservations(), (1, 512))
+
+    def test_response_checkpoint_failure_burns_daily_quota_and_denies_retry(self):
+        model = self.exchanges["ceo"].model
+        self.states["ceo"].db.execute("""CREATE TRIGGER fail_response BEFORE UPDATE ON calls
+            BEGIN SELECT RAISE(ABORT,'fixture checkpoint failure'); END""")
+        with self.assertRaises(sqlite3.IntegrityError):
+            model("checkpoint", {}, {})
+        self.states["ceo"].close()
+        self.open_role("ceo")
+        with self.assertRaisesRegex(ValueError, "ambiguous"):
+            self.exchanges["ceo"].model("checkpoint", {}, {})
+        with self.assertRaises(sqlite3.IntegrityError):
+            self.new_state_model()("checkpoint", {}, {})
+        self.assertEqual(self.reservations(), (1, 512))
+        self.assertEqual(len(self.providers["ceo"].calls), 1)
+
+    def test_concurrent_state_directories_share_atomic_session_ceiling(self):
+        from concurrent.futures import ThreadPoolExecutor
+        # Initialize schema before racing distinct connections.
+        self.exchanges["ceo"].model("initial", {}, {})
+        def call(index):
+            directory = self.home / ("concurrent-" + str(index))
+            directory.mkdir(mode=0o700)
+            state = ExchangeState(directory)
+            try:
+                model = StandingModel(state, FixtureProvider("ceo"),
+                    context=self.context, actor="ceo", role="ceo")
+                model("parallel-" + str(index), {}, {})
+                return True
+            except ValueError as exc:
+                self.assertIn("ceiling", str(exc))
+                return False
+            finally:
+                state.close()
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            self.assertEqual(sum(pool.map(call, range(6))), 3)
+        self.assertEqual(self.reservations(), (4, 2048))
 
     def test_no_provider_fixture_fallback_at_entrypoint(self):
         config = self.home / "config.json"

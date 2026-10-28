@@ -16,7 +16,7 @@ import stat
 import time
 import uuid
 
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
 from agents.ceo.control_plane import load_trust, read_json
@@ -26,7 +26,7 @@ from agents.ceo.cross_vm_transport import (
     ACKNOWLEDGEMENT, assignment_body, verify_assignment, verify_acknowledgement,
 )
 from agents.ceo.escalation_inbox import canonical, digest, exact, identifier, inside_root
-from agents.ceo.service_identity import private_directory
+from agents.ceo.service_identity import private_directory, preparation_authority
 from agents.ceo.venture_exercise import configured_provider, strict_json
 
 SYSTEM = (
@@ -82,17 +82,6 @@ class RoleSigner:
         return dict(body=body, signature=self.key.sign(canonical(body).encode()).hex())
 
 
-def operator_public_key(path):
-    path = inside_root(path)
-    info = path.stat()
-    if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
-            or info.st_uid != os.geteuid() or info.st_mode & 0o022):
-        raise ValueError("operator-owned public signing pin required")
-    record = read_json(path, 1024)
-    exact(record, ("public_key",))
-    return bytes.fromhex(record["public_key"])
-
-
 class ExchangeState:
     def __init__(self, directory):
         self.directory = private_directory(directory)
@@ -119,59 +108,109 @@ class ExchangeState:
             raise ValueError("session context changed; new state directory required")
 
 
-class GrantedModel:
-    """Existing HTTPS no-tools adapter plus signed, durable inference ceiling."""
-    def __init__(self, state, provider, envelope, operator_key, *, context, actor, role):
-        exact(envelope, ("grant", "signature"))
-        grant = envelope["grant"]
-        exact(grant, ("domain", "grant_id", "actor_id", "role", "context_sha256",
-                      "provider_sha256", "maximum_requests", "maximum_output_tokens",
-                      "issued_at", "expires_at", "budget_reference", "reconciliation_reference"))
-        identifier(grant["grant_id"])
-        expected = dict(domain="or010-preparation-inference-v1", actor_id=actor, role=role,
-            context_sha256=digest(canonical(dict(context=context, state_directory=str(state.directory))).encode()),
-            provider_sha256=digest(canonical(dict(endpoint=provider.endpoint, model=provider.model)).encode()))
-        if any(grant[k] != v for k, v in expected.items()):
-            raise ValueError("inference grant binding denied")
+class StandingModel:
+    """Operator standing policy; durable intent and shared reservations before I/O."""
+    def __init__(self, state, provider, *, context, actor, role):
+        self.state, self.provider = state, provider
+        self.context, self.actor, self.role = dict(context), actor, role
+        self.authority = preparation_authority()
+        self.epoch = self.authority.authority()["epoch"]
+        self.policy = self._policy()
+        self.binding = digest(canonical(dict(context=context, policy=self.policy)).encode())
+        state.bind(context)
+
+    def _policy(self):
+        authority = self.authority.authority()
+        if (authority["epoch"] != self.epoch or self.actor in authority["revoked"]
+                or "service-" + self.role in authority["revoked"]):
+            raise ValueError("standing authority revoked or stale")
+        path = inside_root(self.authority.directory / "exchange-usage-policy.json")
+        info = path.stat()
+        if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                or info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("operator-owned standing usage policy required")
+        policy = read_json(path)
+        exact(policy, ("domain", "enabled", "epoch", "roles",
+                       "maximum_requests", "maximum_output_tokens"))
+        if (policy["domain"] != "preparation-exchange-usage-v1"
+                or policy["enabled"] is not True or type(policy["epoch"]) is not int
+                or policy["epoch"] != self.epoch):
+            raise ValueError("standing usage policy denied")
+        exact(policy["roles"], ("ceo", "manager"))
+        for role, binding in policy["roles"].items():
+            exact(binding, ("actor_id", "endpoint", "model"))
+            identifier(binding["actor_id"])
+            if (binding["actor_id"] != self.context.get(role + "_id")
+                    or type(binding["endpoint"]) is not str or not binding["endpoint"].startswith("https://")
+                    or binding["model"] != "gpt-6-sol"):
+                raise ValueError("standing provider binding denied")
+        if (self.role not in ("ceo", "manager")
+                or self.context.get(self.role + "_id") != self.actor
+                or policy["roles"][self.role] != dict(actor_id=self.actor,
+                    endpoint=self.provider.endpoint, model=self.provider.model)):
+            raise ValueError("standing role/provider binding denied")
         for field, limit in (("maximum_requests", 8), ("maximum_output_tokens", 1024)):
-            if type(grant[field]) is not int or not 1 <= grant[field] <= limit:
-                raise ValueError("inference allowance denied")
-        for field in ("budget_reference", "reconciliation_reference"):
-            if type(grant[field]) is not str or not 1 <= len(grant[field]) <= 300:
-                raise ValueError("reconciled allowance required")
-        issued, expires = (datetime.fromisoformat(grant[k]) for k in ("issued_at", "expires_at"))
-        if (issued.utcoffset() != timedelta(0) or expires.utcoffset() != timedelta(0)
-                or not issued <= utc() < expires or expires - issued > timedelta(hours=24)):
-            raise ValueError("inference grant expired")
-        Ed25519PublicKey.from_public_bytes(operator_key).verify(
-            bytes.fromhex(envelope["signature"]), canonical(grant).encode())
-        self.state, self.provider, self.grant = state, provider, grant
-        provider.maximum_output_tokens = grant["maximum_output_tokens"]
+            if type(policy[field]) is not int or not 1 <= policy[field] <= limit:
+                raise ValueError("standing inference ceiling denied")
+        return policy
+
+    def _reserve(self, identity):
+        # Shared with the authoritative daily quota, independent of workflow state
+        # paths and policy versions. A partial reservation is deliberately burned.
+        path = inside_root(self.authority.directory / "resources.sqlite")
+        if path.exists():
+            info = path.stat()
+            if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                    or info.st_uid != os.geteuid() or info.st_mode & 0o077):
+                raise ValueError("private resource ledger required")
+        fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        os.close(fd)
+        db = sqlite3.connect(path, isolation_level=None)
+        call = digest(canonical(dict(domain="preparation-exchange-call-v1",
+            session=self.context["session_id"], actor=self.actor, identity=identity)).encode())
+        try:
+            db.execute("PRAGMA synchronous=FULL")
+            db.execute("CREATE TABLE IF NOT EXISTS exchange_sessions(session TEXT PRIMARY KEY, binding TEXT)")
+            db.execute("CREATE TABLE IF NOT EXISTS exchange_calls(identity TEXT PRIMARY KEY, session TEXT)")
+            db.execute("BEGIN IMMEDIATE")
+            session = self.context["session_id"]
+            row = db.execute("SELECT binding FROM exchange_sessions WHERE session=?", (session,)).fetchone()
+            if row is None:
+                db.execute("INSERT INTO exchange_sessions VALUES(?,?)", (session, self.binding))
+            elif row[0] != self.binding:
+                raise ValueError("standing session binding changed")
+            count = db.execute("SELECT COUNT(*) FROM exchange_calls WHERE session=?", (session,)).fetchone()[0]
+            if count >= self.policy["maximum_requests"]:
+                raise ValueError("standing session inference ceiling reached")
+            db.execute("INSERT INTO exchange_calls VALUES(?,?)", (call, session))
+            db.execute("COMMIT")
+        except BaseException:
+            if db.in_transaction:
+                db.execute("ROLLBACK")
+            raise
+        finally:
+            db.close()
+        self.authority.reserve_provider(call, self.policy["maximum_output_tokens"],
+            context=dict(epoch=self.epoch, actor="service-" + self.role))
 
     def __call__(self, identity, context, contract):
+        identifier(identity)
+        if self._policy() != self.policy:
+            raise ValueError("standing policy changed; reconciliation required")
         request = dict(system=SYSTEM, json_object_mode=True,
                        opportunity=dict(context=context, response_contract=contract))
         wire = canonical(request)
         db = self.state.db
         row = db.execute("SELECT request,response,grant_id FROM calls WHERE id=?", (identity,)).fetchone()
         if row:
-            if row[0] != wire or row[2] != self.grant["grant_id"] or row[1] is None:
+            if row[0] != wire or row[2] != self.binding or row[1] is None:
                 raise ValueError("ambiguous or changed inference; operator reconciliation required")
             return json.loads(row[1])
-        try:
-            db.execute("BEGIN IMMEDIATE")
-            if utc() >= datetime.fromisoformat(self.grant["expires_at"]):
-                raise ValueError("inference allowance expired")
-            count = db.execute("SELECT COUNT(*) FROM calls WHERE grant_id=?",
-                               (self.grant["grant_id"],)).fetchone()[0]
-            if count >= self.grant["maximum_requests"]:
-                raise ValueError("inference ceiling reached")
-            db.execute("INSERT INTO calls VALUES(?,?,NULL,?)", (identity, wire, self.grant["grant_id"]))
-            db.execute("COMMIT")
-        except BaseException:
-            if db.in_transaction:
-                db.execute("ROLLBACK")
-            raise
+        # Keep the legacy column for old ledgers: old grants cannot replay as policy.
+        # Commit intent first. Any crash, quota denial or provider failure holds it.
+        db.execute("INSERT INTO calls VALUES(?,?,NULL,?)", (identity, wire, self.binding))
+        self._reserve(identity)
+        self.provider.maximum_output_tokens = self.policy["maximum_output_tokens"]
         response = self.provider(request, ())
         if response.get("tool_call") is not None:
             raise ValueError("provider tools denied")
@@ -319,8 +358,7 @@ def main(argv=None):
             if provider.model != "gpt-6-sol":
                 raise ValueError("fixed CEO and manager model policy requires gpt-6-sol")
             provider.trace_path = state.directory / "provider.jsonl"
-            model = GrantedModel(state, provider, read_json(inside_root(config["inference_grant"])),
-                operator_public_key(config["operator_public_key"]),
+            model = StandingModel(state, provider,
                 context=config["context"], actor=signer.actor, role=role)
             exchange = PreparationExchange(state, signer, actors, model, config["context"])
             if role == "ceo":
