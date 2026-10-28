@@ -39,7 +39,7 @@ No production ports or firewall openings added. Port 8443 remains bound at `0.0.
 
 ## Important outstanding reliability and approval items
 
-1. **Certificate expiry:** currently issued broker certificate expires **2026-10-30 16:43:42 UTC** and Agents client certificate **2026-10-30 16:43:09 UTC**. Rotation/renewal automation is not yet configured. Renew before expiry or transport will fail closed. OpenBao CA currently expires 2026-11-27.
+1. **Certificate expiry and rotation:** the initial 48-hour service certificates were replaced with 14-day OpenBao-issued certificates. Live Control broker and Agents client certificates now expire **2026-11-11 16:54:32 UTC**. The former client certificate returned HTTP 403 after pin withdrawal; the replacement returned HTTP 200. The replacement Control capability identity also returned HTTP 200 on /health. OpenBao CA expires 2026-11-27. Renewal is not automated; rotate before November 11 or traffic will fail closed.
 2. Production transport activation occurred **before a fresh Claude acceptance of this deployment evidence**. It must be submitted for independent review immediately; do not represent Level 2B as accepted until Claude explicitly accepts. If review identifies a blocking weakness, suspend or repair mTLS; never revert to plaintext.
 3. The real manager service did **not** sign/return an authenticated acknowledgement, and no real CEO-issued signed instruction was tested; only a signed synthetic preparation fixture and durable Agents receipt. This may remain a blocker for the real workflow gate (Level 2C).
 4. No permanent automated Agents polling daemon is running yet; real-VM smoke was executed as an authenticated client command.
