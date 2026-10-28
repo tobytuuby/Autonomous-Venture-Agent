@@ -33,3 +33,36 @@ class ProviderDispatchTransportTests(unittest.TestCase):
             with self.assertRaises(ModelProviderError):
                 provider(dict(system="TEST", opportunity={}), ())
             provider._opener.open.assert_not_called()
+
+
+class RoleModelRoutingTests(unittest.TestCase):
+    def test_operator_model_mapping(self):
+        from agents.ceo.provider_dispatch import role_models, provider_binding
+        provider = OpenAICompatibleShadowModel("https://provider.invalid/v1", "gpt-6-sol", "TEST")
+        selected = role_models({"MANAGER_MODEL_NAME": "gpt-6-sol", "WORKER_MODEL_NAME": "gpt-6-luna"}, provider)
+        self.assertEqual(selected, {"ceo": "gpt-6-sol", "manager": "gpt-6-sol", "worker": "gpt-6-luna"})
+        self.assertNotEqual(provider_binding(provider, selected), provider_binding(provider, {"ceo": "gpt-6-sol", "manager": "gpt-6-sol", "worker": "gpt-6-sol"}))
+        with self.assertRaises(ModelProviderError):
+            role_models({"WORKER_MODEL_NAME": "bad model"}, provider)
+
+    def test_dispatch_routes_by_validated_task_identity(self):
+        from agents.ceo.provider_dispatch import GrantedProvider
+        from unittest.mock import patch
+        from datetime import datetime, timedelta, timezone
+        from tempfile import TemporaryDirectory
+        from pathlib import Path
+        from agents.ceo.venture_workflow import hashed
+        now = datetime.now(timezone.utc)
+        provider = OpenAICompatibleShadowModel("https://provider.invalid/v1", "gpt-6-sol", "TEST")
+        authority = Mock()
+        authority.authority.return_value = {"epoch": 1}
+        assignment = {"test": True}
+        grant = {"maximum_output_tokens": 100, "maximum_requests": 3, "assignment_hash": hashed(assignment), "expires_at": (now + timedelta(hours=1)).isoformat()}
+        models = {"ceo": "gpt-6-sol", "manager": "gpt-6-sol", "worker": "gpt-6-luna"}
+        with TemporaryDirectory() as directory:
+            adapter = GrantedProvider(provider, Path(directory), grant, lambda: assignment, identities=authority, models=models)
+            with patch.object(OpenAICompatibleShadowModel, "__call__", return_value={"decision": {"content": "{}"}}):
+                for identity, expected in (("manager-plan", "gpt-6-sol"), ("development", "gpt-6-luna"), ("final-ceo-review", "gpt-6-sol")):
+                    adapter({"opportunity": {"task_id": identity}}, ())
+                    self.assertEqual(adapter.model, expected)
+            self.assertEqual(authority.reserve_provider.call_count, 3)

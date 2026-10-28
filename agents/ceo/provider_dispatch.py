@@ -79,9 +79,20 @@ def configuration_blockers(environ):
     return missing
 
 
-def provider_binding(provider):
+def role_models(environ, provider):
+    """Operator-owned model routing; agents cannot nominate models."""
+    models = {"ceo": provider.model,
+              "manager": environ.get("MANAGER_MODEL_NAME") or provider.model,
+              "worker": environ.get("WORKER_MODEL_NAME") or provider.model}
+    if any(not isinstance(v, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", v) for v in models.values()):
+        raise ModelProviderError("invalid role model configuration")
+    return models
+
+
+def provider_binding(provider, models=None):
     # No credential or credential digest enters evidence.
-    return hashed(dict(endpoint=provider.endpoint, model=provider.model))
+    return hashed(dict(endpoint=provider.endpoint, model=provider.model,
+                       **({"role_models": models} if models is not None else {})))
 
 
 def authorize(envelope, key, assignment, manifest, provider):
@@ -116,9 +127,10 @@ def authorize(envelope, key, assignment, manifest, provider):
 
 class GrantedProvider(OpenAICompatibleShadowModel):
     """One reservation per logical call, no automatic transport/paid retries."""
-    def __init__(self, provider, state, grant, current_assignment, manifest=None, identities=None):
+    def __init__(self, provider, state, grant, current_assignment, manifest=None, identities=None, models=None):
         super().__init__(provider.endpoint, provider.model, provider.token, timeout=90)
         self._opener = provider._opener
+        self.models = models or {"ceo": provider.model, "manager": provider.model, "worker": provider.model}
         self.state, self.grant = state, grant
         self.current_assignment = current_assignment
         self.manifest = manifest
@@ -151,8 +163,13 @@ class GrantedProvider(OpenAICompatibleShadowModel):
         self.identities.reserve_provider(hashed(dict(context=self.authority_context, identity=identity)),
                                          self.maximum_output_tokens, context=dict(self.authority_context, actor=(
                                              "service-ceo" if identity == "final-ceo-review" else
-                                             "service-manager" if identity.startswith("manager-") else "worker-" + identity)))
+                                             "service-manager" if identity == "manager-plan" or identity.startswith("manager-") else "worker-" + identity)))
         self.calls += 1
+        # Bind model to the authenticated, validated task identity; never model output.
+        role = ("ceo" if identity == "final-ceo-review" else
+                "manager" if identity == "manager-plan" or identity.startswith("manager-") else
+                "worker")
+        self.model = self.models[role]
         # Existing adapter has no retry or redirect and records redacted wire hashes.
         return super().__call__(request, ())
 
@@ -285,7 +302,9 @@ def dispatch(service, state, *, envelope=None, operator_key=None, environ=None):
                     report_present=(state / "report.json").exists())
     current_assignment(service)  # Fresh signed assignment remains mandatory.
     manifest = runtime_manifest()
-    provider = configured_provider(dict(os.environ if environ is None else environ), required=True)
+    environment = dict(os.environ if environ is None else environ)
+    provider = configured_provider(environment, required=True)
+    models = role_models(environment, provider)
     # Trusted standing policy replaces only redundant INTERNAL task grants.
     # Optional legacy grants remain verified and can only narrow this ceiling.
     identities = preparation_authority()
@@ -293,11 +312,13 @@ def dispatch(service, state, *, envelope=None, operator_key=None, environ=None):
         if operator_key is None:
             raise ValueError("legacy grant pin required")
         grant = authorize(envelope, operator_key, current, manifest, provider)
+        if models != {"ceo": provider.model, "manager": provider.model, "worker": provider.model}:
+            raise ValueError("legacy signed grant does not authorize role model variation")
     else:
         now = datetime.now(timezone.utc)
         grant = dict(grant_id="standing-preparation-v1", scope="SHADOW_PREPARATION_ONLY",
                      assignment_hash=hashed(current), packet_hash=PACKET_SHA256,
-                     runtime_hash=hashed(manifest), provider_hash=provider_binding(provider),
+                     runtime_hash=hashed(manifest), provider_hash=provider_binding(provider, models),
                      maximum_requests=47, maximum_output_tokens=MAX_OUTPUT_TOKENS,
                      issued_at=now.isoformat(), expires_at=(now + timedelta(hours=24)).isoformat())
     run_id = "dispatch-" + hashed(current)[:32]
@@ -309,7 +330,7 @@ def dispatch(service, state, *, envelope=None, operator_key=None, environ=None):
                standing_authority=identities.authority(),
                run_id=run_id, status="RESERVED_NO_AUTOMATIC_RETRY"), exclusive=True)
     bounded = GrantedProvider(provider, state, grant,
-                              lambda: current_assignment(service), manifest=manifest, identities=identities)
+                              lambda: current_assignment(service), manifest=manifest, identities=identities, models=models)
     runtime = load_runtime()
     # Assignment reaches manager planning; no model-selected runtime, path or executor.
     with runtime.AgentManager(run_id, provider_factory=lambda env: bounded,

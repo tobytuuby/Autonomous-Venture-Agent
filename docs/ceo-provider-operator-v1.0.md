@@ -94,3 +94,16 @@ isolation or independent certification. Configured response provenance retains
 configured_provider_response_not_independently_verified and never promotes a
 test double into genuine inference evidence. All existing live authority fields
 remain false; model output is never execution authorization.
+
+## Role-specific provider models
+
+The preparation dispatcher supports operator-owned `CEO_MODEL_NAME`,
+`MANAGER_MODEL_NAME`, and `WORKER_MODEL_NAME` environment settings.
+The CEO setting remains required. Manager and worker settings default to the CEO
+model when omitted. Roles are selected from validated task identities, not
+model-produced input. The standing authorization binds all three configured
+model IDs; legacy signed grants reject role-model divergence. The dispatcher
+never authorizes additional spend through model selection. Restarting the shadow
+readiness service alone does not run an inference journey. Apply environment
+settings only through the approved protected service configuration; never commit
+credentials. Verify service and scheduler environment inheritance separately.
