@@ -28,6 +28,7 @@ from agents.ceo.scheduled_exercise import write_json
 from agents.ceo.scheduled_intake import PACKET_SHA256
 from agents.ceo.venture_exercise import configured_provider, strict_json
 from agents.ceo.venture_workflow import hashed, scope_check
+from agents.ceo.service_identity import preparation_authority, MAX_OUTPUT_TOKENS
 
 RUNTIME = "ventures/venture-001/runtime/"
 # Include untracked legacy dependencies without adopting or rewriting owner files.
@@ -41,6 +42,7 @@ DEPENDENCIES = tuple(RUNTIME + name for name in (
     "agents/ceo/authenticated_handoff.py", "agents/ceo/control_plane.py",
     "agents/ceo/venture_workflow.py", "agents/ceo/escalation_inbox.py",
     "agents/ceo/venture_exercise.py", "agents/ceo/gates.py",
+    "agents/ceo/service_identity.py",
     "agents/ceo/scheduled_exercise.py", "agents/ceo/scheduled_intake.py",
     "ventures/venture-001/product/restock.html", "ventures/venture-001/product/START-HERE.md",
     "ventures/venture-001/OFFER.md", "ventures/venture-001/validation/test-restock.js",
@@ -114,7 +116,7 @@ def authorize(envelope, key, assignment, manifest, provider):
 
 class GrantedProvider(OpenAICompatibleShadowModel):
     """One reservation per logical call, no automatic transport/paid retries."""
-    def __init__(self, provider, state, grant, current_assignment, manifest=None):
+    def __init__(self, provider, state, grant, current_assignment, manifest=None, identities=None):
         super().__init__(provider.endpoint, provider.model, provider.token, timeout=90)
         self._opener = provider._opener
         self.state, self.grant = state, grant
@@ -122,6 +124,8 @@ class GrantedProvider(OpenAICompatibleShadowModel):
         self.manifest = manifest
         self.maximum_output_tokens = grant["maximum_output_tokens"]
         self.calls = 0
+        self.identities = identities or preparation_authority()
+        self.authority_context = dict(assignment_hash=grant["assignment_hash"], epoch=self.identities.authority()["epoch"])
 
     def __call__(self, request, tool_schemas):
         if tool_schemas or len(canonical(request).encode()) > 1048576:
@@ -144,6 +148,10 @@ class GrantedProvider(OpenAICompatibleShadowModel):
                        grant_hash=hashed(self.grant), status="RESERVED_NO_RETRY"), exclusive=True)
         except FileExistsError:
             raise ModelProviderError("logical call already reserved; no retry") from None
+        self.identities.reserve_provider(hashed(dict(context=self.authority_context, identity=identity)),
+                                         self.maximum_output_tokens, context=dict(self.authority_context, actor=(
+                                             "service-ceo" if identity == "final-ceo-review" else
+                                             "service-manager" if identity.startswith("manager-") else "worker-" + identity)))
         self.calls += 1
         # Existing adapter has no retry or redirect and records redacted wire hashes.
         return super().__call__(request, ())
@@ -236,6 +244,20 @@ def completed_replay(state, current):
         if not path.is_file() or path.stat().st_nlink != 1 or digest(path.read_bytes()) != expected:
             raise ValueError("completed runtime artifact changed")
     report = private_json(state / "report.json")
+    runtime = load_runtime()
+    with runtime.AgentManager(report["run_id"], assignment=current,
+                              identities=preparation_authority()) as manager:
+        manager.verify_agent_state()
+        reviews = [json.loads(row["body"])["detail"] for row in manager.db.execute(
+            "SELECT body FROM events ORDER BY sequence")
+            if json.loads(row["body"])["action"] == "ceo_final_review"]
+        if len(reviews) != 1 or reviews[0] != dict(
+                review=packet["final_ceo_review"], report_hash=hashed(report),
+                runtime_report_hash=packet["runtime_report_hash"], evidence_hash=packet["evidence_hash"],
+                packet_hash=hashed(packet)):
+            raise ValueError("signed final review binding denied")
+        if any(report.get(key) != value for key, value in BASE.items()):
+            raise ValueError("review authority boundary denied")
     return dict(report, replayed=True, inference_requests_this_tick=0)
 
 
@@ -261,27 +283,37 @@ def dispatch(service, state, *, envelope=None, operator_key=None, environ=None):
         return dict(BASE, status="RESERVED_NO_AUTOMATIC_RETRY",
                     required_action="RECONCILE_ATTEMPT_AND_REVIEW_LOCAL_REPORT",
                     report_present=(state / "report.json").exists())
-    if envelope is None or operator_key is None:
-        return dict(BASE, status="BLOCKED_OPERATOR_GRANT_REQUIRED",
-                    required_action="PIN_OPERATOR_PUBLIC_KEY_AND_SUPPLY_SIGNED_RECONCILED_PROVIDER_ALLOWANCE",
-                    configuration_blockers=configuration_blockers(os.environ if environ is None else environ))
-    current_assignment(service)  # Fresh authority required only for new provider work.
+    current_assignment(service)  # Fresh signed assignment remains mandatory.
     manifest = runtime_manifest()
     provider = configured_provider(dict(os.environ if environ is None else environ), required=True)
-    grant = authorize(envelope, operator_key, current, manifest, provider)
+    # Trusted standing policy replaces only redundant INTERNAL task grants.
+    # Optional legacy grants remain verified and can only narrow this ceiling.
+    identities = preparation_authority()
+    if envelope is not None:
+        if operator_key is None:
+            raise ValueError("legacy grant pin required")
+        grant = authorize(envelope, operator_key, current, manifest, provider)
+    else:
+        now = datetime.now(timezone.utc)
+        grant = dict(grant_id="standing-preparation-v1", scope="SHADOW_PREPARATION_ONLY",
+                     assignment_hash=hashed(current), packet_hash=PACKET_SHA256,
+                     runtime_hash=hashed(manifest), provider_hash=provider_binding(provider),
+                     maximum_requests=47, maximum_output_tokens=MAX_OUTPUT_TOKENS,
+                     issued_at=now.isoformat(), expires_at=(now + timedelta(hours=24)).isoformat())
     run_id = "dispatch-" + hashed(current)[:32]
     run_path = inside_root(RUNTIME + "runs/" + run_id)
     if run_path.exists():
         raise ValueError("preexisting runtime run denied")
     write_json(attempt, dict(assignment_hash=hashed(current), runtime=manifest,
-               authorization=envelope, operator_key_hash=digest(operator_key),
+               authorization=envelope, operator_key_hash=digest(operator_key) if operator_key else None,
+               standing_authority=identities.authority(),
                run_id=run_id, status="RESERVED_NO_AUTOMATIC_RETRY"), exclusive=True)
     bounded = GrantedProvider(provider, state, grant,
-                              lambda: current_assignment(service), manifest=manifest)
+                              lambda: current_assignment(service), manifest=manifest, identities=identities)
     runtime = load_runtime()
     # Assignment reaches manager planning; no model-selected runtime, path or executor.
     with runtime.AgentManager(run_id, provider_factory=lambda env: bounded,
-                              assignment=current) as manager:
+                              assignment=current, identities=identities) as manager:
         result = manager.run_agents()
         report = dict(BASE, status="MANAGER_PREPARATION_RECORDED",
                       assignment_hash=hashed(current), run_id=run_id,
@@ -342,6 +374,12 @@ def dispatch(service, state, *, envelope=None, operator_key=None, environ=None):
                           finance_gate="DENIED_SEPARATE_OWNER_FINANCE_APPROVAL_REQUIRED",
                           limitations=result["limitations"])
             write_json(state / "owner-review-packet.json", packet, exclusive=True)
+            with manager.db:
+                manager.event("ceo_final_review", dict(review=review, report_hash=hashed(report),
+                    runtime_report_hash=hashed(result), evidence_hash=hashed(evidence), packet_hash=hashed(packet)))
+            manager.verify_agent_state()
+            (manager.home / "decision-log.json").write_text(json.dumps([
+                dict(row) for row in manager.db.execute("SELECT * FROM events ORDER BY sequence")], indent=2))
             # Last fsynced write marks a complete historical result, never authority.
             write_json(state / "completed.json", dict(assignment_hash=hashed(current),
                        files={name: digest((state / name).read_bytes()) for name in

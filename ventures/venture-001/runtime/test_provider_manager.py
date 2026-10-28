@@ -7,12 +7,14 @@ import shutil
 import sys
 import unittest
 import uuid
+import tempfile
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from provider_manager import AgentManager, validate_plan, file_map, ROLES, DENIED, CAPABILITIES, external_communication_denied
 from agents.ceo.provider import ModelProviderError, OpenAICompatibleShadowModel
 from agents.ceo.gates import CertificationGateError
+from agents.ceo import service_identity
 
 def plan(reverse=False):
     roles = list(reversed(ROLES)) if reverse else list(ROLES)
@@ -74,9 +76,15 @@ class TestProvider:
 
 class AgentRuntimeTests(unittest.TestCase):
     def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(dir=service_identity.ROOT / "artifacts")
+        self.addCleanup(self.temp.cleanup)
+        self.authority_patch = patch.object(service_identity, "AUTHORITY_DIRECTORY", Path(self.temp.name) / "authority")
+        self.authority_patch.start()
+        self.addCleanup(self.authority_patch.stop)
+        self.identities = service_identity.preparation_authority()
         self.provider = TestProvider()
         self.name = "ai-test-" + uuid.uuid4().hex
-        self.manager = AgentManager(self.name, test_provider=self.provider)
+        self.manager = AgentManager(self.name, test_provider=self.provider, identities=self.identities)
 
     def tearDown(self):
         self.manager.close()
@@ -149,7 +157,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.run_agents()
         count = len(self.provider.calls)
         self.manager.close()
-        self.manager = AgentManager(self.name, test_provider=self.provider)
+        self.manager = AgentManager(self.name, test_provider=self.provider, identities=self.identities)
         result = self.manager.run_agents()
         self.assertEqual(result["status"], "prepared_with_research_blocked")
         self.assertEqual(len(self.provider.calls), count)
@@ -241,7 +249,7 @@ class AgentRuntimeTests(unittest.TestCase):
                 break
             m.update(current, "rejected", {"defects": ["synthetic correction failure"]})
             m.close()
-            self.manager = m = AgentManager(self.name, test_provider=self.provider)
+            self.manager = m = AgentManager(self.name, test_provider=self.provider, identities=self.identities)
             with self.assertRaises(ValueError):
                 m.assign_agent("commercial", [], current["id"])
             with self.assertRaises(ValueError):
@@ -250,7 +258,7 @@ class AgentRuntimeTests(unittest.TestCase):
         self.assertEqual(m.effective("research-1")["status"], "accepted")
         count = len(self.provider.calls)
         m.close()
-        self.manager = m = AgentManager(self.name, test_provider=self.provider)
+        self.manager = m = AgentManager(self.name, test_provider=self.provider, identities=self.identities)
         m.plan()
         self.assertEqual(m.effective("research-1")["id"], "research-5")
         self.assertEqual(len(self.provider.calls), count)
@@ -363,7 +371,7 @@ class AgentRuntimeTests(unittest.TestCase):
         m.save("calls", m.meta("calls") + [{"id": "manager-research-4", "status": "running"}])
         count = len(self.provider.calls)
         m.close()
-        self.manager = AgentManager(self.name, test_provider=self.provider)
+        self.manager = AgentManager(self.name, test_provider=self.provider, identities=self.identities)
         self.assertEqual(self.manager.run_agents()["status"], "blocked")
         self.assertEqual(len(self.provider.calls), count)
 
@@ -530,7 +538,10 @@ class AgentRuntimeTests(unittest.TestCase):
         self.manager.test_provider = None
         default_adapter = OpenAICompatibleShadowModel("https://example.invalid/v1", "test-model", "test-token")
 
-        for identity, role, timeout in (("research-1", "research", 30.0), ("manager-research-2", "manager", 300.0)):
+        for identity, role, timeout in (("manager-plan", "manager", 30.0), ("manager-plan", "manager", 300.0)):
+            self.manager.close()
+            shutil.rmtree(self.manager.home)
+            self.manager = AgentManager(self.name, identities=self.identities)
             with self.subTest(identity=identity):
                 adapter = OpenAICompatibleShadowModel("https://example.invalid/v1", "test-model", "test-token")
                 adapter.timeout = timeout

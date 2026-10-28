@@ -145,7 +145,11 @@ def external_communication_denied(body, *, online=False):
 
 class AgentManager(Manager):
     """The legacy Manager supplies locking/snapshots/SQLite, never its scheduler."""
-    def __init__(self, run_id, *, test_provider=None, provider_factory=None, assignment=None):
+    def __init__(self, run_id, *, test_provider=None, provider_factory=None, assignment=None, identities=None):
+        self.identities = identities
+        self.crypto_context = (dict(run_id=run_id, assignment_hash=hashlib.sha256(canonical(assignment).encode()).hexdigest(),
+                                   implementation=digest(Path(__file__)), epoch=identities.authority()["epoch"])
+                               if identities is not None else None)
         super().__init__(run_id)
         self.test_provider = test_provider
         self.provider_factory = provider_factory
@@ -187,6 +191,28 @@ class AgentManager(Manager):
                 raise ValueError("control assignment changed")
             self.save("control_assignment", assignment)
 
+    def event(self, action, detail):
+        if self.identities is None:
+            return super().event(action, detail)
+        row = self.db.execute("SELECT sequence,hash FROM events ORDER BY sequence DESC LIMIT 1").fetchone()
+        sequence, previous = (row["sequence"] + 1, row["hash"]) if row else (1, "GENESIS")
+        attestation = self.identities.attest(action, detail, self.crypto_context,
+                                            sequence, previous,
+                                            worker=detail.get("task_id") if action == "worker_submission" else None)
+        self.identities.verify_attestation(attestation, action, detail, self.crypto_context, sequence, previous)
+        body = canonical(dict(action=action, detail=detail, attestation=attestation))
+        sha = hashlib.sha256((previous + body).encode()).hexdigest()
+        self.db.execute("INSERT INTO events(body,previous,hash) VALUES(?,?,?)", (body, previous, sha))
+
+    def verify_events(self):
+        super().verify_events()
+        if self.identities is None:
+            return
+        for row in self.db.execute("SELECT * FROM events ORDER BY sequence"):
+            event = json.loads(row["body"])
+            self.identities.verify_attestation(event["attestation"], event["action"], event["detail"],
+                                               self.crypto_context, row["sequence"], row["previous"])
+
     def meta(self, key):
         row = self.db.execute("SELECT value FROM metadata WHERE key=?", (key,)).fetchone()
         return json.loads(row[0]) if row else None
@@ -197,6 +223,7 @@ class AgentManager(Manager):
             self.event("metadata", {"key": key, "value": value})
 
     def verify_agent_state(self):
+        self.verify_events()
         expected_meta, expected_tasks = {}, {}
         for row in self.db.execute("SELECT body FROM events ORDER BY sequence"):
             event = json.loads(row[0])
@@ -205,7 +232,7 @@ class AgentManager(Manager):
                 expected_meta[detail["key"]] = detail["value"]
             if action == "agent_assignment":
                 expected_tasks[detail["id"]] = detail
-            if action in ("running", "accepted", "rejected"):
+            if action in ("pending", "running", "accepted", "rejected"):
                 if detail["id"] in expected_tasks:
                     expected_tasks[detail["id"]].update(status=action, record=detail["record"])
         actual_meta = {r["key"]: json.loads(r["value"]) for r in self.db.execute("SELECT * FROM metadata")
@@ -225,6 +252,8 @@ class AgentManager(Manager):
 
         for call in self.meta("calls") or []:
             if call["status"] == "returned":
+                if not isinstance(call.get("id"), str):
+                    raise ValueError("call identity missing")
                 folder = safe(self.home, "inference/" + call["id"])
                 for field, name in (("response_sha256", "response.json"), ("request_sha256", "request.json"),
                                     ("provider_trace_sha256", "provider-trace.jsonl")):
@@ -232,6 +261,16 @@ class AgentManager(Manager):
                         raise ValueError("inference evidence integrity failure")
 
     def infer(self, identity, role, payload, contract):
+        self.verify_agent_state()
+        if self.test_provider is None and self.identities is None:
+            raise ValueError("trusted per-agent identities required before provider dispatch")
+        if role != "manager":
+            task = next((t for t in self.tasks() if t["id"] == identity), None)
+            if task is None or task["role"] != role or task["status"] != "running":
+                raise ValueError("worker assignment/role denied")
+        elif identity != "manager-plan" and not any(
+                identity == "manager-" + t["id"] and t["correction_of"] for t in self.tasks()):
+            raise ValueError("manager instruction identity denied")
         calls = self.meta("calls") or []
         if len(calls) >= CAPABILITIES["max_inference_calls"]:
             raise ValueError("inference call bound")
@@ -279,6 +318,11 @@ class AgentManager(Manager):
                            backend="test_adapter" if self.test_provider else "approved_provider",
                            agent_inference=self.test_provider is None)
             self.save("calls", calls)
+            if role != "manager":
+                with self.db:
+                    self.event("worker_submission", dict(task_id=identity, role=role,
+                        response_hash=attempt["response_sha256"], request_hash=attempt["request_sha256"],
+                        provider_trace_hash=attempt["provider_trace_sha256"]))
             return parsed
         except Exception as exc:
             # Never persist exception messages, provider objects, env or traceback.
@@ -487,6 +531,7 @@ class AgentManager(Manager):
                                                            for n, b in app.items()}}
 
     def dispatch_agent(self, task):
+        self.verify_agent_state()
         if task not in self.tasks() or task["status"] != "pending":
             raise PermissionError("unregistered assignment")
         if any(self.effective(d)["status"] != "accepted" for d in task["deps"]):
@@ -687,6 +732,10 @@ class AgentManager(Manager):
             for t in self.tasks():
                 if t["status"] == "running":
                     self.update(t, "rejected", {"defects": ["interrupted worker; outcome unknown"]})
+            if self.identities is not None and self.meta("ceo_appointment") is None:
+                with self.db:
+                    self.event("ceo_appointment", dict(assignment=self.assignment, scope=CAPABILITIES))
+                self.save("ceo_appointment", self.crypto_context)
             self.plan()
             while True:
                 # Invalidate every downstream result when an input revision changes.
@@ -748,6 +797,11 @@ class AgentManager(Manager):
                                         "passed_local_gates" if complete else "NOT_ACCEPTED"),
                   "review_decision": "OWNER_REVIEW_REQUIRED; not approval or phase certification",
                   "implementation_sha256": self.code_hash}
+        if self.identities is not None:
+            with self.db:
+                self.event("manager_signoff", dict(report_hash=hashlib.sha256(canonical(result).encode()).hexdigest(),
+                                                  status=result["status"]))
+            self.verify_agent_state()
         safe(self.home, "integrated-review.json").write_text(json.dumps(result, indent=2))
         events = [dict(r) for r in self.db.execute("SELECT * FROM events ORDER BY sequence")]
         safe(self.home, "decision-log.json").write_text(json.dumps(events, indent=2))

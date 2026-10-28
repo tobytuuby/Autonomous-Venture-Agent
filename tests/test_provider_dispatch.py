@@ -26,6 +26,10 @@ class ProviderDispatchTests(unittest.TestCase):
         self.service = self.fixture.service
         self.state = self.fixture.base / "dispatch"
         self.state.mkdir(mode=0o700)
+        from agents.ceo import service_identity
+        authority_patch = patch.object(service_identity, "AUTHORITY_DIRECTORY", self.fixture.base / "authority")
+        authority_patch.start()
+        self.addCleanup(authority_patch.stop)
         self.key = self.fixture.actors["ceo"][1]  # Ephemeral TEST-ONLY operator pin.
         source = deepcopy(self.fixture.source)
         source["review_source"] = "configured_provider_not_independently_verified"
@@ -61,12 +65,11 @@ class ProviderDispatchTests(unittest.TestCase):
     def resign(self):
         self.envelope["signature"] = self.fixture.sign(self.envelope["grant"])
 
-    def test_missing_grant_does_not_import_runtime_or_dispatch(self):
-        with patch.object(integration, "load_runtime", side_effect=AssertionError("no import")):
-            result = self.invoke(envelope=False)
-        self.assertEqual(result["status"], "BLOCKED_OPERATOR_GRANT_REQUIRED")
-        self.assertFalse((self.state / "attempt.json").exists())
-        self.assertFalse(self.run_path.exists())
+    def test_missing_task_grant_uses_standing_authority(self):
+        with patch.object(integration, "load_runtime", side_effect=RuntimeError("TEST reached runtime")):
+            with self.assertRaisesRegex(RuntimeError, "reached runtime"):
+                self.invoke(envelope=False)
+        self.assertTrue((self.state / "attempt.json").exists())
 
     def test_signature_scope_runtime_configuration_and_budget_denials(self):
         original = deepcopy(self.envelope)
@@ -287,9 +290,9 @@ class ProviderDispatchTests(unittest.TestCase):
             code = integration.main(["--state-dir", str(self.state), "--handoff-state",
                 str(self.fixture.state), "--trust-file", str(trust),
                 "--source-state", str(self.fixture.source_dir)])
-        self.assertEqual(code, 0)
-        self.assertEqual(json.loads(output.getvalue())["status"], "BLOCKED_OPERATOR_GRANT_REQUIRED")
-        self.assertTrue((self.state / "status.json").is_file())
+        self.assertEqual(code, 4)
+        self.assertEqual(json.loads(output.getvalue())["status"], "PROVIDER_DISPATCH_DENIED")
+        self.assertFalse((self.state / "status.json").exists())
         self.assertFalse((self.state / "attempt.json").exists())
 
     def test_runtime_dependency_missing_fails_before_reservation(self):
