@@ -1,4 +1,4 @@
-"""mTLS-only capability broker and read-only signed preparation polling."""
+"""mTLS capability broker, preparation polling and opt-in signed receipt ingestion."""
 import os
 from http.server import ThreadingHTTPServer
 
@@ -30,8 +30,25 @@ def main():
         finally:
             outbox.close()
 
+    # Opt-in only: old read-only deployments stay closed to ACK until public
+    # signing trust and fixed workload identities have been explicitly configured.
+    acknowledge = None
+    if os.environ.get("VENTURE_BROKER_PREPARATION_TRUST"):
+        from agents.ceo.control_plane import load_trust
+        actors = load_trust(required("VENTURE_BROKER_PREPARATION_TRUST"))
+        ceo_id = required("VENTURE_BROKER_CEO_ID")
+        manager_id = required("VENTURE_BROKER_MANAGER_ID")
+
+        def acknowledge(envelope):
+            outbox = PreparationOutbox(db_path)
+            try:
+                return outbox.accept_ack(envelope, actors, expected_ceo=ceo_id,
+                                         expected_manager=manager_id)
+            finally:
+                outbox.close()
+
     handler = handler_for(capability_pins=cap, polling_pins=poll,
-                          pending=pending_assignments)
+                          pending=pending_assignments, acknowledge=acknowledge)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

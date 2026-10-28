@@ -4,6 +4,9 @@ This module does not start a production listener. The caller must explicitly
 supply a loopback bind address, certificate paths and certificate pinsets.
 """
 import hashlib
+import json
+from agents.ceo.cross_vm_transport import _object, MAX_ACK
+from agents.ceo.cross_vm_poll_client import ACK_PATH
 import ssl
 from http.server import ThreadingHTTPServer
 from kernel.broker.server import Handler as ExistingBrokerHandler
@@ -19,7 +22,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -27,6 +30,8 @@ def handler_for(*, capability_pins, polling_pins, pending=None):
                all(c in "0123456789abcdef" for c in s)
                for s in (*capability_pins, *polling_pins)):
         raise ValueError("malformed fingerprint")
+    if set(capability_pins) & set(polling_pins):
+        raise ValueError("role pinsets must be disjoint")
     class GuardedHandler(ExistingBrokerHandler):
         def _role(self):
             if not isinstance(self.connection, ssl.SSLSocket):
@@ -57,6 +62,29 @@ def handler_for(*, capability_pins, polling_pins, pending=None):
             return self._deny() if role is None or self.path == "/health" else self._send(404, {"error": "not_found"})
 
         def do_POST(self):
+            if self.path == ACK_PATH:
+                if self._role() != "poll":
+                    return self._deny()
+                if acknowledge is None:
+                    return self._send(503, {"error": "acknowledgement_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("explicit bounded length required")
+                    length = int(lengths[0])
+                    if not 0 < length <= MAX_ACK:
+                        raise ValueError("invalid acknowledgement length")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete acknowledgement")
+                    envelope = json.loads(raw, object_pairs_hook=_object)
+                    result = acknowledge(envelope)
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "acknowledgement_denied"})
+                except Exception:
+                    return self._send(503, {"error": "acknowledgement_unavailable"})
+                return self._send(200, result)
             if self.path == CAP_PATH and self._role() == "capability":
                 return super().do_POST()
             return self._deny() if self.path == CAP_PATH or self._role() is None else self._send(404, {"error": "not_found"})
@@ -69,11 +97,12 @@ def handler_for(*, capability_pins, polling_pins, pending=None):
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
-        capability_pins=set(capability_pins), polling_pins=set(polling_pins), pending=pending))
+        capability_pins=set(capability_pins), polling_pins=set(polling_pins),
+        pending=pending, acknowledge=acknowledge))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)
