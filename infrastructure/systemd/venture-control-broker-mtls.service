@@ -1,0 +1,25 @@
+[Unit]
+Description=Venture capability broker mTLS
+After=network-online.target opa.service
+Requires=opa.service
+
+[Service]
+Type=simple
+User=venture-broker
+Group=venture-broker
+WorkingDirectory=/usr/local/lib/venture-control-broker
+Environment=PYTHONPATH=/usr/local/lib/venture-control-broker
+EnvironmentFile=/etc/venture-control/broker-mtls.env
+ExecStart=/usr/bin/python3 -m kernel.broker.mtls_server
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/venture-control-broker
+
+[Install]
+WantedBy=multi-user.target
