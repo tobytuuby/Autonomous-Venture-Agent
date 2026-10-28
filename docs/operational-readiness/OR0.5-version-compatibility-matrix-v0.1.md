@@ -61,6 +61,30 @@ A complete, reproducible Python lock for both host roles; browser executable rev
 - `openbao.service` and `opa.service` both reported **active**. Active services and source-unit relationships justify retaining existing services while tracing functionality, but do not demonstrate a real CEO-to-OpenBao request. No service was changed.
 - **Blockers remain:** hash-locked Python and JS artifacts with verified provenance; supported browser build and all Ubuntu 26.04 library versions/notices; actual isolated environments; software advisory review; active OpenBao call path. OR0.5 remains NOT COMPLETE and OR0.6 stays BLOCKED.
 
+## OR0.5 verification continuation — 2026-10-28 (no installation)
+The following are verified **choices and facts**, not a passed complete compatibility gate.
+
+### uv selection
+- **Selected candidate:** `uv==0.13.5`, a documented October 21, 2026 release; upstream changelog reports certificate-trust security fixes through 0.13.4/0.13.5 and continued explicit Python 3.14 support. Release history: https://github.com/astral-sh/uv/releases and https://github.com/astral-sh/uv/blob/main/CHANGELOG.md.
+- Project source license: MIT OR Apache-2.0, subject to the selected release artifact's included notices and verification. `uv` is FOSS-eligible and works without system `pip`; **not yet installed**.
+- Installation contract MUST request `/usr/bin/python3` or explicit Python 3.14, disable automatic interpreter downloads, verify the uv artifact digest/attestation and create an isolated project environment. Upstream uv 0.13 changed default managed Python to 3.15; do **not** invoke commands that silently upgrade the system interpreter.
+- Platform candidate: Linux x86_64 GNU; exact signed asset SHA-256/attestation and install provenance remain to be extracted and locked at OR0.6. No vendor-hosted install shell script is to be executed unreviewed.
+
+### Playwright Chromium selection
+- Existing local `playwright-core` v1.64.1 `browsers.json` reports **Chromium revision 1248**, browserVersion `156.0.8078.4`, plus **chromium-headless-shell revision 1248**, same version. This identifies a precise candidate build, **NOT proof** it runs on Ubuntu 26.04.
+- Browser download artifact integrity, supported Linux shared-library resolution, and the full selected apt/font license BOM are still NOT verified on Venture-Agents. Do not classify the browser as installation-ready.
+- The existing `package-lock.json` is untracked; move/copy a sanitized exact-manifest + lock under a designated tracked build/test directory in the next controlled provenance step. Never commit `node_modules`.
+
+### OpenBao active use
+- `kernel/execution/openbao.py` contains an `OpenBaoLeaseClient` that uses `urllib.request` for `/v1/auth/token/create` and revoke-accessor operations, explicitly described as an internal execution-service integration.
+- A source reference search found **no instantiation/reference to `OpenBaoLeaseClient` outside its definition** within `agents/` and `kernel/`. This does not disprove use via dynamic configuration, but **active CEO runtime use remains unproven**. Preserve the existing active service; treat OpenBao as existing, not a new mandatory dependency on Venture-Agents.
+- OPA remains a required control service due to existing broker systemd `Requires=opa.service`.
+
+### Security and license gate
+- The upstream uv security certificate fixes give a reason to prefer uv 0.13.5 over 0.13.3. This is **not a full advisory scan** of cryptography, PostgreSQL, Playwright, browser, libraries or Python runtime.
+- A complete exact-version transitive dependency/advisory report and selected browser Debian copyright/notice files are still required. No blanket "no vulnerabilities" claim can be made.
+- **Status remains NOT COMPLETE** because Ubuntu browser compatibility, full binary provenance/license records, and repeatable hash-locked installation have not been demonstrated. OR0.6 remains blocked.
+
 ## Outstanding blockers before OR0.6
 - Produce a **complete trackable reproducible direct+transitive Python requirements/lock manifest**, identifying host-specific environment resolution and actual native dependencies.
 - Track and validate JS package-lock with integrity; verify selected browser revision is downloadable and runnable with the listed Ubuntu libraries, without executing installation before OR0.6.
