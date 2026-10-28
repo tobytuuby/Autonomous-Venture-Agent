@@ -181,9 +181,15 @@ def run(state_dir, gate_file, environ=None, *, queue=True, cycle=None, intake_on
         except ModelProviderError:
             summary["status"] = "PROVIDER_OR_REPLAY_DENIED"
             code = 2
-        except Exception:
-            # No remote bodies, environment, exception text or traceback in logs.
+        except Exception as exc:
+            # Record only a bounded built-in exception category, never messages,
+            # tracebacks, file paths, provider bodies, or environment secrets.
+            category = type(exc).__name__
+            allowed = {"ValueError", "TypeError", "KeyError", "OSError",
+                       "PermissionError", "FileNotFoundError", "RuntimeError",
+                       "sqlite3.OperationalError"}
             summary["status"] = "STATE_DENIED"
+            summary["failure_category"] = category if category in allowed else "OTHER"
             code = 4
         finally:
             if decisions is not None:
