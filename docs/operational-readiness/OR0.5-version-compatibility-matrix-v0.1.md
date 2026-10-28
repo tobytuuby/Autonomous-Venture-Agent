@@ -93,6 +93,15 @@ The following are verified **choices and facts**, not a passed complete compatib
 - Exact license notice files for the agent VM's **not-yet-installed** libraries, browser binary compatibility, and vulnerability advisory results remain open; package availability alone cannot pass the gate.
 - Underlying project runtime, owner approvals, and finances remain untouched. **OR-0.5 NOT COMPLETE; installation not authorized by this evidence alone.**
 
+## October 28 verification: upstream provenance and lock procedure
+- uv 0.13.5 PyPI **manylinux x86_64 wheel** SHA-256: `fa8d26e08e34c29c0c4e820cf3181757086d547240b4f4d31ff1d8bd810ca946`. PyPI release artifact: `uv-0.13.5-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl` (published 2026-10-22). This is an upstream-published digest, **not locally verified wheel bytes or a security attestation**. Reference: https://pypi.org/project/uv/0.13.5/
+- Python lock design: create a project-local `pyproject.toml` with exact direct versions, `requires-python = "==3.14.*"`; set `UV_PYTHON_DOWNLOADS=never` and explicitly select `/usr/bin/python3`; run selected uv `lock` to produce `uv.lock` with resolved packages and registry artifact hashes; verify with uv `sync --locked --no-python-downloads` in a clean isolated environment only **after OR0.6 contract approval**. Python hash-locked artifact references must be inspected against upstream digests; do not simply re-label observed system packages as locked dependencies. Commands are procedural design, not executed.
+- Node artifact: the repository's tracked `infrastructure/browser-acceptance/package-lock.json` provides npm package integrity hashes, verified structurally against the tracked exact-version manifest; actual npm tarball bytes and browser archive digest remain to be checked.
+- Chromium revision 1248 is declared in the existing Playwright package metadata; **no authoritative archive SHA-256 has been established**. Verify the real downloaded archive checksum against an authenticated trusted source before installing or treating the browser as accepted.
+- Ubuntu library candidates, including fonts, have exact release package versions on Venture-Agents; **complete per-package copyright file extraction and transitive browser dependencies remain unresolved**.
+- Advisory posture: upstream uv changelog notes 0.13.4/0.13.5 certificate-trust fixes, but there is **no comprehensive package-level OSV/GHSA/Ubuntu-USN report** yet. Do not infer lack of vulnerabilities.
+- OR0.5 decision **STILL OPEN**. This is a concrete provenance advance; OR0.6 cannot be approved from this evidence alone.
+
 ## Outstanding blockers before OR0.6
 - Produce a **complete trackable reproducible direct+transitive Python requirements/lock manifest**, identifying host-specific environment resolution and actual native dependencies.
 - Track and validate JS package-lock with integrity; verify selected browser revision is downloadable and runnable with the listed Ubuntu libraries, without executing installation before OR0.6.
