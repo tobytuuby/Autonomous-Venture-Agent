@@ -12,6 +12,8 @@ This file is an operational index. Detailed policy requirements remain in the ca
 
 ## Canonical documents
 
+- `docs/operational-viability-project-plan-v2.4.md` — current owner-directed operational viability target, OR-0 full FOSS software readiness gate, fixed agent hierarchy, and mandatory GitHub/Claude review evidence. This does not itself authorize live operations. Reconcile conflicting older approval policy through a separately versioned policy change before enabling internal execution.
+
 - `docs/owner-venture-approval-policy-v1.0.md` — binding owner discussion and venture approval gate; supersedes prior CEO autonomous approval authority.
 - `project-phase-plan-v2.3.md` — current roadmap amendment; prior phase acceptance unchanged.
 - `docs/venture-operating-policy-v1.1-DRAFT.md`, `docs/venture-to-first-profit-plan-v1.4-DRAFT.md`, `docs/venture-finance-control-and-transaction-visibility-v1.2-DRAFT.md`, and `docs/core-synthetic-orchestration-plan-v1.1.md` — current core policy and plans.
