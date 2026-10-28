@@ -182,7 +182,7 @@ def _object(pairs):
 class CrossVMTransport:
     """Explicit HTTPS task endpoint; no guessed broker address, redirect or retry.
 
-    CA roots default to system trust; optional ca_file adds a configured CA bundle.
+    CA roots default to system trust; optional ca_file supplies a CA bundle.
     No unverified SSL context or alternate transport can be supplied.
     """
 
@@ -197,7 +197,9 @@ class CrossVMTransport:
                     or url.password is not None or url.query or url.fragment
                     or not url.path or url.path == "/"):
                 raise ValueError()
-            port = url.port or 443
+            port = url.port if url.port is not None else 443
+            if port < 1:
+                raise ValueError()
         except ValueError:
             raise EnvelopeError("explicit HTTPS task endpoint required") from None
         if (type(timeout) not in (int, float) or not math.isfinite(timeout)
@@ -222,6 +224,10 @@ class CrossVMTransport:
             raise EnvelopeError("task already reserved or conflicting; reconcile")
         connection = None
         try:
+            # Recheck expiry after potentially blocking durable reservations.
+            _body(body, domain=ASSIGNMENT, actor_id=self._ceo_id,
+                  recipient_id=self._manager_id, role="ceo",
+                  now=datetime.now(timezone.utc))
             # HTTPSConnection performs one attempt and never follows redirects.
             connection = http.client.HTTPSConnection(
                 self._host, self._port, timeout=self._timeout, context=self._context)

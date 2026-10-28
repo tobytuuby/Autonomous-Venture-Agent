@@ -286,6 +286,21 @@ class TransportTests(unittest.TestCase):
         self.assertFalse(self.store.tasks)
         self.connection_type.assert_not_called()
 
+    def test_response_lost_after_post_is_unknown_and_stays_reserved(self):
+        self.connection.getresponse.side_effect = TimeoutError("TEST response lost")
+        with self.assertRaises(transport.UnknownOutcome):
+            self.client.send(FIXTURES["assignment"])
+        self.connection.request.assert_called_once()
+        self.assertIn("test-task-1", self.store.tasks)
+
+    def test_expiry_during_reservation_prevents_network(self):
+        with patch.object(transport, "datetime", wraps=datetime) as clock:
+            clock.now.side_effect = [NOW, NOW + timedelta(minutes=4)]
+            with self.assertRaises(transport.UnknownOutcome):
+                self.client.send(FIXTURES["assignment"])
+        self.connection_type.assert_not_called()
+        self.assertIn("test-task-1", self.store.tasks)
+
     def test_wrong_signed_ack_is_unknown_outcome(self):
         self.response(json.dumps(FIXTURES["wrong_ack"]).encode())
         with self.assertRaises(transport.UnknownOutcome):
@@ -330,7 +345,8 @@ class TransportTests(unittest.TestCase):
                          "https://tasks.invalid/", "https://user@tasks.invalid/tasks",
                          "https://tasks.invalid/tasks?token=TEST",
                          "https://tasks.invalid/tasks#fragment",
-                         "https://tasks.invalid:bad/tasks", "https://tasks.invalid/\n"):
+                         "https://tasks.invalid:bad/tasks", "https://tasks.invalid:0/tasks",
+                         "https://tasks.invalid/\n"):
             with self.subTest(endpoint=endpoint), self.assertRaises(transport.EnvelopeError):
                 transport.CrossVMTransport(endpoint, ACTORS, ceo_id="test-ceo",
                     manager_id="test-manager", consume_nonce=self.store.consume,
