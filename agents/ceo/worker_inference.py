@@ -26,7 +26,7 @@ def valid_policy(policy):
             or type(policy["maximum_requests"]) is not int
             or not 1 <= policy["maximum_requests"] <= 4
             or type(policy["maximum_output_tokens"]) is not int
-            or not 1 <= policy["maximum_output_tokens"] <= 512):
+            or not 1 <= policy["maximum_output_tokens"] <= 1024):
         raise ValueError("bounded worker policy denied")
     return policy
 

@@ -48,7 +48,8 @@ class HierarchyGateway:
         if len(ceos) != 1:
             raise ValueError("unique CEO trust required")
         item_id = review.get("item_id")
-        if item_id not in ("level2d-acceptance", "level2d-acceptance-retry"):
+        if item_id not in ("level2d-acceptance", "level2d-acceptance-retry",
+                           "level2d-acceptance-retry2"):
             raise ValueError("bounded technical fixture only")
         venture_id = "venture-verification"
         if (review.get("item_id") != item_id
@@ -94,10 +95,14 @@ class HierarchyGateway:
         exact(payload, ("command", "signature"))
         cmd = payload["command"]
         if type(cmd) is not dict or cmd.get("workflow_id") not in (
-                "level2d-acceptance-1", "level2d-acceptance-2"):
+                "level2d-acceptance-1", "level2d-acceptance-2",
+                "level2d-acceptance-3"):
             raise ValueError("bounded technical acceptance fixtures only")
-        item_id = ("level2d-acceptance" if cmd["workflow_id"].endswith("-1")
-                   else "level2d-acceptance-retry")
+        item_id = {
+            "level2d-acceptance-1": "level2d-acceptance",
+            "level2d-acceptance-2": "level2d-acceptance-retry",
+            "level2d-acceptance-3": "level2d-acceptance-retry2",
+        }[cmd["workflow_id"]]
         scope = cmd.get("payload", {}).get("scope", {})
         if (cmd.get("action") != "create" or cmd.get("role") != "ceo"
                 or cmd.get("live") is not False
