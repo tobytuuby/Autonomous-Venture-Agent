@@ -92,8 +92,7 @@ class ModelRoleCallback:
         sha = hashlib.sha256(wire).hexdigest()
         # Store must DURABLY commit exact bytes before signed command creation.
         self.artifact_store("preparation-" + sha, wire)
-        payload = dict(reason=data["explanation"])
-        if data["action"] == "submit":
-            payload["units"] = data["units"]
+        payload = (dict(units=data["units"]) if data["action"] == "submit"
+                   else dict(reason=data["explanation"]))
         return dict(action=data["action"], payload=payload,
                     evidence=[dict(ref="preparation-" + sha, sha256=sha)])
