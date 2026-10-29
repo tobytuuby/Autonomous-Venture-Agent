@@ -89,6 +89,62 @@ class PreparationPollClient:
             conn.close()
 
 
+
+    def submit_assignment(self, envelope):
+        """CEO-only signed assignment ingress; broker validates role and nonce."""
+        from agents.ceo.escalation_inbox import canonical
+        from kernel.broker.isolated_mtls import CEO_SUBMIT_PATH
+        raw = canonical(envelope).encode()
+        if len(raw) > MAX_ACK:
+            raise ValueError("oversized signed submission")
+        conn = http.client.HTTPSConnection(self.host, self.port, timeout=self.timeout, context=self.context)
+        try:
+            conn.request("POST", CEO_SUBMIT_PATH, body=raw,
+                         headers={"Content-Type": "application/json"})
+            res = conn.getresponse()
+            if res.status != 200:
+                raise ValueError("broker assignment submission denied")
+            data = res.read(1025)
+            if len(data) > 1024:
+                raise ValueError("oversized submission response")
+            result = json.loads(data, object_pairs_hook=_object)
+            if (type(result) is not dict or set(result) != {"accepted", "duplicate", "task_id"}
+                    or result["accepted"] is not True or type(result["duplicate"]) is not bool
+                    or result["task_id"] != envelope["body"]["task_id"]):
+                raise ValueError("uncorrelated submission")
+            return result
+        finally:
+            conn.close()
+
+    def assignment_record(self, task_id):
+        """CEO-only status; broker never grants database access."""
+        from kernel.broker.isolated_mtls import CEO_STATUS_PREFIX
+        import re
+        if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,119}", task_id):
+            raise ValueError("invalid task identity")
+        conn = http.client.HTTPSConnection(self.host, self.port, timeout=self.timeout, context=self.context)
+        try:
+            conn.request("GET", CEO_STATUS_PREFIX + task_id)
+            res = conn.getresponse()
+            if res.status != 200:
+                raise ValueError("broker status denied")
+            data = res.read(65537)
+            if len(data) > 65536:
+                raise ValueError("oversized broker record")
+            result = json.loads(data, object_pairs_hook=_object)
+            if type(result) is not dict or set(result) != {"record"}:
+                raise ValueError("unexpected broker status")
+            record = result["record"]
+            if record is not None and (
+                    type(record) is not dict or
+                    set(record) != {"assignment", "state", "acknowledgement"} or
+                    record["assignment"]["body"]["task_id"] != task_id or
+                    record["state"] not in ("PENDING", "ACKNOWLEDGED")):
+                raise ValueError("corrupt broker record")
+            return record
+        finally:
+            conn.close()
+
     def reserve_provider(self, payload):
         """Reserve through the same verified mTLS origin; no redirects or fallback."""
         from agents.ceo.provider_reservation import RESERVATION_PATH, MAX_RESERVATION

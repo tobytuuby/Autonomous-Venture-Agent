@@ -278,6 +278,26 @@ def instructions(content):
     return content
 
 
+class RemotePreparationOutbox:
+    """CEO sees only signed ingress and authenticated status over mTLS."""
+    def __init__(self, client):
+        self.client = client
+
+    def record(self, task_id):
+        return self.client.assignment_record(task_id)
+
+    def enqueue_verified(self, assignment, actors, *, expected_ceo, expected_manager, consume_nonce):
+        if assignment["body"]["actor_id"] != expected_ceo or assignment["body"]["recipient_id"] != expected_manager:
+            raise ValueError("incorrect CEO or Manager")
+        return not self.client.submit_assignment(assignment)["duplicate"]
+
+    def consume_nonce(self, *_):
+        raise ValueError("remote nonce authority belongs to broker")
+
+    def close(self):
+        pass
+
+
 class PreparationExchange:
     def __init__(self, state, signer, actors, model, context):
         exact(context, ("session_id", "venture_id", "ceo_id", "manager_id", "objective", "rounds"))
@@ -418,7 +438,7 @@ def main(argv=None):
                 client=client, policy_path=config["usage_policy"])
             exchange = PreparationExchange(state, signer, actors, model, config["context"])
             if role == "ceo":
-                outbox = PreparationOutbox(inside_root(config["outbox"]))
+                outbox = RemotePreparationOutbox(client)
                 tick = lambda: exchange.ceo_tick(outbox)
             else:
                 tick = lambda: exchange.manager_tick(client)

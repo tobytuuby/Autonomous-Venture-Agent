@@ -19,7 +19,7 @@ from agents.ceo.cross_vm_outbox import PreparationOutbox
 from agents.ceo.cross_vm_poll_client import PreparationPollClient, ACK_PATH
 from agents.ceo.escalation_inbox import canonical, digest, ROOT
 from agents.ceo.preparation_exchange import (
-    ExchangeState, StandingModel, RemoteStandingModel, PreparationExchange, RoleSigner, utc, main,
+    ExchangeState, StandingModel, RemoteStandingModel, PreparationExchange, RemotePreparationOutbox, RoleSigner, utc, main,
 )
 from kernel.broker.isolated_mtls import isolated_server, handler_for
 from tests import test_broker_isolated_mtls as tls_fixture
@@ -504,6 +504,73 @@ class ExchangeTests(unittest.TestCase):
                 self.client.reserve_provider(ceo_request)
             self.assertTrue(self.client.reserve_provider(manager_request)["reserved"])
             self.assertEqual(self.reservations(), (3, 1536))
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
+    def test_ceo_broker_submission_manager_ack_and_ceo_continuation(self):
+        def with_box(action, *args):
+            box = PreparationOutbox(self.outbox_path)
+            try:
+                return getattr(box, action)(*args)
+            finally:
+                box.close()
+        def pending():
+            return with_box("pending")
+        def status(task_id):
+            return with_box("record", task_id)
+        def submit(envelope):
+            box = PreparationOutbox(self.outbox_path)
+            try:
+                return box.enqueue_verified(envelope, self.actors,
+                    expected_ceo="ceo", expected_manager="manager",
+                    consume_nonce=box.consume_nonce)
+            finally:
+                box.close()
+        def acknowledge(envelope):
+            box = PreparationOutbox(self.outbox_path)
+            try:
+                return box.accept_ack(envelope, self.actors,
+                    expected_ceo="ceo", expected_manager="manager")
+            finally:
+                box.close()
+        server = isolated_server(host="127.0.0.1", port=0,
+            server_cert=self.tls.paths["server"][0],
+            server_key=self.tls.paths["server"][1], client_ca=self.tls.ca,
+            capability_pins={self.tls.pin("cap")},
+            polling_pins={self.tls.pin("poll")},
+            ceo_reservation_pins={self.tls.pin("other")},
+            ceo_reservation_actor="ceo", reservation_actor="manager",
+            pending=pending, acknowledge=acknowledge, submit=submit, status=status)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            def client(which):
+                return PreparationPollClient(
+                    "https://localhost:" + str(server.server_port) + "/v1/assignments/pending",
+                    ca_file=str(self.tls.ca),
+                    client_cert=str(self.tls.paths[which][0]),
+                    client_key=str(self.tls.paths[which][1]),
+                    actors=self.actors, ceo_id="ceo", manager_id="manager",
+                    consume_nonce=lambda *_: False)
+            ceo, manager = client("other"), client("poll")
+            remote = RemotePreparationOutbox(ceo)
+            self.assertEqual(self.exchanges["ceo"].ceo_tick(remote), "WAITING_ACK")
+            assignment = manager.fetch()[0]
+            self.assertEqual(remote.record(assignment["body"]["task_id"])["state"], "PENDING")
+            with self.assertRaises(ValueError):
+                manager.submit_assignment(assignment)
+            with self.assertRaises(RuntimeError):
+                ceo.fetch()
+            self.assertEqual(self.exchanges["manager"].manager_tick(manager),
+                             "POLLING_PREPARATION_ONLY")
+            self.assertEqual(self.exchanges["ceo"].ceo_tick(remote), "WAITING_ACK")
+            self.assertEqual(self.exchanges["manager"].manager_tick(manager),
+                             "POLLING_PREPARATION_ONLY")
+            self.assertEqual(self.exchanges["ceo"].ceo_tick(remote),
+                             "COMPLETE_RECEIPTS_ONLY")
+            self.assertEqual(self.reservations(), (4, 2048))
         finally:
             server.shutdown()
             server.server_close()

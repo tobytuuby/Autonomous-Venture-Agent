@@ -5,6 +5,7 @@ supply a loopback bind address, certificate paths and certificate pinsets.
 """
 import hashlib
 import json
+import re
 from agents.ceo.cross_vm_transport import _object, MAX_ACK
 from agents.ceo.cross_vm_poll_client import ACK_PATH
 from agents.ceo.provider_reservation import RESERVATION_PATH, MAX_RESERVATION
@@ -13,6 +14,8 @@ from http.server import ThreadingHTTPServer
 from kernel.broker.server import Handler as ExistingBrokerHandler
 
 POLL_PATH = "/v1/assignments/pending"
+CEO_SUBMIT_PATH = "/v1/assignments/submit"
+CEO_STATUS_PREFIX = "/v1/assignments/status/"
 CAP_PATH = "/v1/capabilities/evaluate"
 
 def tls_context(*, server_cert, server_key, client_ca):
@@ -23,7 +26,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -69,11 +72,50 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                 if pending is None:
                     return self._send(503, {"error": "polling_unavailable"})
                 return self._send(200, {"assignments": pending()})
+            if self.path.startswith(CEO_STATUS_PREFIX):
+                if role != "quota-ceo":
+                    return self._deny()
+                if status is None:
+                    return self._send(503, {"error": "status_unavailable"})
+                task_id = self.path[len(CEO_STATUS_PREFIX):]
+                if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,119}", task_id):
+                    return self._send(400, {"error": "invalid_task"})
+                try:
+                    record = status(task_id)
+                except Exception:
+                    return self._send(503, {"error": "status_unavailable"})
+                return self._send(200, {"record": record})
             if self.path == "/health" and role == "capability":
                 return super().do_GET()
             return self._deny() if role is None or self.path == "/health" else self._send(404, {"error": "not_found"})
 
         def do_POST(self):
+            if self.path == CEO_SUBMIT_PATH:
+                if self._role() != "quota-ceo":
+                    return self._deny()
+                if submit is None:
+                    return self._send(503, {"error": "submission_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("bounded submission required")
+                    length = int(lengths[0])
+                    if not 0 < length <= MAX_ACK:
+                        raise ValueError("submission size denied")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete submission")
+                    envelope = json.loads(raw, object_pairs_hook=_object)
+                    created = submit(envelope)
+                    if type(created) is not bool:
+                        raise ValueError("invalid broker submission result")
+                    return self._send(200, {"accepted": True, "duplicate": not created,
+                                            "task_id": envelope["body"]["task_id"]})
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "submission_denied"})
+                except Exception:
+                    return self._send(503, {"error": "submission_unavailable"})
             if self.path == RESERVATION_PATH:
                 role = self._role()
                 if role not in ("poll", "quota-ceo"):
@@ -135,13 +177,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
-        ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor))
+        ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
+        submit=submit, status=status))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)

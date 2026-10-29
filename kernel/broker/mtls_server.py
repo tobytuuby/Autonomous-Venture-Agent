@@ -33,6 +33,8 @@ def main():
     # Opt-in only: old read-only deployments stay closed to ACK until public
     # signing trust and fixed workload identities have been explicitly configured.
     acknowledge = None
+    submit = None
+    status = None
     if os.environ.get("VENTURE_BROKER_PREPARATION_TRUST"):
         from agents.ceo.control_plane import load_trust
         actors = load_trust(required("VENTURE_BROKER_PREPARATION_TRUST"))
@@ -47,11 +49,35 @@ def main():
             finally:
                 outbox.close()
 
+        def submit(envelope):
+            outbox = PreparationOutbox(db_path)
+            try:
+                # Exact committed submissions may be observed again after a lost
+                # HTTP response; never reissue the authorization or consume nonce.
+                from agents.ceo.escalation_inbox import canonical
+                existing = outbox.record(envelope["body"]["task_id"])
+                if existing is not None:
+                    if canonical(existing["assignment"]) != canonical(envelope):
+                        raise ValueError("conflicting assignment denied")
+                    return False
+                return outbox.enqueue_verified(envelope, actors, expected_ceo=ceo_id,
+                    expected_manager=manager_id, consume_nonce=outbox.consume_nonce)
+            finally:
+                outbox.close()
+
+        def status(task_id):
+            outbox = PreparationOutbox(db_path)
+            try:
+                return outbox.record(task_id)
+            finally:
+                outbox.close()
+
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
-                          ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None)
+                          ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
+                          submit=submit, status=status)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:
