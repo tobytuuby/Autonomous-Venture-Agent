@@ -1,6 +1,6 @@
 # Level 2D Worker mTLS Renewal — Actual Rotation and Final Hierarchy Closeout
 
-Date: October 29, 2026 UTC. **Operator-verified live two-VM evidence; independent auditor verdict pending.** Source commits `3a29aff` and `2589bbb`; real hierarchy operation is documented separately in the preexisting `docs/operational-readiness/evidence/level2d-real-hierarchy-20261029.md` if present.
+Date: October 29, 2026 UTC. **Operator-verified live two-VM evidence; independent auditor verdict pending.** Source commits `3a29aff` and `2589bbb`; real hierarchy operation is documented separately in the preexisting `docs/operational-readiness/evidence/level2d-real-autonomous-hierarchy-20261029.md`.
 
 ## Worker renewal controls
 
