@@ -11,7 +11,7 @@ RESERVATION_PATH = "/v1/inference/reservations"
 MAX_RESERVATION = 8192
 
 
-def reserve_exchange(payload, *, actor):
+def reserve_exchange(payload, *, actor, role="manager"):
     """Trusted broker callback; actor comes from TLS pin configuration, never JSON.
 
     A CEO-established session is mandatory. Exact retry of one durable intent is
@@ -20,7 +20,7 @@ def reserve_exchange(payload, *, actor):
     from agents.ceo.preparation_exchange import StandingModel
     exact(payload, ("context", "actor", "role", "identity", "request_sha256",
                     "attempt", "policy", "endpoint", "model"))
-    if payload["role"] != "manager" or payload["actor"] != actor:
+    if role not in ("ceo", "manager") or payload["role"] != role or payload["actor"] != actor:
         raise ValueError("reservation role denied")
     identifier(payload["identity"])
     for field in ("request_sha256", "attempt"):
@@ -31,6 +31,8 @@ def reserve_exchange(payload, *, actor):
     context = payload["context"]
     exact(context, ("session_id", "venture_id", "ceo_id", "manager_id", "objective", "rounds"))
     identifier(context["session_id"])
+    if context[role + "_id"] != actor:
+        raise ValueError("reservation context recipient denied")
     authority = service_identity.ProviderQuota(service_identity.AUTHORITY_DIRECTORY)
     live_policy = authority.authority()
     if any(name in live_policy["revoked"] for name in
@@ -39,7 +41,7 @@ def reserve_exchange(payload, *, actor):
     # Reuse the standing policy validator with authoritative Control files.
     checker = StandingModel.__new__(StandingModel)
     checker.authority, checker.epoch = authority, authority.authority()["epoch"]
-    checker.context, checker.actor, checker.role = context, actor, "manager"
+    checker.context, checker.actor, checker.role = context, actor, role
     checker.provider = SimpleNamespace(endpoint=payload["endpoint"], model=payload["model"])
     policy = checker._policy()
     if policy != payload["policy"]:
@@ -49,19 +51,35 @@ def reserve_exchange(payload, *, actor):
         session=context["session_id"], actor=actor, identity=payload["identity"])).encode())
     wire = canonical(payload)
     path = inside_root(authority.directory / "resources.sqlite")
-    info = path.stat()  # Never create a missing authoritative ledger from Agents.
+    # Only the authenticated CEO may bootstrap broker-owned quota state.
+    if not path.exists() and role == "ceo":
+        try:
+            fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        except FileExistsError:
+            pass
+        else:
+            os.close(fd)
+    info = path.stat()
     if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
             or info.st_uid != os.geteuid() or info.st_mode & 0o077):
         raise ValueError("private resource ledger required")
     db = sqlite3.connect(path, isolation_level=None, timeout=5)
     try:
         db.execute("PRAGMA synchronous=FULL")
+        db.execute("BEGIN IMMEDIATE")
+        if role == "ceo":
+            db.execute("CREATE TABLE IF NOT EXISTS reservations(day TEXT, identity TEXT UNIQUE, tokens INTEGER)")
+            db.execute("CREATE TABLE IF NOT EXISTS exchange_sessions(session TEXT PRIMARY KEY, binding TEXT)")
+            db.execute("CREATE TABLE IF NOT EXISTS exchange_calls(identity TEXT PRIMARY KEY, session TEXT)")
         db.execute("""CREATE TABLE IF NOT EXISTS remote_reservations(
             identity TEXT PRIMARY KEY, request TEXT NOT NULL)""")
-        db.execute("BEGIN IMMEDIATE")
         session = context["session_id"]
         row = db.execute("SELECT binding FROM exchange_sessions WHERE session=?", (session,)).fetchone()
-        if row is None or row[0] != binding:
+        if row is None:
+            if role != "ceo":
+                raise ValueError("CEO-established Control session required")
+            db.execute("INSERT INTO exchange_sessions VALUES(?,?)", (session, binding))
+        elif row[0] != binding:
             raise ValueError("Control session binding required")
         prior = db.execute("SELECT request FROM remote_reservations WHERE identity=?", (call,)).fetchone()
         if prior:

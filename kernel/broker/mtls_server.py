@@ -49,7 +49,9 @@ def main():
 
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
-                          reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None)
+                          reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
+                          ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
+                          ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

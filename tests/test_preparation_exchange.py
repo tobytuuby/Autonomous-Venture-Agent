@@ -403,7 +403,7 @@ class ExchangeTests(unittest.TestCase):
         self.assertEqual(fixture.request("poll", "POST", ACK_PATH, body=canonical(ack))[0], 403)
         self.assertEqual(fixture.request("other", "POST", ACK_PATH, body=canonical(ack))[0], 200)
 
-    def test_grant_free_entrypoint_uses_central_policy(self):
+    def test_ceo_entrypoint_requires_central_mtls_reservation(self):
         config = self.home / "standing-config.json"
         config.write_text(canonical(dict(state_directory=str(self.home/"ceo"), role="ceo",
             signing_key=str(self.home/"ceo/role.seed"), context=self.context,
@@ -412,8 +412,9 @@ class ExchangeTests(unittest.TestCase):
             actor: dict(role=role, public_key=key.hex())
             for actor, (role, key) in self.actors.items()})))
         with patch("agents.ceo.preparation_exchange.configured_provider", return_value=self.providers["ceo"]):
-            self.assertEqual(main(["--config", str(config), "--once"]), 0)
-        self.assertEqual(self.reservations(), (1, 512))
+            with self.assertRaises(KeyError):
+                main(["--config", str(config), "--once"])
+        self.assertEqual(len(self.providers["ceo"].calls), 0)
 
     def test_response_checkpoint_failure_burns_daily_quota_and_denies_retry(self):
         model = self.exchanges["ceo"].model
@@ -467,6 +468,46 @@ class ExchangeTests(unittest.TestCase):
             identity=identity, request_sha256="a"*64, attempt="b"*64,
             policy=deepcopy(self.policy), endpoint=FixtureProvider.endpoint,
             model=FixtureProvider.model)
+
+    def test_distinct_ceo_mtls_identity_bootstraps_manager_quota_session(self):
+        self.issue()  # Creates the durable central ledger, not the new session.
+        context = dict(self.context, session_id="new-approved-preparation")
+        manager_request = dict(self.reservation_payload("new-manager-1"), context=context)
+        with self.assertRaises(ValueError):
+            self.client.reserve_provider(manager_request)
+        server = isolated_server(
+            host="127.0.0.1", port=0,
+            server_cert=self.tls.paths["server"][0],
+            server_key=self.tls.paths["server"][1],
+            client_ca=self.tls.ca, capability_pins={self.tls.pin("cap")},
+            polling_pins={self.tls.pin("poll")}, pending=lambda: [],
+            reservation_actor="manager", ceo_reservation_pins={self.tls.pin("other")},
+            ceo_reservation_actor="ceo")
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            ceo_client = PreparationPollClient(
+                "https://localhost:" + str(server.server_port) + "/v1/assignments/pending",
+                ca_file=str(self.tls.ca),
+                client_cert=str(self.tls.paths["other"][0]),
+                client_key=str(self.tls.paths["other"][1]),
+                actors=self.actors, ceo_id="ceo", manager_id="manager",
+                consume_nonce=lambda *_: False)
+            ceo_request = dict(manager_request, actor="ceo", role="ceo",
+                               identity="new-ceo-1")
+            self.assertTrue(ceo_client.reserve_provider(ceo_request)["reserved"])
+            with self.assertRaises(RuntimeError):
+                ceo_client.fetch()  # CEO reservation identity cannot poll assignments.
+            with self.assertRaises(ValueError):
+                ceo_client.reserve_provider(manager_request)
+            with self.assertRaises(ValueError):
+                self.client.reserve_provider(ceo_request)
+            self.assertTrue(self.client.reserve_provider(manager_request)["reserved"])
+            self.assertEqual(self.reservations(), (3, 1536))
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
 
     def test_remote_exact_reservation_retry_restart_and_replay_binding(self):
         self.issue()

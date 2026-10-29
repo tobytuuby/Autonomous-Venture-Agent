@@ -23,18 +23,25 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
     if not all(isinstance(s, str) and len(s) == 64 and
                all(c in "0123456789abcdef" for c in s)
-               for s in (*capability_pins, *polling_pins)):
+               for s in (*capability_pins, *polling_pins, *ceo_reservation_pins)):
         raise ValueError("malformed fingerprint")
-    if set(capability_pins) & set(polling_pins):
+    if (set(capability_pins) & set(polling_pins) or set(capability_pins) & set(ceo_reservation_pins)
+            or set(polling_pins) & set(ceo_reservation_pins)):
         raise ValueError("role pinsets must be disjoint")
+    if bool(ceo_reservation_pins) != bool(ceo_reservation_actor):
+        raise ValueError("CEO reservation identity incomplete")
     if reservation_actor is not None and (not isinstance(reservation_actor, str) or not reservation_actor):
         raise ValueError("reservation actor pin required")
+    if ceo_reservation_pins and (not isinstance(ceo_reservation_actor, str)
+                                 or not ceo_reservation_actor
+                                 or ceo_reservation_actor == reservation_actor):
+        raise ValueError("distinct CEO reservation actor required")
     class GuardedHandler(ExistingBrokerHandler):
         def _role(self):
             if not isinstance(self.connection, ssl.SSLSocket):
@@ -43,6 +50,8 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
             if not cert:
                 return None
             fingerprint = hashlib.sha256(cert).hexdigest()
+            if fingerprint in ceo_reservation_pins:
+                return "quota-ceo"
             if fingerprint in polling_pins:
                 return "poll"
             if fingerprint in capability_pins:
@@ -66,9 +75,10 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
 
         def do_POST(self):
             if self.path == RESERVATION_PATH:
-                if self._role() != "poll":
+                role = self._role()
+                if role not in ("poll", "quota-ceo"):
                     return self._deny()
-                if reservation_actor is None:
+                if (reservation_actor if role == "poll" else ceo_reservation_actor) is None:
                     return self._send(503, {"error": "reservation_unavailable"})
                 try:
                     lengths = self.headers.get_all("Content-Length", [])
@@ -83,7 +93,8 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                         raise ValueError("incomplete reservation")
                     payload = json.loads(raw, object_pairs_hook=_object)
                     from agents.ceo.provider_reservation import reserve_exchange
-                    result = reserve_exchange(payload, actor=reservation_actor)
+                    result = reserve_exchange(payload, actor=(reservation_actor if role == "poll" else ceo_reservation_actor),
+                        role=("manager" if role == "poll" else "ceo"))
                 except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
                     return self._send(400, {"error": "reservation_denied"})
                 except Exception:
@@ -124,12 +135,13 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
-        pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor))
+        pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
+        ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)

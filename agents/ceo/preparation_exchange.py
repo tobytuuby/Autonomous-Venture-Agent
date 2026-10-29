@@ -112,7 +112,8 @@ class ExchangeState:
 class StandingModel:
     """Operator standing policy; durable intent and shared reservations before I/O."""
     def __init__(self, state, provider, *, context, actor, role):
-        if role != "ceo":
+        from agents.ceo.provider import OpenAICompatibleShadowModel
+        if role != "ceo" or isinstance(provider, OpenAICompatibleShadowModel):
             raise ValueError("Agents require remote reservation; local fallback forbidden")
         self.state, self.provider = state, provider
         self.context, self.actor, self.role = dict(context), actor, role
@@ -238,8 +239,8 @@ class StandingModel:
 class RemoteStandingModel(StandingModel):
     """Agents have a policy copy and remote client, never Control identity keys/DB."""
     def __init__(self, state, provider, *, context, actor, role, client, policy_path):
-        if role != "manager" or client is None:
-            raise ValueError("remote manager reservation required")
+        if role not in ("ceo", "manager") or client is None:
+            raise ValueError("remote role reservation required")
         self.state, self.provider = state, provider
         self.context, self.actor, self.role = dict(context), actor, role
         self.client, self.policy_path = client, inside_root(policy_path)
@@ -406,20 +407,15 @@ def main(argv=None):
             if provider.model != "gpt-6-sol":
                 raise ValueError("fixed CEO and manager model policy requires gpt-6-sol")
             provider.trace_path = state.directory / "provider.jsonl"
-            client = None
-            if role == "manager":
-                client = PreparationPollClient(config["endpoint"],
-                    ca_file=str(inside_root(config["ca_file"])),
-                    client_cert=str(inside_root(config["client_cert"])),
-                    client_key=str(inside_root(config["client_key"])), actors=actors,
-                    ceo_id=config["context"]["ceo_id"], manager_id=signer.actor,
-                    consume_nonce=lambda *_: False)
-                model = RemoteStandingModel(state, provider,
-                    context=config["context"], actor=signer.actor, role=role,
-                    client=client, policy_path=config["usage_policy"])
-            else:
-                model = StandingModel(state, provider,
-                    context=config["context"], actor=signer.actor, role=role)
+            client = PreparationPollClient(config["endpoint"],
+                ca_file=str(inside_root(config["ca_file"])),
+                client_cert=str(inside_root(config["client_cert"])),
+                client_key=str(inside_root(config["client_key"])), actors=actors,
+                ceo_id=config["context"]["ceo_id"], manager_id=config["context"]["manager_id"],
+                consume_nonce=lambda *_: False)
+            model = RemoteStandingModel(state, provider,
+                context=config["context"], actor=signer.actor, role=role,
+                client=client, policy_path=config["usage_policy"])
             exchange = PreparationExchange(state, signer, actors, model, config["context"])
             if role == "ceo":
                 outbox = PreparationOutbox(inside_root(config["outbox"]))
