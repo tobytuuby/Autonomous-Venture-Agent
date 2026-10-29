@@ -27,9 +27,13 @@ TASK=(
 
 
 def run(config):
+    flow=config["workflow_id"]
+    if flow not in ("level2d-acceptance-1", "level2d-acceptance-2"):
+        raise ValueError("bounded technical fixture only")
+    item=ITEM if flow.endswith("-1") else "level2d-acceptance-retry"
     c=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
         client_cert=config["client_cert"],client_key=config["client_key"])
-    if c.read(FLOW) is not None:
+    if c.read(flow) is not None:
         print("hierarchy-technical-test-already-created")
         return
     key=Ed25519PrivateKey.from_private_bytes(Path(config["signing_key"]).read_bytes())
@@ -38,10 +42,10 @@ def run(config):
     issued=datetime.now(timezone.utc)-timedelta(seconds=10)
     expires=issued+timedelta(hours=1)
     times=dict(issued_at=issued.isoformat(),expires_at=expires.isoformat())
-    review=dict(item_id=ITEM,packet_hash=digest(PACKET.encode()),disposition="HANDOFF",
+    review=dict(item_id=item,packet_hash=digest(PACKET.encode()),disposition="HANDOFF",
         summary="Owner-authorized technical preparation only; no external activity.",
         manager_id=MANAGER,instructions=[TASK],owner_action=None,scope="PREPARATION_ONLY")
-    receipt=dict(venture_id=VENTURE,item_id=ITEM,packet_hash=review["packet_hash"],
+    receipt=dict(venture_id=VENTURE,item_id=item,packet_hash=review["packet_hash"],
         review_hash=hashed(review),manager_id=MANAGER,decision="HANDOFF",
         scope="PREPARATION_ONLY",ceo_id=CEO,
         decision_reference="owner-authorized-level2d-technical-test",**times)
@@ -49,7 +53,7 @@ def run(config):
                                       receipt_signature=sign(receipt)))
     scope=dict(mode="PREPARATION_ONLY",manager_id=MANAGER,worker_id=WORKER,
         tasks=[TASK],budget_units=5,seed_cents=10000)
-    cmd=dict(workflow_id=FLOW,request_id="ceo-level2d-acceptance-create",
+    cmd=dict(workflow_id=flow,request_id="ceo-"+flow+"-create",
         actor_id=CEO,role="ceo",origin="control_plane",action="create",
         revision=0,previous_hash="GENESIS",version=1,
         scope_hash=hashed(scope),evidence=[dict(ref="owner-level2d-preparation",
@@ -60,20 +64,20 @@ def run(config):
     result=c.bootstrap_commit(cmd,sign(cmd))
     policy=json.loads(Path(config["policy"]).read_text())
     context=config["context"]
-    if context["session_id"]!=FLOW or context["venture_id"]!=VENTURE:
+    if context["session_id"]!=flow or context["venture_id"]!=VENTURE:
         raise ValueError("CEO bounded technical session required")
     # CEO establishes the Control-owned inference session; this reserves one
     # model-budget slot without making a provider call. Manager cannot bootstrap.
     reservation=dict(context=context,actor=CEO,role="ceo",
         identity="ceo-level2d-technical-bootstrap",
         request_sha256=digest(PACKET.encode()),
-        attempt=digest((FLOW+"-standing-bootstrap").encode()),
+        attempt=digest((flow+"-standing-bootstrap").encode()),
         policy=policy,endpoint=policy["roles"]["ceo"]["endpoint"],
         model=policy["roles"]["ceo"]["model"])
     receipt_budget=c._request("POST","/v1/inference/reservations",reservation)
     if receipt_budget.get("reserved") is not True:
         raise ValueError("central CEO session bootstrap denied")
-    print(json.dumps(dict(workflow_id=FLOW,state=result["state"],
+    print(json.dumps(dict(workflow_id=flow,state=result["state"],
         central_session_reserved=True,owner_approval=False,operational_authority=False)))
 
 

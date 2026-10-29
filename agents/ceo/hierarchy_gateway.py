@@ -47,7 +47,9 @@ class HierarchyGateway:
         ceos = [k for k,v in self.actors.items() if v[0] == "ceo"]
         if len(ceos) != 1:
             raise ValueError("unique CEO trust required")
-        item_id = "level2d-acceptance"
+        item_id = review.get("item_id")
+        if item_id not in ("level2d-acceptance", "level2d-acceptance-retry"):
+            raise ValueError("bounded technical fixture only")
         venture_id = "venture-verification"
         if (review.get("item_id") != item_id
                 or review.get("manager_id") != "service-manager"
@@ -91,8 +93,11 @@ class HierarchyGateway:
         from agents.ceo.escalation_inbox import EscalationInbox
         exact(payload, ("command", "signature"))
         cmd = payload["command"]
-        if type(cmd) is not dict or cmd.get("workflow_id") != "level2d-acceptance-1":
-            raise ValueError("single technical acceptance fixture only")
+        if type(cmd) is not dict or cmd.get("workflow_id") not in (
+                "level2d-acceptance-1", "level2d-acceptance-2"):
+            raise ValueError("bounded technical acceptance fixtures only")
+        item_id = ("level2d-acceptance" if cmd["workflow_id"].endswith("-1")
+                   else "level2d-acceptance-retry")
         scope = cmd.get("payload", {}).get("scope", {})
         if (cmd.get("action") != "create" or cmd.get("role") != "ceo"
                 or cmd.get("live") is not False
@@ -112,7 +117,7 @@ class HierarchyGateway:
         workflow = VentureWorkflow(self.directory / "workflow.sqlite",actors=self.actors)
         try:
             return workflow.create(cmd,payload["signature"],inbox=inbox,
-                                   item_id="level2d-acceptance")
+                                   item_id=item_id)
         finally:
             workflow.close()
             inbox.close()
