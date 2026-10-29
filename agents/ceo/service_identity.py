@@ -37,7 +37,79 @@ def private_directory(path):
     return path
 
 
-class ServiceIdentities:
+class ProviderQuota:
+    """Control quota authority only; no signing keys are read by this interface."""
+    def __init__(self, directory):
+        self.directory = private_directory(directory)
+
+    def authority(self):
+        path = inside_root(self.directory / "authority.json")
+        info = path.stat()
+        if (info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o600
+                or not stat.S_ISREG(info.st_mode) or info.st_nlink != 1):
+            raise ValueError("private authority policy required")
+        policy = read_json(path)
+        exact(policy, ("epoch", "revoked", "enabled"))
+        if (type(policy["epoch"]) is not int or policy["epoch"] < 1
+                or type(policy["enabled"]) is not bool
+                or type(policy["revoked"]) is not list
+                or any(type(actor) is not str for actor in policy["revoked"])):
+            raise ValueError("authority policy denied")
+        if not policy["enabled"]:
+            raise ValueError("preparation authority disabled")
+        return policy
+
+
+    def reserve_provider(self, request_hash, output_tokens, *, context):
+        """Atomic shared daily ceiling, reserved before transport; no crash refunds."""
+        policy = self.authority()
+        if (context["epoch"] != policy["epoch"] or context.get("actor") in policy["revoked"]
+                or any(actor in policy["revoked"] for actor in ("service-ceo", "service-manager", "service-worker"))):
+            raise ValueError("stale resource epoch")
+        if type(output_tokens) is not int or not 1 <= output_tokens <= MAX_OUTPUT_TOKENS:
+            raise ValueError("provider token ceiling")
+        path = inside_root(self.directory / "resources.sqlite")
+        if path.exists():
+            info = path.stat()
+            if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                    or info.st_uid != os.geteuid() or info.st_mode & 0o077):
+                raise ValueError("private resource ledger required")
+        fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+        os.close(fd)
+        db = sqlite3.connect(path, isolation_level=None)
+        try:
+            db.execute("PRAGMA synchronous=FULL")
+            db.execute("CREATE TABLE IF NOT EXISTS reservations(day TEXT, identity TEXT UNIQUE, tokens INTEGER)")
+            db.execute("BEGIN IMMEDIATE")
+            self._reserve_daily(db, request_hash, output_tokens)
+            db.execute("COMMIT")
+        except BaseException:
+            if db.in_transaction:
+                db.execute("ROLLBACK")
+            raise
+        finally:
+            db.close()
+
+
+    def _reserve_daily(self, db, request_hash, output_tokens):
+        """Caller owns the IMMEDIATE transaction, shared by local/remote reserves."""
+        if type(output_tokens) is not int or not 1 <= output_tokens <= MAX_OUTPUT_TOKENS:
+            raise ValueError("provider token ceiling")
+        if not db.in_transaction:
+            raise ValueError("quota reservation transaction required")
+        if db.execute("""SELECT 1 FROM reservations
+                WHERE typeof(tokens) != 'integer' OR tokens < 1 OR tokens > ?
+                LIMIT 1""", (MAX_OUTPUT_TOKENS,)).fetchone():
+            raise ValueError("invalid central quota ledger")
+        day = datetime.now(timezone.utc).date().isoformat()
+        used, tokens = db.execute(
+            "SELECT COUNT(*),COALESCE(SUM(tokens),0) FROM reservations WHERE day=?", (day,)).fetchone()
+        if used >= DAILY_REQUESTS or tokens + output_tokens > DAILY_OUTPUT_TOKENS:
+            raise ValueError("central daily provider quota exhausted")
+        db.execute("INSERT INTO reservations VALUES(?,?,?)", (day, request_hash, output_tokens))
+
+
+class ServiceIdentities(ProviderQuota):
     def __init__(self, directory):
         directory = private_directory(directory)
         self.directory = directory
@@ -78,24 +150,6 @@ class ServiceIdentities:
                 or command.get("origin") != "control_plane" or command.get("live") is not False):
             raise ValueError("service action denied")
         return self._keys[command["actor_id"]].sign(canonical(command).encode()).hex()
-
-
-    def authority(self):
-        path = inside_root(self.directory / "authority.json")
-        info = path.stat()
-        if (info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o600
-                or not stat.S_ISREG(info.st_mode) or info.st_nlink != 1):
-            raise ValueError("private authority policy required")
-        policy = read_json(path)
-        exact(policy, ("epoch", "revoked", "enabled"))
-        if (type(policy["epoch"]) is not int or policy["epoch"] < 1
-                or type(policy["enabled"]) is not bool
-                or type(policy["revoked"]) is not list
-                or any(type(actor) is not str for actor in policy["revoked"])):
-            raise ValueError("authority policy denied")
-        if not policy["enabled"]:
-            raise ValueError("preparation authority disabled")
-        return policy
 
 
     def _event_key(self, actor, context):
@@ -156,40 +210,6 @@ class ServiceIdentities:
         Ed25519PublicKey.from_public_bytes(key).verify(
             bytes.fromhex(envelope["signature"]), canonical(body).encode())
 
-
-    def reserve_provider(self, request_hash, output_tokens, *, context):
-        """Atomic shared daily ceiling, reserved before transport; no crash refunds."""
-        policy = self.authority()
-        if (context["epoch"] != policy["epoch"] or context.get("actor") in policy["revoked"]
-                or any(actor in policy["revoked"] for actor in ("service-ceo", "service-manager", "service-worker"))):
-            raise ValueError("stale resource epoch")
-        if type(output_tokens) is not int or not 1 <= output_tokens <= MAX_OUTPUT_TOKENS:
-            raise ValueError("provider token ceiling")
-        path = inside_root(self.directory / "resources.sqlite")
-        if path.exists():
-            info = path.stat()
-            if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
-                    or info.st_uid != os.geteuid() or info.st_mode & 0o077):
-                raise ValueError("private resource ledger required")
-        fd = os.open(path, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-        os.close(fd)
-        db = sqlite3.connect(path, isolation_level=None)
-        try:
-            db.execute("CREATE TABLE IF NOT EXISTS reservations(day TEXT, identity TEXT UNIQUE, tokens INTEGER)")
-            db.execute("BEGIN IMMEDIATE")
-            day = datetime.now(timezone.utc).date().isoformat()
-            used, tokens = db.execute(
-                "SELECT COUNT(*),COALESCE(SUM(tokens),0) FROM reservations WHERE day=?", (day,)).fetchone()
-            if used >= DAILY_REQUESTS or tokens + output_tokens > DAILY_OUTPUT_TOKENS:
-                raise ValueError("central daily provider quota exhausted")
-            db.execute("INSERT INTO reservations VALUES(?,?,?)", (day, request_hash, output_tokens))
-            db.execute("COMMIT")
-        except BaseException:
-            if db.in_transaction:
-                db.execute("ROLLBACK")
-            raise
-        finally:
-            db.close()
 
 
 def provision(directory):

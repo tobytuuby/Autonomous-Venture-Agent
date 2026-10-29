@@ -12,6 +12,19 @@ ACK_PATH = "/v1/assignments/ack"
 from agents.ceo.cross_vm_poll_server import PATH
 
 
+def verify_reservation(payload, result):
+    """Require an exact receipt for this intent before any paid inference."""
+    from agents.ceo.escalation_inbox import canonical, digest
+    expected = dict(reserved=True, request_sha256=digest(canonical(payload).encode()),
+        maximum_output_tokens=payload["policy"]["maximum_output_tokens"],
+        scope="PREPARATION_ONLY")
+    if (type(result) is not dict or result != expected
+            or result.get("reserved") is not True
+            or type(result.get("maximum_output_tokens")) is not int):
+        raise ValueError("uncorrelated reservation response")
+    return result
+
+
 class PreparationPollClient:
     def __init__(self, endpoint, *, ca_file, client_cert, client_key, actors,
                  ceo_id, manager_id, consume_nonce, timeout=10):
@@ -72,5 +85,28 @@ class PreparationPollClient:
                     or type(result["duplicate"]) is not bool):
                 raise ValueError("uncorrelated acknowledgement response")
             return result
+        finally:
+            conn.close()
+
+
+    def reserve_provider(self, payload):
+        """Reserve through the same verified mTLS origin; no redirects or fallback."""
+        from agents.ceo.provider_reservation import RESERVATION_PATH, MAX_RESERVATION
+        from agents.ceo.escalation_inbox import canonical
+        raw = canonical(payload).encode()
+        if len(raw) > MAX_RESERVATION:
+            raise ValueError("oversized reservation")
+        conn = http.client.HTTPSConnection(self.host, self.port, timeout=self.timeout, context=self.context)
+        try:
+            conn.request("POST", RESERVATION_PATH, body=raw,
+                         headers={"Content-Type": "application/json"})
+            res = conn.getresponse()
+            if res.status != 200:
+                raise ValueError("central reservation denied or unavailable")
+            reply = res.read(1025)
+            if len(reply) > 1024:
+                raise ValueError("oversized reservation response")
+            result = json.loads(reply, object_pairs_hook=_object)
+            return verify_reservation(payload, result)
         finally:
             conn.close()

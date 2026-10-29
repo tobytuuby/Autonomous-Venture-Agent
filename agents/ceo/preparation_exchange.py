@@ -95,6 +95,7 @@ class ExchangeState:
         self.db.execute("CREATE TABLE IF NOT EXISTS nonces(actor TEXT, nonce TEXT, PRIMARY KEY(actor,nonce))")
         self.db.execute("CREATE TABLE IF NOT EXISTS issued(task_id TEXT PRIMARY KEY, assignment TEXT)")
         self.db.execute("CREATE TABLE IF NOT EXISTS binding(context TEXT)")
+        self.db.execute("CREATE TABLE IF NOT EXISTS reservation_intents(id TEXT PRIMARY KEY, attempt TEXT)")
 
     def close(self):
         self.db.close()
@@ -111,6 +112,8 @@ class ExchangeState:
 class StandingModel:
     """Operator standing policy; durable intent and shared reservations before I/O."""
     def __init__(self, state, provider, *, context, actor, role):
+        if role != "ceo":
+            raise ValueError("Agents require remote reservation; local fallback forbidden")
         self.state, self.provider = state, provider
         self.context, self.actor, self.role = dict(context), actor, role
         self.authority = preparation_authority()
@@ -130,6 +133,9 @@ class StandingModel:
                 or info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o600):
             raise ValueError("operator-owned standing usage policy required")
         policy = read_json(path)
+        return self._validate_policy(policy)
+
+    def _validate_policy(self, policy):
         exact(policy, ("domain", "enabled", "epoch", "roles",
                        "maximum_requests", "maximum_output_tokens"))
         if (policy["domain"] != "preparation-exchange-usage-v1"
@@ -154,7 +160,7 @@ class StandingModel:
                 raise ValueError("standing inference ceiling denied")
         return policy
 
-    def _reserve(self, identity):
+    def _reserve(self, identity, request_hash=None, attempt=None):
         # Shared with the authoritative daily quota, independent of workflow state
         # paths and policy versions. A partial reservation is deliberately burned.
         path = inside_root(self.authority.directory / "resources.sqlite")
@@ -208,8 +214,17 @@ class StandingModel:
             return json.loads(row[1])
         # Keep the legacy column for old ledgers: old grants cannot replay as policy.
         # Commit intent first. Any crash, quota denial or provider failure holds it.
-        db.execute("INSERT INTO calls VALUES(?,?,NULL,?)", (identity, wire, self.binding))
-        self._reserve(identity)
+        attempt = uuid.uuid4().hex + uuid.uuid4().hex
+        try:
+            db.execute("BEGIN IMMEDIATE")
+            db.execute("INSERT INTO calls VALUES(?,?,NULL,?)", (identity, wire, self.binding))
+            db.execute("INSERT INTO reservation_intents VALUES(?,?)", (identity, attempt))
+            db.execute("COMMIT")
+        except BaseException:
+            if db.in_transaction:
+                db.execute("ROLLBACK")
+            raise
+        self._reserve(identity, digest(wire.encode()), attempt)
         self.provider.maximum_output_tokens = self.policy["maximum_output_tokens"]
         response = self.provider(request, ())
         if response.get("tool_call") is not None:
@@ -217,6 +232,39 @@ class StandingModel:
         output = strict_json(response["decision"]["content"])
         db.execute("UPDATE calls SET response=? WHERE id=?", (canonical(output), identity))
         return output
+
+
+
+class RemoteStandingModel(StandingModel):
+    """Agents have a policy copy and remote client, never Control identity keys/DB."""
+    def __init__(self, state, provider, *, context, actor, role, client, policy_path):
+        if role != "manager" or client is None:
+            raise ValueError("remote manager reservation required")
+        self.state, self.provider = state, provider
+        self.context, self.actor, self.role = dict(context), actor, role
+        self.client, self.policy_path = client, inside_root(policy_path)
+        self.epoch = read_json(self.policy_path)["epoch"]
+        self.policy = self._policy()
+        self.binding = digest(canonical(dict(context=context, policy=self.policy)).encode())
+        state.bind(context)
+
+    def _policy(self):
+        path = self.policy_path
+        info = path.stat()
+        if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                or info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o600):
+            raise ValueError("operator-owned standing usage policy required")
+        return self._validate_policy(read_json(path))
+
+    def _reserve(self, identity, request_hash=None, attempt=None):
+        # Intent is already durably committed locally. No retry can call inference
+        # after ambiguity; direct exact reservation retries only observe one charge.
+        from agents.ceo.cross_vm_poll_client import verify_reservation
+        payload = dict(context=self.context, actor=self.actor,
+            role=self.role, identity=identity, request_sha256=request_hash,
+            attempt=attempt, policy=self.policy,
+            endpoint=self.provider.endpoint, model=self.provider.model)
+        verify_reservation(payload, self.client.reserve_provider(payload))
 
 
 def instructions(content):
@@ -358,19 +406,25 @@ def main(argv=None):
             if provider.model != "gpt-6-sol":
                 raise ValueError("fixed CEO and manager model policy requires gpt-6-sol")
             provider.trace_path = state.directory / "provider.jsonl"
-            model = StandingModel(state, provider,
-                context=config["context"], actor=signer.actor, role=role)
-            exchange = PreparationExchange(state, signer, actors, model, config["context"])
-            if role == "ceo":
-                outbox = PreparationOutbox(inside_root(config["outbox"]))
-                tick = lambda: exchange.ceo_tick(outbox)
-            else:
+            client = None
+            if role == "manager":
                 client = PreparationPollClient(config["endpoint"],
                     ca_file=str(inside_root(config["ca_file"])),
                     client_cert=str(inside_root(config["client_cert"])),
                     client_key=str(inside_root(config["client_key"])), actors=actors,
                     ceo_id=config["context"]["ceo_id"], manager_id=signer.actor,
                     consume_nonce=lambda *_: False)
+                model = RemoteStandingModel(state, provider,
+                    context=config["context"], actor=signer.actor, role=role,
+                    client=client, policy_path=config["usage_policy"])
+            else:
+                model = StandingModel(state, provider,
+                    context=config["context"], actor=signer.actor, role=role)
+            exchange = PreparationExchange(state, signer, actors, model, config["context"])
+            if role == "ceo":
+                outbox = PreparationOutbox(inside_root(config["outbox"]))
+                tick = lambda: exchange.ceo_tick(outbox)
+            else:
                 tick = lambda: exchange.manager_tick(client)
             while True:
                 try:
