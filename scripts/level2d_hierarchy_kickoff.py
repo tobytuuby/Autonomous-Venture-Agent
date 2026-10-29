@@ -29,12 +29,14 @@ TASK=(
 def run(config):
     flow=config["workflow_id"]
     if flow not in ("level2d-acceptance-1", "level2d-acceptance-2",
-                     "level2d-acceptance-3", "level2d-acceptance-4"):
+                     "level2d-acceptance-3", "level2d-acceptance-4",
+                     "level2d-acceptance-5"):
         raise ValueError("bounded technical fixture only")
     item={"level2d-acceptance-1": ITEM,
           "level2d-acceptance-2": "level2d-acceptance-retry",
           "level2d-acceptance-3": "level2d-acceptance-retry2",
-          "level2d-acceptance-4": "level2d-acceptance-retry3"}[flow]
+          "level2d-acceptance-4": "level2d-acceptance-retry3",
+          "level2d-acceptance-5": "level2d-acceptance-retry4"}[flow]
     c=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
         client_cert=config["client_cert"],client_key=config["client_key"])
     if c.read(flow) is not None:
