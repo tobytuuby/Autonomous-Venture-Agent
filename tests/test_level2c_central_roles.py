@@ -175,6 +175,22 @@ class CentralRolesTests(unittest.TestCase):
         self.assertEqual(f.reservations(), (1, 512))
         self.assertEqual(len(f.providers["ceo"].calls), 1)
 
+    def test_ceo_remote_quota_accepts_local_provider_without_broker_binding(self):
+        f = self.f
+        class CeoProviderNoBinding:
+            endpoint = fixtures.FixtureProvider.endpoint
+            model = fixtures.FixtureProvider.model
+            maximum_output_tokens = None
+            trace_path = None
+            def __call__(self, request, tools):
+                return f.providers["ceo"](request, tools)
+        model = RemoteStandingModel(f.states["ceo"], CeoProviderNoBinding(),
+            context=f.context, actor="ceo", role="ceo", client=self.ceo,
+            policy_path=f.policy_path)
+        value = model("ceo-no-manager-proxy", {}, {})
+        self.assertEqual(value["disposition"], "PREPARE")
+        self.assertEqual(f.reservations(), (1, 512))
+
     def test_gateway_execution_requires_prior_reservation_and_caches_exact_result(self):
         from agents.ceo.provider_gateway import execute_reserved
         from agents.ceo.preparation_exchange import SYSTEM

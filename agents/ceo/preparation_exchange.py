@@ -266,9 +266,12 @@ class RemoteStandingModel(StandingModel):
             attempt=attempt, policy=self.policy,
             endpoint=self.provider.endpoint, model=self.provider.model)
         verify_reservation(payload, self.client.reserve_provider(payload))
-        if not hasattr(self.provider, "bind_reservation"):
-            raise ValueError("Manager requires broker-backed provider")
-        self.provider.bind_reservation(payload)
+        if self.role == "manager":
+            if not hasattr(self.provider, "bind_reservation"):
+                raise ValueError("Manager requires broker-backed provider")
+            self.provider.bind_reservation(payload)
+        # CEO has an independently authorized Control-local provider; it must
+        # reserve centrally but does not use the Manager broker executor.
 
 
 def instructions(content):
