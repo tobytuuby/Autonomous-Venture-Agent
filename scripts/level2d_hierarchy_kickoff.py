@@ -58,8 +58,23 @@ def run(config):
         issued_at=datetime.now(timezone.utc).isoformat(),
         expires_at=(datetime.now(timezone.utc)+timedelta(minutes=5)).isoformat(),live=False)
     result=c.bootstrap_commit(cmd,sign(cmd))
+    policy=json.loads(Path(config["policy"]).read_text())
+    context=config["context"]
+    if context["session_id"]!=FLOW or context["venture_id"]!=VENTURE:
+        raise ValueError("CEO bounded technical session required")
+    # CEO establishes the Control-owned inference session; this reserves one
+    # model-budget slot without making a provider call. Manager cannot bootstrap.
+    reservation=dict(context=context,actor=CEO,role="ceo",
+        identity="ceo-level2d-technical-bootstrap",
+        request_sha256=digest(PACKET.encode()),
+        attempt=digest((FLOW+"-standing-bootstrap").encode()),
+        policy=policy,endpoint=policy["roles"]["ceo"]["endpoint"],
+        model=policy["roles"]["ceo"]["model"])
+    receipt_budget=c._request("POST","/v1/inference/reservations",reservation)
+    if receipt_budget.get("reserved") is not True:
+        raise ValueError("central CEO session bootstrap denied")
     print(json.dumps(dict(workflow_id=FLOW,state=result["state"],
-        owner_approval=False,operational_authority=False)))
+        central_session_reserved=True,owner_approval=False,operational_authority=False)))
 
 
 if __name__=="__main__":
