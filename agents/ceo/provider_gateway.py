@@ -43,7 +43,7 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
     elif request["system"] != EXCHANGE_SYSTEM:
         raise ValueError("model system boundary denied")
     if (actor != reservation["context"]["manager_id"] or reservation["role"] != "manager"
-            or reservation["actor"] != actor or request["system"] != SYSTEM
+            or reservation["actor"] != actor or request["system"] not in (EXCHANGE_SYSTEM, HIERARCHY_SYSTEM)
             or request["json_object_mode"] is not True
             or type(request["opportunity"]) is not dict
             or digest(canonical(request).encode()) != reservation["request_sha256"]

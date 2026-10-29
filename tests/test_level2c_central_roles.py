@@ -191,6 +191,39 @@ class CentralRolesTests(unittest.TestCase):
         self.assertEqual(value["disposition"], "PREPARE")
         self.assertEqual(f.reservations(), (1, 512))
 
+    def test_hierarchy_manager_system_allowed_only_for_signed_matching_state(self):
+        from agents.ceo.provider_gateway import execute_reserved
+        from agents.ceo.hierarchy_model_callbacks import SYSTEM as HIERARCHY_SYSTEM
+        from agents.ceo.escalation_inbox import digest
+        from agents.ceo.venture_workflow import hashed
+        from types import SimpleNamespace
+        f=self.f
+        session=f.context["session_id"]
+        state=dict(state="MANAGER_PENDING", scope=dict(manager_id="manager",
+            tasks=["Test tenant isolation"]), scope_hash="f"*64)
+        opportunity=dict(role="manager", state="MANAGER_PENDING",
+            workflow_id=session, snapshot_sha256=hashed(state),
+            scope_hash=state["scope_hash"], tasks=state["scope"]["tasks"])
+        request=dict(system=HIERARCHY_SYSTEM, json_object_mode=True,
+                     opportunity=opportunity)
+        reservation=dict(f.reservation_payload("manager-hierarchy-gateway"),
+                         request_sha256=digest(canonical(request).encode()))
+        self.ceo.reserve_provider(self.payload("ceo-before-hierarchy-gateway"))
+        f.client.reserve_provider(reservation)
+        provider=fixtures.FixtureProvider("manager")
+        hierarchy=SimpleNamespace(state=lambda key: state if key==session else None)
+        response=execute_reserved(dict(reservation=reservation,request=request),
+                                  actor="manager", provider=provider, hierarchy=hierarchy)
+        self.assertIsNone(response["tool_call"])
+        self.assertEqual(len(provider.calls),1)
+        with self.assertRaises(ValueError):
+            execute_reserved(dict(reservation=reservation,request=request),
+                actor="manager",provider=provider,
+                hierarchy=SimpleNamespace(state=lambda key:dict(state, state="WORKER_PENDING")))
+        with self.assertRaises(ValueError):
+            execute_reserved(dict(reservation=reservation,request=request),
+                actor="manager",provider=provider,hierarchy=None)
+
     def test_gateway_execution_requires_prior_reservation_and_caches_exact_result(self):
         from agents.ceo.provider_gateway import execute_reserved
         from agents.ceo.preparation_exchange import SYSTEM
