@@ -72,12 +72,24 @@ def main():
             finally:
                 outbox.close()
 
+    execute = None
+    if os.environ.get("VENTURE_BROKER_PROVIDER_ENABLED") == "1":
+        from pathlib import Path
+        from agents.ceo.venture_exercise import configured_provider
+        from agents.ceo.provider_gateway import execute_reserved
+        provider = configured_provider(os.environ, required=True)
+        from agents.ceo import service_identity
+        provider.trace_path = service_identity.AUTHORITY_DIRECTORY / "broker-provider.jsonl"
+        actor = required("VENTURE_BROKER_RESERVATION_ACTOR")
+        def execute(payload):
+            return execute_reserved(payload, actor=actor, provider=provider)
+
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
-                          submit=submit, status=status)
+                          submit=submit, status=status, execute=execute)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

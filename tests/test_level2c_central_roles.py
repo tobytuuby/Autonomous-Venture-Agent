@@ -175,6 +175,74 @@ class CentralRolesTests(unittest.TestCase):
         self.assertEqual(f.reservations(), (1, 512))
         self.assertEqual(len(f.providers["ceo"].calls), 1)
 
+    def test_gateway_execution_requires_prior_reservation_and_caches_exact_result(self):
+        from agents.ceo.provider_gateway import execute_reserved
+        from agents.ceo.preparation_exchange import SYSTEM
+        from agents.ceo.escalation_inbox import digest
+        f = self.f
+        request = dict(system=SYSTEM, json_object_mode=True,
+            opportunity=dict(context=dict(objective="receipt-only"), response_contract=dict(status="RECEIVED")))
+        manager = dict(f.reservation_payload("manager-gateway"),
+            request_sha256=digest(canonical(request).encode()))
+        payload = dict(reservation=manager, request=request)
+        provider = fixtures.FixtureProvider("manager")
+        with self.assertRaises(ValueError):
+            execute_reserved(payload, actor="manager", provider=provider)
+        self.ceo.reserve_provider(self.payload("ceo-prepares-manager-gateway"))
+        f.client.reserve_provider(manager)
+        first = execute_reserved(payload, actor="manager", provider=provider)
+        self.assertIsNone(first["tool_call"])
+        self.assertEqual(len(provider.calls), 1)
+        self.assertEqual(execute_reserved(payload, actor="manager", provider=provider), first)
+        self.assertEqual(len(provider.calls), 1)
+        with self.assertRaises(ValueError):
+            execute_reserved(dict(payload, request=dict(request, system="override")),
+                actor="manager", provider=provider)
+        with self.assertRaises(ValueError):
+            execute_reserved(payload, actor="ceo", provider=provider)
+        self.assertEqual(f.reservations(), (2, 1024))
+
+    def test_mtls_manager_execution_endpoint_and_ceo_denial(self):
+        from agents.ceo.provider_gateway import execute_reserved, RemoteInferenceProvider
+        from agents.ceo.preparation_exchange import SYSTEM
+        from agents.ceo.escalation_inbox import digest
+        f = self.f
+        provider = fixtures.FixtureProvider("manager")
+        server = isolated_server(host="127.0.0.1", port=0,
+            server_cert=f.tls.paths["server"][0], server_key=f.tls.paths["server"][1],
+            client_ca=f.tls.ca, capability_pins={f.tls.pin("cap")},
+            polling_pins={f.tls.pin("poll")}, reservation_actor="manager",
+            ceo_reservation_pins={f.tls.pin("other")}, ceo_reservation_actor="ceo",
+            execute=lambda payload: execute_reserved(payload, actor="manager", provider=provider))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            def caller(role):
+                return PreparationPollClient(
+                    "https://localhost:" + str(server.server_port) + POLL_PATH,
+                    ca_file=str(f.tls.ca), client_cert=str(f.tls.paths[role][0]),
+                    client_key=str(f.tls.paths[role][1]), actors=f.actors,
+                    ceo_id="ceo", manager_id="manager", consume_nonce=lambda *_: False)
+            mgr, ceo = caller("poll"), caller("other")
+            request = dict(system=SYSTEM, json_object_mode=True,
+                opportunity=dict(context=dict(objective="receipt only"), response_contract=dict(status="RECEIVED")))
+            payload = dict(f.reservation_payload("http-provider-gateway"),
+                request_sha256=digest(canonical(request).encode()))
+            self.ceo.reserve_provider(self.payload("ceo-http-bootstrap"))
+            mgr.reserve_provider(payload)
+            pending = dict(reservation=payload, request=request)
+            with self.assertRaises(ValueError):
+                ceo.execute_provider(pending)
+            remote = RemoteInferenceProvider(mgr, endpoint=provider.endpoint, model=provider.model)
+            remote.bind_reservation(payload)
+            result = remote(request, ())
+            self.assertIsNone(result["tool_call"])
+            self.assertEqual(len(provider.calls), 1)
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
     def test_provider_backed_local_model_is_forbidden(self):
         provider = OpenAICompatibleShadowModel.__new__(OpenAICompatibleShadowModel)
         with self.assertRaises(ValueError):

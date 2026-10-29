@@ -15,6 +15,7 @@ from kernel.broker.server import Handler as ExistingBrokerHandler
 
 POLL_PATH = "/v1/assignments/pending"
 CEO_SUBMIT_PATH = "/v1/assignments/submit"
+EXECUTE_PATH = "/v1/inference/execute"
 CEO_STATUS_PREFIX = "/v1/assignments/status/"
 CAP_PATH = "/v1/capabilities/evaluate"
 
@@ -26,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -116,6 +117,31 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     return self._send(400, {"error": "submission_denied"})
                 except Exception:
                     return self._send(503, {"error": "submission_unavailable"})
+            if self.path == EXECUTE_PATH:
+                if self._role() != "poll":
+                    return self._deny()
+                if execute is None:
+                    return self._send(503, {"error": "provider_execution_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("bounded inference length required")
+                    length = int(lengths[0])
+                    if not 0 < length <= 16384:
+                        raise ValueError("inference length denied")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete inference")
+                    payload = json.loads(raw, object_pairs_hook=_object)
+                    result = execute(payload)
+                    if len(json.dumps(result, separators=(",", ":")).encode()) > 16300:
+                        raise ValueError("oversized inference response")
+                    return self._send(200, {"result": result})
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "inference_denied"})
+                except Exception:
+                    return self._send(503, {"error": "inference_unavailable"})
             if self.path == RESERVATION_PATH:
                 role = self._role()
                 if role not in ("poll", "quota-ceo"):
@@ -177,14 +203,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status))
+        submit=submit, status=status, execute=execute))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)

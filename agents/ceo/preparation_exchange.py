@@ -266,6 +266,9 @@ class RemoteStandingModel(StandingModel):
             attempt=attempt, policy=self.policy,
             endpoint=self.provider.endpoint, model=self.provider.model)
         verify_reservation(payload, self.client.reserve_provider(payload))
+        if not hasattr(self.provider, "bind_reservation"):
+            raise ValueError("Manager requires broker-backed provider")
+        self.provider.bind_reservation(payload)
 
 
 def instructions(content):
@@ -423,7 +426,13 @@ def main(argv=None):
             actors = load_trust(config["trust"])
             role = config["role"]
             signer = RoleSigner(config["signing_key"], config["context"][role + "_id"], role, actors)
-            provider = configured_provider(os.environ, required=True)
+            if role == "manager":
+                from agents.ceo.provider_gateway import RemoteInferenceProvider
+                binding = read_json(inside_root(config["usage_policy"]))["roles"]["manager"]
+                provider = RemoteInferenceProvider(None,
+                    endpoint=binding["endpoint"], model=binding["model"])
+            else:
+                provider = configured_provider(os.environ, required=True)
             if provider.model != "gpt-6-sol":
                 raise ValueError("fixed CEO and manager model policy requires gpt-6-sol")
             provider.trace_path = state.directory / "provider.jsonl"
@@ -433,6 +442,8 @@ def main(argv=None):
                 client_key=str(inside_root(config["client_key"])), actors=actors,
                 ceo_id=config["context"]["ceo_id"], manager_id=config["context"]["manager_id"],
                 consume_nonce=lambda *_: False)
+            if role == "manager":
+                provider.client = client
             model = RemoteStandingModel(state, provider,
                 context=config["context"], actor=signer.actor, role=role,
                 client=client, policy_path=config["usage_policy"])

@@ -34,6 +34,10 @@ class FixtureProvider:
     def __init__(self, role):
         self.role, self.calls, self.fail = role, [], False
 
+    def bind_reservation(self, payload):
+        # Isolated fake provider; the real Manager must use broker execution.
+        self.last_reservation = payload
+
     def __call__(self, request, tools):
         assert tools == ()
         self.calls.append(request)
@@ -735,7 +739,9 @@ class ExchangeTests(unittest.TestCase):
             for actor, (role, key) in self.actors.items()})))
         with patch("agents.ceo.preparation_exchange.configured_provider", return_value=self.providers["manager"]), patch(
                 "agents.ceo.preparation_exchange.preparation_authority",
-                side_effect=AssertionError("local authority forbidden")):
+                side_effect=AssertionError("local authority forbidden")), patch(
+                "agents.ceo.provider_gateway.RemoteInferenceProvider.__call__",
+                lambda _remote, request, tools: self.providers["manager"](request, tools)):
             valid_config = json.loads(config.read_text())
             alias = self.home / "tls-alias"
             alias.symlink_to(tls_paths["ca_file"])

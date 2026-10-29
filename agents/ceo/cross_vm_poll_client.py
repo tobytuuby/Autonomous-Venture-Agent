@@ -145,6 +145,35 @@ class PreparationPollClient:
         finally:
             conn.close()
 
+    def execute_provider(self, payload):
+        """Bounded paid call is broker-side only, after central reservation."""
+        from agents.ceo.provider_gateway import EXECUTE_PATH, MAX_EXECUTE
+        from agents.ceo.escalation_inbox import canonical
+        raw = canonical(payload).encode()
+        if len(raw) > MAX_EXECUTE:
+            raise ValueError("oversized inference request")
+        conn = http.client.HTTPSConnection(self.host, self.port,
+            timeout=max(self.timeout, 50), context=self.context)
+        try:
+            conn.request("POST", EXECUTE_PATH, body=raw,
+                         headers={"Content-Type": "application/json"})
+            res = conn.getresponse()
+            if res.status != 200:
+                raise ValueError("broker provider execution denied or ambiguous")
+            reply = res.read(16385)
+            if len(reply) > 16384:
+                raise ValueError("oversized inference response")
+            value = json.loads(reply, object_pairs_hook=_object)
+            if (type(value) is not dict or set(value) != {"result"}
+                    or type(value["result"]) is not dict
+                    or value["result"].get("tool_call") is not None
+                    or type(value["result"].get("decision")) is not dict
+                    or type(value["result"]["decision"].get("content")) is not str):
+                raise ValueError("untrusted broker provider result")
+            return value["result"]
+        finally:
+            conn.close()
+
     def reserve_provider(self, payload):
         """Reserve through the same verified mTLS origin; no redirects or fallback."""
         from agents.ceo.provider_reservation import RESERVATION_PATH, MAX_RESERVATION
