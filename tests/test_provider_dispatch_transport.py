@@ -26,6 +26,17 @@ class ProviderDispatchTransportTests(unittest.TestCase):
             provider(dict(system="TEST", opportunity={}), ())
         self.assertEqual(provider._opener.open.call_count, 1)
 
+    def test_gpt6_sol_uses_completion_token_limit(self):
+        raw = json.dumps(dict(choices=[dict(message=dict(content="{}"))])).encode()
+        provider = self.provider(raw)
+        provider.model = "gpt-6-sol"
+        provider.maximum_output_tokens = 512
+        provider(dict(system="TEST", opportunity={}), ())
+        request = provider._opener.open.call_args.args[0]
+        data = json.loads(request.data)
+        self.assertEqual(data["max_completion_tokens"], 512)
+        self.assertNotIn("max_tokens", data)
+
     def test_invalid_output_token_bound_never_opens_network(self):
         for value in (True, 0, 16385, "512"):
             provider = self.provider(b"")

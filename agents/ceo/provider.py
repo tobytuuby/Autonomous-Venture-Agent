@@ -92,7 +92,10 @@ class OpenAICompatibleShadowModel:
         if self.maximum_output_tokens is not None:
             if type(self.maximum_output_tokens) is not int or not 1 <= self.maximum_output_tokens <= 16384:
                 raise ModelProviderError("output token bound denied")
-            body["max_tokens"] = self.maximum_output_tokens
+            # Current GPT-6 API requires max_completion_tokens; legacy
+            # OpenAI-compatible deployments may still require max_tokens.
+            token_field = "max_completion_tokens" if self.model == "gpt-6-sol" else "max_tokens"
+            body[token_field] = self.maximum_output_tokens
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",
