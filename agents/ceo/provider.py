@@ -96,6 +96,10 @@ class OpenAICompatibleShadowModel:
             # OpenAI-compatible deployments may still require max_tokens.
             token_field = "max_completion_tokens" if self.model in ("gpt-6-sol", "gpt-6-luna") else "max_tokens"
             body[token_field] = self.maximum_output_tokens
+        if self.model == "gpt-6-luna":
+            # Luna's default reasoning can exhaust the bounded completion
+            # budget before its small JSON artifact is complete.
+            body["reasoning_effort"] = "low"
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",

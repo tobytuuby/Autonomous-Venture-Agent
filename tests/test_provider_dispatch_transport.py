@@ -37,6 +37,17 @@ class ProviderDispatchTransportTests(unittest.TestCase):
         self.assertEqual(data["max_completion_tokens"], 512)
         self.assertNotIn("max_tokens", data)
 
+    def test_luna_uses_bounded_low_reasoning_effort(self):
+        raw = json.dumps(dict(choices=[dict(message=dict(content="{}"))])).encode()
+        provider = self.provider(raw)
+        provider.model = "gpt-6-luna"
+        provider.maximum_output_tokens = 1024
+        provider(dict(system="TEST", opportunity={}), ())
+        request = provider._opener.open.call_args.args[0]
+        payload = json.loads(request.data)
+        self.assertEqual(payload["reasoning_effort"], "low")
+        self.assertEqual(payload["max_completion_tokens"], 1024)
+
     def test_invalid_output_token_bound_never_opens_network(self):
         for value in (True, 0, 16385, "512"):
             provider = self.provider(b"")

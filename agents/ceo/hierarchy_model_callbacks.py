@@ -14,7 +14,12 @@ SYSTEM = (
     "customer contact, launches, or binding approval. Supply a substantive "
     "preparation-only work product and a permitted workflow action. "
     "If the current evidence is incomplete, manager must request improvement. "
-    "For worker submissions include declared preparation effort units."
+    "For worker submissions include declared preparation effort units. "
+    "Return exactly action, explanation, deliverable, units. "
+    "Explanation must be 30-100 characters, deliverable 150-450 characters. "
+    "Be concrete, concise, and finish the valid JSON object. "
+    "During the first Worker draft, label restart/rollback testing as pending "
+    "so Manager can request a substantive correction; second draft should address it."
 )
 MAX_TEXT = 6000
 MAX_EVIDENCE = 10000
@@ -66,8 +71,8 @@ class ModelRoleCallback:
                 existing_evidence=history,
                 permitted_actions=sorted(allowed),
                 response_contract=dict(action="one permitted action",
-                    explanation="reasoned review in plain text",
-                    deliverable="substantive preparation-only output",
+                    explanation="concrete review reason, 30-100 characters",
+                    deliverable="specific preparation evidence, 150-450 characters",
                     units="positive integer for worker submit; zero otherwise")))
         response = self.provider(request, ())
         if type(response) is not dict or response.get("tool_call") is not None:
