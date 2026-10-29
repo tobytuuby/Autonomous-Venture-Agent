@@ -84,12 +84,14 @@ def main():
         def execute(payload):
             return execute_reserved(payload, actor=actor, provider=provider)
 
+    from agents.ceo.cert_renewal import ManagerRenewalMailbox
+    cert_mailbox = ManagerRenewalMailbox()
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
-                          submit=submit, status=status, execute=execute)
+                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

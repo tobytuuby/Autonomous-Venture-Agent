@@ -27,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -67,6 +67,12 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
 
         def do_GET(self):
             role = self._role()
+            if self.path == "/v1/certificates/manager/issued":
+                if role != "poll":
+                    return self._deny()
+                if cert_mailbox is None:
+                    return self._send(503, {"error": "renewal_unavailable"})
+                return self._send(200, {"certificate": cert_mailbox.issued()})
             if self.path == POLL_PATH:
                 if role != "poll":
                     return self._deny()
@@ -91,6 +97,28 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
             return self._deny() if role is None or self.path == "/health" else self._send(404, {"error": "not_found"})
 
         def do_POST(self):
+            if self.path == "/v1/certificates/manager/csr":
+                if self._role() != "poll":
+                    return self._deny()
+                if cert_mailbox is None:
+                    return self._send(503, {"error": "renewal_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding"):
+                        raise ValueError("CSR length denied")
+                    length = int(lengths[0])
+                    if not 1 <= length <= 8192:
+                        raise ValueError("CSR bound")
+                    self.connection.settimeout(5)
+                    data = self.rfile.read(length)
+                    if len(data) != length:
+                        raise ValueError("incomplete CSR")
+                    cert_mailbox.submit(data)
+                    return self._send(200, {"accepted": True})
+                except (ValueError, TypeError, IndexError):
+                    return self._send(400, {"error": "csr_denied"})
+                except Exception:
+                    return self._send(503, {"error": "renewal_unavailable"})
             if self.path == CEO_SUBMIT_PATH:
                 if self._role() != "quota-ceo":
                     return self._deny()
@@ -203,14 +231,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status, execute=execute))
+        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)
