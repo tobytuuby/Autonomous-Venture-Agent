@@ -19,6 +19,7 @@ from cryptography.hazmat.primitives import serialization
 CERTDIR = pathlib.Path("/etc/venture-control")
 ENVFILE = CERTDIR / "broker-mtls.env"
 MAILBOX = pathlib.Path("/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/renewal")
+WORKER_MAILBOX = pathlib.Path("/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/worker-renewal")
 RENEW_BEFORE = timedelta(days=7)
 TARGETS = (
     ("broker", CERTDIR / "broker.crt", CERTDIR / "broker.key",
@@ -131,6 +132,24 @@ def main():
             atomic_install(MAILBOX / "issued.crt", certificate, owner="venture-broker", group="venture-broker", mode=0o600)
             atomic_install(marker, (digest+"\n").encode(), owner="venture-broker", group="venture-broker", mode=0o600)
             changed.append("manager")
+    worker_request = WORKER_MAILBOX / "pending.csr"
+    if worker_request.is_file():
+        content = worker_request.read_bytes()
+        csr = x509.load_pem_x509_csr(content)
+        if (not csr.is_signature_valid or len(csr.extensions) != 0
+                or csr.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
+                    != "venture-level2d-worker"):
+            raise ValueError("untrusted Worker CSR")
+        digest = hashlib.sha256(content).hexdigest()
+        marker = WORKER_MAILBOX / "last_csr.sha256"
+        if not marker.exists() or marker.read_text().strip() != digest:
+            certificate = signed(content, "or010-worker", token)
+            add_pin("VENTURE_BROKER_WORKER_PINS", certificate)
+            atomic_install(WORKER_MAILBOX / "issued.crt", certificate,
+                           owner="venture-broker", group="venture-broker", mode=0o600)
+            atomic_install(marker, (digest+"\n").encode(),
+                           owner="venture-broker", group="venture-broker", mode=0o600)
+            changed.append("worker")
     if changed:
         run(["systemctl", "restart", "venture-control-broker-mtls.service"])
         run(["systemctl", "is-active", "--quiet", "venture-control-broker-mtls.service"])

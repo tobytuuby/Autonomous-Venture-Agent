@@ -6,10 +6,28 @@ from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.x509.oid import NameOID
-from agents.ceo.cert_renewal import ManagerRenewalMailbox
+from agents.ceo.cert_renewal import ManagerRenewalMailbox, WorkerRenewalMailbox
 
 
 class CertRenewalTests(unittest.TestCase):
+    def test_worker_mailbox_is_role_isolated_and_separately_persisted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            worker = WorkerRenewalMailbox(Path(tmp))
+            manager = ManagerRenewalMailbox(Path(tmp))
+            key = ec.generate_private_key(ec.SECP256R1())
+            def csr(cn):
+                return (x509.CertificateSigningRequestBuilder()
+                    .subject_name(x509.Name([x509.NameAttribute(NameOID.COMMON_NAME,cn)]))
+                    .sign(key,hashes.SHA256()).public_bytes(serialization.Encoding.PEM))
+            work = csr("venture-level2d-worker")
+            self.assertTrue(worker.submit(work))
+            self.assertEqual((Path(tmp)/"worker-renewal/pending.csr").read_bytes(),work)
+            with self.assertRaises(ValueError):
+                manager.submit(work)
+            with self.assertRaises(ValueError):
+                worker.submit(csr("venture-agents"))
+            self.assertFalse((Path(tmp)/"renewal/pending.csr").exists())
+
     def test_manager_csr_bounded_and_persisted(self):
         with tempfile.TemporaryDirectory() as tmp:
             mailbox = ManagerRenewalMailbox(Path(tmp))

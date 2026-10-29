@@ -62,6 +62,53 @@ class BrokerMtlsTests(unittest.TestCase):
         self.assertEqual(self.request("cap","GET","/health"),
           (200,{"status":"ok","component":"capability-broker"}))
 
+    def test_worker_and_manager_csr_mailboxes_are_key_bound_and_role_isolated(self):
+        from agents.ceo.cert_renewal import ManagerRenewalMailbox, WorkerRenewalMailbox
+        with tempfile.TemporaryDirectory() as tmp:
+            d=Path(tmp)
+            server=isolated_server(host="127.0.0.1",port=0,
+                server_cert=self.paths["server"][0],server_key=self.paths["server"][1],
+                client_ca=self.ca,capability_pins=[self.pin("cap")],
+                polling_pins=[self.pin("poll")],worker_pins=[self.pin("other")],
+                cert_mailbox=ManagerRenewalMailbox(d),
+                worker_cert_mailbox=WorkerRenewalMailbox(d),
+                pending=lambda: [])
+            thread=threading.Thread(target=server.serve_forever,daemon=True)
+            thread.start()
+            def call(who,method,path,body=None):
+                ctx=ssl.create_default_context(cafile=str(self.ca))
+                cert,key=self.paths[who]
+                ctx.load_cert_chain(str(cert),str(key))
+                conn=http.client.HTTPSConnection("localhost",server.server_port,
+                                                 context=ctx,timeout=3)
+                try:
+                    conn.request(method,path,body=body,
+                                 headers={"Content-Type":"application/x-pem-file"})
+                    resp=conn.getresponse()
+                    return resp.status,json.loads(resp.read())
+                finally:
+                    conn.close()
+            def csr(key,cn,name):
+                target=d/(name+".csr")
+                run("req","-new","-key",key,"-subj","/CN="+cn,
+                    "-out",target)
+                return target.read_bytes()
+            try:
+                worker=csr(self.paths["other"][1],"venture-level2d-worker","worker")
+                manager=csr(self.paths["poll"][1],"venture-agents","manager")
+                self.assertEqual(call("other","POST","/v1/certificates/worker/csr",worker)[0],200)
+                self.assertEqual(call("poll","POST","/v1/certificates/manager/csr",manager)[0],200)
+                self.assertEqual(call("poll","GET","/v1/certificates/worker/issued")[0],403)
+                self.assertEqual(call("other","GET","/v1/certificates/manager/issued")[0],403)
+                self.assertEqual(call("cap","POST","/v1/certificates/worker/csr",worker)[0],403)
+                self.assertEqual(call("other","POST","/v1/certificates/worker/csr",manager)[0],400)
+                bad_key=csr(self.paths["cap"][1],"venture-level2d-worker","bad")
+                self.assertEqual(call("other","POST","/v1/certificates/worker/csr",bad_key)[0],400)
+            finally:
+                server.shutdown()
+                server.server_close()
+                thread.join()
+
     def test_polling_isolation(self):
         self.assertEqual(self.request("poll","GET","/v1/assignments/pending"),
                          (200,{"assignments":[]}))

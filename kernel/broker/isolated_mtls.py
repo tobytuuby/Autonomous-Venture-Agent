@@ -27,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -70,12 +70,15 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
 
         def do_GET(self):
             role = self._role()
-            if self.path == "/v1/certificates/manager/issued":
-                if role != "poll":
+            if self.path in ("/v1/certificates/manager/issued",
+                             "/v1/certificates/worker/issued"):
+                is_worker = self.path == "/v1/certificates/worker/issued"
+                if role != ("worker" if is_worker else "poll"):
                     return self._deny()
-                if cert_mailbox is None:
+                mailbox = worker_cert_mailbox if is_worker else cert_mailbox
+                if mailbox is None:
                     return self._send(503, {"error": "renewal_unavailable"})
-                return self._send(200, {"certificate": cert_mailbox.issued()})
+                return self._send(200, {"certificate": mailbox.issued()})
             from agents.ceo.hierarchy_gateway import STATE_PREFIX, ARTIFACT_PREFIX
             if self.path.startswith(STATE_PREFIX):
                 if role not in ("quota-ceo", "poll", "worker"):
@@ -203,10 +206,13 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     return self._send(400, {"error": "hierarchy_transition_denied"})
                 except Exception:
                     return self._send(503, {"error": "hierarchy_transition_unavailable"})
-            if self.path == "/v1/certificates/manager/csr":
-                if self._role() != "poll":
+            if self.path in ("/v1/certificates/manager/csr",
+                             "/v1/certificates/worker/csr"):
+                is_worker = self.path == "/v1/certificates/worker/csr"
+                if self._role() != ("worker" if is_worker else "poll"):
                     return self._deny()
-                if cert_mailbox is None:
+                mailbox = worker_cert_mailbox if is_worker else cert_mailbox
+                if mailbox is None:
                     return self._send(503, {"error": "renewal_unavailable"})
                 try:
                     lengths = self.headers.get_all("Content-Length", [])
@@ -219,7 +225,19 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     data = self.rfile.read(length)
                     if len(data) != length:
                         raise ValueError("incomplete CSR")
-                    cert_mailbox.submit(data)
+                    # Renewal is confined to the exact TLS-authenticated
+                    # role key. A valid certificate may not mint a successor
+                    # for an unrelated private key or cross-role identity.
+                    from cryptography import x509
+                    from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+                    csr = x509.load_pem_x509_csr(data)
+                    peer = x509.load_der_x509_certificate(
+                        self.connection.getpeercert(binary_form=True))
+                    public = lambda key: key.public_bytes(
+                        Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
+                    if public(csr.public_key()) != public(peer.public_key()):
+                        raise ValueError("CSR key must match authenticated certificate")
+                    mailbox.submit(data)
                     return self._send(200, {"accepted": True})
                 except (ValueError, TypeError, IndexError):
                     return self._send(400, {"error": "csr_denied"})
@@ -337,14 +355,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
         worker_reserve=worker_reserve, worker_execute=worker_execute))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,

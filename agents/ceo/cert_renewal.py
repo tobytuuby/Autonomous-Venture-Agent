@@ -17,8 +17,13 @@ MAX_CSR = 8192
 
 
 class ManagerRenewalMailbox:
-    def __init__(self, directory=None):
-        self.directory = Path(directory or AUTHORITY_DIRECTORY) / "renewal"
+    def __init__(self, directory=None, *, subdir="renewal", common_name="venture-agents"):
+        if (subdir, common_name) not in (
+                ("renewal", "venture-agents"),
+                ("worker-renewal", "venture-level2d-worker")):
+            raise ValueError("bounded renewal role required")
+        self.common_name = common_name
+        self.directory = Path(directory or AUTHORITY_DIRECTORY) / subdir
         self.directory.mkdir(mode=0o700, parents=True, exist_ok=True)
         if self.directory.is_symlink() or self.directory.stat().st_mode & 0o077:
             raise ValueError("private renewal directory required")
@@ -27,7 +32,7 @@ class ManagerRenewalMailbox:
         if type(csr_bytes) is not bytes or not 1 <= len(csr_bytes) <= MAX_CSR:
             raise ValueError("bounded CSR required")
         csr = x509.load_pem_x509_csr(csr_bytes)
-        if not csr.is_signature_valid or csr.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value != "venture-agents":
+        if not csr.is_signature_valid or csr.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value != self.common_name:
             raise ValueError("unauthorized CSR identity")
         if len(csr.extensions) != 0:
             raise ValueError("unexpected CSR extensions")
@@ -52,3 +57,12 @@ class ManagerRenewalMailbox:
             raise ValueError("oversized issued certificate")
         x509.load_pem_x509_certificate(content)
         return content.decode("ascii")
+
+
+
+class WorkerRenewalMailbox(ManagerRenewalMailbox):
+    """Separate worker identity and spool, never shares Manager CSR authority."""
+
+    def __init__(self, directory=None):
+        super().__init__(directory, subdir="worker-renewal",
+                         common_name="venture-level2d-worker")

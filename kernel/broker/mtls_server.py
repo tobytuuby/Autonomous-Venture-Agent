@@ -84,8 +84,9 @@ def main():
         def execute(payload):
             return execute_reserved(payload, actor=actor, provider=provider, hierarchy=hierarchy)
 
-    from agents.ceo.cert_renewal import ManagerRenewalMailbox
+    from agents.ceo.cert_renewal import ManagerRenewalMailbox, WorkerRenewalMailbox
     cert_mailbox = ManagerRenewalMailbox()
+    worker_cert_mailbox = WorkerRenewalMailbox()
     hierarchy = None
     worker_pins = tuple(filter(None, os.environ.get("VENTURE_BROKER_WORKER_PINS", "").split(",")))
     if os.environ.get("VENTURE_BROKER_HIERARCHY_ENABLED") == "1":
@@ -114,7 +115,7 @@ def main():
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
-                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
                           worker_reserve=worker_reserve, worker_execute=worker_execute)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
