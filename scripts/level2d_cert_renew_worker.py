@@ -69,13 +69,23 @@ def main(*, force=False):
             tmp = pathlib.Path(f.name)
         try:
             subprocess.run(["openssl", "req", "-new", "-key", str(key_path),
-                            "-subj", "/CN=venture-agents", "-out", str(tmp)],
+                            "-subj", "/CN=venture-level2d-worker", "-out", str(tmp)],
                            check=True, capture_output=True)
             csr_path.write_bytes(tmp.read_bytes())
             os.chmod(csr_path,0o600)
         finally:
             tmp.unlink(missing_ok=True)
     payload = csr_path.read_bytes()
+    pending = x509.load_pem_x509_csr(payload)
+    if (not pending.is_signature_valid or len(pending.extensions) != 0 or
+            pending.subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
+                != "venture-level2d-worker"):
+        raise ValueError("invalid persisted Worker CSR identity")
+    key_bytes = serialization.load_pem_private_key(key_path.read_bytes(), password=None)
+    public = lambda key: key.public_bytes(serialization.Encoding.DER,
+        serialization.PublicFormat.SubjectPublicKeyInfo)
+    if public(pending.public_key()) != public(key_bytes.public_key()):
+        raise ValueError("persisted Worker CSR public key mismatch")
     result = query(base, "csr", context, payload)
     if result != {"accepted": True}:
         raise ValueError("broker CSR not accepted")
