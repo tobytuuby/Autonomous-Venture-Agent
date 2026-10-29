@@ -27,16 +27,17 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
     if not all(isinstance(s, str) and len(s) == 64 and
                all(c in "0123456789abcdef" for c in s)
-               for s in (*capability_pins, *polling_pins, *ceo_reservation_pins)):
+               for s in (*capability_pins, *polling_pins, *ceo_reservation_pins, *worker_pins)):
         raise ValueError("malformed fingerprint")
     if (set(capability_pins) & set(polling_pins) or set(capability_pins) & set(ceo_reservation_pins)
-            or set(polling_pins) & set(ceo_reservation_pins)):
+            or set(polling_pins) & set(ceo_reservation_pins)
+            or set(worker_pins) & (set(capability_pins) | set(polling_pins) | set(ceo_reservation_pins))):
         raise ValueError("role pinsets must be disjoint")
     if bool(ceo_reservation_pins) != bool(ceo_reservation_actor):
         raise ValueError("CEO reservation identity incomplete")
@@ -54,6 +55,8 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
             if not cert:
                 return None
             fingerprint = hashlib.sha256(cert).hexdigest()
+            if fingerprint in worker_pins:
+                return "worker"
             if fingerprint in ceo_reservation_pins:
                 return "quota-ceo"
             if fingerprint in polling_pins:
@@ -73,6 +76,31 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                 if cert_mailbox is None:
                     return self._send(503, {"error": "renewal_unavailable"})
                 return self._send(200, {"certificate": cert_mailbox.issued()})
+            from agents.ceo.hierarchy_gateway import STATE_PREFIX, ARTIFACT_PREFIX
+            if self.path.startswith(STATE_PREFIX):
+                if role not in ("quota-ceo", "poll", "worker"):
+                    return self._deny()
+                if hierarchy is None:
+                    return self._send(503, {"error": "hierarchy_unavailable"})
+                try:
+                    state = hierarchy.state(self.path[len(STATE_PREFIX):])
+                    return self._send(200, {"state": state})
+                except ValueError:
+                    return self._send(400, {"error": "hierarchy_state_denied"})
+                except Exception:
+                    return self._send(503, {"error": "hierarchy_state_unavailable"})
+            if self.path.startswith(ARTIFACT_PREFIX):
+                if role not in ("quota-ceo", "poll", "worker"):
+                    return self._deny()
+                if hierarchy is None:
+                    return self._send(503, {"error": "hierarchy_unavailable"})
+                try:
+                    content = hierarchy.artifact(self.path[len(ARTIFACT_PREFIX):], role=role)
+                    return self._send(200, {"content": content})
+                except ValueError:
+                    return self._send(400, {"error": "artifact_denied"})
+                except Exception:
+                    return self._send(503, {"error": "artifact_unavailable"})
             if self.path == POLL_PATH:
                 if role != "poll":
                     return self._deny()
@@ -97,6 +125,32 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
             return self._deny() if role is None or self.path == "/health" else self._send(404, {"error": "not_found"})
 
         def do_POST(self):
+            from agents.ceo.hierarchy_gateway import COMMAND_PATH, ARTIFACT_PATH, MAX_COMMAND
+            if self.path in (COMMAND_PATH, ARTIFACT_PATH):
+                role = self._role()
+                if role not in ("quota-ceo", "poll", "worker"):
+                    return self._deny()
+                if hierarchy is None:
+                    return self._send(503, {"error": "hierarchy_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("bounded signed hierarchy request required")
+                    length = int(lengths[0])
+                    if not 0 < length <= MAX_COMMAND:
+                        raise ValueError("hierarchy request too large")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete signed request")
+                    payload = json.loads(raw, object_pairs_hook=_object)
+                    if self.path == COMMAND_PATH:
+                        return self._send(200, {"state": hierarchy.apply(payload, role=role)})
+                    return self._send(200, {"stored": hierarchy.store(payload, role=role)})
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "hierarchy_transition_denied"})
+                except Exception:
+                    return self._send(503, {"error": "hierarchy_transition_unavailable"})
             if self.path == "/v1/certificates/manager/csr":
                 if self._role() != "poll":
                     return self._deny()
@@ -231,14 +285,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox))
+        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)
