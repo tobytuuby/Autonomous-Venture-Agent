@@ -17,7 +17,8 @@ class HierarchyProvider:
         if role not in ("ceo", "manager", "worker"):
             raise ValueError("hierarchy provider role denied")
         self.role, self.actor = role, actor
-        self.workflow_id, self.client = identifier(workflow_id), client
+        identifier(workflow_id)
+        self.workflow_id, self.client = workflow_id, client
         self.policy, self.context = policy, context
         self.local_provider = local_provider
         if role == "ceo" and local_provider is None:
