@@ -26,12 +26,22 @@ class HierarchyRunner:
     }
 
     def __init__(self, workflow: VentureWorkflow, *, manager, worker, ceo, signers,
-                 clock=None):
+                 clock=None, role_filter=None):
         self.workflow = workflow
         self.callbacks = {"manager": manager, "worker": worker, "ceo": ceo}
-        if not all(callable(callback) for callback in self.callbacks.values()):
-            raise ValueError("role callbacks required")
+        if role_filter is None:
+            if not all(callable(callback) for callback in self.callbacks.values()):
+                raise ValueError("role callbacks required")
+        elif role_filter not in self.callbacks:
+            raise ValueError("assigned role denied")
+        elif (not callable(self.callbacks[role_filter])
+                or any(callable(value) for key, value in self.callbacks.items()
+                       if key != role_filter)):
+            raise ValueError("role-isolated callback required")
+        self.role_filter = role_filter
         self.signers = dict(signers)
+        if role_filter is not None and len(self.signers) != 1:
+            raise ValueError("role-isolated signing key required")
         self.clock = clock or (lambda: datetime.now(timezone.utc))
 
     def tick(self, workflow_id):
@@ -50,6 +60,8 @@ class HierarchyRunner:
         if allowed is None:
             return item
         role = TRANSITIONS[(item["state"], sorted(allowed)[0])][0]
+        if self.role_filter is not None and role != self.role_filter:
+            return item
         actor = (item["scope"][role + "_id"] if role != "ceo"
                  else item["handoff"]["decision"]["receipt"]["ceo_id"])
         if self.workflow.actors.get(actor, (None,))[0] != role:

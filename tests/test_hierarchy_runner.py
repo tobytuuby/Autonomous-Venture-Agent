@@ -45,6 +45,19 @@ class HierarchyRunnerTests(unittest.TestCase):
         options.update(changes)
         return HierarchyRunner(self.fixture.workflow, **options)
 
+    def test_role_filter_denies_all_other_signers_and_callbacks(self):
+        actor = self.fixture.scope["manager_id"]
+        isolated = self.runner(role_filter="manager", worker=None, ceo=None,
+                               signers={actor: self.fixture.keys[actor].sign})
+        self.assertEqual(isolated.tick("studio-flow")["state"], "WORKER_PENDING")
+        self.assertEqual(isolated.tick("studio-flow")["state"], "WORKER_PENDING")
+        self.assertEqual(self.calls, [("manager", "MANAGER_PENDING")])
+        with self.assertRaisesRegex(ValueError, "role-isolated signing"):
+            self.runner(role_filter="manager", worker=None, ceo=None)
+        with self.assertRaisesRegex(ValueError, "role-isolated callback"):
+            self.runner(role_filter="manager", ceo=None,
+                        signers={actor: self.fixture.keys[actor].sign})
+
     def test_role_sequence_signed_restart_and_owner_stop(self):
         runner = self.runner()
         states = ["WORKER_PENDING", "MANAGER_REVIEW", "WORKER_PENDING",
