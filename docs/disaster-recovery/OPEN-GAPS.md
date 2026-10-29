@@ -1,6 +1,6 @@
 # Recovery gaps and acceptance register — 2026-10-29
 
-**Verdict: DOCUMENTATION BASELINE PRODUCED; WHOLE-SYSTEM DR NOT CERTIFIED.** The following gaps cannot honestly be closed with source inspection alone.
+**Verdict: DOCUMENTATION BASELINE PRODUCED; WHOLE-SYSTEM DR NOT CERTIFIED.** DR-01 read-only coverage audit is documented in `DR-01-OFF-VM-BACKUP-AUDIT-20261029.md`; it remains OPEN. A TrueNAS-mounted PostgreSQL archive exists, but critical SQLite, Agents, and secret-recovery coverage is unverified. The following gaps cannot honestly be closed with source inspection alone.
 
 | ID | Priority | Gap / evidence required to close |
 |---|---|---|
