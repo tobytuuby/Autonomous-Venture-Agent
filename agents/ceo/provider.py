@@ -99,7 +99,7 @@ class OpenAICompatibleShadowModel:
         if self.model == "gpt-6-luna":
             # Luna's default reasoning can exhaust the bounded completion
             # budget before its small JSON artifact is complete.
-            body["reasoning_effort"] = "low"
+            body["reasoning_effort"] = "none"
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",
