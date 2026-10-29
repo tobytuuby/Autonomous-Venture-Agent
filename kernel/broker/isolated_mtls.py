@@ -153,6 +153,31 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     return self._send(400, {"error": "worker_inference_denied"})
                 except Exception:
                     return self._send(503, {"error": "worker_inference_unavailable"})
+            from agents.ceo.hierarchy_gateway import BOOTSTRAP_PREPARE_PATH, BOOTSTRAP_COMMIT_PATH
+            if self.path in (BOOTSTRAP_PREPARE_PATH, BOOTSTRAP_COMMIT_PATH):
+                if self._role() != "quota-ceo":
+                    return self._deny()
+                if hierarchy is None:
+                    return self._send(503, {"error": "hierarchy_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("signed bootstrap length required")
+                    length = int(lengths[0])
+                    if not 0 < length <= 16000:
+                        raise ValueError("bounded bootstrap request required")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete hierarchy bootstrap")
+                    payload = json.loads(raw, object_pairs_hook=_object)
+                    if self.path == BOOTSTRAP_PREPARE_PATH:
+                        return self._send(200, {"handoff": hierarchy.bootstrap_prepare(payload)})
+                    return self._send(200, {"state": hierarchy.bootstrap_commit(payload)})
+                except (ValueError,TypeError,KeyError,UnicodeError,RecursionError):
+                    return self._send(400, {"error": "hierarchy_bootstrap_denied"})
+                except Exception:
+                    return self._send(503, {"error": "hierarchy_bootstrap_unavailable"})
             if self.path in (COMMAND_PATH, ARTIFACT_PATH):
                 role = self._role()
                 if role not in ("quota-ceo", "poll", "worker"):

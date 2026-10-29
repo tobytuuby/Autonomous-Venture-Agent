@@ -72,6 +72,21 @@ class HierarchyClient:
             raise ValueError("artifact response invalid")
         return r["content"].encode("utf-8")
 
+    def bootstrap_prepare(self, payload):
+        from agents.ceo.hierarchy_gateway import BOOTSTRAP_PREPARE_PATH
+        r=self._request("POST",BOOTSTRAP_PREPARE_PATH,payload)
+        if type(r) is not dict or set(r)!={"handoff"}:
+            raise ValueError("unexpected owner fixture handoff")
+        return r["handoff"]
+
+    def bootstrap_commit(self, command, signature):
+        from agents.ceo.hierarchy_gateway import BOOTSTRAP_COMMIT_PATH
+        r=self._request("POST",BOOTSTRAP_COMMIT_PATH,
+                        dict(command=command,signature=signature))
+        if type(r) is not dict or set(r)!={"state"}:
+            raise ValueError("unexpected workflow genesis")
+        return r["state"]
+
     def worker_reserve(self, payload):
         return self._request("POST", "/v1/inference/worker-reservations", payload)
 
