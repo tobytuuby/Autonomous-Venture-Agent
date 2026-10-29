@@ -58,6 +58,9 @@ class ModelRoleCallback:
             history.append(json.loads(raw))
         request = dict(system=SYSTEM, json_object_mode=True,
             opportunity=dict(role=self.role, state=state,
+                workflow_id=item["id"], snapshot_sha256=__import__(
+                    "agents.ceo.venture_workflow",fromlist=["hashed"]).hashed(item),
+                scope_hash=item["scope_hash"],
                 tasks=item["scope"]["tasks"],
                 remaining_effort_units=item["scope"]["budget_units"]-item["used_units"],
                 existing_evidence=history,

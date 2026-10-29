@@ -82,7 +82,7 @@ def main():
         provider.trace_path = service_identity.AUTHORITY_DIRECTORY / "broker-provider.jsonl"
         actor = required("VENTURE_BROKER_RESERVATION_ACTOR")
         def execute(payload):
-            return execute_reserved(payload, actor=actor, provider=provider)
+            return execute_reserved(payload, actor=actor, provider=provider, hierarchy=hierarchy)
 
     from agents.ceo.cert_renewal import ManagerRenewalMailbox
     cert_mailbox = ManagerRenewalMailbox()
@@ -94,12 +94,28 @@ def main():
         from agents.ceo.service_identity import AUTHORITY_DIRECTORY
         hierarchy = HierarchyGateway(AUTHORITY_DIRECTORY / "hierarchy",
             load_trust(required("VENTURE_BROKER_HIERARCHY_TRUST")))
+    worker_reserve = None
+    worker_execute = None
+    if os.environ.get("VENTURE_BROKER_WORKER_INFERENCE_ENABLED") == "1":
+        if hierarchy is None or not worker_pins:
+            raise ValueError("worker hierarchy and pinned identity required")
+        from agents.ceo.provider import OpenAICompatibleShadowModel
+        from agents.ceo.worker_inference import reserve_worker, execute_worker
+        from agents.ceo.service_identity import AUTHORITY_DIRECTORY
+        worker_provider = OpenAICompatibleShadowModel(
+            required("CEO_MODEL_ENDPOINT"), "gpt-6-luna", required("CEO_MODEL_TOKEN"))
+        worker_provider.trace_path = AUTHORITY_DIRECTORY / "worker-provider.jsonl"
+        worker_reserve = lambda payload: reserve_worker(payload,
+            actor="service-worker", hierarchy=hierarchy)
+        worker_execute = lambda payload: execute_worker(payload,
+            actor="service-worker", hierarchy=hierarchy, provider=worker_provider)
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
-                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy)
+                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+                          worker_reserve=worker_reserve, worker_execute=worker_execute)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

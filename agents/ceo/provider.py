@@ -94,7 +94,7 @@ class OpenAICompatibleShadowModel:
                 raise ModelProviderError("output token bound denied")
             # Current GPT-6 API requires max_completion_tokens; legacy
             # OpenAI-compatible deployments may still require max_tokens.
-            token_field = "max_completion_tokens" if self.model == "gpt-6-sol" else "max_tokens"
+            token_field = "max_completion_tokens" if self.model in ("gpt-6-sol", "gpt-6-luna") else "max_tokens"
             body[token_field] = self.maximum_output_tokens
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(

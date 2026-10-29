@@ -27,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -126,6 +126,33 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
 
         def do_POST(self):
             from agents.ceo.hierarchy_gateway import COMMAND_PATH, ARTIFACT_PATH, MAX_COMMAND
+            from agents.ceo.worker_inference import RESERVE_PATH as WORKER_RESERVE_PATH, EXECUTE_PATH as WORKER_EXECUTE_PATH
+            if self.path in (WORKER_RESERVE_PATH, WORKER_EXECUTE_PATH):
+                if self._role() != "worker":
+                    return self._deny()
+                action = worker_reserve if self.path == WORKER_RESERVE_PATH else worker_execute
+                if action is None:
+                    return self._send(503, {"error": "worker_inference_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding"):
+                        raise ValueError("worker length denied")
+                    length = int(lengths[0])
+                    if not 0 < length <= 16000:
+                        raise ValueError("bounded worker request required")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete Worker inference")
+                    payload = json.loads(raw, object_pairs_hook=_object)
+                    result = action(payload)
+                    if len(json.dumps(result,separators=(",",":")).encode()) > 16000:
+                        raise ValueError("oversized Worker response")
+                    return self._send(200, result)
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "worker_inference_denied"})
+                except Exception:
+                    return self._send(503, {"error": "worker_inference_unavailable"})
             if self.path in (COMMAND_PATH, ARTIFACT_PATH):
                 role = self._role()
                 if role not in ("quota-ceo", "poll", "worker"):
@@ -285,14 +312,15 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy))
+        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+        worker_reserve=worker_reserve, worker_execute=worker_execute))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)

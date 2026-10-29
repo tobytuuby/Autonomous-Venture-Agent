@@ -9,7 +9,7 @@ from agents.ceo.venture_workflow import hashed
 class RoleCallbackTests(unittest.TestCase):
     def setUp(self):
         self.evidence = {}
-        self.item = dict(state="WORKER_PENDING", mode="PREPARATION_ONLY",
+        self.item = dict(id="test-flow", state="WORKER_PENDING", mode="PREPARATION_ONLY",
                          scope=dict(tasks=["Document testable tenant isolation"],
                                     budget_units=5), used_units=0,
                          scope_hash="f" * 64, revision=2, evidence={})

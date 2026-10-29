@@ -16,13 +16,32 @@ EXECUTE_PATH = "/v1/inference/execute"
 MAX_EXECUTE = 16384
 
 
-def execute_reserved(payload, *, actor, provider):
+def execute_reserved(payload, *, actor, provider, hierarchy=None):
     exact(payload, ("reservation", "request"))
     reservation, request = payload["reservation"], payload["request"]
     exact(reservation, ("context", "actor", "role", "identity", "request_sha256",
                        "attempt", "policy", "endpoint", "model"))
     exact(request, ("system", "json_object_mode", "opportunity"))
     from agents.ceo.preparation_exchange import SYSTEM
+    from agents.ceo.hierarchy_model_callbacks import SYSTEM as HIERARCHY_SYSTEM
+    from agents.ceo.preparation_exchange import SYSTEM as EXCHANGE_SYSTEM
+    if request["system"] == HIERARCHY_SYSTEM:
+        opportunity = request["opportunity"]
+        if (hierarchy is None or type(opportunity) is not dict
+                or opportunity.get("role") != "manager"
+                or opportunity.get("state") not in ("MANAGER_PENDING", "MANAGER_REVIEW")
+                or opportunity.get("workflow_id") != reservation["context"]["session_id"]):
+            raise ValueError("signed Manager workflow required")
+        state = hierarchy.state(opportunity["workflow_id"])
+        from agents.ceo.venture_workflow import hashed
+        if (state is None or hashed(state) != opportunity.get("snapshot_sha256")
+                or state["scope"]["manager_id"] != actor
+                or state["state"] != opportunity["state"]
+                or state["scope_hash"] != opportunity.get("scope_hash")
+                or state["scope"]["tasks"] != opportunity["tasks"]):
+            raise ValueError("stale or unauthorized Manager inference")
+    elif request["system"] != EXCHANGE_SYSTEM:
+        raise ValueError("model system boundary denied")
     if (actor != reservation["context"]["manager_id"] or reservation["role"] != "manager"
             or reservation["actor"] != actor or request["system"] != SYSTEM
             or request["json_object_mode"] is not True
