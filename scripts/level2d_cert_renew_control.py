@@ -91,7 +91,7 @@ def main():
     token = (CERTDIR / "level2d-renewal.token").read_text().strip()
     if not token or len(token) > 256:
         raise ValueError("renewal token unavailable")
-    run(["bao", "token", "renew", "-self"], token=token)
+    run(["bao", "write", "-f", "auth/token/renew-self"], token=token)
     changed = []
     for label, cert_path, key_path, role, cn in TARGETS:
         if not expired_soon(cert_path):
