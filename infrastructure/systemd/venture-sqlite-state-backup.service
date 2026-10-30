@@ -1,0 +1,11 @@
+[Unit]
+Description=DR-02 SQLite-aware online backup to TrueNAS
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/lib/venture-backup/backup-host.sh
+UMask=0077
+NoNewPrivileges=true

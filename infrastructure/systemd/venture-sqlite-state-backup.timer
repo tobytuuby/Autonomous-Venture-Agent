@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily DR-02 operational SQLite state backup
+
+[Timer]
+OnCalendar=*-*-* 04:15:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+Unit=venture-sqlite-state-backup.service
+
+[Install]
+WantedBy=timers.target
