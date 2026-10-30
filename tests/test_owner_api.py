@@ -1,6 +1,7 @@
 """Negative-boundary tests for the owner API adapter."""
 import base64
 import http.client
+from contextlib import closing
 import json
 import sqlite3
 import tempfile
@@ -18,11 +19,12 @@ class OwnerAPITests(unittest.TestCase):
         root = Path(self.tmp.name)
         discovery = root / "discovery.sqlite"
         self.reviewdb = root / "review.sqlite"
-        with sqlite3.connect(discovery) as db:
+        with closing(sqlite3.connect(discovery)) as db:
             db.execute("CREATE TABLE discovery(cycle_id TEXT, result TEXT, state TEXT, created_utc TEXT)")
             db.execute("INSERT INTO discovery VALUES(?,?,?,?)", (
                 "cycle-1", json.dumps({"proposals": [{"title": "Sample"}]}),
                 "COMPLETE", "2026-10-30"))
+            db.commit()
         inbox = OwnerIdeaInbox(discovery, self.reviewdb)
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), handler_factory(inbox, "x" * 40))
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)

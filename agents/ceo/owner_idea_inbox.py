@@ -11,6 +11,7 @@ import os
 import re
 import secrets
 import sqlite3
+from contextlib import closing
 from datetime import datetime,timezone
 from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
@@ -41,9 +42,9 @@ class OwnerIdeaInbox:
             db.close()
 
     def ideas(self):
-        with sqlite3.connect("file:"+str(self.discovery)+"?mode=ro",uri=True) as db:
+        with closing(sqlite3.connect("file:"+str(self.discovery)+"?mode=ro",uri=True)) as db:
             rows=db.execute("SELECT cycle_id,result FROM discovery WHERE state='COMPLETE' ORDER BY created_utc DESC").fetchall()
-        with sqlite3.connect(self.decisions) as db:
+        with closing(sqlite3.connect(self.decisions)) as db:
             reviews={(r[0],r[1]):dict(decision=r[2],reason=r[3],reviewed_utc=r[4])
                      for r in db.execute("SELECT cycle_id,proposal_digest,decision,reason,created_utc FROM owner_idea_reviews")}
         output=[]
@@ -66,7 +67,7 @@ class OwnerIdeaInbox:
             raise ValueError("unknown or changed proposal")
         if matching[0]["review"] is not None:
             raise ValueError("already reviewed; request a new proposal version")
-        with sqlite3.connect(self.decisions,timeout=5) as db:
+        with closing(sqlite3.connect(self.decisions,timeout=5)) as db:
             db.execute("INSERT INTO owner_idea_reviews(cycle_id,proposal_digest,decision,reason,created_utc) VALUES(?,?,?,?,?)",
                        (cycle_id,proposal_digest,decision,reason,datetime.now(timezone.utc).isoformat()))
             db.commit()
