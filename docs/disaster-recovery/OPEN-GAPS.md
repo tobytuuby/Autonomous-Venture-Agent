@@ -29,3 +29,7 @@ An independent auditor should identify the actual backup IDs and UTC dates, veri
 - Owner web review: `docs/operational-readiness/evidence/owner-idea-self-service-20261029.md`
 - Initial discovery: `docs/operational-readiness/evidence/ceo-discovery-initial-20261029.md`
 - Owner authority: `docs/owner-venture-approval-policy-v1.0.md`
+
+## DR-02 October 30 update
+
+Control and Agents SQLite online backup timers are deployed and produced TrueNAS archives with successful isolated database integrity checks; see `DR-02-SQLITE-BACKUP-20261030.md`. This is **partial mitigation**, not closure of DR-01/02 or proof of cryptographic key and whole-VM recovery.
