@@ -1,0 +1,16 @@
+[Unit]
+Description=AVA Owner API reverse SSH tunnel (loopback only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=epsilon
+Group=epsilon
+ExecStart=/usr/bin/ssh -N -T -i /home/epsilon/.ssh/venture-owner-tunnel -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3 -R 127.0.0.1:18792:127.0.0.1:8792 epsilon@192.168.0.242
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
