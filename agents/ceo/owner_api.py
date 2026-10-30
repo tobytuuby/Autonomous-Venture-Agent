@@ -15,6 +15,9 @@ def handler_factory(inbox, token):
         raise ValueError("dedicated service credential required")
 
     class Handler(BaseHTTPRequestHandler):
+        def setup(self):
+            super().setup()
+            self.connection.settimeout(8)
         def reply(self, status, payload):
             raw = canonical(payload).encode()
             self.send_response(status)
@@ -73,7 +76,10 @@ def serve(inbox, *, host, port, cert, key, client_ca, token):
     context.verify_mode = ssl.CERT_REQUIRED
     context.load_verify_locations(cafile=client_ca)
     context.load_cert_chain(certfile=cert, keyfile=key)
+    if host != "127.0.0.1":
+        raise ValueError("Owner API must bind to loopback; use a separately restricted tunnel")
     server = ThreadingHTTPServer((host, port), handler_factory(inbox, token))
+    server.daemon_threads = True
     server.socket = context.wrap_socket(server.socket, server_side=True)
     server.serve_forever()
 

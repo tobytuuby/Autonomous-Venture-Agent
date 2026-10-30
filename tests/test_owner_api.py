@@ -66,6 +66,47 @@ class OwnerAPITests(unittest.TestCase):
         self.assertEqual(self.request("POST", "/v1/owner/reviews", review)[0], 409)
         self.assertEqual(self.request("GET", "/v1/owner/ideas")[1]["ideas"][0]["review"]["decision"], "APPROVE_FOR_RESEARCH")
 
+    def test_token_variations_and_paths(self):
+        for value in ["bearer " + "x"*40, "Bearer  " + "x"*40,
+                      "Bearer " + "x"*40 + " ", "Basic " + "x"*40]:
+            conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+            conn.request("GET", "/v1/owner/ideas", headers={"Authorization": value})
+            response = conn.getresponse()
+            self.assertEqual(response.status, 401)
+            response.read()
+            conn.close()
+        self.assertEqual(self.request("GET", "/v1/owner/ideas%00")[0], 404)
+        self.assertEqual(self.request("GET", "/v1/owner/../ideas")[0], 404)
+
+    def test_invalid_http_framing(self):
+        for headers in [
+            {"Content-Length": "-1"},
+            {"Content-Length": "100000"},
+            {"Content-Length": "garbage"},
+            {"Transfer-Encoding": "chunked"},
+        ]:
+            conn = http.client.HTTPConnection("127.0.0.1", self.server.server_port)
+            supplied = {"Authorization": "Bearer " + "x"*40,
+                        "X-Owner-Intent": "explicit", **headers}
+            conn.putrequest("POST", "/v1/owner/reviews")
+            for k, v in supplied.items():
+                conn.putheader(k, v)
+            conn.endheaders()
+            response = conn.getresponse()
+            self.assertEqual(response.status, 409)
+            response.read()
+            conn.close()
+
+    def test_concurrent_review_submission_only_one_wins(self):
+        from concurrent.futures import ThreadPoolExecutor
+        ideas = self.request("GET", "/v1/owner/ideas")[1]["ideas"]
+        payload = dict(cycle_id="cycle-1", proposal_digest=ideas[0]["digest"],
+                       decision="REJECT", reason="test")
+        with ThreadPoolExecutor(max_workers=8) as pool:
+            results = list(pool.map(lambda _: self.request("POST", "/v1/owner/reviews", payload)[0], range(8)))
+        self.assertEqual(results.count(200), 1)
+        self.assertEqual(results.count(409), 7)
+
     def test_rejects_extra_fields_and_unauthorized_post(self):
         payload = dict(cycle_id="cycle-1", proposal_digest="0"*64,
                        decision="REJECT", reason="", grant_capital=True)
