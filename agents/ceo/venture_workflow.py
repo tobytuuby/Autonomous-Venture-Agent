@@ -17,6 +17,8 @@ from agents.ceo.escalation_inbox import (
 
 # (source state, action) -> (required role, destination)
 TRANSITIONS = {
+    ("MANAGER_PENDING", "propose_decomposition"): ("manager", "DECOMPOSITION_REVIEW"),
+    ("DECOMPOSITION_REVIEW", "approve_decomposition"): ("ceo", "WORKER_PENDING"),
     ("MANAGER_PENDING", "delegate"): ("manager", "WORKER_PENDING"),
     ("MANAGER_PENDING", "reject_premise"): ("manager", "CEO_REDIRECTION"),
     ("WORKER_PENDING", "submit"): ("worker", "MANAGER_REVIEW"),
@@ -138,6 +140,79 @@ class VentureWorkflow(EscalationInbox):
         if dict(self.db.execute("SELECT id,snapshot FROM inbox")) != latest:
             raise ValueError("snapshot integrity denied")
 
+
+    def _assigned_actor(self, item, command):
+        role, actor = command["role"], command["actor_id"]
+        if role == "worker" and item.get("decomposition"):
+            return actor in {a["worker_id"] for a in item["decomposition"]["assignments"]}
+        return role not in ("manager", "worker") or actor == item["scope"][role + "_id"]
+
+    def _decomposition_transition(self, prior, command, signature):
+        """Reconstruct assignment state from signed commands, including on restart."""
+        action, role, payload = command["action"], command["role"], command["payload"]
+        plan = json.loads(canonical(prior.get("decomposition")))
+        if action == "propose_decomposition":
+            if prior["state"] != "MANAGER_PENDING" or role != "manager":
+                raise ValueError("manager proposal denied")
+            exact(payload, ("assignments",))
+            assignments = payload["assignments"]
+            if type(assignments) is not list or len(assignments) != 3:
+                raise ValueError("three assignments required")
+            workers = set()
+            for assignment, name, dependencies in zip(assignments, ("A", "B", "C"), ([], [], ["A", "B"])):
+                exact(assignment, ("id", "worker_id", "task", "depends_on"))
+                if assignment["id"] != name or assignment["depends_on"] != dependencies:
+                    raise ValueError("assignment dependencies denied")
+                worker = assignment["worker_id"]
+                identifier(worker)
+                if self.actors.get(worker, (None,))[0] != "worker" or worker in workers:
+                    raise ValueError("distinct assigned workers required")
+                workers.add(worker)
+                if assignment["task"] not in prior["scope"]["tasks"]:
+                    raise ValueError("assignment scope denied")
+            if {a["task"] for a in assignments} != set(prior["scope"]["tasks"]):
+                raise ValueError("assignment scope coverage required")
+            return dict(assignments=assignments, approval=None,
+                        states=dict(A="PENDING", B="PENDING", C="BLOCKED")), "DECOMPOSITION_REVIEW", prior["used_units"]
+        if action == "approve_decomposition":
+            if prior["state"] != "DECOMPOSITION_REVIEW" or role != "ceo" or plan is None:
+                raise ValueError("CEO decomposition approval required")
+            exact(payload, ("proposal_hash",))
+            if payload["proposal_hash"] != hashed(plan["assignments"]):
+                raise ValueError("proposal binding denied")
+            plan["approval"] = dict(command=command, signature=signature)
+            plan["states"].update(A="READY", B="READY")
+            target = ("BUDGET_EXHAUSTED" if prior["used_units"] >= prior["scope"]["budget_units"]
+                      else "WORKER_PENDING")
+            return plan, target, prior["used_units"]
+        if action == "submit" and plan is not None:
+            if prior["state"] != "WORKER_PENDING" or role != "worker" or plan["approval"] is None:
+                raise ValueError("signed CEO approval required")
+            exact(payload, ("assignment_id", "units"))
+            assignment = next((a for a in plan["assignments"] if a["id"] == payload["assignment_id"]), None)
+            if (assignment is None or assignment["worker_id"] != command["actor_id"]
+                    or plan["states"][assignment["id"]] != "READY"
+                    or any(plan["states"][dep] != "COMPLETE" for dep in assignment["depends_on"])):
+                raise ValueError("assignment or dependency denied")
+            units = payload["units"]
+            if type(units) is not int or units < 1:
+                raise ValueError("positive effort required")
+            if prior["used_units"] + units > prior["scope"]["budget_units"]:
+                return plan, "BUDGET_EXHAUSTED", prior["used_units"]
+            plan["states"][assignment["id"]] = "COMPLETE"
+            if (all(plan["states"][dep] == "COMPLETE" for dep in ("A", "B"))
+                    and plan["states"]["C"] == "BLOCKED"):
+                plan["states"]["C"] = "READY"
+            target = "MANAGER_REVIEW" if all(s == "COMPLETE" for s in plan["states"].values()) else "WORKER_PENDING"
+            return plan, target, prior["used_units"] + units
+        if action == "improve" and plan is not None:
+            if prior["state"] != "MANAGER_REVIEW" or role != "manager":
+                raise ValueError("manager improvement denied")
+            exact(payload, ("reason",))
+            bounded(payload["reason"])
+            return None, "MANAGER_PENDING", prior["used_units"]
+        return None
+
     def _verify_transition(self, prior, item, command):
         """Reconstruct security-relevant state from signed commands on restart.
 
@@ -158,13 +233,16 @@ class VentureWorkflow(EscalationInbox):
             if prior["state"] == "TERMINATED":
                 raise ValueError("signed terminal transition denied")
             if (command["version"] != prior["version"] or command["scope_hash"] != prior["scope_hash"]
-                    or (role in ("manager", "worker") and command["actor_id"] != prior["scope"][role + "_id"])):
+                    or not self._assigned_actor(prior, command)):
                 raise ValueError("signed scope lineage denied")
             expected = {key: prior[key] for key in (
                 "used_units", "version", "scope", "scope_hash", "venture_id", "owner_receipt", "finance_request")}
             if item["handoff"] != prior["handoff"]:
                 raise ValueError("handoff immutable")
-            if action in ("hold", "security_hold", "terminate"):
+            multi = self._decomposition_transition(prior, command, item["signature"])
+            if multi is not None:
+                expected["decomposition"], target, expected["used_units"] = multi
+            elif action in ("hold", "security_hold", "terminate"):
                 allowed = {"hold": {"ceo", "manager", "owner"},
                            "security_hold": {"ceo", "manager", "worker", "owner", "security"},
                            "terminate": {"ceo", "owner"}}[action]
@@ -198,6 +276,10 @@ class VentureWorkflow(EscalationInbox):
             expected["state"] = target
             if target in {"HOLD", "SECURITY_HOLD", "TERMINATED", "CEO_REDIRECTION"}:
                 expected.update(owner_receipt=None, finance_request=None)
+        expected_plan = (expected.get("decomposition", prior.get("decomposition") if prior else None)
+                         if action != "revise" else None)
+        if item.get("decomposition") != expected_plan:
+            raise ValueError("signed decomposition reconstruction denied")
         if any(item[key] != value for key, value in expected.items()):
             raise ValueError("signed state reconstruction denied")
         prior_results = prior.get("synthetic_results", {}) if prior else {}
@@ -300,24 +382,28 @@ class VentureWorkflow(EscalationInbox):
                         execution_performed=False, money_released=False)
             return self._record(item, command, signature)
 
+
+    def _synthetic_result(self, command, synthetic_input):
+        if command["action"] != "submit" or command["role"] != "worker":
+            raise ValueError("synthetic submission required")
+        exact(synthetic_input, ("proposal", "manager_plan"))
+        from kernel.synthetic_orchestration import run_synthetic_orchestration
+        result = run_synthetic_orchestration(
+            ceo_proposal=synthetic_input["proposal"], manager_plan=synthetic_input["manager_plan"])
+        result_hash = hashed(result)
+        if dict(ref="synthetic-result-" + result_hash, sha256=result_hash) not in command["evidence"]:
+            raise ValueError("signed result binding required")
+        return result
+
     def apply(self, command, signature, *, synthetic_input=None):
         self._authenticate(command, signature)
-        result = None
-        if synthetic_input is not None:
-            if command["action"] != "submit" or command["role"] != "worker":
-                raise ValueError("synthetic submission required")
-            exact(synthetic_input, ("proposal", "manager_plan"))
-            from kernel.synthetic_orchestration import run_synthetic_orchestration
-            result = run_synthetic_orchestration(
-                ceo_proposal=synthetic_input["proposal"], manager_plan=synthetic_input["manager_plan"])
-            result_hash = hashed(result)
-            if dict(ref="synthetic-result-" + result_hash, sha256=result_hash) not in command["evidence"]:
-                raise ValueError("signed result binding required")
         with self.transaction():
             retry = self._retry(command)
             if retry is not None:
-                if result is not None and retry.get("synthetic_results", {}).get(hashed(result)) != result:
-                    raise ValueError("synthetic retry conflict")
+                if synthetic_input is not None:
+                    result = self._synthetic_result(command, synthetic_input)
+                    if retry.get("synthetic_results", {}).get(hashed(result)) != result:
+                        raise ValueError("synthetic retry conflict")
                 return retry
             item = self._get(command["workflow_id"])
             if (command["revision"] != item["revision"] or command["previous_hash"] != hashed(item)
@@ -325,11 +411,14 @@ class VentureWorkflow(EscalationInbox):
                     or command["scope_hash"] != item["scope_hash"]):
                 raise ValueError("stale version scope or state")
             action, role, payload = command["action"], command["role"], command["payload"]
-            if role in ("manager", "worker") and command["actor_id"] != item["scope"][role + "_id"]:
+            if not self._assigned_actor(item, command):
                 raise ValueError("assigned actor required")
             if item["state"] == "TERMINATED":
                 raise ValueError("terminated")
-            if action in ("hold", "security_hold", "terminate"):
+            multi = self._decomposition_transition(item, command, signature)
+            if multi is not None:
+                item["decomposition"], target, item["used_units"] = multi
+            elif action in ("hold", "security_hold", "terminate"):
                 allowed = {"hold": {"ceo", "manager", "owner"},
                            "security_hold": {"ceo", "manager", "worker", "owner", "security"},
                            "terminate": {"ceo", "owner"}}[action]
@@ -358,6 +447,7 @@ class VentureWorkflow(EscalationInbox):
                         raise ValueError("scope actor denied")
                 item.update(scope=payload["scope"], scope_hash=hashed(payload["scope"]),
                             version=payload["version"], owner_receipt=None, finance_request=None)
+                item.pop("decomposition", None)
                 target = "MANAGER_PENDING"
             else:
                 required, target = TRANSITIONS.get((item["state"], action), (None, None))
@@ -395,11 +485,16 @@ class VentureWorkflow(EscalationInbox):
             if synthetic_input is not None:
                 # Pure existing workers only. Never load a callable, code, path or
                 # provider from a command. Persist output and transition atomically.
-                if action != "submit" or role != "worker" or target != "MANAGER_REVIEW":
+                if action != "submit" or role != "worker" or target not in {"MANAGER_REVIEW", "WORKER_PENDING"}:
                     raise ValueError("synthetic execution transition denied")
+                result = self._synthetic_result(command, synthetic_input)
+                expected_tasks = item["scope"]["tasks"]
+                if item.get("decomposition"):
+                    expected_tasks = [a["task"] for a in item["decomposition"]["assignments"]
+                                      if a["id"] == payload["assignment_id"]]
                 objectives = [t["objective"] for t in synthetic_input["manager_plan"]["tasks"]]
                 if (result["ceo_proposal"]["venture_id"] != item["venture_id"]
-                        or objectives != item["scope"]["tasks"]):
+                        or objectives != expected_tasks):
                     raise ValueError("synthetic task scope denied")
                 result_hash = hashed(result)
                 results = item.setdefault("synthetic_results", {})

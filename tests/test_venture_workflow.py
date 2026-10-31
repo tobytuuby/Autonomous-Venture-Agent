@@ -19,8 +19,8 @@ class WorkflowTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(dir=ROOT / "artifacts")
         self.path = Path(self.temp.name) / "workflow.sqlite"
         self.keys = {role: Ed25519PrivateKey.generate()
-                     for role in ("ceo", "manager", "worker", "owner", "security", "other")}
-        self.actors = {role: (role if role != "other" else "manager", key.public_key().public_bytes(
+                     for role in ("ceo", "manager", "worker", "owner", "security", "other", "worker-b", "worker-c")}
+        self.actors = {role: (("worker" if role.startswith("worker") else role) if role != "other" else "manager", key.public_key().public_bytes(
             serialization.Encoding.Raw, serialization.PublicFormat.Raw))
             for role, key in self.keys.items()}
         self.inbox = EscalationInbox(Path(self.temp.name) / "inbox.sqlite",
@@ -377,6 +377,197 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.act("finance_request", "ceo", dict(amount_cents=1))
 
+
+    def propose_multi(self):
+        self.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
+        self.create()
+        assignments = [
+            dict(id=name, worker_id=worker, task=task, depends_on=deps)
+            for name, worker, task, deps in zip(
+                ("A", "B", "C"), ("worker", "worker-b", "worker-c"),
+                self.scope["tasks"], ([], [], ["A", "B"]))]
+        self.act("propose_decomposition", "manager", dict(assignments=assignments))
+        return assignments
+
+    def approve_multi(self, assignments):
+        return self.act("approve_decomposition", "ceo",
+                        dict(proposal_hash=hashed(assignments)))
+
+    def submit_assignment(self, name, actor, units=1):
+        return self.act("submit", actor, dict(assignment_id=name, units=units))
+
+    def test_multi_signed_approval_dependency_order_and_restart(self):
+        assignments = self.propose_multi()
+        item = self.approve_multi(assignments)
+        self.assertEqual(item["decomposition"]["states"],
+                         dict(A="READY", B="READY", C="BLOCKED"))
+        # B can finish first; A and B are independent.
+        item = self.submit_assignment("B", "worker-b")
+        self.assertEqual(item["decomposition"]["states"],
+                         dict(A="READY", B="COMPLETE", C="BLOCKED"))
+        with self.assertRaises(ValueError):
+            self.submit_assignment("C", "worker-c")
+        self.workflow.close()
+        self.workflow = VentureWorkflow(self.path, actors=self.actors)
+        self.assertEqual(self.workflow.read("studio-flow"), item)
+        item = self.submit_assignment("A", "worker")
+        self.assertEqual(item["decomposition"]["states"]["C"], "READY")
+        item = self.submit_assignment("C", "worker-c")
+        self.assertEqual(item["state"], "MANAGER_REVIEW")
+        self.assertEqual(item["used_units"], 3)
+        self.assertEqual(set(item["decomposition"]["states"].values()), {"COMPLETE"})
+        self.act("manager_approve", "manager")
+        self.act("ceo_approve", "ceo")
+        self.assertEqual(self.workflow.read("studio-flow")["state"], "OWNER_REVIEW")
+        self.workflow.close()
+        self.workflow = VentureWorkflow(self.path, actors=self.actors)
+        self.workflow.verify()
+
+    def test_multi_no_computation_before_approval_or_dependencies(self):
+        assignments = self.propose_multi()
+        with patch("kernel.synthetic_orchestration.run_synthetic_orchestration",
+                   side_effect=AssertionError("worker must not run")) as run:
+            for actor, name in (("worker", "A"), ("worker-b", "B"), ("worker-c", "C")):
+                cmd = self.command("submit", actor, dict(assignment_id=name, units=1))
+                with self.assertRaises(ValueError):
+                    self.workflow.apply(cmd, self.sign(cmd, actor), synthetic_input={})
+            self.approve_multi(assignments)
+            cmd = self.command("submit", "worker-c", dict(assignment_id="C", units=1))
+            with self.assertRaises(ValueError):
+                self.workflow.apply(cmd, self.sign(cmd, "worker-c"), synthetic_input={})
+            run.assert_not_called()
+
+    def test_multi_approval_signature_actor_and_proposal_binding(self):
+        assignments = self.propose_multi()
+        before = self.workflow.read("studio-flow")
+        for actor, payload in (
+                ("manager", dict(proposal_hash=hashed(assignments))),
+                ("ceo", dict(proposal_hash="wrong"))):
+            with self.assertRaises(ValueError):
+                self.act("approve_decomposition", actor, payload)
+        cmd = self.command("approve_decomposition", "ceo",
+                           dict(proposal_hash=hashed(assignments)))
+        with self.assertRaises(Exception):
+            self.workflow.apply(cmd, self.sign(cmd, "manager"))
+        self.assertEqual(self.workflow.read("studio-flow"), before)
+        self.approve_multi(assignments)
+        for actor, name in (("worker-b", "A"), ("worker", "C"), ("worker", "unknown")):
+            with self.assertRaises(ValueError):
+                self.submit_assignment(name, actor)
+        cmd = self.command("submit", "worker", dict(assignment_id="A", units=1))
+        signed = self.sign(cmd, "worker")
+        item = self.workflow.apply(cmd, signed)
+        self.assertEqual(self.workflow.apply(cmd, signed), item)
+        with self.assertRaises(ValueError):
+            self.submit_assignment("A", "worker")
+        self.assertEqual(self.workflow.read("studio-flow"), item)
+
+    def test_multi_invalid_proposals_are_atomic(self):
+        import copy
+        assignments = self.propose_multi()
+        self.act("hold", "ceo")
+        self.act("resume", "ceo")
+        self.act("revise", "ceo", dict(scope=self.scope, version=2, reason="retry"))
+        invalid = [assignments[:2]]
+        for index, field, value in (
+                (0, "depends_on", ["B"]), (2, "depends_on", ["A"]),
+                (1, "worker_id", "worker"), (1, "worker_id", "other"),
+                (0, "task", "outside scope"), (2, "id", "D")):
+            changed = copy.deepcopy(assignments)
+            changed[index][field] = value
+            invalid.append(changed)
+        before = self.workflow.read("studio-flow")
+        for proposal in invalid:
+            with self.subTest(proposal=proposal), self.assertRaises(ValueError):
+                self.act("propose_decomposition", "manager", dict(assignments=proposal))
+            self.assertEqual(self.workflow.read("studio-flow"), before)
+
+    def test_multi_improvement_revision_hold_and_budget_require_new_gates(self):
+        assignments = self.propose_multi()
+        self.approve_multi(assignments)
+        for name, actor in (("A", "worker"), ("B", "worker-b"), ("C", "worker-c")):
+            self.submit_assignment(name, actor)
+        item = self.act("improve", "manager")
+        self.assertEqual(item["state"], "MANAGER_PENDING")
+        self.assertIsNone(item["decomposition"])
+        self.act("propose_decomposition", "manager", dict(assignments=assignments))
+        with self.assertRaises(ValueError):
+            self.submit_assignment("A", "worker")
+        self.approve_multi(assignments)
+        item = self.submit_assignment("A", "worker", units=3)
+        self.assertEqual(item["state"], "BUDGET_EXHAUSTED")
+        self.assertEqual(item["decomposition"]["states"]["A"], "READY")
+        self.assertEqual(item["used_units"], 3)
+        item = self.act("revise", "ceo", dict(scope=self.scope, version=2, reason="retry"))
+        self.assertNotIn("decomposition", item)
+        self.act("propose_decomposition", "manager", dict(assignments=assignments))
+        self.approve_multi(assignments)
+        self.act("hold", "manager")
+        with self.assertRaises(ValueError):
+            self.submit_assignment("A", "worker")
+        self.workflow.close()
+        self.workflow = VentureWorkflow(self.path, actors=self.actors)
+        self.workflow.verify()
+
+    def test_multi_rehashed_assignment_state_or_approval_tamper_denied(self):
+        import json
+        assignments = self.propose_multi()
+        self.approve_multi(assignments)
+        for field, value in (("states", dict(A="COMPLETE", B="COMPLETE", C="READY")),
+                             ("approval", None)):
+            self.workflow.db.execute("SAVEPOINT tamper")
+            seq, prior, raw = self.workflow.db.execute(
+                "SELECT sequence,previous_hash,event FROM audit ORDER BY sequence DESC LIMIT 1").fetchone()
+            event = json.loads(raw)
+            event["snapshot"]["decomposition"][field] = value
+            raw = canonical(event)
+            self.workflow.db.execute("UPDATE audit SET event=?,event_hash=? WHERE sequence=?",
+                                     (raw, digest(canonical([seq, prior, raw]).encode()), seq))
+            self.workflow.db.execute("UPDATE inbox SET snapshot=?",
+                                     (canonical(event["snapshot"]),))
+            with self.assertRaises(ValueError):
+                self.workflow.verify()
+            self.workflow.db.execute("ROLLBACK TO tamper")
+            self.workflow.db.execute("RELEASE tamper")
+
+
+
+    def test_multi_signed_synthetic_result_is_recorded_per_assignment(self):
+        assignments = self.propose_multi()
+        self.approve_multi(assignments)
+        result = dict(ceo_proposal=dict(venture_id="venture-001"), output="synthetic A")
+        cmd = self.command("submit", "worker", dict(assignment_id="A", units=1))
+        result_hash = hashed(result)
+        cmd["evidence"].append(dict(ref="synthetic-result-" + result_hash, sha256=result_hash))
+        inputs = dict(proposal={}, manager_plan=dict(tasks=[dict(objective="Prepare A")]))
+        with patch("kernel.synthetic_orchestration.run_synthetic_orchestration",
+                   return_value=result) as run:
+            item = self.workflow.apply(cmd, self.sign(cmd, "worker"), synthetic_input=inputs)
+            run.assert_called_once()
+            self.assertEqual(item["decomposition"]["states"]["A"], "COMPLETE")
+            self.assertEqual(item["synthetic_results"][result_hash], result)
+            self.assertEqual(self.workflow.apply(cmd, self.sign(cmd, "worker"),
+                                                synthetic_input=inputs), item)
+        self.workflow.verify()
+
+    def test_single_worker_synthetic_submission_and_retry_retained(self):
+        self.create()
+        self.act("delegate", "manager")
+        result = dict(ceo_proposal=dict(venture_id="venture-001"), output="synthetic")
+        cmd = self.command("submit", "worker", dict(units=1))
+        result_hash = hashed(result)
+        cmd["evidence"].append(dict(ref="synthetic-result-" + result_hash, sha256=result_hash))
+        inputs = dict(proposal={}, manager_plan=dict(tasks=[dict(objective=self.scope["tasks"][0])]))
+        with patch("kernel.synthetic_orchestration.run_synthetic_orchestration", return_value=result):
+            item = self.workflow.apply(cmd, self.sign(cmd, "worker"), synthetic_input=inputs)
+            self.assertEqual(item["state"], "MANAGER_REVIEW")
+            self.assertEqual(self.workflow.apply(cmd, self.sign(cmd, "worker"),
+                                                synthetic_input=inputs), item)
+        with patch("kernel.synthetic_orchestration.run_synthetic_orchestration",
+                   return_value=dict(result, output="changed")):
+            with self.assertRaises(ValueError):
+                self.workflow.apply(cmd, self.sign(cmd, "worker"), synthetic_input=inputs)
+        self.assertEqual(self.workflow.read("studio-flow"), item)
 
 if __name__ == "__main__":
     unittest.main()
