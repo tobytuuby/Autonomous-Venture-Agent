@@ -19,3 +19,11 @@ Implementation decision: reuse existing signed CEO decision and workflow, existi
 Outstanding boundaries: no authenticated live website request using Owner credentials performed; no claim of current ledger financial balance or historical signature verification; real payments not verified. These limitations are documented evidence, not invented acceptance.
 
 No business-state mutations or privilege changes were made. This task is documentation-only, so deployment of new services is inapplicable.
+
+## Additional verification (same Task 01)
+- Compared installed Agents Worker file against workspace source: installed variant uses singular actor_id; current source supports bounded actor_ids for worker-a/b/c and stronger historical shared-ceiling accounting. The installed binary is older, not equivalent. No deployment changed.
+- Owner API private directory /var/lib/venture-review/inbox denies read access to bridge execution identity. This prevents independent inspection of signed production review ledger without separately authorized read-only access.
+- Owner page requires authenticated website session and Owner verification; code contracts and PHP tests passed, but authenticated Owner end-to-end behavior remains unverified without Owner-authenticated session.
+- venture-ceo-exercise.service was observed FAILED (exit status 4/NOPERMISSION) and its journal shows a nonpermission failure; this is a separate older advisory service and must not be treated as evidence that active research daemon failed.
+- No existing durable per-venture cross-workflow inference aggregate was demonstrated from permitted source/runtime inspection. Daily central quota exists; no assumption of cumulative per-venture protection is justified.
+- Decision: inspection is BLOCKED for authenticated private ledger and Owner-session checks; no approval bypass, privilege escalation, or synthetic PASS is permitted.
