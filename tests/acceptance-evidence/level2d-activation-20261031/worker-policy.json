@@ -1,0 +1,15 @@
+{
+  "domain": "worker-preparation-inference-v1",
+  "enabled": true,
+  "endpoint": "https://api.openai.com/v1",
+  "epoch": 2,
+  "maximum_output_tokens": 1024,
+  "maximum_requests": 4,
+  "model": "gpt-6-luna",
+  "actor_ids": [
+    "service-worker",
+    "worker-a",
+    "worker-b",
+    "worker-c"
+  ]
+}

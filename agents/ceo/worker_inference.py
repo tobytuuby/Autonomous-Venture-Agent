@@ -30,10 +30,12 @@ def valid_policy(policy):
             or not 1 <= policy["maximum_output_tokens"] <= 1024):
         raise ValueError("bounded worker policy denied")
     actors = policy_actors(policy)
-    if type(actors) is not list or not 1 <= len(actors) <= 3:
+    if type(actors) is not list or not 1 <= len(actors) <= 4:
         raise ValueError("bounded worker actors required")
     for actor in actors:
         identifier(actor)
+    if len(actors) == 4 and set(actors) != {"service-worker", "worker-a", "worker-b", "worker-c"}:
+        raise ValueError("legacy and three enrolled workers required")
     if len(set(actors)) != len(actors):
         raise ValueError("distinct policy workers required")
     return policy

@@ -250,10 +250,22 @@ class WorkerInferenceTests(unittest.TestCase):
         self.assertEqual(self.ledger_count(), 1)
         self.assertEqual(self.provider.calls, 0)
 
+    def test_legacy_plus_three_worker_policy_is_bounded(self):
+        policy = dict(self.policy)
+        policy.pop("actor_id")
+        policy["actor_ids"] = ["service-worker", "worker-a", "worker-b", "worker-c"]
+        self.assertEqual(wi.valid_policy(policy), policy)
+        for actors in (policy["actor_ids"] + ["worker-d"],
+                       ["worker-a", "worker-b", "worker-c", "worker-d"]):
+            with self.subTest(actors=actors), self.assertRaises(ValueError):
+                wi.valid_policy(dict(policy, actor_ids=actors))
+        with self.assertRaises(ValueError):
+            wi.valid_policy(dict(policy, maximum_requests=5))
+
     def test_multiworker_policy_shares_one_budget_under_concurrency(self):
         from concurrent.futures import ThreadPoolExecutor
         self.policy.pop("actor_id")
-        self.policy["actor_ids"] = ["service-worker", "worker-b", "worker-c"]
+        self.policy["actor_ids"] = ["service-worker", "worker-a", "worker-b", "worker-c"]
         data = [(self.payload(assignment, actor, "mixed-" + str(n)), actor)
                 for n, (assignment, actor) in enumerate(
                     [("A", "service-worker"), ("B", "worker-b")] * 5)]
