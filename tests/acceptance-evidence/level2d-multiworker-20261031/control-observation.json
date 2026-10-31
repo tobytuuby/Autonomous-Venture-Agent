@@ -1,0 +1,802 @@
+{
+  "blockers": [
+    "Pinned hierarchy trust has only one Worker actor; three distinct authorized live Workers are unavailable.",
+    "Deployed Worker reservation and execution closures bind every Worker TLS pin to service-worker.",
+    "One actor_id policy must equal the hard-coded actor before signed assignment authorization.",
+    "Technical bootstrap permits only level2d-acceptance-1 through -5; the new fixture ID is denied."
+  ],
+  "branch": "main",
+  "ceo_config": {
+    "fields": {
+      "actor_id": "service-ceo",
+      "decomposition_workers": null,
+      "role": "ceo",
+      "workflow_id": "level2d-acceptance-5"
+    },
+    "sha256": "fbebbb66ca1211f2e1bdc470452ab746a77fc6d2011c2086c95f52129fa00c46"
+  },
+  "ceo_service": {
+    "ActiveState": "inactive",
+    "EnvironmentFiles": "/etc/venture-ceo-level2c.env (ignore_errors=no)",
+    "ExecMainStartTimestamp": "Thu 2026-10-29 15:30:17 UTC",
+    "Id": "venture-level2d-ceo.service",
+    "MainPID": "0",
+    "SubState": "dead",
+    "User": "venture-ceo",
+    "WorkingDirectory": "/usr/local/lib/venture-ceo-level2c"
+  },
+  "classification": "operator-observed-live-control-configuration-and-on-disk-source",
+  "dirty_tracked_sha256": {
+    "agents/ceo/service_identity.py": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+    "kernel/synthetic_venture_store.py": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+    "kernel/venture_admission.py": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+    "tests/test_owner_approval.py": "442dfc9b12a51f47f29bab6946e62cd0a8af9aa8319d0a379117d5830121df01"
+  },
+  "journey_executed": false,
+  "limitations": [
+    "No Agents VM service or credential inspection was needed after the Control prerequisite failed.",
+    "Source hashes identify files on disk, not proof of exact Python bytecode loaded in the running process.",
+    "Two TLS pins do not demonstrate two actors; the broker routes both through one Worker role and actor.",
+    "No inference, signed command, audit transition, provider receipt, live denial probe or restart was performed."
+  ],
+  "observed_at": "2026-10-31T05:28:03.125070+00:00",
+  "project_head": "44ccadd8919669eca54c04d2a91e6a85f6dfd880",
+  "schema": "level2d-multiworker-preflight-v1",
+  "service": {
+    "ActiveState": "active",
+    "EnvironmentFiles": "/etc/venture-control/broker-provider-level2c.env (ignore_errors=no)",
+    "ExecMainStartTimestamp": "Sat 2026-10-31 05:22:12 UTC",
+    "Id": "venture-control-broker-mtls.service",
+    "MainPID": "4099109",
+    "SubState": "running",
+    "User": "venture-broker",
+    "WorkingDirectory": "/usr/local/lib/venture-control-broker-level2c"
+  },
+  "settings": {
+    "VENTURE_BROKER_CEO_RESERVATION_ACTOR": "service-ceo",
+    "VENTURE_BROKER_HIERARCHY_ENABLED": "1",
+    "VENTURE_BROKER_RESERVATION_ACTOR": "service-manager",
+    "VENTURE_BROKER_WORKER_INFERENCE_ENABLED": "1"
+  },
+  "sources": {
+    "agents/ceo/hierarchy_gateway.py": {
+      "excerpts": [
+        {
+          "line": 182,
+          "text": "        exact(payload, (\"command\", \"signature\"))"
+        },
+        {
+          "line": 183,
+          "text": "        cmd = payload[\"command\"]"
+        },
+        {
+          "line": 184,
+          "text": "        if type(cmd) is not dict:"
+        },
+        {
+          "line": 185,
+          "text": "            raise ValueError('signed CEO command required')"
+        },
+        {
+          "line": 186,
+          "text": "        if re.fullmatch(r'research-[0-9a-f]{24}',cmd.get('workflow_id','')):"
+        },
+        {
+          "line": 187,
+          "text": "            return self.bootstrap_research_commit(payload)"
+        },
+        {
+          "line": 188,
+          "text": "        if cmd.get(\"workflow_id\") not in ("
+        },
+        {
+          "line": 189,
+          "text": "                \"level2d-acceptance-1\", \"level2d-acceptance-2\","
+        },
+        {
+          "line": 190,
+          "text": "                \"level2d-acceptance-3\", \"level2d-acceptance-4\","
+        },
+        {
+          "line": 191,
+          "text": "                \"level2d-acceptance-5\"):"
+        },
+        {
+          "line": 192,
+          "text": "            raise ValueError(\"bounded technical acceptance fixtures only\")"
+        },
+        {
+          "line": 193,
+          "text": "        item_id = {"
+        },
+        {
+          "line": 194,
+          "text": "            \"level2d-acceptance-1\": \"level2d-acceptance\","
+        },
+        {
+          "line": 195,
+          "text": "            \"level2d-acceptance-2\": \"level2d-acceptance-retry\","
+        },
+        {
+          "line": 196,
+          "text": "            \"level2d-acceptance-3\": \"level2d-acceptance-retry2\","
+        },
+        {
+          "line": 197,
+          "text": "            \"level2d-acceptance-4\": \"level2d-acceptance-retry3\","
+        },
+        {
+          "line": 198,
+          "text": "            \"level2d-acceptance-5\": \"level2d-acceptance-retry4\","
+        },
+        {
+          "line": 199,
+          "text": "        }[cmd[\"workflow_id\"]]"
+        },
+        {
+          "line": 200,
+          "text": "        scope = cmd.get(\"payload\", {}).get(\"scope\", {})"
+        },
+        {
+          "line": 201,
+          "text": "        if (cmd.get(\"action\") != \"create\" or cmd.get(\"role\") != \"ceo\""
+        },
+        {
+          "line": 202,
+          "text": "                or cmd.get(\"live\") is not False"
+        },
+        {
+          "line": 203,
+          "text": "                or cmd.get(\"payload\", {}).get(\"venture_id\") != \"venture-verification\""
+        },
+        {
+          "line": 204,
+          "text": "                or type(scope) is not dict"
+        },
+        {
+          "line": 205,
+          "text": "                or scope.get(\"mode\") != \"PREPARATION_ONLY\""
+        },
+        {
+          "line": 206,
+          "text": "                or scope.get(\"manager_id\") != \"service-manager\""
+        },
+        {
+          "line": 207,
+          "text": "                or scope.get(\"worker_id\") != \"service-worker\""
+        },
+        {
+          "line": 208,
+          "text": "                or scope.get(\"budget_units\", 10001) > 5"
+        },
+        {
+          "line": 209,
+          "text": "                or scope.get(\"seed_cents\", 10001) > 10000):"
+        }
+      ],
+      "local_checkout_sha256": "50c447dffa0cee5f02196cde9b1fcd4e92772cdcf1c9145a4c3ed9dfdad296f5",
+      "sha256": "50c447dffa0cee5f02196cde9b1fcd4e92772cdcf1c9145a4c3ed9dfdad296f5"
+    },
+    "agents/ceo/hierarchy_runner.py": {
+      "excerpts": [
+        {
+          "line": 15,
+          "text": ")"
+        },
+        {
+          "line": 16,
+          "text": ""
+        },
+        {
+          "line": 17,
+          "text": ""
+        },
+        {
+          "line": 18,
+          "text": "def ready_assignment(item, actor=None):"
+        },
+        {
+          "line": 19,
+          "text": "    \"\"\"Select a ready assignment from the verified snapshot before any callback.\"\"\""
+        },
+        {
+          "line": 20,
+          "text": "    plan = item.get(\"decomposition\")"
+        },
+        {
+          "line": 21,
+          "text": "    if not plan or not plan.get(\"approval\") or item[\"state\"] != \"WORKER_PENDING\":"
+        },
+        {
+          "line": 22,
+          "text": "        return None"
+        },
+        {
+          "line": 23,
+          "text": "    if item[\"used_units\"] >= item[\"scope\"][\"budget_units\"]:"
+        },
+        {
+          "line": 24,
+          "text": "        return None"
+        },
+        {
+          "line": 25,
+          "text": "    return next((a for a in plan[\"assignments\"]"
+        },
+        {
+          "line": 26,
+          "text": "                 if (actor is None or a[\"worker_id\"] == actor)"
+        },
+        {
+          "line": 82,
+          "text": "            assigned = ready_assignment(item, next(iter(self.signers)) if self.role_filter else None)"
+        },
+        {
+          "line": 83,
+          "text": "            if assigned is None:"
+        },
+        {
+          "line": 84,
+          "text": "                return item"
+        },
+        {
+          "line": 85,
+          "text": "            actor = assigned[\"worker_id\"]"
+        },
+        {
+          "line": 86,
+          "text": "        if self.workflow.actors.get(actor, (None,))[0] != role:"
+        },
+        {
+          "line": 87,
+          "text": "            raise ValueError(\"assigned actor required\")"
+        },
+        {
+          "line": 88,
+          "text": "        signer = self.signers.get(actor)"
+        },
+        {
+          "line": 89,
+          "text": "        if not callable(signer):"
+        },
+        {
+          "line": 90,
+          "text": "            raise ValueError(\"assigned signer required\")"
+        },
+        {
+          "line": 91,
+          "text": "        decision = deepcopy(self.callbacks[role](deepcopy(item)))"
+        },
+        {
+          "line": 92,
+          "text": "        exact(decision, (\"action\", \"payload\", \"evidence\"))"
+        },
+        {
+          "line": 93,
+          "text": "        if type(decision[\"action\"]) is not str or decision[\"action\"] not in allowed:"
+        },
+        {
+          "line": 94,
+          "text": "            raise ValueError(\"preparation transition denied\")"
+        },
+        {
+          "line": 95,
+          "text": "        if role == \"worker\" and item.get(\"decomposition\"):"
+        },
+        {
+          "line": 96,
+          "text": "            if decision[\"payload\"].get(\"assignment_id\") != assigned[\"id\"]:"
+        }
+      ],
+      "local_checkout_sha256": "01b4f7ea1dbb03b21e4e110b0a1ec0b6a85985c2d74142a8b250650a51a1a7c3",
+      "sha256": "01b4f7ea1dbb03b21e4e110b0a1ec0b6a85985c2d74142a8b250650a51a1a7c3"
+    },
+    "agents/ceo/worker_inference.py": {
+      "excerpts": [
+        {
+          "line": 15,
+          "text": "POLICY_FILE = AUTHORITY_DIRECTORY / \"worker-inference-policy.json\""
+        },
+        {
+          "line": 16,
+          "text": ""
+        },
+        {
+          "line": 17,
+          "text": ""
+        },
+        {
+          "line": 18,
+          "text": "def valid_policy(policy):"
+        },
+        {
+          "line": 19,
+          "text": "    exact(policy, (\"domain\", \"enabled\", \"epoch\", \"actor_id\", \"model\","
+        },
+        {
+          "line": 20,
+          "text": "                   \"endpoint\", \"maximum_requests\", \"maximum_output_tokens\"))"
+        },
+        {
+          "line": 21,
+          "text": "    if (policy[\"domain\"] != \"worker-preparation-inference-v1\""
+        },
+        {
+          "line": 22,
+          "text": "            or policy[\"enabled\"] is not True"
+        },
+        {
+          "line": 23,
+          "text": "            or policy[\"model\"] != \"gpt-6-luna\""
+        },
+        {
+          "line": 24,
+          "text": "            or not isinstance(policy[\"endpoint\"], str) or not policy[\"endpoint\"].startswith(\"https://\")"
+        },
+        {
+          "line": 25,
+          "text": "            or type(policy[\"epoch\"]) is not int"
+        },
+        {
+          "line": 26,
+          "text": "            or type(policy[\"maximum_requests\"]) is not int"
+        },
+        {
+          "line": 27,
+          "text": "            or not 1 <= policy[\"maximum_requests\"] <= 4"
+        },
+        {
+          "line": 28,
+          "text": "            or type(policy[\"maximum_output_tokens\"]) is not int"
+        },
+        {
+          "line": 29,
+          "text": "            or not 1 <= policy[\"maximum_output_tokens\"] <= 1024):"
+        },
+        {
+          "line": 30,
+          "text": "        raise ValueError(\"bounded worker policy denied\")"
+        },
+        {
+          "line": 31,
+          "text": "    identifier(policy[\"actor_id\"])"
+        },
+        {
+          "line": 32,
+          "text": "    return policy"
+        },
+        {
+          "line": 33,
+          "text": ""
+        },
+        {
+          "line": 42,
+          "text": ""
+        },
+        {
+          "line": 43,
+          "text": "def authorized(payload, *, actor, hierarchy):"
+        },
+        {
+          "line": 44,
+          "text": "    exact(payload, (\"domain\", \"workflow_id\", \"worker_id\", \"snapshot_sha256\","
+        },
+        {
+          "line": 45,
+          "text": "                    \"identity\", \"attempt\", \"request_sha256\", \"policy\", \"assignment_id\"))"
+        },
+        {
+          "line": 46,
+          "text": "    if payload[\"domain\"] != \"worker-preparation-call-v1\" or payload[\"worker_id\"] != actor:"
+        },
+        {
+          "line": 47,
+          "text": "        raise ValueError(\"worker role denied\")"
+        },
+        {
+          "line": 48,
+          "text": "    identifier(payload[\"identity\"])"
+        },
+        {
+          "line": 49,
+          "text": "    for field in (\"snapshot_sha256\", \"attempt\", \"request_sha256\"):"
+        },
+        {
+          "line": 50,
+          "text": "        h = payload[field]"
+        },
+        {
+          "line": 51,
+          "text": "        if type(h) is not str or len(h) != 64 or any(c not in \"0123456789abcdef\" for c in h):"
+        },
+        {
+          "line": 52,
+          "text": "            raise ValueError(\"invalid Worker digest\")"
+        },
+        {
+          "line": 53,
+          "text": "    policy = current_policy()"
+        },
+        {
+          "line": 54,
+          "text": "    if policy != payload[\"policy\"] or policy[\"actor_id\"] != actor:"
+        },
+        {
+          "line": 55,
+          "text": "        raise ValueError(\"changed worker policy\")"
+        },
+        {
+          "line": 56,
+          "text": "    auth = ProviderQuota(AUTHORITY_DIRECTORY)"
+        },
+        {
+          "line": 57,
+          "text": "    authority = auth.authority()"
+        },
+        {
+          "line": 58,
+          "text": "    if policy[\"epoch\"] != authority[\"epoch\"] or actor in authority[\"revoked\"]:"
+        },
+        {
+          "line": 59,
+          "text": "        raise ValueError(\"revoked Worker\")"
+        },
+        {
+          "line": 60,
+          "text": "    state = hierarchy.inference_state(payload[\"workflow_id\"], payload[\"assignment_id\"], actor)"
+        },
+        {
+          "line": 61,
+          "text": "    if digest(canonical(state).encode()) != payload[\"snapshot_sha256\"]:"
+        },
+        {
+          "line": 62,
+          "text": "        raise ValueError(\"stale authoritative workflow snapshot\")"
+        },
+        {
+          "line": 72,
+          "text": "    path = AUTHORITY_DIRECTORY / \"resources.sqlite\""
+        },
+        {
+          "line": 73,
+          "text": "    db = sqlite3.connect(path, isolation_level=None, timeout=5)"
+        },
+        {
+          "line": 74,
+          "text": "    try:"
+        },
+        {
+          "line": 75,
+          "text": "        db.execute(\"PRAGMA synchronous=FULL\")"
+        },
+        {
+          "line": 76,
+          "text": "        db.execute(\"BEGIN IMMEDIATE\")"
+        },
+        {
+          "line": 77,
+          "text": "        db.execute(\"\"\"CREATE TABLE IF NOT EXISTS worker_reservations("
+        },
+        {
+          "line": 78,
+          "text": "                    identity TEXT PRIMARY KEY, request TEXT NOT NULL)\"\"\")"
+        },
+        {
+          "line": 79,
+          "text": "        prior = db.execute(\"SELECT request FROM worker_reservations WHERE identity=?\", (key,)).fetchone()"
+        },
+        {
+          "line": 80,
+          "text": "        wire = canonical(payload)"
+        },
+        {
+          "line": 81,
+          "text": "        if prior:"
+        },
+        {
+          "line": 82,
+          "text": "            if prior[0] != wire:"
+        },
+        {
+          "line": 83,
+          "text": "                raise ValueError(\"Worker reservation replay conflict\")"
+        },
+        {
+          "line": 84,
+          "text": "            db.execute(\"COMMIT\")"
+        },
+        {
+          "line": 85,
+          "text": "            return dict(reserved=True, duplicate=True, identity=key)"
+        },
+        {
+          "line": 86,
+          "text": "        # Parse exact fields rather than substring/LIKE matching caller identifiers."
+        },
+        {
+          "line": 87,
+          "text": "        reservations = [json.loads(row[0]) for row in db.execute("
+        },
+        {
+          "line": 88,
+          "text": "            \"SELECT request FROM worker_reservations\")]"
+        },
+        {
+          "line": 89,
+          "text": "        used = sum(r.get(\"workflow_id\") == payload[\"workflow_id\"]"
+        },
+        {
+          "line": 90,
+          "text": "                   and r.get(\"assignment_id\") == payload[\"assignment_id\"]"
+        },
+        {
+          "line": 91,
+          "text": "                   for r in reservations)"
+        },
+        {
+          "line": 92,
+          "text": "        if used >= 4:"
+        },
+        {
+          "line": 93,
+          "text": "            raise ValueError(\"worker assignment quota exhausted\")"
+        },
+        {
+          "line": 94,
+          "text": "        shared_used = sum(r.get(\"workflow_id\") == payload[\"workflow_id\"] for r in reservations)"
+        },
+        {
+          "line": 95,
+          "text": "        if shared_used >= policy[\"maximum_requests\"]:"
+        },
+        {
+          "line": 96,
+          "text": "            raise ValueError(\"shared workflow quota exhausted\")"
+        },
+        {
+          "line": 97,
+          "text": "        auth._reserve_daily(db, key, policy[\"maximum_output_tokens\"])"
+        },
+        {
+          "line": 98,
+          "text": "        db.execute(\"INSERT INTO worker_reservations VALUES(?,?)\", (key,wire))"
+        },
+        {
+          "line": 99,
+          "text": "        db.execute(\"COMMIT\")"
+        },
+        {
+          "line": 100,
+          "text": "    except BaseException:"
+        },
+        {
+          "line": 101,
+          "text": "        if db.in_transaction:"
+        },
+        {
+          "line": 102,
+          "text": "            db.execute(\"ROLLBACK\")"
+        },
+        {
+          "line": 103,
+          "text": "        raise"
+        },
+        {
+          "line": 104,
+          "text": "    finally:"
+        },
+        {
+          "line": 105,
+          "text": "        db.close()"
+        },
+        {
+          "line": 106,
+          "text": "    return dict(reserved=True, duplicate=False, identity=key)"
+        },
+        {
+          "line": 107,
+          "text": ""
+        },
+        {
+          "line": 108,
+          "text": ""
+        }
+      ],
+      "local_checkout_sha256": "0af215e054b8dc8e72b5b0ddb1e7bf9f5f791fea3bc5a14b55b7785c4706eb4f",
+      "sha256": "0af215e054b8dc8e72b5b0ddb1e7bf9f5f791fea3bc5a14b55b7785c4706eb4f"
+    },
+    "kernel/broker/isolated_mtls.py": {
+      "excerpts": [
+        {
+          "line": 51,
+          "text": "        def _role(self):"
+        },
+        {
+          "line": 52,
+          "text": "            if not isinstance(self.connection, ssl.SSLSocket):"
+        },
+        {
+          "line": 53,
+          "text": "                return None"
+        },
+        {
+          "line": 54,
+          "text": "            cert = self.connection.getpeercert(binary_form=True)"
+        },
+        {
+          "line": 55,
+          "text": "            if not cert:"
+        },
+        {
+          "line": 56,
+          "text": "                return None"
+        },
+        {
+          "line": 57,
+          "text": "            fingerprint = hashlib.sha256(cert).hexdigest()"
+        },
+        {
+          "line": 58,
+          "text": "            if fingerprint in worker_pins:"
+        },
+        {
+          "line": 59,
+          "text": "                return \"worker\""
+        },
+        {
+          "line": 60,
+          "text": "            if fingerprint in ceo_reservation_pins:"
+        },
+        {
+          "line": 61,
+          "text": "                return \"quota-ceo\""
+        },
+        {
+          "line": 62,
+          "text": "            if fingerprint in polling_pins:"
+        },
+        {
+          "line": 63,
+          "text": "                return \"poll\""
+        },
+        {
+          "line": 64,
+          "text": "            if fingerprint in capability_pins:"
+        },
+        {
+          "line": 65,
+          "text": "                return \"capability\""
+        },
+        {
+          "line": 66,
+          "text": "            return None"
+        }
+      ],
+      "local_checkout_sha256": "e50ec7b3796f58dee6beeba9bffa54d6342627ca92ec93d6017b073651a1b12a",
+      "sha256": "e50ec7b3796f58dee6beeba9bffa54d6342627ca92ec93d6017b073651a1b12a"
+    },
+    "kernel/broker/mtls_server.py": {
+      "excerpts": [
+        {
+          "line": 90,
+          "text": "    hierarchy = None"
+        },
+        {
+          "line": 91,
+          "text": "    worker_pins = tuple(filter(None, os.environ.get(\"VENTURE_BROKER_WORKER_PINS\", \"\").split(\",\")))"
+        },
+        {
+          "line": 92,
+          "text": "    if os.environ.get(\"VENTURE_BROKER_HIERARCHY_ENABLED\") == \"1\":"
+        },
+        {
+          "line": 93,
+          "text": "        from agents.ceo.hierarchy_gateway import HierarchyGateway"
+        },
+        {
+          "line": 94,
+          "text": "        from agents.ceo.control_plane import load_trust"
+        },
+        {
+          "line": 95,
+          "text": "        from agents.ceo.service_identity import AUTHORITY_DIRECTORY"
+        },
+        {
+          "line": 96,
+          "text": "        hierarchy = HierarchyGateway(AUTHORITY_DIRECTORY / \"hierarchy\","
+        },
+        {
+          "line": 97,
+          "text": "            load_trust(required(\"VENTURE_BROKER_HIERARCHY_TRUST\")))"
+        },
+        {
+          "line": 98,
+          "text": "    worker_reserve = None"
+        },
+        {
+          "line": 99,
+          "text": "    worker_execute = None"
+        },
+        {
+          "line": 100,
+          "text": "    if os.environ.get(\"VENTURE_BROKER_WORKER_INFERENCE_ENABLED\") == \"1\":"
+        },
+        {
+          "line": 101,
+          "text": "        if hierarchy is None or not worker_pins:"
+        },
+        {
+          "line": 102,
+          "text": "            raise ValueError(\"worker hierarchy and pinned identity required\")"
+        },
+        {
+          "line": 103,
+          "text": "        from agents.ceo.provider import OpenAICompatibleShadowModel"
+        },
+        {
+          "line": 104,
+          "text": "        from agents.ceo.worker_inference import reserve_worker, execute_worker"
+        },
+        {
+          "line": 105,
+          "text": "        from agents.ceo.service_identity import AUTHORITY_DIRECTORY"
+        },
+        {
+          "line": 106,
+          "text": "        worker_provider = OpenAICompatibleShadowModel("
+        },
+        {
+          "line": 107,
+          "text": "            required(\"CEO_MODEL_ENDPOINT\"), \"gpt-6-luna\", required(\"CEO_MODEL_TOKEN\"))"
+        },
+        {
+          "line": 108,
+          "text": "        worker_provider.trace_path = AUTHORITY_DIRECTORY / \"worker-provider.jsonl\""
+        },
+        {
+          "line": 109,
+          "text": "        worker_reserve = lambda payload: reserve_worker(payload,"
+        },
+        {
+          "line": 110,
+          "text": "            actor=\"service-worker\", hierarchy=hierarchy)"
+        },
+        {
+          "line": 111,
+          "text": "        worker_execute = lambda payload: execute_worker(payload,"
+        },
+        {
+          "line": 112,
+          "text": "            actor=\"service-worker\", hierarchy=hierarchy, provider=worker_provider)"
+        }
+      ],
+      "local_checkout_sha256": "2a4798fcc2e271ea75de9fafd520d9ffd4996508eb204ad8477e036b0f3b519f",
+      "sha256": "2a4798fcc2e271ea75de9fafd520d9ffd4996508eb204ad8477e036b0f3b519f"
+    }
+  },
+  "trust": {
+    "actors": {
+      "service-ceo": "ceo",
+      "service-manager": "manager",
+      "service-worker": "worker"
+    },
+    "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/level2d-hierarchy-trust.json",
+    "sha256": "ffc5a084c3af9a0b898af97a867219f4758c1aec065fe4a3489bc7a245cdab62"
+  },
+  "verdict": "BLOCKED",
+  "worker_pin_count": 2,
+  "worker_policy": {
+    "endpoint_host": "api.openai.com",
+    "fields": {
+      "actor_id": "service-worker",
+      "domain": "worker-preparation-inference-v1",
+      "enabled": true,
+      "epoch": 2,
+      "maximum_output_tokens": 1024,
+      "maximum_requests": 4,
+      "model": "gpt-6-luna"
+    },
+    "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/worker-inference-policy.json",
+    "sha256": "5c630a916933cc058943550c71a6f774d804bbf1df67a06cd24e5c702d06fe5e"
+  }
+}

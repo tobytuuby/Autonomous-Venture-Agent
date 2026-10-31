@@ -1,0 +1,49 @@
+{
+  "schema": "level2d-multiworker-planned-fixture-v1",
+  "workflow_id": "level2d-multiworker-20261031-01",
+  "status": "PLANNED_NOT_CREATED",
+  "mode": "PREPARATION_ONLY",
+  "owner_review_target": "OWNER_REVIEW",
+  "worker_provider_call_cap": 4,
+  "assignments": [
+    {
+      "id": "A",
+      "task": "Assess demand using internal hypotheses only",
+      "worker_id": "service-worker-a",
+      "depends_on": []
+    },
+    {
+      "id": "B",
+      "task": "Assess competition using internal hypotheses only",
+      "worker_id": "service-worker-b",
+      "depends_on": []
+    },
+    {
+      "id": "C",
+      "task": "Assess feasibility using A and B evidence",
+      "worker_id": "service-worker-c",
+      "depends_on": [
+        "A",
+        "B"
+      ]
+    }
+  ],
+  "identity_status": "Proposed names only; not provisioned or authorized.",
+  "steps": [
+    "CEO signed create",
+    "Manager signed propose_decomposition",
+    "CEO signed approve_decomposition",
+    "Early Worker C denied before reservation or inference",
+    "Separately authorized Workers A and B execute provider inference",
+    "Worker C executes provider inference with A/B evidence",
+    "Manager consolidates digest-verified individual evidence",
+    "CEO reviews to OWNER_REVIEW"
+  ],
+  "boundaries": {
+    "operational_authority": false,
+    "external_actions_allowed": false,
+    "money_released": false,
+    "production_ceo": false
+  },
+  "note": "This is a plan, not a signed command, created workflow, provider receipt, or acceptance result."
+}

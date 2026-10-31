@@ -1,0 +1,33 @@
+{
+  "canonical_json_sha256": {
+    "control-observation.json": "a8affa6d122e9bf8591f92c990d41667e2b1461b13091cbaa2f7c6e70ae61398",
+    "execution.json": "667d7b80a7f90cb1eceb5bd0bddd9031fd3cdc5abc489f9be5c76761d44b9c8c",
+    "fixture.json": "9793224e32b39b187c3d43995e3150e4f68e1eeabd01009cb8f0ab63984224b5"
+  },
+  "live_acceptance": false,
+  "live_evidence": {
+    "audit_chain_verification": "NOT_RUN",
+    "ceo_approval": "NOT_RUN",
+    "ceo_owner_review": "NOT_RUN",
+    "four_call_cap": "NOT_RUN",
+    "identity_denial": "NOT_RUN",
+    "manager_consolidation": "NOT_RUN",
+    "manager_decomposition": "NOT_RUN",
+    "provider_receipts": "NOT_RUN",
+    "service_restart": "NOT_RUN",
+    "shared_atomic_budget": "NOT_RUN",
+    "signed_genesis": "NOT_RUN",
+    "worker_a_provider": "NOT_RUN",
+    "worker_b_provider": "NOT_RUN",
+    "worker_c_early_denial": "NOT_RUN",
+    "worker_c_provider": "NOT_RUN"
+  },
+  "local_validation": {
+    "classification": "local fixtures only",
+    "exit_code": 0,
+    "passed": 48,
+    "tests": 48
+  },
+  "schema": "level2d-multiworker-blocker-manifest-v1",
+  "verdict": "BLOCKED"
+}

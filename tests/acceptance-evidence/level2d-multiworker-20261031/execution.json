@@ -1,0 +1,50 @@
+{
+  "schema": "level2d-multiworker-execution-record-v1",
+  "scope": "Read-only prerequisite inspection; blocked before live workflow creation",
+  "bridge": "venture-control",
+  "inspection": {
+    "process_id": "proc_mvvymrir_j1wjaw",
+    "pid": 4133316,
+    "status": "exited",
+    "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvvymrir_j1wjaw.log",
+    "bridge_log_read": true,
+    "command": "sudo -n python3 tests/acceptance-evidence/level2d-multiworker-20261031/inspect_control.py > tests/acceptance-evidence/level2d-multiworker-20261031/control-observation.json",
+    "result": "Complete JSON observation emitted; empty bridge log; process exit code not exposed by process.list"
+  },
+  "local_tests": {
+    "process_id": "proc_mvvyno7n_hy9cnq",
+    "pid": 4142342,
+    "status": "exited",
+    "exit_code": 0,
+    "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvvyno7n_hy9cnq.log",
+    "bridge_log_read": true,
+    "raw_report": "local-tests.log",
+    "command": "mkdir -p artifacts/level2d-multiworker-20261031/tmp && TMPDIR=\"$PWD/artifacts/level2d-multiworker-20261031/tmp\" infrastructure/python-runtime/.venv/bin/python -B -m unittest -v tests.test_hierarchy_multi_worker tests.test_hierarchy_runner tests.test_worker_inference tests.test_hierarchy_bootstrap tests.test_broker_mtls_entrypoint tests.test_broker_isolated_mtls",
+    "classification": "Local unit/integration fixtures, fake inference, local TLS servers; no deployed provider inference"
+  },
+  "preliminary_failures": [
+    {
+      "operation": "Initial git verification and rg file discovery",
+      "result": "git HEAD/status/branch succeeded; rg unavailable, exit 127",
+      "resolution": "Used bounded git ls-files, sed, explicit files and directory listings."
+    },
+    {
+      "operation": "Broad venture service listing plus missing acceptance directory",
+      "result": "Service output exceeded bridge buffer; acceptance directory did not exist.",
+      "resolution": "Used systemctl show on specific units, then created only requested evidence directory."
+    }
+  ],
+  "decision": "Stop before execution because distinct Worker identity and new technical fixture admission prerequisites failed.",
+  "live_failures": [],
+  "live_failure_note": "No deployed denial attempts were made. Static denial conditions and local negative tests are not live denial evidence.",
+  "signed_commands": [],
+  "provider_receipts": [],
+  "live_state_transitions": [],
+  "audit_chain": null,
+  "restart": {
+    "status": "NOT_RUN",
+    "reason": "Prerequisite blocked; no completed test state exists to recover, and the existing broker serves shared research."
+  },
+  "no_service_or_authority_changes": true,
+  "no_production_ceo_or_capital_action": true
+}
