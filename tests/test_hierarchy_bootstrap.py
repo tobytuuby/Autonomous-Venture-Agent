@@ -1,6 +1,7 @@
 """Technical-only CEO-signed kickoff, without Owner or venture authorization."""
 import tempfile
 import unittest
+from agents.ceo.escalation_inbox import ROOT
 from pathlib import Path
 from datetime import datetime,timedelta,timezone
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -12,7 +13,7 @@ from agents.ceo.hierarchy_gateway import HierarchyGateway
 
 class HierarchyBootstrapTests(unittest.TestCase):
     def test_signed_technical_preparation_only_genesis(self):
-        with tempfile.TemporaryDirectory() as tmp:
+        with tempfile.TemporaryDirectory(dir=ROOT) as tmp:
             keys={role:Ed25519PrivateKey.generate() for role in ("ceo","manager","worker")}
             actors={"service-"+role:(role,k.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
                     for role,k in keys.items()}
