@@ -1,0 +1,10 @@
+# Level 2D Worker reservation mismatch and bounded recovery — 2026-10-31
+
+## Proven fault
+The live Worker A/B policies retained four actors (`service-worker`, `worker-a`, `worker-b`, `worker-c`). The installed Control policy accepts only the three active actors and rejects more than three. The Worker reservation endpoint returns HTTP 400 before recording a reservation. The owner-supplied privileged Worker diagnostic established the exact local pending intents and policy mismatch. A privileged read-only Control database inspection established zero `worker_reservations` and zero `worker_executions` for `level2d-multiworker-remediation-1` at diagnosis.
+
+## Minimal remedy
+Use the existing broker and policies. Stop A/B/C Worker services, change only their local `actor_ids` policy entries to the active three, archive full original inference.sqlite databases, and reconcile precisely the A/B local intents that failed before a central reservation. The helper `scripts/level2d_denied_worker_reservation_recovery.py` rejects any unexpected identity, request SHA, response, workflow, assignment, epoch or cap and preserves unchanged historical journal/provider-quota databases. Its local intent removal is limited to two explicitly identified failed pre-reservation calls, with full sqlite backups. The helper restarts only the three existing Worker services. No new service, new inference ceiling, venture identity, capital approval or ledger refund.
+
+## Boundary
+Execution requires an authorized human on Venture-Agents; its bridge process has `no_new_privileges` and cannot elevate despite the owner's passwordless sudo. The helper is staged in `/home/epsilon/venture-agents-workspace/recover_level2d_denied_worker_reservations.py`. Root execution and successful real-provider A/B/C acceptance are not claimed by this evidence note. Verify the Control journal and quota ledger again before running if the workload state has changed. The existing workflow remains authoritative; never recreate it merely to evade history.
