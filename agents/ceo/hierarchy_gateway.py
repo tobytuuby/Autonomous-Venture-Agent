@@ -286,9 +286,12 @@ class HierarchyGateway:
         if type(cmd) is not dict:
             raise ValueError("signed hierarchy command required")
         expected = {"quota-ceo":"ceo", "poll":"manager", "worker":"worker"}.get(role)
-        if expected is None or cmd.get("role") != expected or cmd.get("action") not in (
-                "delegate", "submit", "improve", "manager_approve",
-                "reject_premise", "ceo_approve", "redirect"):
+        actions=("delegate", "submit", "improve", "manager_approve",
+                 "reject_premise", "ceo_approve", "redirect")
+        research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
+                       and isinstance(cmd.get('workflow_id'),str)
+                       and re.fullmatch(r'research-[0-9a-f]{24}',cmd['workflow_id']))
+        if expected is None or cmd.get('role')!=expected or (cmd.get('action') not in actions and not research_hold):
             raise ValueError("role transition denied")
         if (cmd.get("actor_id") not in self.actors or
                 self.actors[cmd["actor_id"]][0] != expected):

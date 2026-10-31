@@ -80,6 +80,19 @@ class ApprovedResearchAdmissionTests(unittest.TestCase):
             [dict(workflow_id=self.flow,state='MANAGER_PENDING')])
         self.assertFalse(result["financial_authority"] if "financial_authority" in result else result["money_released"])
         self.assertFalse(result["external_actions_allowed"])
+        hold_at=datetime.now(timezone.utc)
+        hold=dict(workflow_id=self.flow,request_id="quota-hold-"+self.fingerprint[:24],
+            actor_id="service-ceo",role="ceo",origin="control_plane",action="hold",
+            revision=result["revision"],previous_hash=hashed(result),
+            version=result["version"],scope_hash=result["scope_hash"],
+            evidence=cmd["evidence"],payload=dict(reason="No further internal inference budget"),
+            issued_at=hold_at.isoformat(),expires_at=(hold_at+timedelta(minutes=5)).isoformat(),
+            live=False)
+        with self.assertRaises(ValueError):
+            self.gateway.apply(dict(command=hold,signature=self.sign(hold)),role="worker")
+        blocked=self.gateway.apply(dict(command=hold,signature=self.sign(hold)),role="quota-ceo")
+        self.assertEqual(blocked["state"],"HOLD")
+        self.assertFalse(blocked["money_released"])
         wrong=dict(cmd,payload=dict(cmd["payload"],scope=dict(scope,seed_cents=10000)))
         with self.assertRaises(ValueError):
             self.gateway.bootstrap_commit(dict(command=wrong,signature=self.sign(wrong)))
