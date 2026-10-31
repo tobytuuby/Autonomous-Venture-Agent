@@ -47,13 +47,30 @@ class OwnerIdeaInbox:
         with closing(sqlite3.connect(self.decisions)) as db:
             reviews={(r[0],r[1]):dict(decision=r[2],reason=r[3],reviewed_utc=r[4])
                      for r in db.execute("SELECT cycle_id,proposal_digest,decision,reason,created_utc FROM owner_idea_reviews")}
+        progress={}
+        status_file=self.decisions.parent/'research-status.json'
+        if status_file.exists():
+            if status_file.is_symlink() or not status_file.is_file() or status_file.stat().st_size>65536:
+                raise ValueError('invalid private research status file')
+            data=json.loads(status_file.read_text())
+            if (data.get('domain')!='owner-research-progress-v1'
+                    or data.get('financial_authority') is not False
+                    or data.get('venture_admission') is not False
+                    or data.get('advisory_only') is not True):
+                raise ValueError('invalid research status authority')
+            stamp=datetime.fromisoformat(data['generated_utc'])
+            stale=not stamp.tzinfo or (datetime.now(timezone.utc)-stamp).total_seconds()>1800
+            progress={(r['cycle_id'],r['proposal_digest']):dict(r,stale=stale,generated_utc=data['generated_utc'])
+                     for r in data['records']}
         output=[]
         for cycle,wire in rows:
             report=json.loads(wire)
             for proposal in report["proposals"]:
                 fingerprint=digest(proposal)
+                review=reviews.get((cycle,fingerprint))
+                research=progress.get((cycle,fingerprint)) if review and review['decision']=='APPROVE_FOR_RESEARCH' else None
                 output.append(dict(cycle_id=cycle,digest=fingerprint,
-                                   proposal=proposal,review=reviews.get((cycle,fingerprint))))
+                                   proposal=proposal,review=review,research=research))
         return output
 
     def review(self,cycle_id,proposal_digest,decision,reason):
