@@ -23,10 +23,12 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
                        "attempt", "policy", "endpoint", "model"))
     exact(request, ("system", "json_object_mode", "opportunity"))
     from agents.ceo.preparation_exchange import SYSTEM
-    from agents.ceo.hierarchy_model_callbacks import SYSTEM as HIERARCHY_SYSTEM
+    from agents.ceo.hierarchy_model_callbacks import SYSTEM as HIERARCHY_SYSTEM, RESEARCH_SYSTEM
     from agents.ceo.preparation_exchange import SYSTEM as EXCHANGE_SYSTEM
-    if request["system"] == HIERARCHY_SYSTEM:
-        opportunity = request["opportunity"]
+    if request['system'] in (HIERARCHY_SYSTEM,RESEARCH_SYSTEM):
+        opportunity = request['opportunity']
+        if request['system']==RESEARCH_SYSTEM and not str(opportunity.get('workflow_id','')).startswith('research-'):
+            raise ValueError('research system requires signed research flow')
         if (hierarchy is None or type(opportunity) is not dict
                 or opportunity.get("role") != "manager"
                 or opportunity.get("state") not in ("MANAGER_PENDING", "MANAGER_REVIEW")
@@ -43,7 +45,7 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
     elif request["system"] != EXCHANGE_SYSTEM:
         raise ValueError("model system boundary denied")
     if (actor != reservation["context"]["manager_id"] or reservation["role"] != "manager"
-            or reservation["actor"] != actor or request["system"] not in (EXCHANGE_SYSTEM, HIERARCHY_SYSTEM)
+            or reservation["actor"] != actor or request["system"] not in (EXCHANGE_SYSTEM, HIERARCHY_SYSTEM, RESEARCH_SYSTEM)
             or request["json_object_mode"] is not True
             or type(request["opportunity"]) is not dict
             or digest(canonical(request).encode()) != reservation["request_sha256"]

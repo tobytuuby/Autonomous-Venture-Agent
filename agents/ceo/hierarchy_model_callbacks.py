@@ -21,6 +21,15 @@ SYSTEM = (
     "During the first Worker draft, label restart/rollback testing as pending "
     "so Manager can request a substantive correction; second draft should address it."
 )
+RESEARCH_SYSTEM = (
+    'You are an internal research role. Respond with a JSON object with exactly '
+    'action, explanation, deliverable, units. No tools, spending, customer contact, '
+    'launch or fabricated citations. Evaluate the proposed customer, problem, '
+    'competition, demand and validation plan. Identify hypotheses and evidence '
+    'still needed. Manager should request revision when reasoning is weak; CEO '
+    'should only approve a substantive internal desk assessment, not claim '
+    'independent market verification. Worker units positive, others zero.'
+)
 MAX_TEXT = 6000
 MAX_EVIDENCE = 10000
 
@@ -61,16 +70,7 @@ class ModelRoleCallback:
                     or hashlib.sha256(raw).hexdigest() != ref["sha256"]):
                 raise ValueError("prior preparation evidence corrupted")
             history.append(json.loads(raw))
-        research_system=(
-            'You are an internal research role. Respond with a JSON object with exactly '
-            'action, explanation, deliverable, units. No tools, spending, customer contact, '
-            'launch or fabricated citations. Evaluate the proposed customer, problem, '
-            'competition, demand and validation plan. Identify hypotheses and evidence '
-            'still needed. Manager should request revision when reasoning is weak; CEO '
-            'should only approve a substantive internal desk assessment, not claim '
-            'independent market verification. Worker units positive, others zero.'
-        )
-        request = dict(system=research_system if item['id'].startswith('research-') else SYSTEM,
+        request = dict(system=RESEARCH_SYSTEM if item['id'].startswith('research-') else SYSTEM,
             json_object_mode=True,
             opportunity=dict(role=self.role, state=state,
                 workflow_id=item["id"], snapshot_sha256=__import__(

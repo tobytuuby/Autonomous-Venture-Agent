@@ -7,7 +7,7 @@ from pathlib import Path
 from cryptography import x509
 from agents.ceo.escalation_inbox import canonical, digest, exact, identifier
 from agents.ceo.service_identity import AUTHORITY_DIRECTORY, ProviderQuota
-from agents.ceo.hierarchy_model_callbacks import SYSTEM
+from agents.ceo.hierarchy_model_callbacks import SYSTEM,RESEARCH_SYSTEM
 
 RESERVE_PATH = "/v1/inference/worker-reservations"
 EXECUTE_PATH = "/v1/inference/worker-execute"
@@ -106,7 +106,9 @@ def execute_worker(payload, *, actor, hierarchy, provider):
     res, request = payload["reservation"], payload["request"]
     policy, state, _ = authorized(res, actor=actor, hierarchy=hierarchy)
     exact(request, ("system", "json_object_mode", "opportunity"))
-    if (request["system"] != SYSTEM or request["json_object_mode"] is not True
+    if (request['system'] not in (SYSTEM,RESEARCH_SYSTEM)
+            or (request['system']==RESEARCH_SYSTEM and not res['workflow_id'].startswith('research-'))
+            or request["json_object_mode"] is not True
             or type(request["opportunity"]) is not dict
             or request["opportunity"].get("role") != "worker"
             or request["opportunity"].get("state") != "WORKER_PENDING"

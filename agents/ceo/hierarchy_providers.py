@@ -66,14 +66,25 @@ class HierarchyProvider:
             db.execute("BEGIN IMMEDIATE")
             prior = db.execute("SELECT request,response,attempt FROM calls WHERE identity=?",(identity,)).fetchone()
             if prior:
-                if prior[0] != wire or prior[1] is None:
+                if prior[0] != wire:
+                    raise ValueError("changed provider request denied")
+                if prior[1] is not None:
+                    result=json.loads(prior[1])
+                    db.execute("COMMIT")
+                    return result
+                # Owner-operator reconciliation for ONE exact manager intent, after
+                # verifying centrally that remote execution never began. The
+                # existing broker ledger makes replay idempotent even if stale.
+                import os
+                if (self.role!="manager" or not self.workflow_id.startswith("research-")
+                        or os.environ.get("VENTURE_RESEARCH_RECONCILE_ID")!=identity):
                     raise ValueError("ambiguous provider call requires reconciliation")
-                result=json.loads(prior[1])
+                attempt=prior[2]
                 db.execute("COMMIT")
-                return result
-            attempt=uuid.uuid4().hex*2
-            db.execute("INSERT INTO calls VALUES(?,?,NULL,?)",(identity,wire,attempt))
-            db.execute("COMMIT")
+            else:
+                attempt=uuid.uuid4().hex*2
+                db.execute("INSERT INTO calls VALUES(?,?,NULL,?)",(identity,wire,attempt))
+                db.execute("COMMIT")
         except BaseException:
             if db.in_transaction: db.execute("ROLLBACK")
             raise
