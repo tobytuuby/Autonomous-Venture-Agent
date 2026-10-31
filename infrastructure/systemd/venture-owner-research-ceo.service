@@ -10,7 +10,7 @@ Group=venture-ceo
 WorkingDirectory=/usr/local/lib/venture-ceo-level2c
 Environment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c
 EnvironmentFile=/etc/venture-ceo-level2c.env
-ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json
+ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --worker-limit 4
 Restart=on-failure
 RestartSec=10
 NoNewPrivileges=true
