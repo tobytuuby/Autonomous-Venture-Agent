@@ -201,12 +201,20 @@ class WorkflowTests(unittest.TestCase):
             self.act("manager_approve", "manager")
         self.act("revise", "ceo", dict(scope=self.scope, version=2, reason="smaller task"))
         self.act("delegate", "manager")
-        self.act("submit", "worker", dict(units=5))
-        self.act("improve", "manager")
-        self.assertEqual(self.act("submit", "worker", dict(units=1))["state"], "BUDGET_EXHAUSTED")
-        item = self.act("revise", "ceo", dict(scope=self.scope, version=3, reason="retry"))
+        item = self.act("submit", "worker", dict(units=5))
+        self.assertEqual(item["state"], "MANAGER_REVIEW")
         self.assertEqual(item["used_units"], 5)
-        self.assertEqual(self.act("delegate", "manager")["state"], "BUDGET_EXHAUSTED")
+        for action, actor, payload in (
+                ("improve", "manager", dict(reason="retry")),
+                ("delegate", "manager", dict(reason="retry"))):
+            with self.assertRaisesRegex(ValueError, "budget exhausted"):
+                self.act(action, actor, payload)
+            self.assertEqual(self.workflow.read("studio-flow"), item)
+        held = self.act("hold", "manager", dict(reason="Budget exhausted; preparation insufficient"))
+        self.act("resume", "ceo")
+        with self.assertRaisesRegex(ValueError, "budget exhausted"):
+            self.act("revise", "ceo", dict(scope=self.scope, version=3, reason="retry"))
+        self.assertEqual(held["used_units"], 5)
 
     def test_hold_security_and_termination_invalidate_approval(self):
         self.create()

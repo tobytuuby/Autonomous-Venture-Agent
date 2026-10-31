@@ -320,7 +320,8 @@ class HierarchyGateway:
         research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
                        and isinstance(cmd.get('workflow_id'),str)
                        and re.fullmatch(r'research-[0-9a-f]{24}',cmd['workflow_id']))
-        if expected is None or cmd.get('role')!=expected or (cmd.get('action') not in actions and not research_hold):
+        manager_hold = role == "poll" and cmd.get("action") == "hold"
+        if expected is None or cmd.get('role')!=expected or (cmd.get('action') not in actions and not research_hold and not manager_hold):
             raise ValueError("role transition denied")
         if (cmd.get("actor_id") not in self.actors or
                 self.actors[cmd["actor_id"]][0] != expected):
@@ -328,6 +329,12 @@ class HierarchyGateway:
         valid_id(cmd.get("workflow_id"))
         workflow = VentureWorkflow(self.directory / "workflow.sqlite", actors=self.actors)
         try:
+            if manager_hold:
+                current = workflow.read(cmd["workflow_id"])
+                if workflow._retry(cmd) is None and (
+                        current["state"] not in {"MANAGER_REVIEW", "MANAGER_PENDING"}
+                        or current["used_units"] < current["scope"]["budget_units"]):
+                    raise ValueError("exhausted Manager review hold required")
             if cmd["action"] == "revise":
                 from agents.ceo.hierarchy_runner import check_automatic_revision
                 current = workflow.read(cmd["workflow_id"])

@@ -415,6 +415,12 @@ class VentureWorkflow(EscalationInbox):
                 raise ValueError("assigned actor required")
             if item["state"] == "TERMINATED":
                 raise ValueError("terminated")
+            # Admission is stricter than historical reconstruction: already signed
+            # exhausted improvement/re-decomposition records remain immutable and
+            # readable, but cannot authorize a new Worker cycle or quota increase.
+            if (item["used_units"] >= item["scope"]["budget_units"]
+                    and action in {"improve", "delegate", "propose_decomposition", "revise"}):
+                raise ValueError("budget exhausted: Worker cycle restart denied")
             multi = self._decomposition_transition(item, command, signature)
             if multi is not None:
                 item["decomposition"], target, item["used_units"] = multi

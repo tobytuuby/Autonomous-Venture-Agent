@@ -13,13 +13,14 @@ SYSTEM = (
     "Only respond with a JSON object. No tools, external actions, spending, "
     "customer contact, launches, or binding approval. Supply a substantive "
     "preparation-only work product and a permitted workflow action. "
-    "If the current evidence is incomplete, manager must request improvement. "
+    "Manager must assess sufficiency against the preparation-only tasks. "
+    "Unexecuted runtime tests are not absent paper-only preparation evidence. "
+    "Request improvement for substantive deficiencies only while effort remains. "
     "For worker submissions include declared preparation effort units. "
     "Return exactly action, explanation, deliverable, units. "
     "Explanation must be 30-100 characters, deliverable 150-450 characters. "
     "Be concrete, concise, and finish the valid JSON object. "
-    "During the first Worker draft, label restart/rollback testing as pending "
-    "so Manager can request a substantive correction; second draft should address it."
+    "Report pending runtime validation honestly without fabricating execution."
 )
 RESEARCH_SYSTEM = (
     'You are an internal research role. Respond with a JSON object with exactly '
@@ -91,6 +92,7 @@ class ModelRoleCallback:
                                     depends_on=[] if name != "C" else ["A", "B"])
                                for name, task in zip(("A", "B", "C"), item["scope"]["tasks"])]
                 allowed = frozenset({"propose_decomposition", "reject_premise"})
+        allowed = HierarchyRunner.allowed_actions(item) & (allowed | {"hold"})
         # Supply bounded, signed history; no private tokens, keys, or executable tools.
         history = []
         for ref in item.get("last_command", {}).get("evidence", [])[:8]:
@@ -155,6 +157,14 @@ class ModelRoleCallback:
                     deliverable="specific preparation evidence, 150-450 characters",
                     units="positive integer for worker submit; zero otherwise")))
         opportunity = request["opportunity"]
+        if self.role == "manager":
+            opportunity["review_contract"] = (
+                "Assess the existing evidence against the exact preparation-only tasks. "
+                "Unexecuted tests do not imply absent paper-only preparation. "
+                "At zero remaining effort, manager_approve sufficient documentation "
+                "for CEO review; hold genuinely deficient work with an explicit "
+                "budget exhausted reason. Never improve, delegate or restart Workers "
+                "at zero effort. Approval asserts preparation sufficiency only.")
         if assignments is not None:
             opportunity["proposed_assignments"] = assignments
             opportunity["decomposition_contract"] = (

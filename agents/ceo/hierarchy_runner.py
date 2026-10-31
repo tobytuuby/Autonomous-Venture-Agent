@@ -66,6 +66,16 @@ class HierarchyRunner:
         "CEO_REDIRECTION": frozenset({"revise"}),
     }
 
+    @classmethod
+    def allowed_actions(cls, item):
+        allowed = cls.ACTIONS.get(item["state"])
+        if item["used_units"] >= item["scope"]["budget_units"]:
+            if item["state"] == "MANAGER_REVIEW":
+                return frozenset({"manager_approve", "hold"})
+            if item["state"] == "MANAGER_PENDING":
+                return frozenset({"hold"})
+        return allowed
+
     def __init__(self, workflow: VentureWorkflow, *, manager, worker, ceo, signers,
                  clock=None, role_filter=None):
         self.workflow = workflow
@@ -97,12 +107,13 @@ class HierarchyRunner:
                 "operational_authority", "external_actions_allowed",
                 "execution_performed", "money_released")):
             raise ValueError("preparation boundary required")
-        allowed = self.ACTIONS.get(item["state"])
+        allowed = self.allowed_actions(item)
         if allowed is None:
             return item
         if item["state"] == "CEO_REDIRECTION" and not automatic_revision_allowed(item):
             return item
-        role = ("ceo" if item["state"] == "CEO_REDIRECTION" else
+        role = ("manager" if item["state"] in {"MANAGER_PENDING", "MANAGER_REVIEW"} else
+                "ceo" if item["state"] == "CEO_REDIRECTION" else
                 TRANSITIONS[(item["state"], sorted(allowed)[0])][0])
         if self.role_filter is not None and role != self.role_filter:
             return item
