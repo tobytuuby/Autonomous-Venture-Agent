@@ -40,14 +40,16 @@ class WorkerProvisionTests(unittest.TestCase):
             self.issue(actor)
         self.output = self.root / "enrolled"
 
-    def issue(self, actor, *, csr_actor=None, serial=None, eku=True, expired=False):
+    def issue(self, actor, *, csr_actor=None, serial=None, eku=True, expired=False,
+              basic_constraints=True, ca=False):
         csr = x509.load_pem_x509_csr(p.read(self.bundles / (csr_actor or actor) / "client.csr"))
         now = datetime.now(timezone.utc)
         builder = (x509.CertificateBuilder().subject_name(csr.subject).issuer_name(self.ca.subject)
             .public_key(csr.public_key()).serial_number(serial or x509.random_serial_number())
             .not_valid_before(now-timedelta(days=2))
-            .not_valid_after(now+timedelta(days=-1 if expired else 14))
-            .add_extension(x509.BasicConstraints(ca=False, path_length=None), critical=True))
+            .not_valid_after(now+timedelta(days=-1 if expired else 14)))
+        if basic_constraints:
+            builder = builder.add_extension(x509.BasicConstraints(ca=ca, path_length=None), critical=True)
         if eku:
             builder = builder.add_extension(x509.ExtendedKeyUsage([ExtendedKeyUsageOID.CLIENT_AUTH]), critical=False)
         cert = builder.sign(self.ca_key, hashes.SHA256())
@@ -111,6 +113,18 @@ class WorkerProvisionTests(unittest.TestCase):
                 self.issue("worker-b", **option)
                 with self.assertRaises(Exception):
                     self.enroll()
+
+    def test_leaf_without_basic_constraints_accepted(self):
+        self.issue("worker-a", basic_constraints=False)
+        result = self.enroll()
+        self.assertEqual(len(result["tls_pins"]), 3)
+        self.assertFalse(result["deployed"])
+
+    def test_ca_certificate_denied_before_output(self):
+        self.issue("worker-a", ca=True)
+        with self.assertRaisesRegex(ValueError, "non-CA client authentication"):
+            self.enroll()
+        self.assertFalse((self.output / "trust.json").exists())
 
     def test_wrong_ca_denied(self):
         self.ca_path.write_bytes(p.read(self.bundles / "worker-a/client.crt"))

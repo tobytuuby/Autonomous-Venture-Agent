@@ -174,9 +174,13 @@ def enroll(trust, bundles, ca, output):
                 or cert.serial_number in serials):
             raise ValueError("independent valid CSR-matching certificates required")
         serials.add(cert.serial_number)
-        if (cert.extensions.get_extension_for_class(x509.BasicConstraints).value.ca
+        try:
+            basic = cert.extensions.get_extension_for_class(x509.BasicConstraints).value
+        except x509.ExtensionNotFound:
+            basic = None
+        if ((basic is not None and basic.ca)
                 or ExtendedKeyUsageOID.CLIENT_AUTH not in cert.extensions.get_extension_for_class(x509.ExtendedKeyUsage).value):
-            raise ValueError("client authentication certificate required")
+            raise ValueError("non-CA client authentication certificate required")
         subprocess.run(["openssl", "verify", "-purpose", "sslclient", "-CAfile", str(ca), str(bundle / "client.crt")],
                        check=True, capture_output=True)
         record = dict(role="worker", public_key=enrollment["body"]["public_key"])
