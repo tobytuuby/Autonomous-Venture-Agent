@@ -169,12 +169,16 @@ class HierarchyRunnerTests(unittest.TestCase):
             self.runner(manager=concurrent).tick("studio-flow")
         self.assertEqual(self.fixture.workflow.read("studio-flow")["state"], "HOLD")
 
-    def test_rejection_stops_without_inventing_ceo_revision(self):
+    def test_rejection_requires_explicit_bounded_ceo_revision(self):
         runner = self.runner(manager=self.callback("manager", "reject_premise"))
         item = runner.tick("studio-flow")
         self.assertEqual(item["state"], "CEO_REDIRECTION")
-        self.assertEqual(runner.tick("studio-flow"), item)
-        self.assertEqual(len(self.calls), 1)
+        # A normal CEO approval cannot substitute for an explicit revision.
+        with self.assertRaisesRegex(ValueError, "preparation transition denied"):
+            runner.tick("studio-flow")
+        self.assertEqual(self.fixture.workflow.read("studio-flow"), item)
+        self.assertEqual(self.calls, [("manager", "MANAGER_PENDING"),
+                                      ("ceo", "CEO_REDIRECTION")])
 
 
 if __name__ == "__main__":

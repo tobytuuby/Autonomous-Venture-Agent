@@ -5,7 +5,7 @@ Each receives a detached snapshot and returns exactly action/payload/evidence.
 Actor-keyed signers accept canonical command bytes and return signature bytes.
 tick() returns the persisted snapshot (including last_command and signature),
 or the unchanged snapshot at any gate this adapter cannot advance. Creation,
-owner discussion/approval, revisions, finance and execution remain external.
+owner discussion/approval, scope changes, finance and execution remain external.
 """
 from copy import deepcopy
 from datetime import datetime, timedelta, timezone
@@ -28,6 +28,32 @@ def ready_assignment(item, actor=None):
                  and all(plan["states"][d] == "COMPLETE" for d in a["depends_on"])), None)
 
 
+def automatic_revision_allowed(item):
+    """One same-scope correction, counted durably by the signed version.
+
+    Only a Manager premise rejection in the original proposal is eligible.
+    Owner rejection, holds, exhausted effort and subsequent versions stop.
+    This narrows the journal's general revision contract; it grants no quota.
+    """
+    command = item.get("last_command", {})
+    return (item["mode"] == "PREPARATION_ONLY"
+            and item["state"] == "CEO_REDIRECTION" and item["version"] == 1
+            and item["revision"] < 100
+            and item["used_units"] < item["scope"]["budget_units"]
+            and command.get("action") == "reject_premise"
+            and command.get("role") == "manager"
+            and command.get("actor_id") == item["scope"]["manager_id"])
+
+
+def check_automatic_revision(item, payload):
+    exact(payload, ("scope", "version", "reason"))
+    if (not automatic_revision_allowed(item)
+            or payload.get("scope") != item["scope"]
+            or type(payload.get("version")) is not int
+            or payload["version"] != item["version"] + 1):
+        raise ValueError("bounded same-scope correction required")
+
+
 class HierarchyRunner:
     """One signed transition per tick; all progress lives in VentureWorkflow."""
 
@@ -37,6 +63,7 @@ class HierarchyRunner:
         "WORKER_PENDING": frozenset({"submit"}),
         "MANAGER_REVIEW": frozenset({"improve", "manager_approve", "reject_premise"}),
         "CEO_REVIEW": frozenset({"ceo_approve", "redirect"}),
+        "CEO_REDIRECTION": frozenset({"revise"}),
     }
 
     def __init__(self, workflow: VentureWorkflow, *, manager, worker, ceo, signers,
@@ -73,7 +100,10 @@ class HierarchyRunner:
         allowed = self.ACTIONS.get(item["state"])
         if allowed is None:
             return item
-        role = TRANSITIONS[(item["state"], sorted(allowed)[0])][0]
+        if item["state"] == "CEO_REDIRECTION" and not automatic_revision_allowed(item):
+            return item
+        role = ("ceo" if item["state"] == "CEO_REDIRECTION" else
+                TRANSITIONS[(item["state"], sorted(allowed)[0])][0])
         if self.role_filter is not None and role != self.role_filter:
             return item
         actor = (item["scope"][role + "_id"] if role != "ceo"
@@ -95,6 +125,8 @@ class HierarchyRunner:
         if role == "worker" and item.get("decomposition"):
             if decision["payload"].get("assignment_id") != assigned["id"]:
                 raise ValueError("worker assignment binding required")
+        if decision["action"] == "revise":
+            check_automatic_revision(item, decision["payload"])
         evidence_check(decision["evidence"])
         now = self.clock()
         if not isinstance(now, datetime) or now.tzinfo is None or now.utcoffset() is None:

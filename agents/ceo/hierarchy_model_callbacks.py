@@ -51,7 +51,9 @@ class ModelRoleCallback:
         self.artifact_load = artifact_load
 
     def __call__(self, item):
-        from agents.ceo.hierarchy_runner import HierarchyRunner, ready_assignment
+        from agents.ceo.hierarchy_runner import (
+            HierarchyRunner, ready_assignment, automatic_revision_allowed,
+        )
         from agents.ceo.venture_exercise import strict_json
         state = item["state"]
         allowed = HierarchyRunner.ACTIONS.get(state)
@@ -59,12 +61,14 @@ class ModelRoleCallback:
             raise ValueError("no model decision for terminal state")
         expected = {"MANAGER_PENDING": "manager", "WORKER_PENDING": "worker",
                     "MANAGER_REVIEW": "manager", "CEO_REVIEW": "ceo",
-                    "DECOMPOSITION_REVIEW": "ceo"}[state]
+                    "DECOMPOSITION_REVIEW": "ceo", "CEO_REDIRECTION": "ceo"}[state]
         if self.role != expected:
             raise ValueError("wrong role decision")
         if item["mode"] != "PREPARATION_ONLY":
             raise ValueError("preparation-only policy")
         from agents.ceo.venture_workflow import hashed
+        if state == "CEO_REDIRECTION" and not automatic_revision_allowed(item):
+            raise ValueError("bounded Manager rejection correction required")
         plan = item.get("decomposition")
         assignment = None
         assignments = None
@@ -97,6 +101,15 @@ class ModelRoleCallback:
                     or hashlib.sha256(raw).hexdigest() != ref["sha256"]):
                 raise ValueError("prior preparation evidence corrupted")
             history.append(json.loads(raw))
+        if state == "CEO_REDIRECTION":
+            rejection = item["last_command"]
+            if not any(h.get("role") == "manager" and h.get("action") == "reject_premise"
+                       and h.get("scope_hash") == item["scope_hash"]
+                       and h.get("revision") == rejection["revision"]
+                       and h.get("previous_hash") == rejection["previous_hash"]
+                       and h.get("explanation") == rejection["payload"]["reason"]
+                       for h in history):
+                raise ValueError("verified Manager rejection evidence required")
         worker_refs = []
         if plan and (state in ("MANAGER_REVIEW", "CEO_REVIEW") or
                      assignment and assignment["depends_on"]):
@@ -144,7 +157,17 @@ class ModelRoleCallback:
         opportunity = request["opportunity"]
         if assignments is not None:
             opportunity["proposed_assignments"] = assignments
-            opportunity["decomposition_contract"] = "A demand; B competition; C feasibility depends on A and B"
+            opportunity["decomposition_contract"] = (
+                "A and B independently perform their exact scoped tasks; "
+                "C performs its exact scoped task after both A and B complete.")
+        if state == "CEO_REDIRECTION":
+            opportunity["rejection_command"] = item["last_command"]
+            opportunity["revision_contract"] = (
+                "Review the Manager rejection against the original tasks. "
+                "Revise only if a reasoned same-scope correction is justified; "
+                "explain the correction for Manager. Scope, actors, effort ceiling, "
+                "consumption and inference allowances cannot change. "
+                "Only one automatic correction is permitted.")
         if plan:
             opportunity["decomposition"] = plan
         if assignment:
@@ -169,6 +192,8 @@ class ModelRoleCallback:
             explanation=data["explanation"], deliverable=data["deliverable"],
             scope_hash=item["scope_hash"], revision=item["revision"],
             previous_hash=__import__("agents.ceo.venture_workflow", fromlist=["hashed"]).hashed(item), units=data["units"])
+        if state == "CEO_REDIRECTION":
+            envelope["rejection_command_hash"] = hashed(item["last_command"])
         if plan:
             envelope["proposal_hash"] = hashed(plan["assignments"])
         if assignment:
@@ -183,7 +208,10 @@ class ModelRoleCallback:
         self.artifact_store("preparation-" + sha, wire)
         payload = (dict(units=data["units"]) if data["action"] == "submit"
                    else dict(reason=data["explanation"]))
-        if data["action"] == "propose_decomposition":
+        if data["action"] == "revise":
+            payload = dict(scope=json.loads(canonical(item["scope"])),
+                           version=item["version"] + 1, reason=data["explanation"])
+        elif data["action"] == "propose_decomposition":
             payload = dict(assignments=assignments)
         elif data["action"] == "approve_decomposition":
             payload = dict(proposal_hash=hashed(plan["assignments"]))

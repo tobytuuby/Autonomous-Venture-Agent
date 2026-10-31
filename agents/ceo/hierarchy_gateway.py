@@ -316,7 +316,7 @@ class HierarchyGateway:
         expected = {"quota-ceo":"ceo", "poll":"manager", "worker":"worker"}.get(role)
         actions=("propose_decomposition", "approve_decomposition",
                  "delegate", "submit", "improve", "manager_approve",
-                 "reject_premise", "ceo_approve", "redirect")
+                 "reject_premise", "ceo_approve", "redirect", "revise")
         research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
                        and isinstance(cmd.get('workflow_id'),str)
                        and re.fullmatch(r'research-[0-9a-f]{24}',cmd['workflow_id']))
@@ -328,6 +328,13 @@ class HierarchyGateway:
         valid_id(cmd.get("workflow_id"))
         workflow = VentureWorkflow(self.directory / "workflow.sqlite", actors=self.actors)
         try:
+            if cmd["action"] == "revise":
+                from agents.ceo.hierarchy_runner import check_automatic_revision
+                current = workflow.read(cmd["workflow_id"])
+                # Exact accepted replay remains the journal's authenticated
+                # historical receipt; it never grants another correction.
+                if workflow._retry(cmd) is None:
+                    check_automatic_revision(current, cmd["payload"])
             result = workflow.apply(cmd, payload["signature"])
             if result["state"] in ("OWNER_APPROVED", "FINANCE_REQUESTED"):
                 raise ValueError("operational authority never granted by gateway")

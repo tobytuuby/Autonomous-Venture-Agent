@@ -74,7 +74,7 @@ def run(config, *, once=False, poll_seconds=3):
     workflow=RemoteWorkflow(client,actors)
     runner=HierarchyRunner(workflow,**callbacks,role_filter=role,
         signers={actor:private.sign})
-    allowed=dict(ceo={"CEO_REVIEW","DECOMPOSITION_REVIEW"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
+    allowed=dict(ceo={"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
                  worker={"WORKER_PENDING"})[role]
     last=None
     while True:

@@ -63,8 +63,11 @@ class HierarchyProvider:
               (state["state"] not in ("MANAGER_PENDING","MANAGER_REVIEW")
                or state["scope"]["manager_id"] != self.actor)):
             raise ValueError("manager authority missing")
-        if self.role == "ceo" and state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW"):
-            raise ValueError("CEO review missing")
+        if self.role == "ceo":
+            from agents.ceo.hierarchy_runner import automatic_revision_allowed
+            if (state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW")
+                    and not automatic_revision_allowed(state)):
+                raise ValueError("CEO review missing")
         identity = (self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
                     if assignment is not None else self.role+"-"+hashed(state)[:50])
         wire = canonical(request)
