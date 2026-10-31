@@ -47,19 +47,23 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                                  or not ceo_reservation_actor
                                  or ceo_reservation_actor == reservation_actor):
         raise ValueError("distinct CEO reservation actor required")
-    # A legacy single pin has one unambiguous actor; multiple pins require
-    # explicit operator registration and never derive identity from request data.
+    # Legacy current/rollover certificates share one actor. New workers each
+    # require a distinct pin; request data never selects the authenticated actor.
     worker_actors = dict(worker_actors) if worker_actors is not None else (
-        {next(iter(worker_pins)): "service-worker"} if len(worker_pins) == 1 else {})
+        {pin: "service-worker" for pin in worker_pins} if len(worker_pins) <= 2 else {})
+    from collections import Counter
     from agents.ceo.escalation_inbox import identifier
-    if (set(worker_actors) != set(worker_pins) or len(worker_actors) > 3
-            or len(set(worker_actors.values())) != len(worker_actors)):
+    counts = Counter(worker_actors.values())
+    if (set(worker_actors) != set(worker_pins) or len(worker_pins) != len(worker_actors)
+            or len(worker_actors) > 5 or len(counts) > 4
+            or any(count > (2 if actor == "service-worker" else 1)
+                   for actor, count in counts.items())):
         raise ValueError("unique worker pin to actor registration required")
     for actor in worker_actors.values():
         identifier(actor)
         if hierarchy is not None and hierarchy.actors.get(actor, (None,))[0] != "worker":
             raise ValueError("registered worker role required")
-    if len(worker_actors) > 1 and worker_cert_mailbox is not None and not isinstance(worker_cert_mailbox, dict):
+    if len(counts) > 1 and worker_cert_mailbox is not None and not isinstance(worker_cert_mailbox, dict):
         raise ValueError("separate worker renewal mailboxes required")
 
     class GuardedHandler(ExistingBrokerHandler):

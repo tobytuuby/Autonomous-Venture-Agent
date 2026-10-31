@@ -21,7 +21,7 @@ class BrokerMtlsTests(unittest.TestCase):
         cls.paths = {}
         run("req","-x509","-newkey","rsa:2048","-nodes","-days","2",
             "-subj","/CN=Test-CA","-addext","basicConstraints=critical,CA:TRUE","-addext","keyUsage=critical,keyCertSign,cRLSign","-keyout",d/"ca.key","-out",d/"ca.crt")
-        for name, eku in (("server","serverAuth"),("cap","clientAuth"),("poll","clientAuth"),("other","clientAuth"),("worker-b","clientAuth"),("rogue","clientAuth")):
+        for name, eku in (("server","serverAuth"),("cap","clientAuth"),("poll","clientAuth"),("other","clientAuth"),("worker-b","clientAuth"),("worker-a","clientAuth"),("worker-c","clientAuth"),("rollover","clientAuth"),("rogue","clientAuth")):
             key, csr, crt, ext = [d/f"{name}.{e}" for e in ("key","csr","crt","ext")]
             run("req","-new","-newkey","rsa:2048","-nodes","-subj",f"/CN={name}",
                 "-keyout",key,"-out",csr)
@@ -214,11 +214,83 @@ class BrokerMtlsTests(unittest.TestCase):
                     load_worker_pins(path, actors)
             with self.assertRaises(ValueError):
                 handler_for(capability_pins={self.pin("cap")}, polling_pins={self.pin("poll")},
-                    worker_pins=[self.pin("other"), self.pin("worker-b")])
+                    worker_pins=[self.pin("other"), self.pin("worker-b"), self.pin("rogue")])
             with self.assertRaises(ValueError):
                 handler_for(capability_pins={self.pin("cap")}, polling_pins={self.pin("poll")},
                     worker_pins=[self.pin("other"), self.pin("worker-b")],
                     worker_actors={self.pin("other"): "worker-a", self.pin("worker-b"): "worker-a"})
+
+    def test_five_pin_cutover_tls_actor_and_renewal_isolation(self):
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from agents.ceo.cert_renewal import WorkerRenewalMailbox
+        from agents.ceo.worker_inference import RESERVE_PATH
+        identities = {"other": "service-worker", "rollover": "service-worker",
+                      "worker-a": "worker-a", "worker-b": "worker-b", "worker-c": "worker-c"}
+        mapping = {self.pin(name): actor for name, actor in identities.items()}
+        hierarchy = SimpleNamespace(
+            actors={actor: ("worker", b"x"*32) for actor in identities.values()}, apply=Mock())
+        with tempfile.TemporaryDirectory() as tmp:
+            mailboxes = {actor: WorkerRenewalMailbox(Path(tmp), actor_id=actor)
+                         for actor in set(identities.values())}
+            for actor, mailbox in mailboxes.items():
+                mailbox.issued = lambda actor=actor: actor
+            server = isolated_server(host="127.0.0.1", port=0,
+                server_cert=self.paths["server"][0], server_key=self.paths["server"][1],
+                client_ca=self.ca, capability_pins=[self.pin("cap")],
+                polling_pins=[self.pin("poll")], worker_pins=tuple(mapping),
+                worker_actors=mapping, hierarchy=hierarchy, worker_cert_mailbox=mailboxes,
+                worker_reserve=lambda payload, *, actor: {"actor": actor})
+            thread = threading.Thread(target=server.serve_forever, daemon=True)
+            thread.start()
+            original = self.srv
+            self.srv = server
+            try:
+                for name, actor in identities.items():
+                    with self.subTest(identity=name):
+                        self.assertEqual(self.request(name, "GET", "/v1/certificates/worker/issued"),
+                                         (200, {"certificate": actor}))
+                        # Payload identity cannot select the callback principal.
+                        self.assertEqual(self.request(name, "POST", RESERVE_PATH,
+                            json.dumps({"worker_id": "impersonated"})), (200, {"actor": actor}))
+                        for sibling in set(identities.values()) - {actor}:
+                            self.assertEqual(self.request(name, "POST", "/v1/hierarchy/command",
+                                json.dumps({"command": {"actor_id": sibling}, "signature": "fake"}))[0], 400)
+                        csr = Path(tmp) / (name + ".csr")
+                        run("req", "-new", "-key", self.paths[name][1],
+                            "-subj", "/CN=venture-level2d-worker", "-out", csr)
+                        self.assertEqual(self.request(name, "POST", "/v1/certificates/worker/csr",
+                                                      csr.read_bytes())[0], 200)
+                        # A sibling TLS certificate cannot submit this key's CSR.
+                        sibling_name = "worker-b" if actor != "worker-b" else "other"
+                        self.assertEqual(self.request(sibling_name, "POST",
+                            "/v1/certificates/worker/csr", csr.read_bytes())[0], 400)
+                hierarchy.apply.assert_not_called()
+                for name in ("cap", "poll", "rogue"):
+                    self.assertEqual(self.request(name, "GET", "/v1/certificates/worker/issued")[0], 403)
+                    self.assertEqual(self.request(name, "POST", RESERVE_PATH, "{}")[0], 403)
+                # Both legacy TLS keys route into the historical renewal spool.
+                self.assertTrue((Path(tmp) / "worker-renewal" / "pending.csr").is_file())
+            finally:
+                self.srv = original
+                server.shutdown()
+                server.server_close()
+                thread.join()
+
+    def test_worker_registration_limits_and_only_legacy_may_roll_over(self):
+        base = dict(capability_pins={"a"*64}, polling_pins={"b"*64})
+        invalid = [
+            {"c"*64: "service-worker", "d"*64: "service-worker", "e"*64: "service-worker"},
+            {"c"*64: "worker-a", "d"*64: "worker-a"},
+            {pin*64: "worker-" + str(i) for i, pin in enumerate("cdef0")},
+            {pin*64: actor for pin, actor in zip("cdef01",
+                ("service-worker", "service-worker", "worker-a", "worker-b", "worker-c", "worker-d"))},
+        ]
+        for mapping in invalid:
+            with self.subTest(actors=list(mapping.values())), self.assertRaises(ValueError):
+                handler_for(**base, worker_pins=tuple(mapping), worker_actors=mapping)
+        with self.assertRaises(ValueError):
+            handler_for(**base, worker_pins=("c"*64, "c"*64))
 
     def test_polling_isolation(self):
         self.assertEqual(self.request("poll","GET","/v1/assignments/pending"),

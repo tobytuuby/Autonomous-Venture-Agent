@@ -100,10 +100,18 @@ def main():
         if hierarchy is None:
             raise ValueError("worker signing trust required")
         from agents.ceo.control_plane import load_worker_pins
-        worker_actors = load_worker_pins(required("VENTURE_BROKER_WORKER_IDENTITIES"), hierarchy.actors)
-        if worker_pins and set(worker_pins) != set(worker_actors):
-            raise ValueError("worker pin registry mismatch")
-        worker_pins = tuple(worker_actors)
+        registered = load_worker_pins(required("VENTURE_BROKER_WORKER_IDENTITIES"), hierarchy.actors)
+        if (set(worker_pins) & set(registered)
+                or (worker_pins and "service-worker" in registered.values())):
+            raise ValueError("legacy and registered worker identities must be disjoint")
+        if len(worker_pins) > 2:
+            raise ValueError("at most two legacy worker pins required")
+        worker_actors = {pin: "service-worker" for pin in worker_pins}
+        worker_actors.update(registered)
+        if any(hierarchy.actors.get(actor, (None,))[0] != "worker"
+               for actor in worker_actors.values()):
+            raise ValueError("registered worker role required")
+        worker_pins = (*worker_pins, *registered)
         worker_cert_mailbox = {
             actor: WorkerRenewalMailbox(actor_id=actor) for actor in worker_actors.values()}
     worker_reserve = None
