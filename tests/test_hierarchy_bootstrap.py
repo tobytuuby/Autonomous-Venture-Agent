@@ -13,12 +13,21 @@ from agents.ceo.hierarchy_gateway import HierarchyGateway
 
 class HierarchyBootstrapTests(unittest.TestCase):
     def test_signed_technical_preparation_only_genesis(self):
+        self.check_genesis()
+
+    def test_bounded_multiworker_remediation_fixture(self):
+        self.check_genesis(multiworker=True)
+
+    def check_genesis(self, multiworker=False):
         with tempfile.TemporaryDirectory(dir=ROOT) as tmp:
             keys={role:Ed25519PrivateKey.generate() for role in ("ceo","manager","worker")}
             actors={"service-"+role:(role,k.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
                     for role,k in keys.items()}
             gateway=HierarchyGateway(Path(tmp),actors)
             from scripts.level2d_hierarchy_kickoff import PACKET,TASK,ITEM,VENTURE,FLOW
+            if multiworker:
+                ITEM = "level2d-multiworker-remediation"
+                FLOW = "level2d-multiworker-remediation-1"
             issued=datetime.now(timezone.utc)-timedelta(seconds=2)
             times=dict(issued_at=issued.isoformat(),expires_at=(issued+timedelta(hours=1)).isoformat())
             review=dict(item_id=ITEM,packet_hash=digest(PACKET.encode()),disposition="HANDOFF",

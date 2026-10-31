@@ -16,7 +16,8 @@ POLICY_FILE = AUTHORITY_DIRECTORY / "worker-inference-policy.json"
 
 
 def valid_policy(policy):
-    exact(policy, ("domain", "enabled", "epoch", "actor_id", "model",
+    actor_field = "actor_ids" if "actor_ids" in policy else "actor_id"
+    exact(policy, ("domain", "enabled", "epoch", actor_field, "model",
                    "endpoint", "maximum_requests", "maximum_output_tokens"))
     if (policy["domain"] != "worker-preparation-inference-v1"
             or policy["enabled"] is not True
@@ -28,8 +29,18 @@ def valid_policy(policy):
             or type(policy["maximum_output_tokens"]) is not int
             or not 1 <= policy["maximum_output_tokens"] <= 1024):
         raise ValueError("bounded worker policy denied")
-    identifier(policy["actor_id"])
+    actors = policy_actors(policy)
+    if type(actors) is not list or not 1 <= len(actors) <= 3:
+        raise ValueError("bounded worker actors required")
+    for actor in actors:
+        identifier(actor)
+    if len(set(actors)) != len(actors):
+        raise ValueError("distinct policy workers required")
     return policy
+
+
+def policy_actors(policy):
+    return policy["actor_ids"] if "actor_ids" in policy else [policy["actor_id"]]
 
 
 def current_policy():
@@ -50,8 +61,8 @@ def authorized(payload, *, actor, hierarchy):
         h = payload[field]
         if type(h) is not str or len(h) != 64 or any(c not in "0123456789abcdef" for c in h):
             raise ValueError("invalid Worker digest")
-    policy = current_policy()
-    if policy != payload["policy"] or policy["actor_id"] != actor:
+    policy = valid_policy(current_policy())
+    if policy != payload["policy"] or actor not in policy_actors(policy):
         raise ValueError("changed worker policy")
     auth = ProviderQuota(AUTHORITY_DIRECTORY)
     authority = auth.authority()
@@ -91,9 +102,20 @@ def reserve_worker(payload, *, actor, hierarchy):
                    for r in reservations)
         if used >= 4:
             raise ValueError("worker assignment quota exhausted")
-        shared_used = sum(r.get("workflow_id") == payload["workflow_id"] for r in reservations)
-        if shared_used >= policy["maximum_requests"]:
-            raise ValueError("shared workflow quota exhausted")
+        # Resolve venture identity from the verified journal, never the caller.
+        # Legacy rows have no venture column; keep the existing ledger format.
+        shared = []
+        for reservation in reservations:
+            prior_state = (state if reservation["workflow_id"] == payload["workflow_id"]
+                           else hierarchy.state(reservation["workflow_id"]))
+            if prior_state is None:
+                raise ValueError("unverifiable prior worker budget")
+            if prior_state["venture_id"] == state["venture_id"]:
+                shared.append(reservation)
+        ceiling = min([policy["maximum_requests"]] +
+                      [r["policy"]["maximum_requests"] for r in shared])
+        if len(shared) >= ceiling:
+            raise ValueError("shared venture quota exhausted")
         auth._reserve_daily(db, key, policy["maximum_output_tokens"])
         db.execute("INSERT INTO worker_reservations VALUES(?,?)", (key,wire))
         db.execute("COMMIT")

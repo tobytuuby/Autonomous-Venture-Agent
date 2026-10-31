@@ -61,8 +61,38 @@ def load_trust(path):
     for actor, record in value["actors"].items():
         identifier(actor)
         exact(record, ("role", "public_key"))
-        actors[actor] = (record["role"], bytes.fromhex(record["public_key"]))
+        key = bytes.fromhex(record["public_key"])
+        if len(key) != 32 or key in [v[1] for v in actors.values()]:
+            raise ValueError("distinct registered actor keys required")
+        actors[actor] = (record["role"], key)
     return actors
+
+
+def load_worker_pins(path, actors):
+    """Operator-owned public certificates bind TLS pins to registered workers."""
+    from cryptography import x509
+    from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+    path = inside_root(path)
+    info = path.stat()
+    if info.st_uid != os.getuid() or info.st_mode & 0o022:
+        raise ValueError("operator-owned worker identity registry required")
+    value = read_json(path, 32000)
+    exact(value, ("workers",))
+    if type(value["workers"]) is not dict or not 1 <= len(value["workers"]) <= 3:
+        raise ValueError("bounded worker registry required")
+    pins, keys = {}, set()
+    for actor, pem in value["workers"].items():
+        identifier(actor)
+        if actor not in actors or actors[actor][0] != "worker" or type(pem) is not str:
+            raise ValueError("registered worker certificate required")
+        cert = x509.load_pem_x509_certificate(pem.encode("ascii"))
+        pin = digest(cert.public_bytes(Encoding.DER))
+        key = cert.public_key().public_bytes(Encoding.DER, PublicFormat.SubjectPublicKeyInfo)
+        if pin in pins or key in keys:
+            raise ValueError("distinct worker TLS pins and keys required")
+        pins[pin] = actor
+        keys.add(key)
+    return pins
 
 
 class ControlPlane:

@@ -20,7 +20,9 @@ class ManagerRenewalMailbox:
     def __init__(self, directory=None, *, subdir="renewal", common_name="venture-agents"):
         if (subdir, common_name) not in (
                 ("renewal", "venture-agents"),
-                ("worker-renewal", "venture-level2d-worker")):
+                ("worker-renewal", "venture-level2d-worker")) and not (
+                    re.fullmatch(r"worker-renewal-[a-z0-9][a-z0-9_-]{0,119}", subdir)
+                    and common_name == "venture-level2d-worker"):
             raise ValueError("bounded renewal role required")
         self.common_name = common_name
         self.directory = Path(directory or AUTHORITY_DIRECTORY) / subdir
@@ -63,6 +65,9 @@ class ManagerRenewalMailbox:
 class WorkerRenewalMailbox(ManagerRenewalMailbox):
     """Separate worker identity and spool, never shares Manager CSR authority."""
 
-    def __init__(self, directory=None):
-        super().__init__(directory, subdir="worker-renewal",
+    def __init__(self, directory=None, *, actor_id="service-worker"):
+        from agents.ceo.escalation_inbox import identifier
+        identifier(actor_id)
+        subdir = "worker-renewal" if actor_id == "service-worker" else "worker-renewal-" + actor_id
+        super().__init__(directory, subdir=subdir,
                          common_name="venture-level2d-worker")

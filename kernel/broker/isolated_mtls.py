@@ -27,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -47,7 +47,33 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                                  or not ceo_reservation_actor
                                  or ceo_reservation_actor == reservation_actor):
         raise ValueError("distinct CEO reservation actor required")
+    # A legacy single pin has one unambiguous actor; multiple pins require
+    # explicit operator registration and never derive identity from request data.
+    worker_actors = dict(worker_actors) if worker_actors is not None else (
+        {next(iter(worker_pins)): "service-worker"} if len(worker_pins) == 1 else {})
+    from agents.ceo.escalation_inbox import identifier
+    if (set(worker_actors) != set(worker_pins) or len(worker_actors) > 3
+            or len(set(worker_actors.values())) != len(worker_actors)):
+        raise ValueError("unique worker pin to actor registration required")
+    for actor in worker_actors.values():
+        identifier(actor)
+        if hierarchy is not None and hierarchy.actors.get(actor, (None,))[0] != "worker":
+            raise ValueError("registered worker role required")
+    if len(worker_actors) > 1 and worker_cert_mailbox is not None and not isinstance(worker_cert_mailbox, dict):
+        raise ValueError("separate worker renewal mailboxes required")
+
     class GuardedHandler(ExistingBrokerHandler):
+        def _worker_actor(self):
+            if not isinstance(self.connection, ssl.SSLSocket):
+                return None
+            cert = self.connection.getpeercert(binary_form=True)
+            return worker_actors.get(hashlib.sha256(cert).hexdigest()) if cert else None
+
+        def _worker_mailbox(self):
+            if isinstance(worker_cert_mailbox, dict):
+                return worker_cert_mailbox.get(self._worker_actor())
+            return worker_cert_mailbox
+
         def _role(self):
             if not isinstance(self.connection, ssl.SSLSocket):
                 return None
@@ -75,7 +101,7 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                 is_worker = self.path == "/v1/certificates/worker/issued"
                 if role != ("worker" if is_worker else "poll"):
                     return self._deny()
-                mailbox = worker_cert_mailbox if is_worker else cert_mailbox
+                mailbox = self._worker_mailbox() if is_worker else cert_mailbox
                 if mailbox is None:
                     return self._send(503, {"error": "renewal_unavailable"})
                 return self._send(200, {"certificate": mailbox.issued()})
@@ -157,7 +183,7 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     if len(raw) != length:
                         raise ValueError("incomplete Worker inference")
                     payload = json.loads(raw, object_pairs_hook=_object)
-                    result = action(payload)
+                    result = action(payload, actor=self._worker_actor())
                     if len(json.dumps(result,separators=(",",":")).encode()) > 16000:
                         raise ValueError("oversized Worker response")
                     return self._send(200, result)
@@ -209,6 +235,8 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                         raise ValueError("incomplete signed request")
                     payload = json.loads(raw, object_pairs_hook=_object)
                     if self.path == COMMAND_PATH:
+                        if role == "worker" and payload["command"]["actor_id"] != self._worker_actor():
+                            raise ValueError("TLS worker and signed command actor mismatch")
                         return self._send(200, {"state": hierarchy.apply(payload, role=role)})
                     return self._send(200, {"stored": hierarchy.store(payload, role=role)})
                 except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
@@ -220,7 +248,7 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                 is_worker = self.path == "/v1/certificates/worker/csr"
                 if self._role() != ("worker" if is_worker else "poll"):
                     return self._deny()
-                mailbox = worker_cert_mailbox if is_worker else cert_mailbox
+                mailbox = self._worker_mailbox() if is_worker else cert_mailbox
                 if mailbox is None:
                     return self._send(503, {"error": "renewal_unavailable"})
                 try:
@@ -364,14 +392,14 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), hierarchy=None, worker_reserve=None, worker_execute=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
         capability_pins=set(capability_pins), polling_pins=set(polling_pins),
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
-        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+        submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, worker_actors=worker_actors, hierarchy=hierarchy,
         worker_reserve=worker_reserve, worker_execute=worker_execute))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,

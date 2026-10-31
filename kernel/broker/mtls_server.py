@@ -95,6 +95,17 @@ def main():
         from agents.ceo.service_identity import AUTHORITY_DIRECTORY
         hierarchy = HierarchyGateway(AUTHORITY_DIRECTORY / "hierarchy",
             load_trust(required("VENTURE_BROKER_HIERARCHY_TRUST")))
+    worker_actors = None
+    if os.environ.get("VENTURE_BROKER_WORKER_IDENTITIES"):
+        if hierarchy is None:
+            raise ValueError("worker signing trust required")
+        from agents.ceo.control_plane import load_worker_pins
+        worker_actors = load_worker_pins(required("VENTURE_BROKER_WORKER_IDENTITIES"), hierarchy.actors)
+        if worker_pins and set(worker_pins) != set(worker_actors):
+            raise ValueError("worker pin registry mismatch")
+        worker_pins = tuple(worker_actors)
+        worker_cert_mailbox = {
+            actor: WorkerRenewalMailbox(actor_id=actor) for actor in worker_actors.values()}
     worker_reserve = None
     worker_execute = None
     if os.environ.get("VENTURE_BROKER_WORKER_INFERENCE_ENABLED") == "1":
@@ -106,16 +117,16 @@ def main():
         worker_provider = OpenAICompatibleShadowModel(
             required("CEO_MODEL_ENDPOINT"), "gpt-6-luna", required("CEO_MODEL_TOKEN"))
         worker_provider.trace_path = AUTHORITY_DIRECTORY / "worker-provider.jsonl"
-        worker_reserve = lambda payload: reserve_worker(payload,
-            actor="service-worker", hierarchy=hierarchy)
-        worker_execute = lambda payload: execute_worker(payload,
-            actor="service-worker", hierarchy=hierarchy, provider=worker_provider)
+        worker_reserve = lambda payload, *, actor: reserve_worker(payload,
+            actor=actor, hierarchy=hierarchy)
+        worker_execute = lambda payload, *, actor: execute_worker(payload,
+            actor=actor, hierarchy=hierarchy, provider=worker_provider)
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
-                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, hierarchy=hierarchy,
+                          submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, worker_actors=worker_actors, hierarchy=hierarchy,
                           worker_reserve=worker_reserve, worker_execute=worker_execute)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)

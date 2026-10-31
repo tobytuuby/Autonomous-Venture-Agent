@@ -52,7 +52,7 @@ class HierarchyGateway:
         item_id = review.get("item_id")
         if item_id not in ("level2d-acceptance", "level2d-acceptance-retry",
                            "level2d-acceptance-retry2", "level2d-acceptance-retry3",
-                           "level2d-acceptance-retry4"):
+                           "level2d-acceptance-retry4", "level2d-multiworker-remediation"):
             raise ValueError("bounded technical fixture only")
         venture_id = "venture-verification"
         if (review.get("item_id") != item_id
@@ -188,7 +188,7 @@ class HierarchyGateway:
         if cmd.get("workflow_id") not in (
                 "level2d-acceptance-1", "level2d-acceptance-2",
                 "level2d-acceptance-3", "level2d-acceptance-4",
-                "level2d-acceptance-5"):
+                "level2d-acceptance-5", "level2d-multiworker-remediation-1"):
             raise ValueError("bounded technical acceptance fixtures only")
         item_id = {
             "level2d-acceptance-1": "level2d-acceptance",
@@ -196,6 +196,7 @@ class HierarchyGateway:
             "level2d-acceptance-3": "level2d-acceptance-retry2",
             "level2d-acceptance-4": "level2d-acceptance-retry3",
             "level2d-acceptance-5": "level2d-acceptance-retry4",
+            "level2d-multiworker-remediation-1": "level2d-multiworker-remediation",
         }[cmd["workflow_id"]]
         scope = cmd.get("payload", {}).get("scope", {})
         if (cmd.get("action") != "create" or cmd.get("role") != "ceo"

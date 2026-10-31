@@ -250,6 +250,94 @@ class WorkerInferenceTests(unittest.TestCase):
         self.assertEqual(self.ledger_count(), 1)
         self.assertEqual(self.provider.calls, 0)
 
+    def test_multiworker_policy_shares_one_budget_under_concurrency(self):
+        from concurrent.futures import ThreadPoolExecutor
+        self.policy.pop("actor_id")
+        self.policy["actor_ids"] = ["service-worker", "worker-b", "worker-c"]
+        data = [(self.payload(assignment, actor, "mixed-" + str(n)), actor)
+                for n, (assignment, actor) in enumerate(
+                    [("A", "service-worker"), ("B", "worker-b")] * 5)]
+        def reserve(pair):
+            try:
+                self.reserve(*pair)
+                return True
+            except ValueError:
+                return False
+        with ThreadPoolExecutor(max_workers=10) as pool:
+            self.assertEqual(sum(pool.map(reserve, data)), 4)
+        self.assertEqual(self.ledger_count(), 4)
+
+    def test_policy_change_cannot_expand_existing_venture_ceiling(self):
+        self.policy["maximum_requests"] = 2
+        self.reserve(self.payload(identity="small-budget"))
+        self.policy["maximum_requests"] = 4
+        self.reserve(self.payload(identity="remaining-budget"))
+        with self.assertRaisesRegex(ValueError, "shared venture"):
+            self.reserve(self.payload(identity="expanded-budget"))
+        self.assertEqual(self.ledger_count(), 2)
+
+    def test_separate_workflow_for_same_venture_does_not_reset_budget(self):
+        # The second signed journal has distinct workflow identity, same venture.
+        from agents.ceo.venture_workflow import VentureWorkflow
+        other = fixture.WorkflowTests(methodName="runTest")
+        other.setUp()
+        self.addCleanup(other.tearDown)
+        other.workflow.close()
+        other.actors["service-worker"] = other.actors.pop("worker")
+        other.keys["service-worker"] = other.keys["worker"]
+        other.scope = dict(self.fx.scope)
+        other.workflow = VentureWorkflow(other.path, actors=other.actors)
+        original_command = other.command
+        def command(*args, **kwargs):
+            cmd = dict(original_command(*args, **kwargs), workflow_id="second-flow")
+            try:
+                state = other.workflow.read("second-flow")
+            except KeyError:
+                return cmd
+            return dict(cmd, revision=state["revision"], previous_hash=hashed(state),
+                        version=state["version"], scope_hash=state["scope_hash"])
+        other.command = command
+        other.create()
+        def apply(action, actor, payload):
+            cmd = command(action, actor, payload)
+            return other.workflow.apply(cmd, other.sign(cmd, actor))
+        apply("propose_decomposition", "manager", dict(assignments=self.assignments))
+        apply("approve_decomposition", "ceo", dict(proposal_hash=hashed(self.assignments)))
+        for n in range(4):
+            self.reserve(self.payload(identity="first-flow-" + str(n)))
+        from agents.ceo.hierarchy_gateway import HierarchyGateway
+        second = HierarchyGateway(Path(other.temp.name), other.actors)
+        # Resolve both verified journals, as the production gateway does.
+        state_method = second.state
+        second.state = lambda flow: self.gateway.state(flow) if flow == "studio-flow" else state_method(flow)
+        payload = dict(self.payload(identity="second-flow-call")["reservation"],
+                       workflow_id="second-flow", snapshot_sha256=hashed(other.workflow.read("second-flow")))
+        with self.assertRaisesRegex(ValueError, "shared venture"):
+            wi.reserve_worker(payload, actor="service-worker", hierarchy=second)
+        self.assertEqual(self.ledger_count(), 4)
+
+    def test_simultaneous_execution_cannot_call_provider_twice(self):
+        import threading
+        from concurrent.futures import ThreadPoolExecutor
+        data = self.payload()
+        self.reserve(data)
+        entered, release = threading.Event(), threading.Event()
+        with patch.object(FakeProvider, "__call__", autospec=True) as call:
+            call.side_effect = lambda obj, request, tools: (
+                entered.set(), release.wait(5),
+                dict(decision=dict(content='{"action":"submit","units":1}'),tool_call=None))[-1]
+            with ThreadPoolExecutor(max_workers=2) as pool:
+                first = pool.submit(self.execute, data)
+                try:
+                    self.assertTrue(entered.wait(5))
+                    with self.assertRaisesRegex(ValueError, "ambiguous"):
+                        self.execute(data)
+                finally:
+                    release.set()
+                first.result()
+            self.assertEqual(call.call_count, 1)
+        self.assertEqual(self.ledger_count(), 1)
+
     def test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal(self):
         with self.fx.workflow.transaction():
             pass

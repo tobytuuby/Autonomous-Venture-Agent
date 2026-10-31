@@ -21,7 +21,7 @@ class BrokerMtlsTests(unittest.TestCase):
         cls.paths = {}
         run("req","-x509","-newkey","rsa:2048","-nodes","-days","2",
             "-subj","/CN=Test-CA","-addext","basicConstraints=critical,CA:TRUE","-addext","keyUsage=critical,keyCertSign,cRLSign","-keyout",d/"ca.key","-out",d/"ca.crt")
-        for name, eku in (("server","serverAuth"),("cap","clientAuth"),("poll","clientAuth"),("other","clientAuth")):
+        for name, eku in (("server","serverAuth"),("cap","clientAuth"),("poll","clientAuth"),("other","clientAuth"),("worker-b","clientAuth"),("rogue","clientAuth")):
             key, csr, crt, ext = [d/f"{name}.{e}" for e in ("key","csr","crt","ext")]
             run("req","-new","-newkey","rsa:2048","-nodes","-subj",f"/CN={name}",
                 "-keyout",key,"-out",csr)
@@ -108,6 +108,117 @@ class BrokerMtlsTests(unittest.TestCase):
                 server.shutdown()
                 server.server_close()
                 thread.join()
+
+
+    def test_tls_worker_actor_mapping_inference_and_impersonation(self):
+        from agents.ceo import worker_inference as wi
+        from agents.ceo.control_plane import load_worker_pins
+        from agents.ceo.cert_renewal import WorkerRenewalMailbox
+        from tests import test_worker_inference as fixtures
+        fx = fixtures.WorkerInferenceTests(methodName="runTest")
+        fx.setUp()
+        self.addCleanup(fx.doCleanups)
+        fx.policy.pop("actor_id")
+        fx.policy["actor_ids"] = ["service-worker", "worker-b"]
+        registry = fx.dir / "workers.json"
+        registry.write_text(json.dumps(dict(workers={
+            "service-worker": self.paths["other"][0].read_text(),
+            "worker-b": self.paths["worker-b"][0].read_text()})))
+        registry.chmod(0o600)
+        mapping = load_worker_pins(registry, fx.fx.actors)
+        mailboxes = {actor: WorkerRenewalMailbox(fx.dir, actor_id=actor)
+                     for actor in mapping.values()}
+        server = isolated_server(host="127.0.0.1", port=0,
+            server_cert=self.paths["server"][0], server_key=self.paths["server"][1],
+            client_ca=self.ca, capability_pins=[self.pin("cap")],
+            polling_pins=[self.pin("poll")], worker_pins=tuple(mapping),
+            worker_actors=mapping, hierarchy=fx.gateway, worker_cert_mailbox=mailboxes,
+            worker_reserve=lambda payload, *, actor: wi.reserve_worker(
+                payload, actor=actor, hierarchy=fx.gateway),
+            worker_execute=lambda payload, *, actor: wi.execute_worker(
+                payload, actor=actor, hierarchy=fx.gateway, provider=fx.provider))
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        original = self.srv
+        self.srv = server
+        try:
+            a = fx.payload(identity="tls-a")
+            b = fx.payload("B", "worker-b", "tls-b")
+            for identity in ("cap", "poll", "rogue"):
+                self.assertEqual(self.request(identity, "POST", wi.RESERVE_PATH,
+                    json.dumps(a["reservation"]))[0], 403)
+            # Payload worker_id cannot change the authenticated TLS principal.
+            self.assertEqual(self.request("worker-b", "POST", wi.RESERVE_PATH,
+                json.dumps(a["reservation"]))[0], 400)
+            forged = dict(a["reservation"], worker_id="worker-b")
+            self.assertEqual(self.request("worker-b", "POST", wi.RESERVE_PATH,
+                json.dumps(forged))[0], 400)
+            for who, data in (("other", a), ("worker-b", b)):
+                self.assertEqual(self.request(who, "POST", wi.RESERVE_PATH,
+                    json.dumps(data["reservation"]))[0], 200)
+                self.assertEqual(self.request(who, "POST", wi.EXECUTE_PATH,
+                    json.dumps(data))[0], 200)
+            self.assertEqual(fx.provider.calls, 2)
+            self.assertEqual(self.request("worker-b", "POST", wi.EXECUTE_PATH,
+                json.dumps(a))[0], 400)
+            changed = json.loads(json.dumps(a))
+            changed["request"]["opportunity"]["assignment_id"] = "B"
+            self.assertEqual(self.request("other", "POST", wi.EXECUTE_PATH,
+                json.dumps(changed))[0], 400)
+            # Even a valid sibling signature cannot be relayed under another TLS actor.
+            cmd = fx.fx.command("submit", "service-worker", dict(assignment_id="A", units=1))
+            self.assertEqual(self.request("worker-b", "POST", "/v1/hierarchy/command",
+                json.dumps(dict(command=cmd, signature=fx.fx.sign(cmd, "service-worker"))))[0], 400)
+            for n in range(2):
+                value = fx.payload("B", "worker-b", "tls-extra-" + str(n))
+                self.assertEqual(self.request("worker-b", "POST", wi.RESERVE_PATH,
+                    json.dumps(value["reservation"]))[0], 200)
+            self.assertEqual(self.request("other", "POST", wi.RESERVE_PATH,
+                json.dumps(fx.payload(identity="over-quota")["reservation"]))[0], 400)
+            self.assertEqual(fx.ledger_count(), 4)
+            # Renewal results stay in the actor's own spool.
+            for actor, mailbox in mailboxes.items():
+                mailbox.issued = lambda actor=actor: actor
+            self.assertEqual(self.request("other", "GET", "/v1/certificates/worker/issued"),
+                             (200, {"certificate": "service-worker"}))
+            self.assertEqual(self.request("worker-b", "GET", "/v1/certificates/worker/issued"),
+                             (200, {"certificate": "worker-b"}))
+        finally:
+            self.srv = original
+            server.shutdown()
+            server.server_close()
+            thread.join()
+
+    def test_worker_registry_rejects_duplicate_tls_keys_and_unregistered_actors(self):
+        from agents.ceo.control_plane import load_worker_pins
+        from agents.ceo.escalation_inbox import ROOT
+        from cryptography import x509
+        from cryptography.hazmat.primitives import hashes, serialization
+        with tempfile.TemporaryDirectory(dir=ROOT / "artifacts") as tmp:
+            path = Path(tmp) / "workers.json"
+            actors = {"worker-a": ("worker", b"a"*32), "worker-b": ("worker", b"b"*32)}
+            pem = self.paths["other"][0].read_text()
+            # Different certificate/pin, same private key, must also fail.
+            key = serialization.load_pem_private_key(self.paths["other"][1].read_bytes(), None)
+            cert = x509.load_pem_x509_certificate(pem.encode())
+            duplicate_key = (x509.CertificateBuilder().subject_name(cert.subject)
+                .issuer_name(cert.issuer).public_key(key.public_key()).serial_number(9999)
+                .not_valid_before(cert.not_valid_before_utc).not_valid_after(cert.not_valid_after_utc)
+                .sign(key, hashes.SHA256()).public_bytes(serialization.Encoding.PEM).decode())
+            for workers in ({"worker-a": pem, "worker-b": pem},
+                            {"worker-a": pem, "worker-b": duplicate_key},
+                            {"unknown": pem}):
+                path.write_text(json.dumps(dict(workers=workers)))
+                path.chmod(0o600)
+                with self.assertRaises(ValueError):
+                    load_worker_pins(path, actors)
+            with self.assertRaises(ValueError):
+                handler_for(capability_pins={self.pin("cap")}, polling_pins={self.pin("poll")},
+                    worker_pins=[self.pin("other"), self.pin("worker-b")])
+            with self.assertRaises(ValueError):
+                handler_for(capability_pins={self.pin("cap")}, polling_pins={self.pin("poll")},
+                    worker_pins=[self.pin("other"), self.pin("worker-b")],
+                    worker_actors={self.pin("other"): "worker-a", self.pin("worker-b"): "worker-a"})
 
     def test_polling_isolation(self):
         self.assertEqual(self.request("poll","GET","/v1/assignments/pending"),

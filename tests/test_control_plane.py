@@ -325,6 +325,18 @@ class ControlPlaneTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             ControlPlane(shared, actors=self.actors)
 
+
+    def test_duplicate_signing_keys_cannot_register_distinct_actors(self):
+        trust = self.root / "duplicate-trust.json"
+        key = self.actors["worker"][1].hex()
+        for bad_key in (key, "aa"):
+            trust.write_text(canonical(dict(actors={
+                "worker": dict(role="worker", public_key=key),
+                "worker-b": dict(role="worker", public_key=bad_key)})))
+            trust.chmod(0o600)
+            with self.assertRaises(ValueError):
+                load_trust(trust)
+
     def test_delivery_audit_tampering_blocks_future_tick(self):
         (self.spool / "denied.json").write_text('{"operation":"payment","body":{}}')
         outcome = tick(self.control, self.spool)["outcomes"][0]
