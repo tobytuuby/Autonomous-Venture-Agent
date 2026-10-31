@@ -30,12 +30,14 @@ def valid_policy(policy):
             or not 1 <= policy["maximum_output_tokens"] <= 1024):
         raise ValueError("bounded worker policy denied")
     actors = policy_actors(policy)
-    if type(actors) is not list or not 1 <= len(actors) <= 4:
+    if type(actors) is not list or not 1 <= len(actors) <= 3:
         raise ValueError("bounded worker actors required")
     for actor in actors:
         identifier(actor)
-    if len(actors) == 4 and set(actors) != {"service-worker", "worker-a", "worker-b", "worker-c"}:
-        raise ValueError("legacy and three enrolled workers required")
+    # This is new inference authority only. Historical trust pins and signed
+    # journals remain intact; retained reservations still consume the same cap.
+    if not set(actors) <= {"worker-a", "worker-b", "worker-c"}:
+        raise ValueError("enrolled workers required; legacy inference retired")
     if len(set(actors)) != len(actors):
         raise ValueError("distinct policy workers required")
     return policy

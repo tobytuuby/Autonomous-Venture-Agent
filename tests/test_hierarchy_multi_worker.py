@@ -178,17 +178,17 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
         client = Mock()
         client.read.side_effect = fx.fx.workflow.read
         client.worker_reserve.side_effect = lambda data: wi.reserve_worker(
-            data, actor="service-worker", hierarchy=fx.gateway)
+            data, actor="worker-a", hierarchy=fx.gateway)
         client.worker_execute.side_effect = lambda data: wi.execute_worker(
-            data, actor="service-worker", hierarchy=fx.gateway, provider=fx.provider)
-        provider = HierarchyProvider(role="worker", actor="service-worker",
+            data, actor="worker-a", hierarchy=fx.gateway, provider=fx.provider)
+        provider = HierarchyProvider(role="worker", actor="worker-a",
             workflow_id="studio-flow", client=client, policy=fx.policy,
             state_path=fx.dir / "inference.sqlite")
-        callback = ModelRoleCallback(role="worker", actor_id="service-worker",
+        callback = ModelRoleCallback(role="worker", actor_id="worker-a",
             provider=provider, artifact_store=store.store, artifact_load=store.load)
         runner = HierarchyRunner(fx.fx.workflow, manager=None, ceo=None,
             worker=callback, role_filter="worker",
-            signers={"service-worker": fx.fx.keys["service-worker"].sign})
+            signers={"worker-a": fx.fx.keys["worker-a"].sign})
         item = runner.tick("studio-flow")
         self.assertEqual(item["decomposition"]["states"]["A"], "COMPLETE")
         self.assertEqual(item["last_command"]["payload"]["assignment_id"], "A")

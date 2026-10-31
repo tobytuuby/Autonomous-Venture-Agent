@@ -287,7 +287,7 @@ class WorkerProvisionTests(unittest.TestCase):
     def test_configs_keep_shared_policy_and_distinct_service_paths(self):
         policy = self.root / "policy.json"
         provision_policy = dict(domain="worker-preparation-inference-v1", enabled=True,
-            epoch=2, actor_id="service-worker", model="gpt-6-luna",
+            epoch=2, actor_id="worker-a", model="gpt-6-luna",
             endpoint="https://provider.invalid/v1/chat/completions",
             maximum_requests=4, maximum_output_tokens=1024)
         p.put(policy, p.wire(provision_policy))

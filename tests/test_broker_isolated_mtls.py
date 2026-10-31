@@ -119,10 +119,13 @@ class BrokerMtlsTests(unittest.TestCase):
         fx.setUp()
         self.addCleanup(fx.doCleanups)
         fx.policy.pop("actor_id")
-        fx.policy["actor_ids"] = ["service-worker", "worker-b"]
+        fx.policy["actor_ids"] = ["worker-a", "worker-b"]
+        # Keep the legacy TLS/Ed25519 trust entry for historical audit use.
+        fx.fx.actors["service-worker"] = ("worker", fixtures.fixture.Ed25519PrivateKey.generate().public_key().public_bytes_raw())
         registry = fx.dir / "workers.json"
         registry.write_text(json.dumps(dict(workers={
             "service-worker": self.paths["other"][0].read_text(),
+            "worker-a": self.paths["worker-a"][0].read_text(),
             "worker-b": self.paths["worker-b"][0].read_text()})))
         registry.chmod(0o600)
         mapping = load_worker_pins(registry, fx.fx.actors)
@@ -142,6 +145,14 @@ class BrokerMtlsTests(unittest.TestCase):
         original = self.srv
         self.srv = server
         try:
+            legacy = fx.payload(worker="service-worker", identity="retired-tls")
+            self.assertEqual(self.request("other", "POST", wi.RESERVE_PATH,
+                json.dumps(legacy["reservation"]))[0], 400)
+            self.assertEqual(self.request("other", "POST", wi.EXECUTE_PATH,
+                json.dumps(legacy))[0], 400)
+            self.assertEqual(fx.ledger_count(), 0)
+            self.assertEqual(fx.provider.calls, 0)
+            self.assertEqual(self.request("other", "GET", "/v1/certificates/worker/issued")[0], 200)
             a = fx.payload(identity="tls-a")
             b = fx.payload("B", "worker-b", "tls-b")
             for identity in ("cap", "poll", "rogue"):
@@ -153,7 +164,7 @@ class BrokerMtlsTests(unittest.TestCase):
             forged = dict(a["reservation"], worker_id="worker-b")
             self.assertEqual(self.request("worker-b", "POST", wi.RESERVE_PATH,
                 json.dumps(forged))[0], 400)
-            for who, data in (("other", a), ("worker-b", b)):
+            for who, data in (("worker-a", a), ("worker-b", b)):
                 self.assertEqual(self.request(who, "POST", wi.RESERVE_PATH,
                     json.dumps(data["reservation"]))[0], 200)
                 self.assertEqual(self.request(who, "POST", wi.EXECUTE_PATH,
@@ -163,24 +174,24 @@ class BrokerMtlsTests(unittest.TestCase):
                 json.dumps(a))[0], 400)
             changed = json.loads(json.dumps(a))
             changed["request"]["opportunity"]["assignment_id"] = "B"
-            self.assertEqual(self.request("other", "POST", wi.EXECUTE_PATH,
+            self.assertEqual(self.request("worker-a", "POST", wi.EXECUTE_PATH,
                 json.dumps(changed))[0], 400)
             # Even a valid sibling signature cannot be relayed under another TLS actor.
-            cmd = fx.fx.command("submit", "service-worker", dict(assignment_id="A", units=1))
+            cmd = fx.fx.command("submit", "worker-a", dict(assignment_id="A", units=1))
             self.assertEqual(self.request("worker-b", "POST", "/v1/hierarchy/command",
-                json.dumps(dict(command=cmd, signature=fx.fx.sign(cmd, "service-worker"))))[0], 400)
+                json.dumps(dict(command=cmd, signature=fx.fx.sign(cmd, "worker-a"))))[0], 400)
             for n in range(2):
                 value = fx.payload("B", "worker-b", "tls-extra-" + str(n))
                 self.assertEqual(self.request("worker-b", "POST", wi.RESERVE_PATH,
                     json.dumps(value["reservation"]))[0], 200)
-            self.assertEqual(self.request("other", "POST", wi.RESERVE_PATH,
+            self.assertEqual(self.request("worker-a", "POST", wi.RESERVE_PATH,
                 json.dumps(fx.payload(identity="over-quota")["reservation"]))[0], 400)
             self.assertEqual(fx.ledger_count(), 4)
             # Renewal results stay in the actor's own spool.
             for actor, mailbox in mailboxes.items():
                 mailbox.issued = lambda actor=actor: actor
-            self.assertEqual(self.request("other", "GET", "/v1/certificates/worker/issued"),
-                             (200, {"certificate": "service-worker"}))
+            self.assertEqual(self.request("worker-a", "GET", "/v1/certificates/worker/issued"),
+                             (200, {"certificate": "worker-a"}))
             self.assertEqual(self.request("worker-b", "GET", "/v1/certificates/worker/issued"),
                              (200, {"certificate": "worker-b"}))
         finally:

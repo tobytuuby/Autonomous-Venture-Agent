@@ -38,16 +38,16 @@ class WorkerInferenceTests(unittest.TestCase):
         self.fx.setUp()
         self.addCleanup(self.fx.tearDown)
         from agents.ceo.venture_workflow import VentureWorkflow
-        self.fx.scope["worker_id"] = "service-worker"
-        self.fx.actors["service-worker"] = self.fx.actors.pop("worker")
-        self.fx.keys["service-worker"] = self.fx.keys["worker"]
+        self.fx.scope["worker_id"] = "worker-a"
+        self.fx.actors["worker-a"] = self.fx.actors.pop("worker")
+        self.fx.keys["worker-a"] = self.fx.keys["worker"]
         self.fx.workflow.close()
         self.fx.workflow = VentureWorkflow(self.fx.path, actors=self.fx.actors)
         self.fx.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
         self.fx.create()
         self.assignments = [dict(id=name, worker_id=worker, task=task, depends_on=deps)
             for name, worker, task, deps in zip(("A", "B", "C"),
-                ("service-worker", "worker-b", "worker-c"), self.fx.scope["tasks"],
+                ("worker-a", "worker-b", "worker-c"), self.fx.scope["tasks"],
                 ([], [], ["A", "B"]))]
         self.fx.act("propose_decomposition", "manager", dict(assignments=self.assignments))
         self.fx.approve_multi(self.assignments)
@@ -58,7 +58,7 @@ class WorkerInferenceTests(unittest.TestCase):
         db.execute("CREATE TABLE reservations(day TEXT,identity TEXT UNIQUE,tokens INTEGER)")
         db.commit();db.close()
         self.policy=dict(domain="worker-preparation-inference-v1",enabled=True,epoch=1,
-            actor_id="service-worker",model="gpt-6-luna",endpoint="https://provider.invalid/v1",
+            actor_id="worker-a",model="gpt-6-luna",endpoint="https://provider.invalid/v1",
             maximum_requests=4,maximum_output_tokens=512)
         self.provider=FakeProvider()
         from agents.ceo.hierarchy_gateway import HierarchyGateway
@@ -69,7 +69,7 @@ class WorkerInferenceTests(unittest.TestCase):
         for context in (self.p1,self.p2,self.p3):
             context.start();self.addCleanup(context.stop)
 
-    def payload(self, assignment="A", worker="service-worker", identity=None):
+    def payload(self, assignment="A", worker="worker-a", identity=None):
         state=self.fx.workflow.read("studio-flow")
         request=dict(system=SYSTEM,json_object_mode=True,opportunity=dict(
             role="worker",state="WORKER_PENDING",workflow_id="studio-flow",
@@ -85,7 +85,7 @@ class WorkerInferenceTests(unittest.TestCase):
     def test_requires_signed_worker_delegate_and_central_reservation(self):
         data=self.payload()
         with self.assertRaises(ValueError):
-            wi.execute_worker(data,actor="service-worker",hierarchy=self.gateway,provider=self.provider)
+            wi.execute_worker(data,actor="worker-a",hierarchy=self.gateway,provider=self.provider)
         # Fixture identity differs from production; bind to signed fixture worker.
         with self.assertRaises(ValueError):
             wi.reserve_worker(data["reservation"],actor="service-ceo",hierarchy=self.gateway)
@@ -93,29 +93,29 @@ class WorkerInferenceTests(unittest.TestCase):
 
     def test_reservation_precedes_real_execution_and_exact_retry_is_cached(self):
         data=self.payload()
-        receipt=wi.reserve_worker(data["reservation"],actor="service-worker",hierarchy=self.gateway)
+        receipt=wi.reserve_worker(data["reservation"],actor="worker-a",hierarchy=self.gateway)
         self.assertTrue(receipt["reserved"])
         self.assertFalse(receipt["duplicate"])
-        result=wi.execute_worker(data,actor="service-worker",hierarchy=self.gateway,provider=self.provider)
+        result=wi.execute_worker(data,actor="worker-a",hierarchy=self.gateway,provider=self.provider)
         self.assertEqual(result["tool_call"],None)
         self.assertEqual(self.provider.calls,1)
-        self.assertEqual(wi.execute_worker(data,actor="service-worker",hierarchy=self.gateway,provider=self.provider),result)
+        self.assertEqual(wi.execute_worker(data,actor="worker-a",hierarchy=self.gateway,provider=self.provider),result)
         self.assertEqual(self.provider.calls,1)
         changed=dict(data,request=dict(data["request"],system="override"))
         with self.assertRaises(ValueError):
-            wi.execute_worker(changed,actor="service-worker",hierarchy=self.gateway,provider=self.provider)
-        self.fx.act("submit","service-worker",dict(assignment_id="A",units=1))
+            wi.execute_worker(changed,actor="worker-a",hierarchy=self.gateway,provider=self.provider)
+        self.fx.act("submit","worker-a",dict(assignment_id="A",units=1))
         with self.assertRaises(ValueError):
-            wi.reserve_worker(data["reservation"],actor="service-worker",hierarchy=self.gateway)
+            wi.reserve_worker(data["reservation"],actor="worker-a",hierarchy=self.gateway)
 
     def test_workflow_approves_fixture_actor_only(self):
         self.assertEqual(self.fx.workflow.read("studio-flow")["state"],"WORKER_PENDING")
         self.assertEqual(self.fx.workflow.read("studio-flow")["last_command"]["action"],"approve_decomposition")
 
-    def reserve(self, data, actor="service-worker"):
+    def reserve(self, data, actor="worker-a"):
         return wi.reserve_worker(data["reservation"], actor=actor, hierarchy=self.gateway)
 
-    def execute(self, data, actor="service-worker"):
+    def execute(self, data, actor="worker-a"):
         return wi.execute_worker(data, actor=actor, hierarchy=self.gateway, provider=self.provider)
 
     def ledger_count(self):
@@ -153,7 +153,7 @@ class WorkerInferenceTests(unittest.TestCase):
         self.policy["actor_id"] = "worker-c"
         with self.assertRaises(ValueError):
             self.reserve(self.payload("C", "worker-c"), "worker-c")
-        self.fx.submit_assignment("A", "service-worker")
+        self.fx.submit_assignment("A", "worker-a")
         with self.assertRaises(ValueError):
             self.reserve(self.payload("C", "worker-c"), "worker-c")
         self.fx.submit_assignment("B", "worker-b")
@@ -250,25 +250,28 @@ class WorkerInferenceTests(unittest.TestCase):
         self.assertEqual(self.ledger_count(), 1)
         self.assertEqual(self.provider.calls, 0)
 
-    def test_legacy_plus_three_worker_policy_is_bounded(self):
+    def test_only_enrolled_worker_policies_are_valid(self):
         policy = dict(self.policy)
         policy.pop("actor_id")
-        policy["actor_ids"] = ["service-worker", "worker-a", "worker-b", "worker-c"]
+        policy["actor_ids"] = ["worker-a", "worker-b", "worker-c"]
         self.assertEqual(wi.valid_policy(policy), policy)
-        for actors in (policy["actor_ids"] + ["worker-d"],
-                       ["worker-a", "worker-b", "worker-c", "worker-d"]):
+        for actors in (policy["actor_ids"] + ["service-worker"],
+                       ["service-worker"], ["worker-d"],
+                       ["worker-a", "worker-a"]):
             with self.subTest(actors=actors), self.assertRaises(ValueError):
                 wi.valid_policy(dict(policy, actor_ids=actors))
+        with self.assertRaisesRegex(ValueError, "legacy inference retired"):
+            wi.valid_policy(dict(self.policy, actor_id="service-worker"))
         with self.assertRaises(ValueError):
             wi.valid_policy(dict(policy, maximum_requests=5))
 
     def test_multiworker_policy_shares_one_budget_under_concurrency(self):
         from concurrent.futures import ThreadPoolExecutor
         self.policy.pop("actor_id")
-        self.policy["actor_ids"] = ["service-worker", "worker-a", "worker-b", "worker-c"]
+        self.policy["actor_ids"] = ["worker-a", "worker-b", "worker-c"]
         data = [(self.payload(assignment, actor, "mixed-" + str(n)), actor)
                 for n, (assignment, actor) in enumerate(
-                    [("A", "service-worker"), ("B", "worker-b")] * 5)]
+                    [("A", "worker-a"), ("B", "worker-b")] * 5)]
         def reserve(pair):
             try:
                 self.reserve(*pair)
@@ -278,6 +281,62 @@ class WorkerInferenceTests(unittest.TestCase):
         with ThreadPoolExecutor(max_workers=10) as pool:
             self.assertEqual(sum(pool.map(reserve, data)), 4)
         self.assertEqual(self.ledger_count(), 4)
+
+    def test_legacy_signed_audit_remains_verifiable_after_inference_retirement(self):
+        from agents.ceo.venture_workflow import VentureWorkflow
+        from agents.ceo.hierarchy_gateway import HierarchyGateway
+        legacy = fixture.WorkflowTests(methodName="runTest")
+        legacy.setUp()
+        self.addCleanup(legacy.tearDown)
+        legacy.workflow.close()
+        legacy.scope["worker_id"] = "service-worker"
+        legacy.actors["service-worker"] = legacy.actors.pop("worker")
+        legacy.keys["service-worker"] = legacy.keys["worker"]
+        legacy.workflow = VentureWorkflow(legacy.path, actors=legacy.actors)
+        legacy.create()
+        legacy.act("delegate", "manager")
+        legacy.act("submit", "service-worker", dict(units=1))
+        before = list(legacy.workflow.db.execute("SELECT * FROM audit"))
+        gateway = HierarchyGateway(Path(legacy.temp.name), legacy.actors)
+        self.assertEqual(gateway.state("studio-flow")["last_command"]["actor_id"], "service-worker")
+        with self.assertRaises(ValueError):
+            self.reserve(self.payload(worker="service-worker"), "service-worker")
+        # Restart with the retained legacy trust pin: historical signatures
+        # still verify even though the inference policy rejects that actor.
+        legacy.workflow.close()
+        legacy.workflow = VentureWorkflow(legacy.path, actors=legacy.actors)
+        self.assertEqual(gateway.state("studio-flow")["last_command"]["actor_id"], "service-worker")
+        self.assertEqual(list(legacy.workflow.db.execute("SELECT * FROM audit")), before)
+        self.assertEqual(self.ledger_count(), 0)
+        self.assertEqual(self.provider.calls, 0)
+
+    def test_retired_worker_rows_remain_charged_and_new_calls_are_denied(self):
+        data = self.payload(identity="legacy-call")
+        legacy = json.loads(canonical(data["reservation"]))
+        legacy["worker_id"] = "service-worker"
+        legacy["assignment_id"] = "LEGACY_SINGLE_WORKER"
+        legacy["policy"]["actor_id"] = "service-worker"
+        key = "historic-worker-reservation"
+        with sqlite3.connect(self.dir / "resources.sqlite") as db:
+            db.execute("CREATE TABLE worker_reservations(identity TEXT PRIMARY KEY, request TEXT NOT NULL)")
+            db.execute("INSERT INTO worker_reservations VALUES(?,?)", (key, canonical(legacy)))
+            db.execute("INSERT INTO reservations VALUES(?,?,?)", ("2026-10-29", key, 512))
+        audit_before = list(self.fx.workflow.db.execute("SELECT * FROM audit"))
+        with sqlite3.connect(self.dir / "resources.sqlite") as db:
+            rows_before = list(db.execute("SELECT * FROM worker_reservations"))
+        with self.assertRaises(ValueError):
+            self.reserve(dict(data, reservation=legacy), "service-worker")
+        with self.assertRaises(ValueError):
+            self.execute(dict(data, reservation=legacy), "service-worker")
+        with sqlite3.connect(self.dir / "resources.sqlite") as db:
+            self.assertEqual(list(db.execute("SELECT * FROM worker_reservations")), rows_before)
+        for n in range(3):
+            self.reserve(self.payload(identity="new-worker-" + str(n)))
+        with self.assertRaisesRegex(ValueError, "shared venture"):
+            self.reserve(self.payload(identity="over-cap"))
+        self.assertEqual(self.ledger_count(), 4)
+        self.assertEqual(list(self.fx.workflow.db.execute("SELECT * FROM audit")), audit_before)
+        self.assertEqual(self.provider.calls, 0)
 
     def test_policy_change_cannot_expand_existing_venture_ceiling(self):
         self.policy["maximum_requests"] = 2
@@ -295,8 +354,8 @@ class WorkerInferenceTests(unittest.TestCase):
         other.setUp()
         self.addCleanup(other.tearDown)
         other.workflow.close()
-        other.actors["service-worker"] = other.actors.pop("worker")
-        other.keys["service-worker"] = other.keys["worker"]
+        other.actors["worker-a"] = other.actors.pop("worker")
+        other.keys["worker-a"] = other.keys["worker"]
         other.scope = dict(self.fx.scope)
         other.workflow = VentureWorkflow(other.path, actors=other.actors)
         original_command = other.command
@@ -325,7 +384,7 @@ class WorkerInferenceTests(unittest.TestCase):
         payload = dict(self.payload(identity="second-flow-call")["reservation"],
                        workflow_id="second-flow", snapshot_sha256=hashed(other.workflow.read("second-flow")))
         with self.assertRaisesRegex(ValueError, "shared venture"):
-            wi.reserve_worker(payload, actor="service-worker", hierarchy=second)
+            wi.reserve_worker(payload, actor="worker-a", hierarchy=second)
         self.assertEqual(self.ledger_count(), 4)
 
     def test_simultaneous_execution_cannot_call_provider_twice(self):
