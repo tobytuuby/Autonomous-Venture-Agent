@@ -1,0 +1,15 @@
+[Unit]
+Description=Renew bounded Level2D Worker %i certificate
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/usr/local/lib/venture-manager-level2c
+ExecStart=/usr/bin/python3 -B scripts/level2d_cert_renew_worker.py --actor %i
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/venture-%i/level2d /var/lib/venture-%i/renewal

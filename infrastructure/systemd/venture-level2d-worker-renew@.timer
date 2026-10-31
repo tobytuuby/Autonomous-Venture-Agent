@@ -1,0 +1,11 @@
+[Unit]
+Description=Check bounded Level2D Worker %i certificate hourly
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+RandomizedDelaySec=120
+Unit=venture-level2d-worker-renew@%i.service
+
+[Install]
+WantedBy=timers.target

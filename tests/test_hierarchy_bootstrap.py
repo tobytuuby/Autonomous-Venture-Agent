@@ -23,16 +23,22 @@ class HierarchyBootstrapTests(unittest.TestCase):
             keys={role:Ed25519PrivateKey.generate() for role in ("ceo","manager","worker")}
             actors={"service-"+role:(role,k.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
                     for role,k in keys.items()}
+            if multiworker:
+                for actor in ("worker-a", "worker-b", "worker-c"):
+                    key = Ed25519PrivateKey.generate()
+                    actors[actor] = ("worker", key.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
             gateway=HierarchyGateway(Path(tmp),actors)
             from scripts.level2d_hierarchy_kickoff import PACKET,TASK,ITEM,VENTURE,FLOW
             if multiworker:
                 ITEM = "level2d-multiworker-remediation"
                 FLOW = "level2d-multiworker-remediation-1"
+            from scripts.level2d_hierarchy_kickoff import MULTI_TASKS
+            tasks = MULTI_TASKS if multiworker else [TASK]
             issued=datetime.now(timezone.utc)-timedelta(seconds=2)
             times=dict(issued_at=issued.isoformat(),expires_at=(issued+timedelta(hours=1)).isoformat())
             review=dict(item_id=ITEM,packet_hash=digest(PACKET.encode()),disposition="HANDOFF",
                 summary="Owner-authorized technical preparation only; no external activity.",
-                manager_id="service-manager",instructions=[TASK],
+                manager_id="service-manager",instructions=tasks,
                 owner_action=None,scope="PREPARATION_ONLY")
             receipt=dict(venture_id=VENTURE,item_id=ITEM,packet_hash=review["packet_hash"],
                 review_hash=hashed(review),manager_id="service-manager",decision="HANDOFF",
@@ -44,7 +50,7 @@ class HierarchyBootstrapTests(unittest.TestCase):
             handoff=gateway.bootstrap_prepare(payload)
             self.assertEqual(gateway.bootstrap_prepare(payload),handoff)
             scope=dict(mode="PREPARATION_ONLY",manager_id="service-manager",
-                       worker_id="service-worker",tasks=[TASK],budget_units=5,seed_cents=10000)
+                       worker_id="service-worker",tasks=tasks,budget_units=5,seed_cents=10000)
             now=datetime.now(timezone.utc)
             command=dict(workflow_id=FLOW,request_id="ceo-level2d-test-genesis",
                 actor_id="service-ceo",role="ceo",origin="control_plane",action="create",
@@ -53,6 +59,16 @@ class HierarchyBootstrapTests(unittest.TestCase):
                 payload=dict(venture_id=VENTURE,scope=scope,handoff_hash=hashed(handoff)),
                 issued_at=now.isoformat(),
                 expires_at=(now+timedelta(minutes=5)).isoformat(),live=False)
+            if multiworker:
+                original = command["payload"]["scope"]["tasks"]
+                command["payload"]["scope"]["tasks"] = [TASK]
+                with self.assertRaisesRegex(ValueError, "three enrolled"):
+                    gateway.bootstrap_commit(dict(command=command,signature=signer(command)))
+                command["payload"]["scope"]["tasks"] = original
+                missing = gateway.actors.pop("worker-c")
+                with self.assertRaisesRegex(ValueError, "three enrolled"):
+                    gateway.bootstrap_commit(dict(command=command,signature=signer(command)))
+                gateway.actors["worker-c"] = missing
             state=gateway.bootstrap_commit(dict(command=command,signature=signer(command)))
             self.assertEqual(state["state"],"MANAGER_PENDING")
             self.assertFalse(state["operational_authority"])

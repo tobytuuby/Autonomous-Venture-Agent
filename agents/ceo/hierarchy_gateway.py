@@ -16,6 +16,11 @@ ARTIFACT_PATH = "/v1/hierarchy/artifact"
 BOOTSTRAP_PREPARE_PATH = "/v1/hierarchy/bootstrap/prepare"
 BOOTSTRAP_COMMIT_PATH = "/v1/hierarchy/bootstrap/commit"
 MAX_COMMAND = 16000
+MULTI_TASKS = [
+    "Draft internal tenant-isolation denial acceptance cases; no execution.",
+    "Draft internal recovery and rollback acceptance cases independently; no execution.",
+    "Consolidate A and B into an internal acceptance specification with dependency evidence; no execution.",
+]
 
 
 def valid_id(value):
@@ -54,6 +59,8 @@ class HierarchyGateway:
                            "level2d-acceptance-retry2", "level2d-acceptance-retry3",
                            "level2d-acceptance-retry4", "level2d-multiworker-remediation"):
             raise ValueError("bounded technical fixture only")
+        if item_id == "level2d-multiworker-remediation" and review.get("instructions") != MULTI_TASKS:
+            raise ValueError("bounded multiworker technical tasks required")
         venture_id = "venture-verification"
         if (review.get("item_id") != item_id
                 or review.get("manager_id") != "service-manager"
@@ -206,9 +213,19 @@ class HierarchyGateway:
                 or scope.get("mode") != "PREPARATION_ONLY"
                 or scope.get("manager_id") != "service-manager"
                 or scope.get("worker_id") != "service-worker"
-                or scope.get("budget_units", 10001) > 5
-                or scope.get("seed_cents", 10001) > 10000):
+                or type(scope.get("budget_units")) is not int
+                or not 1 <= scope["budget_units"] <= 5
+                or type(scope.get("seed_cents")) is not int
+                or not 1 <= scope["seed_cents"] <= 10000):
             raise ValueError("owner-approved preparation fixture required")
+        if cmd["workflow_id"] == "level2d-multiworker-remediation-1":
+            if (scope.get("tasks") != MULTI_TASKS
+                    or any(self.actors.get(actor, (None,))[0] != "worker"
+                           for actor in ("worker-a", "worker-b", "worker-c"))):
+                raise ValueError("three enrolled workers and three technical tasks required")
+            keys = [record[1] for record in self.actors.values()]
+            if len(keys) != len(set(keys)):
+                raise ValueError("distinct registered actor keys required")
         ceos = [k for k,v in self.actors.items() if v[0]=="ceo"]
         if len(ceos)!=1 or cmd.get("actor_id")!=ceos[0]:
             raise ValueError("signed CEO kickoff required")

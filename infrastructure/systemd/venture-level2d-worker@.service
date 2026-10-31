@@ -1,0 +1,24 @@
+[Unit]
+Description=Bounded Level2D preparation Worker %i
+After=network-online.target
+
+[Service]
+Type=simple
+User=venture-%i
+Group=venture-%i
+WorkingDirectory=/usr/local/lib/venture-manager-level2c
+Environment=PYTHONPATH=/usr/local/lib/venture-manager-level2c
+ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_service --config /var/lib/venture-%i/level2d/hierarchy-config.json
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/venture-%i/level2d
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
