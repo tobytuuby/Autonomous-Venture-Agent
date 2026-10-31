@@ -67,13 +67,14 @@ def run(config, *, once=False, poll_seconds=3):
         context=config.get("context"),local_provider=local,
         state_path=state_dir/"inference.sqlite")
     callback=ModelRoleCallback(role=role,provider=provider,
-        artifact_store=client.store,artifact_load=client.load)
+        artifact_store=client.store,artifact_load=client.load,actor_id=actor,
+        decomposition_workers=config.get("decomposition_workers"))
     callbacks=dict(manager=None,worker=None,ceo=None)
     callbacks[role]=callback
     workflow=RemoteWorkflow(client,actors)
     runner=HierarchyRunner(workflow,**callbacks,role_filter=role,
         signers={actor:private.sign})
-    allowed=dict(ceo={"CEO_REVIEW"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
+    allowed=dict(ceo={"CEO_REVIEW","DECOMPOSITION_REVIEW"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
                  worker={"WORKER_PENDING"})[role]
     last=None
     while True:

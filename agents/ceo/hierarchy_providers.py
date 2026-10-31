@@ -49,16 +49,24 @@ class HierarchyProvider:
                 or state["state"] != request["opportunity"]["state"]
                 or request["opportunity"]["role"] != self.role):
             raise ValueError("stale model request denied")
-        if (self.role == "worker" and
-              (state["state"] != "WORKER_PENDING" or state["scope"]["worker_id"] != self.actor)):
-            raise ValueError("worker delegation missing")
+        assignment = None
+        if self.role == "worker":
+            if state.get("decomposition"):
+                from agents.ceo.hierarchy_runner import ready_assignment
+                assignment = ready_assignment(state, self.actor)
+                if (assignment is None or request["opportunity"].get("assignment_id") != assignment["id"]
+                        or request["opportunity"].get("tasks") != [assignment["task"]]):
+                    raise ValueError("signed Worker assignment required")
+            elif state["state"] != "WORKER_PENDING" or state["scope"]["worker_id"] != self.actor:
+                raise ValueError("worker delegation missing")
         if (self.role == "manager" and
               (state["state"] not in ("MANAGER_PENDING","MANAGER_REVIEW")
                or state["scope"]["manager_id"] != self.actor)):
             raise ValueError("manager authority missing")
-        if self.role == "ceo" and state["state"] != "CEO_REVIEW":
+        if self.role == "ceo" and state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW"):
             raise ValueError("CEO review missing")
-        identity = self.role+"-"+hashed(state)[:50]
+        identity = (self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
+                    if assignment is not None else self.role+"-"+hashed(state)[:50])
         wire = canonical(request)
         db = sqlite3.connect(self.state_path, isolation_level=None, timeout=5)
         try:
@@ -96,6 +104,8 @@ class HierarchyProvider:
                 workflow_id=self.workflow_id, worker_id=self.actor,
                 snapshot_sha256=hashed(state), identity=identity, attempt=attempt,
                 request_sha256=request_sha, policy=self.policy)
+            if assignment is not None:
+                reservation["assignment_id"] = assignment["id"]
             receipt=self.client.worker_reserve(reservation)
             if (type(receipt) is not dict or receipt.get("reserved") is not True
                     or receipt.get("duplicate") is not False):

@@ -18,7 +18,7 @@ from agents.ceo.venture_workflow import hashed
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_service import run as role_tick
 
-STATES = {"ceo":{"CEO_REVIEW","HOLD"},
+STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","HOLD"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
           "worker":{"WORKER_PENDING"}}
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
@@ -39,6 +39,10 @@ def allowed_config(base, flow, snapshot):
         raise ValueError("unapproved research budget")
     if not snapshot["handoff"]["item_id"] == flow or not snapshot["handoff"]["review"]["item_id"] == flow:
         raise ValueError("approved handoff missing")
+    if snapshot.get("decomposition") and role == "worker":
+        from agents.ceo.hierarchy_runner import ready_assignment
+        if ready_assignment(snapshot, base["actor_id"]) is None:
+            raise ValueError("research Worker assignment not ready")
     config=dict(base)
     config["workflow_id"]=flow
     original=Path(base["state_dir"])
@@ -50,7 +54,7 @@ def allowed_config(base, flow, snapshot):
     if role in ("ceo","manager"):
         context=dict(base["context"])
         context.update(session_id=flow,venture_id=flow,
-                       objective=snapshot["scope"]["tasks"][0],rounds=2)
+                       objective="; ".join(snapshot["scope"]["tasks"]),rounds=2)
         config["context"]=context
     return config
 
@@ -143,6 +147,10 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                     if worker_submission_count(client,snapshot)>=worker_limit:
                         logging.warning('Worker research quota reached; no new calls: %s',flow)
                         blocked.add(flow)
+                        continue
+                if config["role"] == "worker" and snapshot.get("decomposition"):
+                    from agents.ceo.hierarchy_runner import ready_assignment
+                    if ready_assignment(snapshot, config["actor_id"]) is None:
                         continue
                 role_tick(allowed_config(config,flow,snapshot),once=True)
         except Exception as exc:

@@ -15,11 +15,25 @@ from agents.ceo.venture_workflow import (
 )
 
 
+def ready_assignment(item, actor=None):
+    """Select a ready assignment from the verified snapshot before any callback."""
+    plan = item.get("decomposition")
+    if not plan or not plan.get("approval") or item["state"] != "WORKER_PENDING":
+        return None
+    if item["used_units"] >= item["scope"]["budget_units"]:
+        return None
+    return next((a for a in plan["assignments"]
+                 if (actor is None or a["worker_id"] == actor)
+                 and plan["states"][a["id"]] == "READY"
+                 and all(plan["states"][d] == "COMPLETE" for d in a["depends_on"])), None)
+
+
 class HierarchyRunner:
     """One signed transition per tick; all progress lives in VentureWorkflow."""
 
     ACTIONS = {
-        "MANAGER_PENDING": frozenset({"delegate", "reject_premise"}),
+        "MANAGER_PENDING": frozenset({"delegate", "reject_premise", "propose_decomposition"}),
+        "DECOMPOSITION_REVIEW": frozenset({"approve_decomposition"}),
         "WORKER_PENDING": frozenset({"submit"}),
         "MANAGER_REVIEW": frozenset({"improve", "manager_approve", "reject_premise"}),
         "CEO_REVIEW": frozenset({"ceo_approve", "redirect"}),
@@ -64,6 +78,11 @@ class HierarchyRunner:
             return item
         actor = (item["scope"][role + "_id"] if role != "ceo"
                  else item["handoff"]["decision"]["receipt"]["ceo_id"])
+        if role == "worker" and item.get("decomposition"):
+            assigned = ready_assignment(item, next(iter(self.signers)) if self.role_filter else None)
+            if assigned is None:
+                return item
+            actor = assigned["worker_id"]
         if self.workflow.actors.get(actor, (None,))[0] != role:
             raise ValueError("assigned actor required")
         signer = self.signers.get(actor)
@@ -73,6 +92,9 @@ class HierarchyRunner:
         exact(decision, ("action", "payload", "evidence"))
         if type(decision["action"]) is not str or decision["action"] not in allowed:
             raise ValueError("preparation transition denied")
+        if role == "worker" and item.get("decomposition"):
+            if decision["payload"].get("assignment_id") != assigned["id"]:
+                raise ValueError("worker assignment binding required")
         evidence_check(decision["evidence"])
         now = self.clock()
         if not isinstance(now, datetime) or now.tzinfo is None or now.utcoffset() is None:
