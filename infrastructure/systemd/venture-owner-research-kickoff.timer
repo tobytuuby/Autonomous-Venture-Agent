@@ -1,0 +1,11 @@
+[Unit]
+Description=Periodically queue new Owner-approved research
+
+[Timer]
+OnBootSec=90s
+OnUnitInactiveSec=5min
+Unit=venture-owner-research-kickoff.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

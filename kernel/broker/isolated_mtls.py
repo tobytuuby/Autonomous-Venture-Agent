@@ -80,6 +80,15 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
                     return self._send(503, {"error": "renewal_unavailable"})
                 return self._send(200, {"certificate": mailbox.issued()})
             from agents.ceo.hierarchy_gateway import STATE_PREFIX, ARTIFACT_PREFIX
+            if self.path == '/v1/hierarchy/research':
+                if role not in ('quota-ceo','poll','worker'):
+                    return self._deny()
+                if hierarchy is None:
+                    return self._send(503, {'error':'hierarchy_unavailable'})
+                try:
+                    return self._send(200, {'research':hierarchy.research_list()})
+                except Exception:
+                    return self._send(503, {'error':'research_state_unavailable'})
             if self.path.startswith(STATE_PREFIX):
                 if role not in ("quota-ceo", "poll", "worker"):
                     return self._deny()

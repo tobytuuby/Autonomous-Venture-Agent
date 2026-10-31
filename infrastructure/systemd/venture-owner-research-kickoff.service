@@ -1,0 +1,19 @@
+[Unit]
+Description=Submit approved owner venture research to signed CEO hierarchy
+After=venture-control-broker-mtls.service venture-owner-feedback-publish.service
+Requires=venture-control-broker-mtls.service
+
+[Service]
+Type=oneshot
+User=venture-ceo
+Group=venture-ceo
+WorkingDirectory=/usr/local/lib/venture-ceo-level2c
+Environment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c
+ExecStart=/usr/bin/python3 -B /usr/local/lib/venture-ceo-level2c/scripts/owner_research_kickoff.py --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --feedback /usr/local/lib/venture-ceo-level2c/artifacts/venture-discovery/owner-feedback.json
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

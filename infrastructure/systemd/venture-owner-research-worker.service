@@ -1,0 +1,23 @@
+[Unit]
+Description=Autonomous venture research Worker (preparation-only)
+After=network-online.target
+
+[Service]
+Type=simple
+User=venture-worker
+Group=venture-worker
+WorkingDirectory=/usr/local/lib/venture-manager-level2c
+Environment=PYTHONPATH=/usr/local/lib/venture-manager-level2c
+ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /var/lib/venture-worker/level2d/hierarchy-config.json
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=
+ReadWritePaths=/var/lib/venture-worker/level2d
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

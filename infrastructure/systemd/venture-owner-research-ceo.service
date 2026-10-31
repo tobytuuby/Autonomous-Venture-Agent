@@ -1,0 +1,26 @@
+[Unit]
+Description=Autonomous research CEO review (preparation-only)
+After=network-online.target venture-control-broker-mtls.service
+Requires=venture-control-broker-mtls.service
+
+[Service]
+Type=simple
+User=venture-ceo
+Group=venture-ceo
+WorkingDirectory=/usr/local/lib/venture-ceo-level2c
+Environment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c
+EnvironmentFile=/etc/venture-ceo-level2c.env
+ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json
+Restart=on-failure
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+CapabilityBoundingSet=
+ReadWritePaths=/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

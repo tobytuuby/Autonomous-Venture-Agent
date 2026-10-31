@@ -43,6 +43,12 @@ class HierarchyClient:
             raise ValueError("unbounded broker reply denied")
         return json.loads(content)
 
+    def research_list(self):
+        data=self._request('GET','/v1/hierarchy/research')
+        if type(data) is not dict or set(data)!={'research'} or type(data['research']) is not list:
+            raise ValueError('unexpected research index')
+        return data['research']
+
     def read(self, workflow_id):
         r = self._request("GET", STATE_PREFIX + valid_id(workflow_id))
         if type(r) is not dict or set(r) != {"state"}:
