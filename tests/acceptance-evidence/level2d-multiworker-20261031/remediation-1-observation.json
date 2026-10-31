@@ -1,0 +1,201 @@
+{
+  "branch": "main",
+  "broker": {
+    "ActiveState": "active",
+    "Id": "venture-control-broker-mtls.service",
+    "MainPID": "460595",
+    "SubState": "running",
+    "User": "venture-broker",
+    "WorkingDirectory": "/usr/local/lib/venture-control-broker-level2c"
+  },
+  "ceo_config": {
+    "actor_id": "service-ceo",
+    "context": {
+      "ceo_id": "service-ceo",
+      "manager_id": "service-manager",
+      "objective": "Owner-authorized technical preparation-only hierarchy verification",
+      "rounds": 2,
+      "session_id": "level2d-acceptance-5",
+      "venture_id": "venture-verification"
+    },
+    "decomposition_workers": null,
+    "role": "ceo",
+    "workflow_id": "level2d-acceptance-5"
+  },
+  "ceo_service": {
+    "ActiveState": "inactive",
+    "Id": "venture-level2d-ceo.service",
+    "MainPID": "0",
+    "SubState": "dead",
+    "User": "venture-ceo",
+    "WorkingDirectory": "/usr/local/lib/venture-ceo-level2c"
+  },
+  "classification": "operator-observed configuration and read-only ledger metadata; not live acceptance",
+  "dirty_tracked_sha256": {
+    "agents/ceo/service_identity.py": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+    "kernel/synthetic_venture_store.py": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+    "kernel/venture_admission.py": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+    "tests/test_owner_approval.py": "442dfc9b12a51f47f29bab6946e62cd0a8af9aa8319d0a379117d5830121df01"
+  },
+  "head": "db478712606e3898e2c6ee8faf409e524c9f378a",
+  "journey_executed": false,
+  "ledger": {
+    "resources": {
+      "mode": "read-only",
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "requested_workflow_reservations": 0,
+      "tables": [
+        "reservations",
+        "exchange_sessions",
+        "exchange_calls",
+        "remote_reservations",
+        "remote_executions",
+        "worker_reservations",
+        "worker_executions"
+      ],
+      "worker_reservations_total": 17
+    },
+    "workflow": {
+      "mode": "read-only",
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/hierarchy/workflow.sqlite",
+      "requested_workflow_rows": 0,
+      "tables": [
+        "inbox",
+        "audit"
+      ]
+    }
+  },
+  "observed_at": "2026-10-31T07:13:16.995809+00:00",
+  "provider_calls": 0,
+  "reasoning_policy": {
+    "domain": "preparation-exchange-usage-v1",
+    "enabled": true,
+    "epoch": 2,
+    "maximum_output_tokens": 1024,
+    "maximum_requests": 8,
+    "roles": {
+      "ceo": {
+        "actor_id": "service-ceo",
+        "endpoint": "https://api.openai.com/v1",
+        "model": "gpt-6-sol"
+      },
+      "manager": {
+        "actor_id": "service-manager",
+        "endpoint": "https://api.openai.com/v1",
+        "model": "gpt-6-sol"
+      }
+    }
+  },
+  "registry": {
+    "actors": [
+      "worker-a",
+      "worker-b",
+      "worker-c"
+    ],
+    "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/level2d-worker-identities.json",
+    "sha256": "8f1e4637dd851da15aea5a415f9e1cbf650419a4a012327b51d45f6126e3f72b"
+  },
+  "services_changed": false,
+  "sources": {
+    "agents/ceo/hierarchy_gateway.py": {
+      "checkout_sha256": "d03bd95cd8d941a439e459f898c7bdda5bbfffb4b92f026235689d26bc0ac7cc",
+      "excerpts": [
+        {
+          "line": 217,
+          "text": "                or not 1 <= scope[\"budget_units\"] <= 5"
+        }
+      ],
+      "installed_path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_gateway.py",
+      "sha256": "d03bd95cd8d941a439e459f898c7bdda5bbfffb4b92f026235689d26bc0ac7cc"
+    },
+    "agents/ceo/hierarchy_service.py": {
+      "checkout_sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+      "excerpts": [
+        {
+          "line": 58,
+          "text": "        if local.model!=\"gpt-6-sol\":"
+        },
+        {
+          "line": 61,
+          "text": "    elif role==\"manager\" and policy[\"roles\"][\"manager\"][\"model\"]!=\"gpt-6-sol\":"
+        },
+        {
+          "line": 63,
+          "text": "    elif role==\"worker\" and policy[\"model\"]!=\"gpt-6-luna\":"
+        }
+      ],
+      "installed_path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_service.py",
+      "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5"
+    },
+    "agents/ceo/worker_inference.py": {
+      "checkout_sha256": "d033cded70fbb2b933261f960b699b06e92bf369aadf74fdd0aaa298be23aaf9",
+      "excerpts": [
+        {
+          "line": 24,
+          "text": "            or policy[\"model\"] != \"gpt-6-luna\""
+        },
+        {
+          "line": 103,
+          "text": "        if used >= 4:"
+        },
+        {
+          "line": 118,
+          "text": "            raise ValueError(\"shared venture quota exhausted\")"
+        }
+      ],
+      "installed_path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/worker_inference.py",
+      "sha256": "d033cded70fbb2b933261f960b699b06e92bf369aadf74fdd0aaa298be23aaf9"
+    },
+    "scripts/level2d_hierarchy_kickoff.py": {
+      "checkout_sha256": "97fa3f2b3fd4bb5fd49903346e8c6df35e83520a47e8e6ea6722bca3a867397b",
+      "installed_path": "/usr/local/lib/venture-ceo-level2c/scripts/level2d_hierarchy_kickoff.py",
+      "status": "NOT_FOUND"
+    }
+  },
+  "trust": {
+    "actors": {
+      "service-ceo": "ceo",
+      "service-manager": "manager",
+      "service-worker": "worker",
+      "worker-a": "worker",
+      "worker-b": "worker",
+      "worker-c": "worker"
+    },
+    "sha256": "4fe9f5bc7bebcab1155b8278a5e0a21d16cdc1161a40adbc0d18a256cd72f561"
+  },
+  "worker_policy": {
+    "actor_id": "service-worker",
+    "domain": "worker-preparation-inference-v1",
+    "enabled": true,
+    "endpoint": "https://api.openai.com/v1",
+    "epoch": 2,
+    "maximum_output_tokens": 1024,
+    "maximum_requests": 4,
+    "model": "gpt-6-luna"
+  },
+  "agents": {
+    "service_observation": {
+      "command": "systemctl show venture-level2d-manager.service venture-level2d-worker@worker-a.service venture-level2d-worker@worker-b.service venture-level2d-worker@worker-c.service --property=Id,ActiveState,SubState,User,WorkingDirectory,MainPID; journalctl -u venture-level2d-manager.service -u venture-level2d-worker@worker-a.service -u venture-level2d-worker@worker-b.service -u venture-level2d-worker@worker-c.service --since '2026-10-31 07:05:00 UTC' --no-pager -o cat -g 'WAITING'; sha256sum artifacts/three-workers/remediation-1-operator.py",
+      "exitCode": 0,
+      "stdout": "Id=venture-level2d-manager.service\nActiveState=active\nSubState=running\nMainPID=1413396\nWorkingDirectory=/usr/local/lib/venture-manager-level2c\nUser=venture-manager\n\nId=venture-level2d-worker@worker-a.service\nActiveState=active\nSubState=running\nMainPID=1414797\nWorkingDirectory=/usr/local/lib/venture-manager-level2c\nUser=venture-worker-a\n\nId=venture-level2d-worker@worker-b.service\nActiveState=active\nSubState=running\nMainPID=1414851\nWorkingDirectory=/usr/local/lib/venture-manager-level2c\nUser=venture-worker-b\n\nId=venture-level2d-worker@worker-c.service\nActiveState=active\nSubState=running\nMainPID=1414867\nWorkingDirectory=/usr/local/lib/venture-manager-level2c\nUser=venture-worker-c\n{\"role\": \"manager\", \"status\": \"WAITING\", \"workflow_state\": \"OWNER_REVIEW\", \"operational_authority\": false}\n{\"role\": \"worker\", \"status\": \"WAITING\", \"workflow_state\": null, \"operational_authority\": false}\n{\"role\": \"worker\", \"status\": \"WAITING\", \"workflow_state\": null, \"operational_authority\": false}\n{\"role\": \"worker\", \"status\": \"WAITING\", \"workflow_state\": null, \"operational_authority\": false}\nfe7aba5ec94dea97674bbf1b361d842f90061e8bcdbd943a72480ecb02c9e928  artifacts/three-workers/remediation-1-operator.py\n",
+      "stderr": ""
+    },
+    "sudo_probe": {
+      "command": "sudo -n true",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "sudo: The \"no new privileges\" flag is set, which prevents sudo from running as root.\nsudo: If sudo is running in a container, you may need to adjust the container configuration to disable the flag.\n",
+      "error_code": "INVALID_ARGUMENT"
+    },
+    "protected_manager_config_read": {
+      "result": "PermissionError",
+      "path": "/var/lib/venture-manager/level2d/hierarchy-config.json",
+      "independently_read": false
+    },
+    "operator_script": {
+      "path": "/home/epsilon/venture-agents-workspace/artifacts/three-workers/remediation-1-operator.py",
+      "sha256": "fe7aba5ec94dea97674bbf1b361d842f90061e8bcdbd943a72480ecb02c9e928",
+      "executed": false
+    }
+  }
+}

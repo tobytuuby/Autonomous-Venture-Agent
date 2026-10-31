@@ -1,0 +1,140 @@
+{
+  "schema": "level2d-remediation-1-bounded-blocker-evidence-v1",
+  "acceptance_id": "level2d-multiworker-remediation-1",
+  "base_head": "db478712606e3898e2c6ee8faf409e524c9f378a",
+  "decision": "BLOCKED_BEFORE_KICKOFF",
+  "journey_executed": false,
+  "authority": {
+    "mode": "PREPARATION_ONLY",
+    "owner_approval": false,
+    "operational_authority": false,
+    "external_business_operations": false,
+    "capital_actions": false,
+    "production_ceo": false
+  },
+  "requested_fixture": {
+    "venture_id": "venture-verification",
+    "workflow_id": "level2d-multiworker-remediation-1",
+    "budget_units": 12,
+    "maximum_units_per_assignment": 4,
+    "worker_provider_shared_ceiling": 4,
+    "context_session_id": "level2d-multiworker-remediation-1",
+    "decomposition_workers": {
+      "A": "worker-a",
+      "B": "worker-b",
+      "C": "worker-c"
+    },
+    "tasks": [
+      {
+        "id": "A",
+        "worker_id": "worker-a",
+        "depends_on": [],
+        "task": "Draft internal tenant-isolation denial acceptance cases; no execution."
+      },
+      {
+        "id": "B",
+        "worker_id": "worker-b",
+        "depends_on": [],
+        "task": "Draft internal recovery and rollback acceptance cases independently; no execution."
+      },
+      {
+        "id": "C",
+        "worker_id": "worker-c",
+        "depends_on": [
+          "A",
+          "B"
+        ],
+        "task": "Consolidate A and B into an internal acceptance specification with dependency evidence; no execution."
+      }
+    ],
+    "target": "Manager synthesis -> CEO OWNER_REVIEW",
+    "created": false,
+    "configuration_installed": false,
+    "approved_identity_replacement": false,
+    "central_ledger_reset": false
+  },
+  "blockers": [
+    "Agents sudo -n true exits 1: no new privileges. Stop before privileged configuration or restart, per owner instruction.",
+    "Agents protected Manager config cannot be read; live decomposition_workers and workflow binding unverified. Manager WAITING journal reports OWNER_REVIEW for an unspecified workflow.",
+    "Control CEO remains bound to level2d-acceptance-5; new technical CEO config/session is not installed.",
+    "Installed technical gateway caps budget_units at 5; requested 10-15 (planned 12) is not admitted.",
+    "Control worker policy actor_id=service-worker excludes worker-a/b/c. Registry activation alone is insufficient. Preserve legacy singleworker when reconciling authorization.",
+    "Installed reasoning service and CEO policy pin CEO/Manager to gpt-6-sol. Worker policy pins gpt-6-luna; all-role luna execution is not configured.",
+    "Inspected installed CEO scripts/level2d_hierarchy_kickoff.py is absent. Existing safe checkout script is available; no alternative installed kickoff path verified.",
+    "17 historical Worker reservations exist in the shared ledger. Same-venture remaining allowance not established; never reset/refund to pass acceptance."
+  ],
+  "stages": [
+    {
+      "stage": "Repository and live prerequisite inspection",
+      "result": "COMPLETED_WITH_BLOCKERS",
+      "evidence": "remediation-1-observation.json"
+    },
+    {
+      "stage": "Offline tests",
+      "result": "26 PASSED",
+      "evidence": "remediation-1-tests.log",
+      "classification": "local fixtures and fake inference; not real provider acceptance"
+    },
+    {
+      "stage": "Operator script staging",
+      "result": "STAGED_NOT_EXECUTED",
+      "evidence": "remediation-1-operator.py",
+      "scope": "Reads protected existing configs and renders a private Manager candidate within Agents approved project only; installs nothing, restarts nothing"
+    },
+    {
+      "stage": "Privileged configuration and kickoff",
+      "result": "NOT_RUN"
+    },
+    {
+      "stage": "Live early C denial, A/B/C provider journey, Manager synthesis, CEO OWNER_REVIEW, signed audit verification and restart",
+      "result": "NOT_RUN"
+    }
+  ],
+  "commands": [
+    {
+      "host": "Control",
+      "command": "sudo -n python3 artifacts/level2d-multiworker-remediation-1/inspect_remediation.py > artifacts/level2d-multiworker-remediation-1/observation.json; result=$?; echo \"$result\" > artifacts/level2d-multiworker-remediation-1/observation.exit; exit \"$result\"",
+      "process_id": "proc_mvw2e3b7_z1xqk0",
+      "pid": 511580,
+      "log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw2e3b7_z1xqk0.log",
+      "exit_code": 0,
+      "completed_log_read": true,
+      "read_only": true
+    },
+    {
+      "host": "Control",
+      "command": "TMPDIR=/home/epsilon/venture-control-workspace/artifacts/level2d-multiworker-remediation-1/tmp python3 -B -m unittest -v tests.test_hierarchy_multi_worker tests.test_hierarchy_bootstrap tests.test_worker_inference",
+      "process_id": "proc_mvw2dstb_qa71pg",
+      "pid": 509126,
+      "log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw2dstb_qa71pg.log",
+      "raw_output": "remediation-1-tests.log",
+      "exit_code": 0,
+      "tests": 26,
+      "seconds": 3.094,
+      "completed_log_read": true
+    },
+    {
+      "host": "Agents",
+      "command": "sudo -n true",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "sudo: The \"no new privileges\" flag is set, which prevents sudo from running as root.\nsudo: If sudo is running in a container, you may need to adjust the container configuration to disable the flag.\n",
+      "error_code": "INVALID_ARGUMENT"
+    }
+  ],
+  "tooling_failures": [
+    "Bridge host has no rg; used find/grep instead.",
+    "Initial observer failed because the inspected installed kickoff script was absent; corrected observer records NOT_FOUND and completed exit 0.",
+    "Oversized exploratory listing outputs were truncated; no completion or acceptance claim derives from them."
+  ],
+  "evidence_classes": {
+    "live_configuration": "Operator-observed service metadata, allowlisted config, on-disk source hashes and read-only ledger counts.",
+    "live_provider_execution": "NOT_RUN; no request, provider receipt, usage or token total for this attempt.",
+    "live_signed_commands_and_audit": "NOT_RUN; workflow absent. Existing signed identity retained but not used to sign this attempt.",
+    "early_C_dependency_denial": "LOCAL_TEST_ONLY; no live denial was attempted.",
+    "restart_and_replay": "LOCAL_TEST_ONLY; no live service restart.",
+    "independent_audit": "NOT_PERFORMED; hashes ensure artifact integrity, not independent attestation.",
+    "ADV": "Supplemental only. ADV-001–ADV-049 and /49 unchanged."
+  },
+  "operator_next_steps": "From an authorized Agents operator shell in the approved project, review then run sudo -n python3 artifacts/three-workers/remediation-1-operator.py. It creates only a private Manager candidate. Separately reconcile the exact technical fixture's 12-unit bound, CEO session/model configuration and A/B/C worker authorization while preserving singleworker; inspect existing shared usage. Then review installation and bounded live sequencing, including a controlled early C probe before A/B finish. This package does not authorize bypassing safeguards."
+}
