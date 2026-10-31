@@ -16,7 +16,6 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey, Ed25519PublicKey
 from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
 from agents.ceo.escalation_inbox import ROOT, canonical
-from agents.ceo.control_plane import load_trust, load_worker_pins
 
 WORKERS = ("worker-a", "worker-b", "worker-c")
 FLOW = "level2d-multiworker-remediation-1"
@@ -145,6 +144,14 @@ def validate_request(actor, enrollment, raw_csr):
         raise ValueError("worker CSR denied")
     return csr
 
+
+def load_trust(*args, **kwargs):
+    from agents.ceo.control_plane import load_trust as impl
+    return impl(*args, **kwargs)
+
+def load_worker_pins(*args, **kwargs):
+    from agents.ceo.control_plane import load_worker_pins as impl
+    return impl(*args, **kwargs)
 
 def enroll(trust, bundles, ca, output):
     """Public-only Control input: each bundle contains enrollment, CSR, signed cert."""
