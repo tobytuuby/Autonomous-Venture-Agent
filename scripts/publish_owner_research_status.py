@@ -68,6 +68,10 @@ def collect(config, feedback, client=None, worker_limit=None):
             item["state"]=state["state"]
             item["research_status"]=STATUS.get(state["state"],"BLOCKED")
             item["revision"]=state["revision"]
+            if state['state'] in ('HOLD','SECURITY_HOLD','BUDGET_EXHAUSTED','CEO_REDIRECTION'):
+                reason=state.get('last_command',{}).get('payload',{}).get('reason')
+                if type(reason) is str and reason:
+                    item['blocking_reason']=reason[:500]
             for ref, sha in list(state["evidence"].items())[-12:]:
                 if not ref.startswith("preparation-") or not ref.endswith(sha):
                     continue
