@@ -44,6 +44,14 @@ class ResearchProgressTests(unittest.TestCase):
         self.assertEqual(result['records'][0]['research_status'],'MANAGER_REVIEW')
         self.assertEqual(result['records'][0]['artifacts'],[])
         self.assertFalse(result['venture_admission'])
+        class DecompositionBroker(Broker):
+            def research_list(self):
+                return [dict(workflow_id=FLOW,state='DECOMPOSITION_REVIEW')]
+            def read(self, flow):
+                return dict(super().read(flow),state='DECOMPOSITION_REVIEW')
+        progress=publisher.collect({},feedback,client=DecompositionBroker())['records'][0]
+        self.assertEqual(progress['research_status'],'CEO_DECOMPOSITION_REVIEW')
+        self.assertNotIn('blocking_reason',progress)
         modified=json.loads(json.dumps(feedback))
         modified['research_assignments'][0]['proposal']['title']='changed'
         with self.assertRaisesRegex(ValueError,'changed or missing'):

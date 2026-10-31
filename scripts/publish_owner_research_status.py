@@ -18,6 +18,7 @@ from agents.ceo.owner_idea_inbox import digest as proposal_digest
 
 STATUS = {
     "MANAGER_PENDING": "QUEUED",
+    "DECOMPOSITION_REVIEW": "CEO_DECOMPOSITION_REVIEW",
     "WORKER_PENDING": "RESEARCHING",
     "MANAGER_REVIEW": "MANAGER_REVIEW",
     "CEO_REVIEW": "CEO_REVIEW",

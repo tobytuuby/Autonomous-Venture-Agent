@@ -17,7 +17,7 @@ ITEM="level2d-acceptance"
 VENTURE="venture-verification"
 FLOW="level2d-acceptance-1"
 MULTI_FLOW="level2d-multiworker-remediation-1"
-from agents.ceo.hierarchy_gateway import MULTI_TASKS
+from agents.ceo.hierarchy_gateway import MULTI_TASKS, MULTI_FIXTURES
 MULTI_WORKERS=dict(A="worker-a",B="worker-b",C="worker-c")
 MANAGER="service-manager"
 WORKER="service-worker"
@@ -33,15 +33,15 @@ def run(config):
     flow=config["workflow_id"]
     if flow not in ("level2d-acceptance-1", "level2d-acceptance-2",
                      "level2d-acceptance-3", "level2d-acceptance-4",
-                     "level2d-acceptance-5", MULTI_FLOW):
+                     "level2d-acceptance-5", *MULTI_FIXTURES):
         raise ValueError("bounded technical fixture only")
     item={"level2d-acceptance-1": ITEM,
           "level2d-acceptance-2": "level2d-acceptance-retry",
           "level2d-acceptance-3": "level2d-acceptance-retry2",
           "level2d-acceptance-4": "level2d-acceptance-retry3",
           "level2d-acceptance-5": "level2d-acceptance-retry4",
-          MULTI_FLOW: "level2d-multiworker-remediation"}[flow]
-    tasks=MULTI_TASKS if flow==MULTI_FLOW else [TASK]
+          **MULTI_FIXTURES}[flow]
+    tasks=MULTI_TASKS if flow in MULTI_FIXTURES else [TASK]
     if config["context"]["session_id"]!=flow or config["context"]["venture_id"]!=VENTURE:
         raise ValueError("CEO bounded technical session required")
     policy=json.loads(Path(config["policy"]).read_text())
@@ -65,7 +65,8 @@ def run(config):
         handoff=c.bootstrap_prepare(dict(packet=PACKET,review=review,receipt=receipt,
                                           receipt_signature=sign(receipt)))
         scope=dict(mode="PREPARATION_ONLY",manager_id=MANAGER,worker_id=WORKER,
-            tasks=tasks,budget_units=5,seed_cents=10000)
+            tasks=tasks,budget_units=5,
+            seed_cents=1 if flow=="level2d-multiworker-acceptance-1" else 10000)
         cmd=dict(workflow_id=flow,request_id="ceo-"+flow+"-create",
             actor_id=CEO,role="ceo",origin="control_plane",action="create",
             revision=0,previous_hash="GENESIS",version=1,

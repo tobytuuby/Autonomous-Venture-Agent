@@ -16,6 +16,11 @@ ARTIFACT_PATH = "/v1/hierarchy/artifact"
 BOOTSTRAP_PREPARE_PATH = "/v1/hierarchy/bootstrap/prepare"
 BOOTSTRAP_COMMIT_PATH = "/v1/hierarchy/bootstrap/commit"
 MAX_COMMAND = 16000
+# Exact owner-authorized fixtures; never accept arbitrary retry suffixes.
+MULTI_FIXTURES = {
+    "level2d-multiworker-remediation-1": "level2d-multiworker-remediation",
+    "level2d-multiworker-acceptance-1": "level2d-multiworker-acceptance",
+}
 MULTI_TASKS = [
     "Draft internal tenant-isolation denial acceptance cases; no execution.",
     "Draft internal recovery and rollback acceptance cases independently; no execution.",
@@ -57,9 +62,9 @@ class HierarchyGateway:
         item_id = review.get("item_id")
         if item_id not in ("level2d-acceptance", "level2d-acceptance-retry",
                            "level2d-acceptance-retry2", "level2d-acceptance-retry3",
-                           "level2d-acceptance-retry4", "level2d-multiworker-remediation"):
+                           "level2d-acceptance-retry4", *MULTI_FIXTURES.values()):
             raise ValueError("bounded technical fixture only")
-        if item_id == "level2d-multiworker-remediation" and review.get("instructions") != MULTI_TASKS:
+        if item_id in MULTI_FIXTURES.values() and review.get("instructions") != MULTI_TASKS:
             raise ValueError("bounded multiworker technical tasks required")
         venture_id = "venture-verification"
         if (review.get("item_id") != item_id
@@ -195,7 +200,7 @@ class HierarchyGateway:
         if cmd.get("workflow_id") not in (
                 "level2d-acceptance-1", "level2d-acceptance-2",
                 "level2d-acceptance-3", "level2d-acceptance-4",
-                "level2d-acceptance-5", "level2d-multiworker-remediation-1"):
+                "level2d-acceptance-5", *MULTI_FIXTURES):
             raise ValueError("bounded technical acceptance fixtures only")
         item_id = {
             "level2d-acceptance-1": "level2d-acceptance",
@@ -203,7 +208,7 @@ class HierarchyGateway:
             "level2d-acceptance-3": "level2d-acceptance-retry2",
             "level2d-acceptance-4": "level2d-acceptance-retry3",
             "level2d-acceptance-5": "level2d-acceptance-retry4",
-            "level2d-multiworker-remediation-1": "level2d-multiworker-remediation",
+            **MULTI_FIXTURES,
         }[cmd["workflow_id"]]
         scope = cmd.get("payload", {}).get("scope", {})
         if (cmd.get("action") != "create" or cmd.get("role") != "ceo"
@@ -218,7 +223,10 @@ class HierarchyGateway:
                 or type(scope.get("seed_cents")) is not int
                 or not 1 <= scope["seed_cents"] <= 10000):
             raise ValueError("owner-approved preparation fixture required")
-        if cmd["workflow_id"] == "level2d-multiworker-remediation-1":
+        if cmd["workflow_id"] == "level2d-multiworker-acceptance-1":
+            if scope.get("budget_units") != 5 or scope.get("seed_cents") != 1:
+                raise ValueError("exact five-unit nonspendable acceptance scope required")
+        if cmd["workflow_id"] in MULTI_FIXTURES:
             if (scope.get("tasks") != MULTI_TASKS
                     or any(self.actors.get(actor, (None,))[0] != "worker"
                            for actor in ("worker-a", "worker-b", "worker-c"))):
