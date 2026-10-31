@@ -19,7 +19,7 @@ def valid_policy(policy):
     exact(policy, ("domain", "enabled", "epoch", "actor_id", "model",
                    "endpoint", "maximum_requests", "maximum_output_tokens"))
     if (policy["domain"] != "worker-preparation-inference-v1"
-            or policy["enabled"] is not True or policy["actor_id"] != "service-worker"
+            or policy["enabled"] is not True
             or policy["model"] != "gpt-6-luna"
             or not isinstance(policy["endpoint"], str) or not policy["endpoint"].startswith("https://")
             or type(policy["epoch"]) is not int
@@ -28,6 +28,7 @@ def valid_policy(policy):
             or type(policy["maximum_output_tokens"]) is not int
             or not 1 <= policy["maximum_output_tokens"] <= 1024):
         raise ValueError("bounded worker policy denied")
+    identifier(policy["actor_id"])
     return policy
 
 
@@ -41,8 +42,8 @@ def current_policy():
 
 def authorized(payload, *, actor, hierarchy):
     exact(payload, ("domain", "workflow_id", "worker_id", "snapshot_sha256",
-                    "identity", "attempt", "request_sha256", "policy"))
-    if payload["domain"] != "worker-preparation-call-v1" or actor != "service-worker" or payload["worker_id"] != actor:
+                    "identity", "attempt", "request_sha256", "policy", "assignment_id"))
+    if payload["domain"] != "worker-preparation-call-v1" or payload["worker_id"] != actor:
         raise ValueError("worker role denied")
     identifier(payload["identity"])
     for field in ("snapshot_sha256", "attempt", "request_sha256"):
@@ -50,19 +51,15 @@ def authorized(payload, *, actor, hierarchy):
         if type(h) is not str or len(h) != 64 or any(c not in "0123456789abcdef" for c in h):
             raise ValueError("invalid Worker digest")
     policy = current_policy()
-    if policy != payload["policy"]:
+    if policy != payload["policy"] or policy["actor_id"] != actor:
         raise ValueError("changed worker policy")
     auth = ProviderQuota(AUTHORITY_DIRECTORY)
     authority = auth.authority()
     if policy["epoch"] != authority["epoch"] or actor in authority["revoked"]:
         raise ValueError("revoked Worker")
-    state = hierarchy.state(payload["workflow_id"])
-    if (state is None or state["state"] != "WORKER_PENDING" or
-            state["scope"]["mode"] != "PREPARATION_ONLY" or
-            state["scope"]["worker_id"] != actor or
-            digest(canonical(state).encode()) != payload["snapshot_sha256"] or
-            state["last_command"]["action"] not in ("delegate","improve")):
-        raise ValueError("signed Manager delegation required")
+    state = hierarchy.inference_state(payload["workflow_id"], payload["assignment_id"], actor)
+    if digest(canonical(state).encode()) != payload["snapshot_sha256"]:
+        raise ValueError("stale authoritative workflow snapshot")
     return policy, state, auth
 
 
@@ -70,6 +67,7 @@ def reserve_worker(payload, *, actor, hierarchy):
     policy, state, auth = authorized(payload, actor=actor, hierarchy=hierarchy)
     key = digest(canonical(dict(domain="worker-budget-key-v1",
                                workflow_id=payload["workflow_id"],
+                               assignment_id=payload["assignment_id"],
                                identity=payload["identity"])).encode())
     path = AUTHORITY_DIRECTORY / "resources.sqlite"
     db = sqlite3.connect(path, isolation_level=None, timeout=5)
@@ -85,10 +83,17 @@ def reserve_worker(payload, *, actor, hierarchy):
                 raise ValueError("Worker reservation replay conflict")
             db.execute("COMMIT")
             return dict(reserved=True, duplicate=True, identity=key)
-        used = db.execute("SELECT COUNT(*) FROM worker_reservations WHERE request LIKE ?",
-                          ('%"workflow_id":"'+payload["workflow_id"]+'"%',)).fetchone()[0]
-        if used >= policy["maximum_requests"]:
-            raise ValueError("worker session quota exhausted")
+        # Parse exact fields rather than substring/LIKE matching caller identifiers.
+        reservations = [json.loads(row[0]) for row in db.execute(
+            "SELECT request FROM worker_reservations")]
+        used = sum(r.get("workflow_id") == payload["workflow_id"]
+                   and r.get("assignment_id") == payload["assignment_id"]
+                   for r in reservations)
+        if used >= 4:
+            raise ValueError("worker assignment quota exhausted")
+        shared_used = sum(r.get("workflow_id") == payload["workflow_id"] for r in reservations)
+        if shared_used >= policy["maximum_requests"]:
+            raise ValueError("shared workflow quota exhausted")
         auth._reserve_daily(db, key, policy["maximum_output_tokens"])
         db.execute("INSERT INTO worker_reservations VALUES(?,?)", (key,wire))
         db.execute("COMMIT")
@@ -113,11 +118,16 @@ def execute_worker(payload, *, actor, hierarchy, provider):
             or request["opportunity"].get("role") != "worker"
             or request["opportunity"].get("state") != "WORKER_PENDING"
             or request["opportunity"].get("permitted_actions") != ["submit"]
+            or request["opportunity"].get("workflow_id") != res["workflow_id"]
+            or request["opportunity"].get("assignment_id") != res["assignment_id"]
+            or request["opportunity"].get("snapshot_sha256") != res["snapshot_sha256"]
+            or request["opportunity"].get("scope_hash") != state["scope_hash"]
             or digest(canonical(request).encode()) != res["request_sha256"]
             or provider.model != policy["model"] or provider.endpoint != policy["endpoint"]):
         raise ValueError("unbound Worker inference")
     key = digest(canonical(dict(domain="worker-budget-key-v1",
                                workflow_id=res["workflow_id"],
+                               assignment_id=res["assignment_id"],
                                identity=res["identity"])).encode())
     dbpath = AUTHORITY_DIRECTORY / "resources.sqlite"
     db=sqlite3.connect(dbpath,isolation_level=None,timeout=5)
@@ -156,7 +166,7 @@ def execute_worker(payload, *, actor, hierarchy, provider):
     data=strict_json(result["decision"]["content"])
     if (type(data) is not dict or data.get("action") != "submit"
             or type(data.get("units")) is not int
-            or not 1 <= data["units"] <= state["scope"]["budget_units"]):
+            or not 1 <= data["units"] <= state["scope"]["budget_units"] - state["used_units"]):
         raise ValueError("unbounded Worker output denied")
     output=dict(decision=dict(content=result["decision"]["content"]),tool_call=None)
     db=sqlite3.connect(dbpath,isolation_level=None,timeout=5)

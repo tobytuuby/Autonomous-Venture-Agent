@@ -57,6 +57,23 @@ def read_scheduled(state):
         inbox.close()
 
 
+def approved_worker_assignment(workflow, workflow_id, assignment_id, worker_id):
+    """Resolve only verified durable commands; caller snapshots grant no authority."""
+    item = workflow.read(workflow_id)
+    plan = item.get("decomposition")
+    if (item["state"] != "WORKER_PENDING"
+            or item["scope"]["mode"] != "PREPARATION_ONLY"
+            or item["used_units"] >= item["scope"]["budget_units"]
+            or not plan or not plan.get("approval")):
+        raise ValueError("signed CEO-approved decomposition required")
+    assignment = next((a for a in plan["assignments"] if a["id"] == assignment_id), None)
+    if (assignment is None or assignment["worker_id"] != worker_id
+            or plan["states"][assignment_id] != "READY"
+            or any(plan["states"][dep] != "COMPLETE" for dep in assignment["depends_on"])):
+        raise ValueError("worker assignment or dependency denied")
+    return item
+
+
 class PreparationBroker:
     def __init__(self, state_dir):
         self.state = private_directory(state_dir)

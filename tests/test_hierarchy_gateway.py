@@ -47,6 +47,37 @@ class HierarchyGatewayTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.gateway.artifact(ref,role="capability")
 
+    def test_gateway_signed_decomposition_and_authoritative_inference_state(self):
+        from agents.ceo.venture_workflow import hashed
+        fx = self.fixture
+        fx.act("reject_premise", "manager")
+        fx.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
+        fx.act("revise", "ceo", dict(scope=fx.scope, version=2, reason="test"))
+        assignments = [dict(id=name, worker_id=worker, task=task, depends_on=deps)
+            for name, worker, task, deps in zip(("A", "B", "C"),
+                ("worker", "worker-b", "worker-c"), fx.scope["tasks"],
+                ([], [], ["A", "B"]))]
+        def apply(action, actor, payload, role):
+            cmd = fx.command(action, actor, payload)
+            return self.gateway.apply(dict(command=cmd, signature=fx.sign(cmd, actor)), role=role)
+        with self.assertRaises(ValueError):
+            self.gateway.inference_state("studio-flow", "A", "worker")
+        apply("propose_decomposition", "manager", dict(assignments=assignments), "poll")
+        with self.assertRaises(ValueError):
+            self.gateway.inference_state("studio-flow", "A", "worker")
+        with self.assertRaises(ValueError):
+            apply("approve_decomposition", "ceo", dict(proposal_hash=hashed(assignments)), "poll")
+        apply("approve_decomposition", "ceo", dict(proposal_hash=hashed(assignments)), "quota-ceo")
+        self.assertEqual(self.gateway.inference_state("studio-flow", "A", "worker")["state"],
+                         "WORKER_PENDING")
+        for assignment, worker in (("A", "worker-b"), ("C", "worker-c")):
+            with self.assertRaises(ValueError):
+                self.gateway.inference_state("studio-flow", assignment, worker)
+        for assignment, worker in (("A", "worker"), ("B", "worker-b")):
+            apply("submit", worker, dict(assignment_id=assignment, units=1), "worker")
+        self.assertEqual(self.gateway.inference_state("studio-flow", "C", "worker-c")
+                         ["decomposition"]["states"]["C"], "READY")
+
 
 if __name__=="__main__":
     unittest.main()

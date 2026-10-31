@@ -280,13 +280,24 @@ class HierarchyGateway:
         finally:
             workflow.close()
 
+    def inference_state(self, workflow_id, assignment_id, worker_id):
+        """Broker-owned journal verification precedes every inference boundary."""
+        from agents.ceo.preparation_broker import approved_worker_assignment
+        valid_id(workflow_id)
+        workflow = VentureWorkflow(self.directory / "workflow.sqlite", actors=self.actors)
+        try:
+            return approved_worker_assignment(workflow, workflow_id, assignment_id, worker_id)
+        finally:
+            workflow.close()
+
     def apply(self, payload, *, role):
         exact(payload, ("command", "signature"))
         cmd = payload["command"]
         if type(cmd) is not dict:
             raise ValueError("signed hierarchy command required")
         expected = {"quota-ceo":"ceo", "poll":"manager", "worker":"worker"}.get(role)
-        actions=("delegate", "submit", "improve", "manager_approve",
+        actions=("propose_decomposition", "approve_decomposition",
+                 "delegate", "submit", "improve", "manager_approve",
                  "reject_premise", "ceo_approve", "redirect")
         research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
                        and isinstance(cmd.get('workflow_id'),str)
