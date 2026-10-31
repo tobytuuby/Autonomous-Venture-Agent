@@ -30,7 +30,7 @@ STATUS = {
 }
 
 
-def collect(config, feedback, client=None, worker_limit=None):
+def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=None, ceo_public_key=None):
     if (feedback.get("domain") != "owner-idea-research-feedback-v1"
             or feedback.get("advisory_only") is not True
             or feedback.get("venture_admission") is not False
@@ -86,6 +86,29 @@ def collect(config, feedback, client=None, worker_limit=None):
                     revision=doc["revision"]))
             worker_submissions=sum(a['role']=='worker' and a['action']=='submit'
                                    for a in item['artifacts'])
+            if ceo_review_dir is not None and state['state']=='HOLD':
+                path=pathlib.Path(ceo_review_dir)/(flow+'.json')
+                if path.is_file() and not path.is_symlink():
+                    if path.stat().st_size>16000 or ceo_public_key is None:
+                        raise ValueError('bounded signed CEO review required')
+                    outcome=json.loads(path.read_text())
+                    if outcome.get('state')=='COMPLETE':
+                        from agents.ceo.venture_workflow import hashed
+                        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+                        packet=outcome['packet']
+                        if (packet.get('domain')!='owner-internal-research-ceo-review-v1'
+                                or packet.get('workflow_id')!=flow
+                                or packet.get('snapshot_hash')!=hashed(state)
+                                or packet.get('model')!='gpt-6-sol'
+                                or packet.get('financial_authority') is not False
+                                or packet.get('venture_admission') is not False
+                                or packet.get('external_market_evidence_verified') is not False):
+                            raise ValueError('CEO assessment authorization mismatch')
+                        Ed25519PublicKey.from_public_bytes(ceo_public_key).verify(
+                            bytes.fromhex(outcome['signature']),canonical(packet).encode())
+                        item['ceo_review']=packet['assessment']
+                        item['ceo_reviewed_utc']=packet['reviewed_utc']
+                        item['research_status']='CEO_ASSESSMENT_COMPLETE'
             if (state['state']=='WORKER_PENDING' and worker_limit is not None
                     and worker_submissions>=worker_limit):
                 item['research_status']='BLOCKED_WORKER_QUOTA'
@@ -124,6 +147,8 @@ def main():
     p.add_argument("--feedback",required=True)
     p.add_argument("--out",required=True)
     p.add_argument("--worker-policy",required=True)
+    p.add_argument('--ceo-reviews',required=True)
+    p.add_argument('--trust',required=True)
     args=p.parse_args()
     policy=json.loads(pathlib.Path(args.worker_policy).read_text())
     if policy.get('domain')!='worker-preparation-inference-v1' or policy.get('enabled') is not True:
@@ -131,8 +156,13 @@ def main():
     limit=policy['maximum_requests']
     if type(limit) is not int or not 1<=limit<=16:
         raise ValueError('invalid worker inference limit')
+    trust=json.loads(pathlib.Path(args.trust).read_text())
+    signer=trust['actors']['service-ceo']
+    if signer['role']!='ceo':
+        raise ValueError('CEO pinned public key required')
     result=collect(json.loads(pathlib.Path(args.config).read_text()),
-                   json.loads(pathlib.Path(args.feedback).read_text()),worker_limit=limit)
+                   json.loads(pathlib.Path(args.feedback).read_text()),worker_limit=limit,
+                   ceo_review_dir=args.ceo_reviews,ceo_public_key=bytes.fromhex(signer['public_key']))
     write_atomic(result,args.out)
     print("published owner research statuses",[(x["title"],x["research_status"]) for x in result["records"]])
 

@@ -18,7 +18,7 @@ from agents.ceo.venture_workflow import hashed
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_service import run as role_tick
 
-STATES = {"ceo":{"CEO_REVIEW"},
+STATES = {"ceo":{"CEO_REVIEW","HOLD"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
           "worker":{"WORKER_PENDING"}}
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
@@ -132,6 +132,10 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                     continue
                 if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
                     hold_exhausted_research(client,config,snapshot,worker_limit_override)
+                    continue
+                if config['role']=='ceo' and snapshot['state']=='HOLD':
+                    from agents.ceo.ceo_research_review import review
+                    review(config,snapshot,client)
                     continue
                 if worker_limit is not None:
                     if flow in blocked:
