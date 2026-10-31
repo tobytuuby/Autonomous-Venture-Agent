@@ -1,0 +1,66 @@
+{
+  "initial_attempt": {
+    "id": "proc_mvw3eplr_qdwkt4",
+    "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3eplr_qdwkt4.log",
+    "pid": 704411,
+    "result": "trust ownership check failed; no reservation/provider call",
+    "status": "exited"
+  },
+  "processes": [
+    {
+      "command": "sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspect_control.py > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/control.json 2> tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.stderr; result=$?; echo \"$result\" > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.exit; exit \"$result\"",
+      "id": "proc_mvw3fd9f_ia0j64",
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3fd9f_ia0j64.log",
+      "pid": 709381,
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "startedAt": "2026-10-31T07:42:16.035Z",
+      "status": "exited",
+      "updatedAt": "2026-10-31T07:44:55.584Z",
+      "workspace": "quota-diagnosis"
+    },
+    {
+      "command": "sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspect_control.py > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/control.json 2> tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.stderr; result=$?; echo \"$result\" > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.exit; exit \"$result\"",
+      "id": "proc_mvw3g1n2_c46swa",
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3g1n2_c46swa.log",
+      "pid": 714352,
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "startedAt": "2026-10-31T07:42:47.630Z",
+      "status": "exited",
+      "updatedAt": "2026-10-31T07:44:55.584Z",
+      "workspace": "quota-diagnosis"
+    },
+    {
+      "command": "TMPDIR=\"$PWD/artifacts\" python3 -B -m unittest -v tests.test_worker_inference tests.test_hierarchy_multi_worker tests.test_hierarchy_bootstrap > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/tests.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/tests.exit; exit \"$result\"",
+      "id": "proc_mvw3g25v_pnw7pn",
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3g25v_pnw7pn.log",
+      "pid": 714361,
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "startedAt": "2026-10-31T07:42:48.307Z",
+      "status": "exited",
+      "updatedAt": "2026-10-31T07:44:55.584Z",
+      "workspace": "quota-diagnosis"
+    },
+    {
+      "command": "sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspect_control.py > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/control.json 2> tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.stderr; result=$?; echo \"$result\" > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.exit; exit \"$result\"",
+      "id": "proc_mvw3glbm_dbfkvm",
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3glbm_dbfkvm.log",
+      "pid": 719272,
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "startedAt": "2026-10-31T07:43:13.138Z",
+      "status": "exited",
+      "updatedAt": "2026-10-31T07:44:55.584Z",
+      "workspace": "quota-diagnosis"
+    },
+    {
+      "command": "sudo -n env PYTHONDONTWRITEBYTECODE=1 python3 tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspect_control.py > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/control.json 2> tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.stderr; result=$?; echo \"$result\" > tests/acceptance-evidence/level2d-quota-diagnosis-20261031/inspection.exit; exit \"$result\"",
+      "id": "proc_mvw3h3p5_832jf5",
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mvw3h3p5_832jf5.log",
+      "pid": 724169,
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "startedAt": "2026-10-31T07:43:36.953Z",
+      "status": "exited",
+      "updatedAt": "2026-10-31T07:44:55.584Z",
+      "workspace": "quota-diagnosis"
+    }
+  ]
+}

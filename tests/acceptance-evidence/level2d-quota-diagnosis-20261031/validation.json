@@ -1,0 +1,16 @@
+{
+  "diff_check_exit": 0,
+  "inspection_exit": 0,
+  "provider_calls_this_task": 0,
+  "real_ceo_or_capital_action": false,
+  "target_acceptance": "BLOCKED_NOT_RUN",
+  "tests": 27,
+  "tests_exit": 0,
+  "unrelated_dirty_hashes_unchanged": {
+    "agents/ceo/service_identity.py": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+    "kernel/synthetic_venture_store.py": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+    "kernel/venture_admission.py": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+    "tests/test_owner_approval.py": "442dfc9b12a51f47f29bab6946e62cd0a8af9aa8319d0a379117d5830121df01"
+  },
+  "validation": "PASS"
+}

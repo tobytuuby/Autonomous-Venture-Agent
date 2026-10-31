@@ -1,0 +1,158 @@
+{
+  "at": "2026-10-31T07:43:37.251423+00:00",
+  "authority": {
+    "enabled": true,
+    "epoch": 2,
+    "revoked": []
+  },
+  "broker": {
+    "ActiveState": "active",
+    "MainPID": "654960",
+    "WorkingDirectory": "/usr/local/lib/venture-control-broker-level2c"
+  },
+  "ceo": {
+    "ActiveState": "inactive",
+    "MainPID": "0",
+    "WorkingDirectory": "/usr/local/lib/venture-ceo-level2c"
+  },
+  "classification": "read-only installed Control ledger and cryptographically verified signed journal",
+  "daily": {
+    "day": "2026-10-31",
+    "maximum_output_tokens": 1540096,
+    "maximum_requests": 94,
+    "next_utc_window": "2026-11-01T00:00:00+00:00",
+    "remaining_requests": 64,
+    "reserved_output_tokens": 30720,
+    "used_requests": 30
+  },
+  "decision": "DO_NOT_KICKOFF",
+  "journal_verified": true,
+  "provider_calls_this_inspection": 0,
+  "provider_side_remaining_quota": "NOT_INDEPENDENTLY_VERIFIED",
+  "sources": {
+    "agents/ceo/service_identity.py": {
+      "checkout_sha256": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+      "installed_sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd"
+    },
+    "agents/ceo/venture_workflow.py": {
+      "checkout_sha256": "d611ec85212aa676e8e42fe79028c95530170b518c98b0fa6c8817cbcdf72b77",
+      "installed_sha256": "d611ec85212aa676e8e42fe79028c95530170b518c98b0fa6c8817cbcdf72b77"
+    },
+    "agents/ceo/worker_inference.py": {
+      "checkout_sha256": "3d968c3e978cfd508fd085c898beca90bcc2e8db0ed375d6ad07560f091fd8c9",
+      "installed_sha256": "3d968c3e978cfd508fd085c898beca90bcc2e8db0ed375d6ad07560f091fd8c9"
+    }
+  },
+  "target": {
+    "context": {
+      "ceo_id": "service-ceo",
+      "manager_id": "service-manager",
+      "objective": "Owner-authorized technical preparation-only hierarchy verification",
+      "rounds": 2,
+      "session_id": "level2d-multiworker-remediation-1",
+      "venture_id": "venture-verification"
+    },
+    "signed_state": null,
+    "workflow_id": "level2d-multiworker-remediation-1"
+  },
+  "total_worker_reservations": 17,
+  "venture": {
+    "effective_ceiling": 4,
+    "id": "venture-verification",
+    "prior_reservations": [
+      {
+        "assignment_id": "LEGACY_SINGLE_WORKER",
+        "ceiling": 4,
+        "daily_reservation": [
+          "2026-10-29",
+          1024
+        ],
+        "execution_status": "PENDING",
+        "identity": "bd713f2d7e25f7ecdbba29c0ca4b83ff883f669dcc69d980d761da4ff7fe270c",
+        "policy_epoch": 2,
+        "signed_state": "WORKER_PENDING",
+        "venture_id": "venture-verification",
+        "worker_id": "service-worker",
+        "workflow_id": "level2d-acceptance-3"
+      },
+      {
+        "assignment_id": "LEGACY_SINGLE_WORKER",
+        "ceiling": 4,
+        "daily_reservation": [
+          "2026-10-29",
+          1024
+        ],
+        "execution_status": "COMPLETE",
+        "identity": "3f7de58a56057dcd07007169edd9c696ce560c10d565b2d7a3dfb0e6d8234373",
+        "policy_epoch": 2,
+        "signed_state": "OWNER_REVIEW",
+        "venture_id": "venture-verification",
+        "worker_id": "service-worker",
+        "workflow_id": "level2d-acceptance-5"
+      },
+      {
+        "assignment_id": "LEGACY_SINGLE_WORKER",
+        "ceiling": 4,
+        "daily_reservation": [
+          "2026-10-29",
+          1024
+        ],
+        "execution_status": "COMPLETE",
+        "identity": "75e80fc3d47a5b18248555148c50db8c608f453a61e5cfd10cf7c1fc4e638bbb",
+        "policy_epoch": 2,
+        "signed_state": "OWNER_REVIEW",
+        "venture_id": "venture-verification",
+        "worker_id": "service-worker",
+        "workflow_id": "level2d-acceptance-5"
+      },
+      {
+        "assignment_id": "LEGACY_SINGLE_WORKER",
+        "ceiling": 4,
+        "daily_reservation": [
+          "2026-10-29",
+          1024
+        ],
+        "execution_status": "COMPLETE",
+        "identity": "c2b3d1a02e8fb68bae305e5a8698c6ef93b9ed6d073c5d2a7007d41bf7776de5",
+        "policy_epoch": 2,
+        "signed_state": "OWNER_REVIEW",
+        "venture_id": "venture-verification",
+        "worker_id": "service-worker",
+        "workflow_id": "level2d-acceptance-5"
+      },
+      {
+        "assignment_id": "LEGACY_SINGLE_WORKER",
+        "ceiling": 4,
+        "daily_reservation": [
+          "2026-10-29",
+          1024
+        ],
+        "execution_status": "COMPLETE",
+        "identity": "c1641f1a45177a17379c441ae71fb995f01a93cdcd3699cd96cc55fb0af45162",
+        "policy_epoch": 2,
+        "signed_state": "OWNER_REVIEW",
+        "venture_id": "venture-verification",
+        "worker_id": "service-worker",
+        "workflow_id": "level2d-acceptance-5"
+      }
+    ],
+    "remaining": 0,
+    "renewal_window": null,
+    "used_worker_reservations": 5
+  },
+  "worker_policy": {
+    "actor_ids": [
+      "service-worker",
+      "worker-a",
+      "worker-b",
+      "worker-c"
+    ],
+    "domain": "worker-preparation-inference-v1",
+    "enabled": true,
+    "endpoint": "https://api.openai.com/v1",
+    "epoch": 2,
+    "maximum_output_tokens": 1024,
+    "maximum_requests": 4,
+    "model": "gpt-6-luna"
+  }
+}
