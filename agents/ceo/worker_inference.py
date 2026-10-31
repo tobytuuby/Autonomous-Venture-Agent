@@ -101,25 +101,30 @@ def reserve_worker(payload, *, actor, hierarchy):
         # Parse exact fields rather than substring/LIKE matching caller identifiers.
         reservations = [json.loads(row[0]) for row in db.execute(
             "SELECT request FROM worker_reservations")]
-        used = sum(r.get("workflow_id") == payload["workflow_id"]
-                   and r.get("assignment_id") == payload["assignment_id"]
-                   for r in reservations)
+        # The signed workflow is the accounting scope, across actors, policy
+        # changes and epochs. Legacy rows without assignments still consume it.
+        shared = []
+        ceiling = policy["maximum_requests"]
+        for reservation in reservations:
+            if (type(reservation) is not dict
+                    or type(reservation.get("workflow_id")) is not str
+                    or not reservation["workflow_id"]):
+                raise ValueError("unverifiable prior worker budget")
+            if reservation["workflow_id"] != payload["workflow_id"]:
+                continue
+            historical = reservation.get("policy")
+            maximum = historical.get("maximum_requests") if type(historical) is dict else None
+            if type(maximum) is not int or not 1 <= maximum <= 4:
+                raise ValueError("unverifiable prior worker budget")
+            # Do not reauthorize retired actors or compare old snapshots with
+            # today's state: retained reservations are charges, not new grants.
+            ceiling = min(ceiling, maximum)
+            shared.append(reservation)
+        used = sum(r.get("assignment_id") == payload["assignment_id"] for r in shared)
         if used >= 4:
             raise ValueError("worker assignment quota exhausted")
-        # Resolve venture identity from the verified journal, never the caller.
-        # Legacy rows have no venture column; keep the existing ledger format.
-        shared = []
-        for reservation in reservations:
-            prior_state = (state if reservation["workflow_id"] == payload["workflow_id"]
-                           else hierarchy.state(reservation["workflow_id"]))
-            if prior_state is None:
-                raise ValueError("unverifiable prior worker budget")
-            if prior_state["venture_id"] == state["venture_id"]:
-                shared.append(reservation)
-        ceiling = min([policy["maximum_requests"]] +
-                      [r["policy"]["maximum_requests"] for r in shared])
         if len(shared) >= ceiling:
-            raise ValueError("shared venture quota exhausted")
+            raise ValueError("shared workflow quota exhausted")
         auth._reserve_daily(db, key, policy["maximum_output_tokens"])
         db.execute("INSERT INTO worker_reservations VALUES(?,?)", (key,wire))
         db.execute("COMMIT")

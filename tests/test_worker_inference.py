@@ -314,7 +314,7 @@ class WorkerInferenceTests(unittest.TestCase):
         data = self.payload(identity="legacy-call")
         legacy = json.loads(canonical(data["reservation"]))
         legacy["worker_id"] = "service-worker"
-        legacy["assignment_id"] = "LEGACY_SINGLE_WORKER"
+        legacy.pop("assignment_id")  # Original reservations predate assignments.
         legacy["policy"]["actor_id"] = "service-worker"
         key = "historic-worker-reservation"
         with sqlite3.connect(self.dir / "resources.sqlite") as db:
@@ -332,22 +332,22 @@ class WorkerInferenceTests(unittest.TestCase):
             self.assertEqual(list(db.execute("SELECT * FROM worker_reservations")), rows_before)
         for n in range(3):
             self.reserve(self.payload(identity="new-worker-" + str(n)))
-        with self.assertRaisesRegex(ValueError, "shared venture"):
+        with self.assertRaisesRegex(ValueError, "shared workflow"):
             self.reserve(self.payload(identity="over-cap"))
         self.assertEqual(self.ledger_count(), 4)
         self.assertEqual(list(self.fx.workflow.db.execute("SELECT * FROM audit")), audit_before)
         self.assertEqual(self.provider.calls, 0)
 
-    def test_policy_change_cannot_expand_existing_venture_ceiling(self):
+    def test_policy_change_cannot_expand_existing_workflow_ceiling(self):
         self.policy["maximum_requests"] = 2
         self.reserve(self.payload(identity="small-budget"))
         self.policy["maximum_requests"] = 4
         self.reserve(self.payload(identity="remaining-budget"))
-        with self.assertRaisesRegex(ValueError, "shared venture"):
+        with self.assertRaisesRegex(ValueError, "shared workflow"):
             self.reserve(self.payload(identity="expanded-budget"))
         self.assertEqual(self.ledger_count(), 2)
 
-    def test_separate_workflow_for_same_venture_does_not_reset_budget(self):
+    def second_workflow(self):
         # The second signed journal has distinct workflow identity, same venture.
         from agents.ceo.venture_workflow import VentureWorkflow
         other = fixture.WorkflowTests(methodName="runTest")
@@ -374,18 +374,142 @@ class WorkerInferenceTests(unittest.TestCase):
             return other.workflow.apply(cmd, other.sign(cmd, actor))
         apply("propose_decomposition", "manager", dict(assignments=self.assignments))
         apply("approve_decomposition", "ceo", dict(proposal_hash=hashed(self.assignments)))
-        for n in range(4):
-            self.reserve(self.payload(identity="first-flow-" + str(n)))
         from agents.ceo.hierarchy_gateway import HierarchyGateway
         second = HierarchyGateway(Path(other.temp.name), other.actors)
-        # Resolve both verified journals, as the production gateway does.
-        state_method = second.state
-        second.state = lambda flow: self.gateway.state(flow) if flow == "studio-flow" else state_method(flow)
-        payload = dict(self.payload(identity="second-flow-call")["reservation"],
-                       workflow_id="second-flow", snapshot_sha256=hashed(other.workflow.read("second-flow")))
-        with self.assertRaisesRegex(ValueError, "shared venture"):
-            wi.reserve_worker(payload, actor="worker-a", hierarchy=second)
+        def payload(identity):
+            data = json.loads(canonical(self.payload(identity=identity)))
+            state = other.workflow.read("second-flow")
+            data["reservation"].update(workflow_id="second-flow", snapshot_sha256=hashed(state))
+            data["request"]["opportunity"].update(workflow_id="second-flow", snapshot_sha256=hashed(state))
+            data["reservation"]["request_sha256"] = digest(canonical(data["request"]).encode())
+            return data
+        self.assertEqual(other.workflow.read("second-flow")["venture_id"],
+                         self.fx.workflow.read("studio-flow")["venture_id"])
+        return second, payload
+
+    def test_distinct_signed_workflows_each_have_four_calls_for_same_venture(self):
+        second, payload = self.second_workflow()
+        self.policy["maximum_requests"] = 2
+        for n in range(2):
+            self.reserve(self.payload(identity="small-first-" + str(n)))
+        self.policy["maximum_requests"] = 4
+        # Historical minima in the first workflow do not narrow the second.
+        for n in range(4):
+            data = payload("second-" + str(n))
+            wi.reserve_worker(data["reservation"], actor="worker-a", hierarchy=second)
+            wi.execute_worker(data, actor="worker-a", hierarchy=second, provider=self.provider)
+        with self.assertRaisesRegex(ValueError, "quota exhausted"):
+            wi.reserve_worker(payload("second-over")["reservation"], actor="worker-a", hierarchy=second)
+        with self.assertRaisesRegex(ValueError, "shared workflow"):
+            self.reserve(self.payload(identity="first-over"))
+        self.assertEqual(self.ledger_count(), 6)
+        self.assertEqual(self.provider.calls, 4)
+
+    def test_two_full_workflows_share_central_daily_request_and_token_limits(self):
+        from agents.ceo.service_identity import ProviderQuota
+        second, payload = self.second_workflow()
+        quota = FakeQuota()
+        quota._reserve_daily = lambda db, key, tokens: ProviderQuota._reserve_daily(quota, db, key, tokens)
+        with patch.object(wi, "ProviderQuota", return_value=quota):
+            for n in range(4):
+                self.reserve(self.payload(identity="first-" + str(n)))
+            # Both central request and token limits apply across workflows,
+            # including reservations by other roles.
+            for limits in (dict(DAILY_REQUESTS=5), dict(DAILY_OUTPUT_TOKENS=5 * 512)):
+                with self.subTest(limits=limits), patch.multiple("agents.ceo.service_identity", **limits):
+                    from datetime import datetime, timezone
+                    with sqlite3.connect(self.dir / "resources.sqlite") as db:
+                        db.execute("INSERT INTO reservations VALUES(?,?,?)",
+                                   (datetime.now(timezone.utc).date().isoformat(), "ceo-or-manager", 512))
+                    with self.assertRaisesRegex(ValueError, "central daily"):
+                        wi.reserve_worker(payload("daily-denied")["reservation"], actor="worker-a", hierarchy=second)
+                    self.assertEqual(self.ledger_count(), 5)
+                    with sqlite3.connect(self.dir / "resources.sqlite") as db:
+                        self.assertEqual(db.execute("SELECT COUNT(*) FROM worker_reservations").fetchone()[0], 4)
+                        db.execute("DELETE FROM reservations WHERE identity='ceo-or-manager'")
+            for n in range(4):
+                wi.reserve_worker(payload("second-" + str(n))["reservation"], actor="worker-a", hierarchy=second)
+        self.assertEqual(self.ledger_count(), 8)
+        self.assertEqual(self.provider.calls, 0)
+
+    def test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow(self):
+        self.reserve(self.payload(identity="before-downgrade"))
+        self.policy["maximum_requests"] = 2
+        self.reserve(self.payload(identity="at-downgrade"))
+        self.policy["maximum_requests"] = 4
+        self.policy["epoch"] = 2
+        quota = FakeQuota()
+        quota.authority = lambda: dict(epoch=2, revoked=[])
+        with patch.object(wi, "ProviderQuota", return_value=quota):
+            with self.assertRaisesRegex(ValueError, "shared workflow"):
+                self.reserve(self.payload(identity="after-raise"))
+        self.assertEqual(self.ledger_count(), 2)
+
+    def test_current_downgrade_denies_before_charging(self):
+        for n in range(2):
+            self.reserve(self.payload(identity="prior-" + str(n)))
+        self.policy["maximum_requests"] = 1
+        with self.assertRaisesRegex(ValueError, "shared workflow"):
+            self.reserve(self.payload(identity="downgraded"))
+        self.assertEqual(self.ledger_count(), 2)
+
+    def test_exact_reservation_duplicate_at_limit_and_changed_replay(self):
+        data = self.payload(identity="exact")
+        receipt = self.reserve(data)
+        for n in range(3):
+            self.reserve(self.payload(identity="other-" + str(n)))
+        self.assertEqual(self.reserve(data), dict(receipt, duplicate=True))
+        changed = json.loads(canonical(data))
+        changed["reservation"]["attempt"] = "b" * 64
+        with self.assertRaisesRegex(ValueError, "replay conflict"):
+            self.reserve(changed)
         self.assertEqual(self.ledger_count(), 4)
+
+    def test_unverifiable_relevant_historical_ceiling_fails_closed(self):
+        original = self.payload(identity="prior")
+        self.reserve(original)
+        with sqlite3.connect(self.dir / "resources.sqlite") as db:
+            key = db.execute("SELECT identity FROM worker_reservations").fetchone()[0]
+        for historical in (None, {}, dict(maximum_requests=True),
+                           dict(maximum_requests="4"), dict(maximum_requests=0),
+                           dict(maximum_requests=5)):
+            with self.subTest(policy=historical):
+                row = dict(original["reservation"], policy=historical)
+                with sqlite3.connect(self.dir / "resources.sqlite") as db:
+                    db.execute("UPDATE worker_reservations SET request=?", (canonical(row),))
+                with self.assertRaisesRegex(ValueError, "unverifiable prior"):
+                    self.reserve(self.payload(identity="new"))
+                with sqlite3.connect(self.dir / "resources.sqlite") as db:
+                    self.assertEqual(db.execute("SELECT request FROM worker_reservations WHERE identity=?",
+                                                (key,)).fetchone()[0], canonical(row))
+                self.assertEqual(self.ledger_count(), 1)
+
+    def test_unattributable_history_fails_closed(self):
+        self.reserve(self.payload(identity="prior"))
+        for row in ([], {}, dict(workflow_id=None), dict(workflow_id="")):
+            with self.subTest(row=row):
+                with sqlite3.connect(self.dir / "resources.sqlite") as db:
+                    db.execute("UPDATE worker_reservations SET request=?", (canonical(row),))
+                with self.assertRaisesRegex(ValueError, "unverifiable prior"):
+                    self.reserve(self.payload(identity="new"))
+                self.assertEqual(self.ledger_count(), 1)
+
+    def test_unknown_old_workflow_does_not_require_its_current_journal(self):
+        data = self.payload(identity="historic-other")
+        self.reserve(data)
+        row = dict(data["reservation"], workflow_id="old-independent-flow", policy=None)
+        with sqlite3.connect(self.dir / "resources.sqlite") as db:
+            db.execute("UPDATE worker_reservations SET request=?", (canonical(row),))
+        for n in range(4):
+            self.reserve(self.payload(identity="current-" + str(n)))
+        self.assertEqual(self.ledger_count(), 5)
+
+    def test_caller_cannot_supply_venture_accounting_scope(self):
+        data = self.payload()
+        data["reservation"]["venture_id"] = "new-budget"
+        with self.assertRaises(ValueError):
+            self.reserve(data)
+        self.assertEqual(self.ledger_count(), 0)
 
     def test_simultaneous_execution_cannot_call_provider_twice(self):
         import threading
