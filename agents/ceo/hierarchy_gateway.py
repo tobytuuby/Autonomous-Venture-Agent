@@ -345,7 +345,7 @@ class HierarchyGateway:
         if type(cmd) is not dict:
             raise ValueError("signed hierarchy command required")
         expected = {"quota-ceo":"ceo", "poll":"manager", "worker":"worker"}.get(role)
-        actions=("research_disposition", "continue_research", "propose_decomposition", "approve_decomposition",
+        actions=("record_mvp_blocker", "research_disposition", "continue_research", "propose_decomposition", "approve_decomposition",
                  "delegate", "submit", "improve", "manager_approve",
                  "reject_premise", "ceo_approve", "redirect", "revise")
         research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
@@ -373,7 +373,7 @@ class HierarchyGateway:
                 # historical receipt; it never grants another correction.
                 if workflow._retry(cmd) is None:
                     check_automatic_revision(current, cmd["payload"])
-            if cmd["action"] in ("continue_research", "research_disposition"):
+            if cmd["action"] in ("record_mvp_blocker", "continue_research", "research_disposition"):
                 self.research_authority(workflow.read(cmd["workflow_id"]))
             result = workflow.apply(cmd, payload["signature"])
             if result["state"] in ("OWNER_APPROVED", "FINANCE_REQUESTED"):

@@ -61,7 +61,8 @@ def approved_worker_assignment(workflow, workflow_id, assignment_id, worker_id):
     """Resolve only verified durable commands; caller snapshots grant no authority."""
     item = workflow.read(workflow_id)
     plan = item.get("decomposition")
-    if (item["state"] != "WORKER_PENDING"
+    if (item.get("research_disposition") is not None
+            or item["state"] != "WORKER_PENDING"
             or item["scope"]["mode"] != "PREPARATION_ONLY"
             or item["used_units"] >= item["scope"]["budget_units"]
             or not plan or not plan.get("approval")):

@@ -318,6 +318,30 @@ class VentureWorkflow(EscalationInbox):
                     decomposition=None, owner_receipt=None, finance_request=None,
                     state="MANAGER_PENDING")
 
+    def _mvp_blocker_transition(self, prior, command):
+        """Record a denial only; no execution authority or allowance is invented."""
+        if command["action"] != "record_mvp_blocker":
+            return None
+        exact(command["payload"], ())
+        signed = prior.get("research_disposition")
+        if (command["role"] != "ceo" or prior["state"] != "OWNER_REVIEW"
+                or not signed or prior.get("mvp_handoff") is not None
+                or signed["packet"]["assessment"]["recommendation"] != "PROCEED_TO_MVP"):
+            raise ValueError("positive signed MVP disposition required")
+        fingerprint = research_identity(prior)
+        if fingerprint is None:
+            raise ValueError("proposal-bound MVP assessment required")
+        return dict(state=prior["state"], mvp_handoff=dict(
+            status="BLOCKED", proposal_digest=fingerprint,
+            disposition_hash=hashed(signed), source_snapshot_hash=hashed(prior),
+            scope_hash=prior["scope_hash"], research_round=len(research_rounds(prior)),
+            code="MVP_EXECUTION_AUTHORITY_UNAVAILABLE",
+            required_action="Resolve existing proposal-bound internal MVP scope, resource limits "
+                            "and a safe execution path at the broker. Research approval and "
+                            "reservations grant no MVP allowance. Do not repeat approval for "
+                            "already-authorized work; do not create scope or grants.",
+            execution_authorized=False))
+
     def _verify_transition(self, prior, item, command):
         """Reconstruct security-relevant state from signed commands on restart.
 
@@ -346,7 +370,11 @@ class VentureWorkflow(EscalationInbox):
                 raise ValueError("handoff immutable")
             multi = self._decomposition_transition(prior, command, item["signature"])
             research = self._research_transition(prior, command)
-            if research is not None:
+            blocker = self._mvp_blocker_transition(prior, command)
+            if blocker is not None:
+                expected.update(blocker)
+                target = blocker["state"]
+            elif research is not None:
                 expected.update(research)
                 target = research["state"]
             elif multi is not None:
@@ -385,6 +413,8 @@ class VentureWorkflow(EscalationInbox):
             expected["state"] = target
             if target in {"HOLD", "SECURITY_HOLD", "TERMINATED", "CEO_REDIRECTION"}:
                 expected.update(owner_receipt=None, finance_request=None)
+        if item.get("mvp_handoff") != expected.get("mvp_handoff", prior.get("mvp_handoff") if prior else None):
+            raise ValueError("signed MVP blocker reconstruction denied")
         if item.get("research_disposition") != expected.get("research_disposition", prior.get("research_disposition") if prior else None):
             raise ValueError("signed research disposition reconstruction denied")
         if item.get("research_rounds") != expected.get("research_rounds", prior.get("research_rounds") if prior else None):
@@ -528,6 +558,9 @@ class VentureWorkflow(EscalationInbox):
                 raise ValueError("assigned actor required")
             if item["state"] == "TERMINATED":
                 raise ValueError("terminated")
+            if (item.get("research_disposition") is not None
+                    and action not in {"record_mvp_blocker", "hold", "security_hold", "terminate"}):
+                raise ValueError("research disposition immutable; no execution authority")
             # Admission is stricter than historical reconstruction: already signed
             # exhausted improvement/re-decomposition records remain immutable and
             # readable, but cannot authorize a new Worker cycle or quota increase.
@@ -536,7 +569,11 @@ class VentureWorkflow(EscalationInbox):
                 raise ValueError("budget exhausted: Worker cycle restart denied")
             multi = self._decomposition_transition(item, command, signature)
             research = self._research_transition(item, command)
-            if research is not None:
+            blocker = self._mvp_blocker_transition(item, command)
+            if blocker is not None:
+                item.update(blocker)
+                target = blocker["state"]
+            elif research is not None:
                 item.update(research)
                 target = research["state"]
             elif multi is not None:

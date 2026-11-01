@@ -104,12 +104,22 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
                         round_worker_calls_used=current, round_worker_calls_remaining=max(0,4-current),
                         round_exhausted=current>=4, exhausted=total>=12 or len(history)>=3)
                 if state.get("research_disposition"):
-                    item["owner_action"] = "Review internal recommendation; separate MVP/external scope approval required"
+                    recommendation = state["research_disposition"]["packet"]["assessment"]["recommendation"]
+                    if recommendation == "PROCEED_TO_MVP":
+                        item["owner_action"] = "Resolve existing internal MVP authority at broker; no repeat approval for authorized work"
+                    else:
+                        item["owner_action"] = "Review internal recommendation; external scope remains separately gated"
                 elif len(history) == 3:
                     item["owner_action"] = "Await terminal CEO disposition; no fourth research round"
             item["state"]=state["state"]
             item["research_status"]=STATUS.get(state["state"],"BLOCKED")
             item["revision"]=state["revision"]
+            if (state["state"] == "OWNER_REVIEW" and (state.get("research_disposition") or {}).get("packet", {}).get(
+                    "assessment", {}).get("recommendation") == "PROCEED_TO_MVP"):
+                item["research_status"] = "BLOCKED_MVP_HANDOFF"
+                item["blocking_reason"] = (state.get("mvp_handoff") or {}).get(
+                    "required_action", "No verified internal MVP execution scope, resource limits "
+                    "and safe broker path available; research reservations are not MVP authority.")
             if state['state'] in ('HOLD','SECURITY_HOLD','BUDGET_EXHAUSTED','CEO_REDIRECTION'):
                 reason=state.get('last_command',{}).get('payload',{}).get('reason')
                 if type(reason) is str and reason:
@@ -171,7 +181,8 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
                 exhausted=item['exhausted'], round_exhausted=item.get('round_exhausted'),
                 owner_action_required=item['owner_action'] not in (
                     'No repeat review; internal research only',
-                    'Research continuation is authorized without additional Owner action'),
+                    'Research continuation is authorized without additional Owner action',
+                    'Resolve existing internal MVP authority at broker; no repeat approval for authorized work'),
                 owner_action=item['owner_action'], financial_expenditure=None,
                 available_authority=None)
         output.append(item)

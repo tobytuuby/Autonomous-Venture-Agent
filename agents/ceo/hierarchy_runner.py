@@ -68,6 +68,8 @@ class HierarchyRunner:
 
     @classmethod
     def allowed_actions(cls, item):
+        if item.get("research_disposition") is not None:
+            return None
         allowed = cls.ACTIONS.get(item["state"])
         if item["used_units"] >= item["scope"]["budget_units"]:
             if item["state"] == "MANAGER_REVIEW":
