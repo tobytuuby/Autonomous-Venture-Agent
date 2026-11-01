@@ -46,7 +46,7 @@ def allowed_config(base, flow, snapshot):
     config=dict(base)
     config["workflow_id"]=flow
     original=Path(base["state_dir"])
-    state=original.parent / "research" / research_session(snapshot)
+    state=original / "research" / research_session(snapshot)
     if original.is_symlink() or state.is_symlink():
         raise ValueError("research state alias denied")
     state.mkdir(parents=True,exist_ok=True,mode=0o700)
@@ -54,7 +54,7 @@ def allowed_config(base, flow, snapshot):
     if role in ("ceo","manager"):
         context=dict(base["context"])
         context.update(session_id=research_session(snapshot),venture_id=flow,
-                       objective="; ".join(snapshot["scope"]["tasks"]),rounds=2)
+                       objective="; ".join(snapshot["scope"]["tasks"]),rounds=len(research_rounds(snapshot)))
         config["context"]=context
     return config
 

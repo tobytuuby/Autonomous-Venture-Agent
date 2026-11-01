@@ -30,6 +30,44 @@ class RemoteWorkflow:
         return self.client.apply(command, signature)
 
 
+
+def tick_research_task(config, client, actors, private, policy):
+    """Let the existing role service process one approved research workflow."""
+    role=config["role"]
+    if role not in ("manager","worker"):
+        return False
+    from agents.ceo.hierarchy_research_daemon import STATES, allowed_config
+    tasks=client.research_list()
+    if len(tasks)>30:
+        raise ValueError("bounded research queue required")
+    for item in tasks:
+        flow=item.get("workflow_id")
+        if item.get("state") not in STATES[role]:
+            continue
+        snapshot=client.read(flow)
+        if snapshot is None or snapshot.get("state")!=item["state"]:
+            continue
+        task_config=allowed_config(config,flow,snapshot)
+        provider=HierarchyProvider(role=role,actor=config["actor_id"],
+            workflow_id=flow,client=client,policy=policy,
+            context=task_config.get("context"),local_provider=None,
+            state_path=Path(task_config["state_dir"])/"inference.sqlite")
+        callback=ModelRoleCallback(role=role,provider=provider,
+            artifact_store=client.store,artifact_load=client.load,
+            actor_id=config["actor_id"],
+            decomposition_workers=task_config.get("decomposition_workers"))
+        callbacks=dict(manager=None,worker=None,ceo=None)
+        callbacks[role]=callback
+        runner=HierarchyRunner(RemoteWorkflow(client,actors),**callbacks,
+            role_filter=role,signers={config["actor_id"]:private.sign})
+        after=runner.tick(flow)
+        print(json.dumps(dict(role=role,workflow_id=flow,
+            from_state=snapshot["state"],to_state=after["state"],
+            revision=after["revision"],operational_authority=False)),flush=True)
+        return True
+    return False
+
+
 def run(config, *, once=False, poll_seconds=3):
     role=config["role"]
     if role not in ("ceo","manager","worker"):
@@ -79,6 +117,7 @@ def run(config, *, once=False, poll_seconds=3):
     last=None
     while True:
         try:
+            tick_research_task(config,client,actors,private,policy)
             state=client.read(config["workflow_id"])
             if state is not None and state["state"] in allowed:
                 after=runner.tick(config["workflow_id"])
