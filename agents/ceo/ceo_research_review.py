@@ -23,7 +23,7 @@ group chats are substitutes. Unverified demand alone is not counterevidence.
 NEEDS_MORE_RESEARCH is allowed only before round 3 for an explicit answerable
 question and a distinct permitted desk task that can resolve it from existing
 artifacts/public descriptions without customer contact, spending or execution.
-Recommend an MVP proposal when there is a concrete customer, problem and plausible
+Choose a positive MVP disposition when there is a concrete customer, problem and plausible
 low-risk bounded validation, even without named competitors or verified demand:
 READY_FOR_OWNER_DISCUSSION before round 3, PROCEED_TO_MVP at round 3.
 REJECT_OR_DEFER requires actual counterevidence, a blocker, or no credible next
@@ -31,8 +31,15 @@ step; exhausted research is not business failure. Research calls/tokens are not
 business funds. Financial data is unavailable here. Business funds exhausted AND
 business failing invokes the existing shutdown mechanism only with authoritative
 financial and failure evidence; never infer it or execute shutdown from this review.
-No launch, payments, deployment or customer contact. MVP means an Owner proposal
-for separately authorized internal development, never permission to execute.
+The CEO decides PROCEED_TO_MVP without a new Owner checkpoint for already-authorized
+internal MVP work. A signed disposition is not a grant of MVP execution scope.
+Continue only within explicit current internal MVP authority and its execution
+limits; never reuse or replenish exhausted research quotas as MVP permission.
+If that scope or a safe workflow transition is unavailable, record the execution
+blocker without treating it as business failure or undoing a positive disposition.
+This review supplies research scope only; it proves no MVP execution grant.
+Owner approval remains required for out-of-scope capital, launch, customer contact
+or external work. No launch, payments, deployment or customer contact here.
 Return strict JSON with exactly recommendation,assessment,evidence_gaps,
 next_internal_task; each text field remains 40..500 characters. Use newline-separated
 Label: value lines within the text fields (no extra JSON fields).
@@ -46,7 +53,11 @@ must start Desk research: and describe only comparison/synthesis of existing
 artifacts or public descriptions. Do not request external validation as desk work.
 For MVP include Customer:, Problem:, Validation: lines in assessment; Validation
 describes plausible low-risk bounded validation, not a claim it already succeeded.
-next_internal_task starts Owner proposal: and proposes separately authorized work.
+For READY_FOR_OWNER_DISCUSSION, next_internal_task starts Owner proposal:.
+For PROCEED_TO_MVP, next_internal_task starts Internal MVP: and identifies the
+next already-authorized internal task, or the missing execution scope/transition
+blocking it. Do not require a new Owner checkpoint for work already authorized.
+Never assert that this disposition itself grants execution or additional quota.
 For REJECT_OR_DEFER include Counterevidence:, Blocker:, or No credible next step:
 in assessment, explaining the cited evidence's bearing on the disposition.
 next_internal_task starts Disposition: and records why to defer/reject.
@@ -112,7 +123,13 @@ def validate_recommendation(result, number, artifacts, objectives):
     elif recommendation in ('READY_FOR_OWNER_DISCUSSION', 'PROCEED_TO_MVP'):
         for label in ('Customer', 'Problem', 'Validation'):
             line('assessment', label)
-        line('next_internal_task', 'Owner proposal')
+        if recommendation == 'READY_FOR_OWNER_DISCUSSION':
+            line('next_internal_task', 'Owner proposal')
+        else:
+            task = line('next_internal_task', 'Internal MVP')
+            if re.search(r'\b(contact|interview|survey|email|pay|purchase|deploy|launch|round 4)\b',
+                         task, re.IGNORECASE):
+                raise ValueError('CEO internal MVP task required')
     else:
         labels = ('Counterevidence', 'Blocker', 'No credible next step')
         if not any(re.search(r'^' + label + r': ', result['assessment'], re.MULTILINE)

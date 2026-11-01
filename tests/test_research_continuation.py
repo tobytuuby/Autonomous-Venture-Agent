@@ -185,15 +185,37 @@ class ResearchContinuationTests(unittest.TestCase):
         self.act("hold")
         with self.assertRaises(ValueError):
             self.apply(self.continuation())
-        signed=self.recommendation("PROCEED_TO_MVP")
+        signed=self.recommendation("PROCEED_TO_MVP", objective=
+            "Internal MVP: Blocked because current signed scope covers research only.")
         payload=dict(round=3,objective=signed["packet"]["assessment"]["next_internal_task"],
             unanswered_question=signed["packet"]["assessment"]["evidence_gaps"],review=signed)
         state=self.act("research_disposition",payload=payload)
         self.assertEqual(state["state"],"OWNER_REVIEW")
         self.assertIsNone(state["owner_receipt"])
         self.assertFalse(state["external_actions_allowed"])
+        # A positive signed disposition records the CEO decision; it cannot
+        # turn INTERNAL_RESEARCH_ONLY into MVP execution scope or another round.
+        self.assertEqual(state["research_disposition"],signed)
+        self.assertEqual(self.fx.approval["scope"],"INTERNAL_RESEARCH_ONLY")
+        before=canonical(state)
+        for action, actor, task in (
+                ("delegate","service-manager",dict(reason="Continue internal MVP")),
+                ("revise","service-ceo",dict(scope=state["scope"],
+                    version=state["version"]+1,reason="Continue internal MVP")),
+                ("research_disposition","service-ceo",payload)):
+            with self.subTest(action=action), self.assertRaises(ValueError):
+                self.act(action,actor,payload=task)
+            self.assertEqual(canonical(self.state()),before)
         with self.assertRaises(ValueError):
             self.apply(self.continuation())
+        with self.assertRaises(ValueError):
+            self.reserve(self.payload("mvp-is-not-research-permission"))
+        reopened=VentureWorkflow(self.gate.directory/"workflow.sqlite",actors=self.gate.actors)
+        try:
+            reopened.verify()
+            self.assertEqual(canonical(reopened.read(self.flow)),before)
+        finally:
+            reopened.close()
 
     def test_legacy_round_one_and_round_limits_do_not_replenish(self):
         # Historical R1 row has no new accounting metadata; it stays R1.

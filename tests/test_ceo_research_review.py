@@ -19,7 +19,9 @@ def assessment(quote, recommendation='NEEDS_MORE_RESEARCH'):
     elif recommendation in ('READY_FOR_OWNER_DISCUSSION', 'PROCEED_TO_MVP'):
         text += ('\nCustomer: Small studio operators.\nProblem: Missed restock decisions.'
                  '\nValidation: Low-risk internal prototype with synthetic inventory.')
-        task = 'Owner proposal: Seek separately authorized internal prototype scope.'
+        task = ('Internal MVP: Blocked because current signed scope covers research only.'
+                if recommendation == 'PROCEED_TO_MVP' else
+                'Owner proposal: Seek separately authorized internal prototype scope.')
     else:
         text += '\nBlocker: The cited evidence prevents safe validation of this premise.'
         task = 'Disposition: Defer this premise pending resolution of the cited blocker.'
@@ -209,7 +211,7 @@ class DecisionCriteriaTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'fields'):
             self.validate(result)
 
-    def test_mvp_needs_customer_problem_bounded_validation_and_owner_proposal(self):
+    def test_mvp_needs_customer_problem_and_bounded_validation(self):
         for label in ('Customer:', 'Problem:', 'Validation:'):
             result=assessment(self.quote,'READY_FOR_OWNER_DISCUSSION')
             result['assessment']=result['assessment'].replace(label,'Missing:')
@@ -219,6 +221,39 @@ class DecisionCriteriaTests(unittest.TestCase):
         result['next_internal_task']='Deploy the MVP immediately without further authorization.'
         with self.assertRaises(ValueError):
             self.validate(result)
+
+    def test_proceed_is_ceo_disposition_without_new_owner_checkpoint(self):
+        result=assessment(self.quote,'PROCEED_TO_MVP')
+        for task in (
+                'Internal MVP: Continue the internal prototype within existing signed MVP scope.',
+                'Internal MVP: Blocked because current signed scope covers research only.',
+                'Internal MVP: Blocked because no safe internal workflow transition exists.'):
+            result['next_internal_task']=task
+            self.validate(result,3)
+        result['next_internal_task']='Owner proposal: Seek separately authorized internal prototype scope.'
+        with self.assertRaisesRegex(ValueError,'Internal MVP'):
+            self.validate(result,3)
+        self.assertIn('without a new Owner checkpoint',SYSTEM)
+        self.assertIn('A signed disposition is not a grant of MVP execution scope',SYSTEM)
+        self.assertIn('never reuse or replenish exhausted research quotas',SYSTEM)
+        self.assertIn('Owner approval remains required for out-of-scope capital',SYSTEM)
+
+    def test_proceed_internal_label_cannot_request_external_work(self):
+        for task in (
+                'Launch the product with the remaining research allowance.',
+                'Contact customers to validate the internal prototype.',
+                'Pay for the prototype using the research reservation.',
+                'Deploy the prototype to collect customer feedback.',
+                'Compare synthetic fixtures then request round 4.'):
+            result=assessment(self.quote,'PROCEED_TO_MVP')
+            result['next_internal_task']='Internal MVP: '+task
+            with self.subTest(task=task), self.assertRaises(ValueError):
+                self.validate(result,3)
+        for label in ('Customer:', 'Problem:', 'Validation:'):
+            result=assessment(self.quote,'PROCEED_TO_MVP')
+            result['assessment']=result['assessment'].replace(label,'Missing:')
+            with self.subTest(label=label), self.assertRaises(ValueError):
+                self.validate(result,3)
 
     def test_disposition_needs_evidence_based_reason_not_just_exhaustion(self):
         self.quote='Required validation would disclose sensitive customer records.'
