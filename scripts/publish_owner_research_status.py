@@ -117,8 +117,8 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
             if (state["state"] == "OWNER_REVIEW" and (state.get("research_disposition") or {}).get("packet", {}).get(
                     "assessment", {}).get("recommendation") == "PROCEED_TO_MVP"):
                 item["research_status"] = "BLOCKED_MVP_HANDOFF"
-                item["blocking_reason"] = (state.get("mvp_handoff") or {}).get(
-                    "required_action", "No verified internal MVP execution scope, resource limits "
+                item["blocking_reason"] = (
+                    "No verified internal MVP execution scope, resource limits "
                     "and safe broker path available; research reservations are not MVP authority.")
             if state['state'] in ('HOLD','SECURITY_HOLD','BUDGET_EXHAUSTED','CEO_REDIRECTION'):
                 reason=state.get('last_command',{}).get('payload',{}).get('reason')

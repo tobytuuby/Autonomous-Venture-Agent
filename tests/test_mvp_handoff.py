@@ -8,7 +8,7 @@ from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
 from agents.ceo.escalation_inbox import canonical, digest
 from agents.ceo.venture_workflow import VentureWorkflow, hashed, research_rounds
-from agents.ceo.hierarchy_research_daemon import record_mvp_blocker, poll
+from agents.ceo.hierarchy_research_daemon import poll
 from tests import test_research_continuation as fixtures
 from tests.test_owner_research_progress import publisher
 
@@ -18,6 +18,7 @@ class MvpHandoffTests(unittest.TestCase):
         self.fx = fixtures.ResearchContinuationTests(methodName="runTest")
         self.fx.setUp()
         self.addCleanup(self.fx.doCleanups)
+        self.fx.keys["service-worker"] = self.fx.keys["worker"]
 
     def disposition(self, recommendation="PROCEED_TO_MVP"):
         fx = self.fx
@@ -50,72 +51,91 @@ class MvpHandoffTests(unittest.TestCase):
             apply=lambda command, signature: fx.gate.apply(
                 dict(command=command, signature=signature), role="quota-ceo"))
 
-    def test_authorized_ceo_records_blocker_without_approving_execution(self):
-        before = self.disposition()
+    def historical_blocker(self):
+        """Seed a pre-cleanup signed record, without using current admission."""
+        before = self.fx.state()
         cmd = self.blocker()
-        after = self.fx.apply(cmd)
-        self.assertEqual(after["state"], "OWNER_REVIEW")
-        self.assertEqual(after["research_disposition"], before["research_disposition"])
-        self.assertEqual(after["research_rounds"], before["research_rounds"])
-        for field in ("scope", "scope_hash", "version", "used_units", "decomposition", "evidence"):
-            self.assertEqual(after.get(field), before.get(field))
-        record = after["mvp_handoff"]
-        self.assertEqual(record["proposal_digest"], self.fx.fx.fingerprint)
-        self.assertEqual(record["source_snapshot_hash"], hashed(before))
-        self.assertEqual(record["disposition_hash"], hashed(before["research_disposition"]))
-        self.assertFalse(record["execution_authorized"])
-        self.assertEqual(self.fx.apply(cmd), after)
+        item = json.loads(canonical(before))
+        item["mvp_handoff"] = dict(
+            status="BLOCKED", proposal_digest=self.fx.fx.fingerprint,
+            disposition_hash=hashed(before["research_disposition"]),
+            source_snapshot_hash=hashed(before), scope_hash=before["scope_hash"],
+            research_round=3, code="MVP_EXECUTION_AUTHORITY_UNAVAILABLE",
+            required_action="Resolve existing proposal-bound internal MVP scope, resource limits "
+                            "and a safe execution path at the broker. Research approval and "
+                            "reservations grant no MVP allowance. Do not repeat approval for "
+                            "already-authorized work; do not create scope or grants.",
+            execution_authorized=False)
+        item["revision"] += 1
+        signature = self.fx.keys["service-ceo"].sign(canonical(cmd).encode()).hex()
+        journal = VentureWorkflow(self.fx.gate.directory / "workflow.sqlite", actors=self.fx.gate.actors)
+        try:
+            with journal.transaction():
+                journal._record(item, cmd, signature)
+        finally:
+            journal.close()
+        return cmd, signature, item
+
+    def test_signed_historical_blocker_verifies_and_replays_after_restart(self):
+        before = self.disposition()
+        cmd, signature, after = self.historical_blocker()
         reopened = VentureWorkflow(self.fx.gate.directory / "workflow.sqlite", actors=self.fx.gate.actors)
         try:
-            self.assertEqual(reopened.read(self.fx.flow), after)
             reopened.verify()
+            self.assertEqual(reopened.read(self.fx.flow), after)
+            self.assertEqual(reopened.apply(cmd, signature), after)
+            with self.assertRaises(InvalidSignature):
+                reopened.apply(cmd, "00" * 64)
+            changed = self.blocker()
+            with self.assertRaisesRegex(ValueError, "replay-only"):
+                reopened.apply(changed, self.fx.keys["service-ceo"].sign(canonical(changed).encode()).hex())
+            self.assertEqual(reopened.read(self.fx.flow), after)
         finally:
             reopened.close()
-        with self.assertRaises(ValueError):
-            self.fx.apply(self.blocker())
-        for field in ("operational_authority", "external_actions_allowed", "money_released", "execution_performed"):
-            self.assertFalse(after[field])
+        self.assertEqual(after["research_disposition"], before["research_disposition"])
+        self.assertEqual(after["state"], "OWNER_REVIEW")
+        self.assertFalse(after["mvp_handoff"]["execution_authorized"])
 
-    def test_role_signature_scope_and_approval_denials_are_atomic(self):
-        self.disposition()
-        before = self.fx.state()
-        cmd = self.blocker()
-        manager = dict(cmd, actor_id="service-manager", role="manager")
-        with self.assertRaises(ValueError):
-            self.fx.apply(manager)
-        changed = dict(cmd, payload=dict(execution_authorized=True))
-        with self.assertRaises(ValueError):
-            self.fx.apply(changed)
-        signature = self.fx.keys["service-ceo"].sign(canonical(cmd).encode()).hex()
-        with self.assertRaises(InvalidSignature):
-            self.fx.gate.apply(dict(command=dict(cmd, request_id="tampered"), signature=signature), role="quota-ceo")
-        self.fx.fx.snapshot["records"][0]["decision"] = "REJECT"
-        self.fx.fx.write_snapshot()
-        with self.assertRaisesRegex(ValueError, "owner approval"):
-            self.fx.apply(cmd)
-        self.assertEqual(self.fx.state(), before)
+    def test_new_blockers_denied_at_gateway_and_journal_for_all_roles(self):
+        for positive in (False, True):
+            if positive:
+                self.disposition()
+            before = self.fx.state()
+            for actor in ("service-ceo", "service-manager", "worker-a"):
+                cmd = self.blocker()
+                cmd.update(actor_id=actor, role=self.fx.gate.actors[actor][0])
+                signature = self.fx.keys[actor].sign(canonical(cmd).encode()).hex()
+                with self.subTest(positive=positive, actor=actor):
+                    with self.assertRaisesRegex(ValueError, "role transition denied"):
+                        self.fx.apply(cmd)
+                    journal = VentureWorkflow(self.fx.gate.directory / "workflow.sqlite", actors=self.fx.gate.actors)
+                    try:
+                        with self.assertRaisesRegex(ValueError, "replay-only"):
+                            journal.apply(cmd, signature)
+                    finally:
+                        journal.close()
+            self.assertEqual(self.fx.state(), before)
 
-    def test_no_positive_disposition_no_blocker_and_terminal_history_unchanged(self):
-        before = self.fx.state()
-        with self.assertRaises(ValueError):
-            self.fx.apply(self.blocker())
-        self.assertEqual(self.fx.state(), before)
-        terminal = self.disposition("REJECT_OR_DEFER")
-        self.assertEqual(record_mvp_blocker(self.config(), terminal, self.client()), terminal)
-        with self.assertRaises(ValueError):
-            self.fx.apply(self.blocker())
-        self.assertEqual(self.fx.state(), terminal)
-
-    def test_blocker_cannot_start_workers_fourth_round_or_reset_correction(self):
-        self.disposition()
-        after = self.fx.apply(self.blocker())
+    def test_disposition_without_blocker_denies_workers_finance_and_fourth_round(self):
+        after = self.disposition()
         for action, actor, payload in (
                 ("continue_research", "service-ceo", self.fx.continuation()["payload"]),
                 ("delegate", "service-manager", dict(reason="MVP")),
                 ("revise", "service-ceo", dict(scope=after["scope"], version=2, reason="MVP")),
-                ("propose_decomposition", "service-manager", dict(assignments=[]))):
-            with self.subTest(action=action), self.assertRaises(ValueError):
-                self.fx.act(action, actor, payload)
+                ("propose_decomposition", "service-manager", dict(assignments=[])),
+                ("submit", "service-worker", dict(units=1)),
+                ("manager_approve", "service-manager", dict(reason="MVP")),
+                ("finance_request", "service-ceo", dict(amount_cents=1))):
+            with self.subTest(action=action):
+                with self.assertRaises(ValueError):
+                    self.fx.act(action, actor, payload)
+                cmd = self.fx.command(action, actor, payload)
+                journal = VentureWorkflow(self.fx.gate.directory / "workflow.sqlite", actors=self.fx.gate.actors)
+                try:
+                    with self.assertRaisesRegex(ValueError, "disposition immutable"):
+                        journal.apply(cmd, self.fx.keys[actor].sign(canonical(cmd).encode()).hex())
+                finally:
+                    journal.close()
         with self.assertRaises(ValueError):
             self.fx.reserve(self.fx.payload("no-mvp-grant"))
         self.fx.act("hold")
@@ -131,61 +151,57 @@ class MvpHandoffTests(unittest.TestCase):
         with sqlite3.connect(self.fx.resources) as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM reservations").fetchone()[0], 0)
 
-    def test_daemon_checkpoint_retry_restart_and_poll_need_no_provider(self):
-        before = self.disposition()
-        cfg, client = self.config(), self.client()
-        apply = client.apply
-        seen = []
-        def lost_response(cmd, sig):
-            seen.append((cmd, sig))
-            apply(cmd, sig)
-            raise OSError("response lost after commit")
-        client.apply = lost_response
-        with self.assertRaises(OSError):
-            record_mvp_blocker(cfg, before, client)
-        def retry(cmd, sig):
-            self.assertEqual((cmd, sig), seen[0])
-            return apply(cmd, sig)
-        client.apply = retry
-        after = record_mvp_blocker(cfg, before, client)
-        self.assertEqual(record_mvp_blocker(cfg, after, client), after)
-        # A restarted daemon reads the recorded blocker and does no model, role or session work.
-        config = dict(cfg, endpoint="unused", ca_file="unused", client_cert="unused", client_key="unused")
-        with patch("agents.ceo.hierarchy_research_daemon.HierarchyClient", return_value=client), \
-             patch("agents.ceo.hierarchy_research_daemon.role_tick", side_effect=AssertionError("role invoked")), \
-             patch("agents.ceo.ceo_research_review.review", side_effect=AssertionError("model invoked")):
-            poll(config, once=True, worker_limit_override=4)
-        self.assertEqual(self.fx.state(), after)
-
-    def test_poll_signs_blocker_on_positive_disposition_without_model_or_role_work(self):
-        self.disposition()
+    def assert_poll_skips(self, before):
         cfg = dict(self.config(), endpoint="unused", ca_file="unused",
                    client_cert="unused", client_key="unused")
-        with patch("agents.ceo.hierarchy_research_daemon.HierarchyClient", return_value=self.client()), \
-             patch("agents.ceo.hierarchy_research_daemon.role_tick", side_effect=AssertionError("role invoked")), \
-             patch("agents.ceo.ceo_research_review.review", side_effect=AssertionError("model invoked")):
+        cfg["signing_key"] = "unused-signing-key"
+        client = self.client()
+        with patch.object(client, "apply") as dispatch, \
+             patch("agents.ceo.hierarchy_research_daemon.HierarchyClient", return_value=client), \
+             patch("agents.ceo.hierarchy_research_daemon.role_tick") as role, \
+             patch("agents.ceo.hierarchy_research_daemon.allowed_config") as session, \
+             patch("agents.ceo.ceo_research_review.review") as model:
             poll(cfg, once=True, worker_limit_override=4)
-        state = self.fx.state()
-        self.assertEqual(state["mvp_handoff"]["status"], "BLOCKED")
-        self.assertEqual(state["last_command"]["action"], "record_mvp_blocker")
+            for callback in (dispatch, role, session, model):
+                callback.assert_not_called()
+        self.assertEqual(self.fx.state(), before)
+        self.assertFalse((self.fx.fx.base / "daemon").exists())
 
-    def test_owner_publication_surfaces_blocker_without_repeat_approval(self):
+    def test_poll_skips_positive_disposition_without_signing_dispatch_or_checkpoint(self):
+        before = self.disposition()
+        self.assertNotIn("mvp_handoff", before)
+        self.assert_poll_skips(before)
+
+    def test_poll_skips_historical_blocker_without_dispatch(self):
         self.disposition()
-        state = self.fx.apply(self.blocker())
+        _, _, before = self.historical_blocker()
+        self.assert_poll_skips(before)
+
+    def test_poll_preserves_terminal_rejection(self):
+        before = self.disposition("REJECT_OR_DEFER")
+        self.assert_poll_skips(before)
+
+    def test_owner_status_comes_from_signed_disposition_with_or_without_legacy_blocker(self):
+        state = self.disposition()
         client = self.client()
         client.load = lambda ref: self.fx.gate.artifact(ref, role="quota-ceo").encode()
-        item = publisher.collect({}, self.fx.fx.snapshot, client=client,
-                                 resource_db=self.fx.resources)["records"][0]
-        self.assertEqual(item["research_status"], "BLOCKED_MVP_HANDOFF")
-        self.assertEqual(item["blocking_reason"], state["mvp_handoff"]["required_action"])
-        self.assertFalse(item["continuation"]["owner_action_required"])
-        self.assertIsNone(item["financials"]["authority_usd"])
-        self.assertEqual(item["worker_calls_used"], 0)
-        # Safety controls retain their own visible status after a positive decision.
+        def collect():
+            return publisher.collect({}, self.fx.fx.snapshot, client=client,
+                                     resource_db=self.fx.resources)["records"][0]
+        before = collect()
+        self.assertEqual(before["research_status"], "BLOCKED_MVP_HANDOFF")
+        self.assertEqual(before["signed_ceo_recommendation"], state["research_disposition"])
+        self.assertFalse(before["continuation"]["owner_action_required"])
+        self.assertIsNone(before["financials"]["authority_usd"])
+        self.assertEqual(before["worker_calls_used"], 0)
+        self.historical_blocker()
+        after = collect()
+        for field in ("research_status", "blocking_reason", "signed_ceo_recommendation", "continuation"):
+            self.assertEqual(after[field], before[field])
+        self.assertNotIn("mvp_handoff", after)
+        self.assertNotEqual(after["blocking_reason"], self.fx.state()["mvp_handoff"]["required_action"])
         self.fx.act("hold")
-        item = publisher.collect({}, self.fx.fx.snapshot, client=client,
-                                 resource_db=self.fx.resources)["records"][0]
-        self.assertEqual(item["research_status"], "BLOCKED")
+        self.assertEqual(collect()["research_status"], "BLOCKED")
 
     def test_historical_post_disposition_correction_reads_but_cannot_execute(self):
         self.disposition()
@@ -228,7 +244,7 @@ class MvpHandoffTests(unittest.TestCase):
 
     def test_recomputed_hashes_cannot_forge_blocker(self):
         self.disposition()
-        self.fx.apply(self.blocker())
+        self.historical_blocker()
         path = self.fx.gate.directory / "workflow.sqlite"
         with sqlite3.connect(path) as db:
             seq, previous, raw = db.execute(

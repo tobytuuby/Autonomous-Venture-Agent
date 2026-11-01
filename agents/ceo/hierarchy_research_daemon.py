@@ -158,48 +158,6 @@ def direct_research(config, snapshot, client, signed):
     return client.apply(command, key.sign(canonical(command).encode()).hex())
 
 
-def record_mvp_blocker(config, snapshot, client):
-    """Persist and dispatch one exact signed denial; never invoke a model or Worker."""
-    signed = snapshot.get("research_disposition")
-    if (config["role"] != "ceo" or snapshot["state"] != "OWNER_REVIEW"
-            or not signed or snapshot.get("mvp_handoff") is not None
-            or signed["packet"]["assessment"]["recommendation"] != "PROCEED_TO_MVP"):
-        return snapshot
-    cfg = allowed_config(config, snapshot["id"], snapshot)
-    from agents.ceo.scheduled_exercise import write_json
-    from agents.ceo.control_plane import read_json
-    source = hashed(snapshot)
-    path = Path(cfg["state_dir"]) / ("mvp-blocker-" + source + ".json")
-    fields = dict(workflow_id=snapshot["id"], request_id="mvp-blocker-" + source[:48],
-        actor_id="service-ceo", role="ceo", origin="control_plane",
-        action="record_mvp_blocker", revision=snapshot["revision"], previous_hash=source,
-        version=snapshot["version"], scope_hash=snapshot["scope_hash"],
-        evidence=snapshot["last_command"]["evidence"], payload={}, live=False)
-    if config["actor_id"] != fields["actor_id"]:
-        raise ValueError("pinned CEO blocker signer required")
-    if path.is_symlink():
-        raise ValueError("MVP blocker checkpoint alias denied")
-    if path.exists():
-        saved = read_json(path)
-    else:
-        now = datetime.now(timezone.utc)
-        command = dict(fields, issued_at=now.isoformat(),
-                       expires_at=(now+timedelta(minutes=5)).isoformat())
-        key = Ed25519PrivateKey.from_private_bytes(Path(config["signing_key"]).read_bytes())
-        saved = dict(command=command, signature=key.sign(canonical(command).encode()).hex())
-        write_json(path, saved, exclusive=True)
-    if (set(saved) != {"command", "signature"}
-            or set(saved["command"]) != set(fields) | {"issued_at", "expires_at"}
-            or any(saved["command"].get(k) != v for k, v in fields.items())):
-        raise ValueError("MVP blocker checkpoint binding denied")
-    result = client.apply(saved["command"], saved["signature"])
-    if result.get("mvp_handoff", {}).get("status") != "BLOCKED":
-        raise ValueError("MVP blocker not committed")
-    logging.warning("Internal MVP handoff blocked for %s: %s",
-                    snapshot["id"], result["mvp_handoff"]["required_action"])
-    return result
-
-
 def poll(config, *, once=False, interval=12,worker_limit_override=None):
     if config["role"] not in STATES:
         raise ValueError("unsupported research role")
@@ -229,8 +187,6 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                 if snapshot is None or snapshot["state"] != item["state"]:
                     continue
                 if snapshot.get("research_disposition") is not None:
-                    if config["role"] == "ceo":
-                        record_mvp_blocker(config,snapshot,client)
                     continue
                 if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
                     hold_exhausted_research(client,config,snapshot,worker_limit_override)

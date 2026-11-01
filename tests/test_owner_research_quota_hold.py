@@ -1,5 +1,7 @@
 import hashlib
 import json
+import sqlite3
+from unittest.mock import patch
 import tempfile
 import unittest
 from pathlib import Path
@@ -29,7 +31,8 @@ class ResearchQuotaHoldTests(unittest.TestCase):
             evidence=canonical(dict(role='worker',action='submit',scope_hash='scope')).encode()
             sha=hashlib.sha256(evidence).hexdigest()
             ref='preparation-'+sha
-            flow='research-'+'a'*24
+            fingerprint='a'*64
+            flow='research-'+fingerprint[:24]
             snapshot=dict(id=flow,venture_id=flow,state='WORKER_PENDING',
                 mode='PREPARATION_ONLY',operational_authority=False,
                 external_actions_allowed=False,execution_performed=False,
@@ -37,9 +40,22 @@ class ResearchQuotaHoldTests(unittest.TestCase):
                 worker_id='service-worker',budget_units=5,seed_cents=1,
                 tasks=['Internal research desk assessment']),scope_hash='scope',
                 handoff=dict(item_id=flow,review=dict(item_id=flow)),
-                evidence={ref:sha},last_command=dict(evidence=[dict(ref=ref,sha256=sha)]),
+                evidence={ref:sha, "research-approval-"+fingerprint[:24]:fingerprint},last_command=dict(evidence=[dict(ref=ref,sha256=sha)]),
                 version=1,revision=3)
             client=Client(evidence)
+            client.read=lambda workflow_id: snapshot if workflow_id==flow else None
+            with sqlite3.connect(root/'resources.sqlite') as db:
+                db.execute("CREATE TABLE worker_reservations(identity TEXT PRIMARY KEY,request TEXT NOT NULL)")
+            # Use a local retained reservation ledger, never the installed authority store.
+            authority_patch=patch('agents.ceo.service_identity.AUTHORITY_DIRECTORY',root)
+            authority_patch.start()
+            self.addCleanup(authority_patch.stop)
+            self.assertFalse(hold_exhausted_research(client,config=dict(role='ceo',actor_id='service-ceo'),
+                                                     snapshot=snapshot,worker_limit=1))
+            self.assertIsNone(client.command)
+            with sqlite3.connect(root/'resources.sqlite') as db:
+                db.execute("INSERT INTO worker_reservations VALUES(?,?)",
+                           ('fixture',canonical(dict(workflow_id=flow))))
             config=dict(role='ceo',actor_id='service-ceo',
                 signing_key=str(signer),state_dir=str(root/'run5'),
                 context=dict(session_id='fixture',venture_id='fixture',ceo_id='service-ceo',manager_id='service-manager',objective='fixture',rounds=2))

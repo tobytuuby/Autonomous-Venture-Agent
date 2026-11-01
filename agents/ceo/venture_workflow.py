@@ -319,7 +319,7 @@ class VentureWorkflow(EscalationInbox):
                     state="MANAGER_PENDING")
 
     def _mvp_blocker_transition(self, prior, command):
-        """Record a denial only; no execution authority or allowance is invented."""
+        """Reconstruct historical signed blockers only; never admit new records."""
         if command["action"] != "record_mvp_blocker":
             return None
         exact(command["payload"], ())
@@ -554,12 +554,14 @@ class VentureWorkflow(EscalationInbox):
                     or command["scope_hash"] != item["scope_hash"]):
                 raise ValueError("stale version scope or state")
             action, role, payload = command["action"], command["role"], command["payload"]
+            if action == "record_mvp_blocker":
+                raise ValueError("historical MVP blocker is replay-only")
             if not self._assigned_actor(item, command):
                 raise ValueError("assigned actor required")
             if item["state"] == "TERMINATED":
                 raise ValueError("terminated")
             if (item.get("research_disposition") is not None
-                    and action not in {"record_mvp_blocker", "hold", "security_hold", "terminate"}):
+                    and action not in {"hold", "security_hold", "terminate"}):
                 raise ValueError("research disposition immutable; no execution authority")
             # Admission is stricter than historical reconstruction: already signed
             # exhausted improvement/re-decomposition records remain immutable and
@@ -569,11 +571,7 @@ class VentureWorkflow(EscalationInbox):
                 raise ValueError("budget exhausted: Worker cycle restart denied")
             multi = self._decomposition_transition(item, command, signature)
             research = self._research_transition(item, command)
-            blocker = self._mvp_blocker_transition(item, command)
-            if blocker is not None:
-                item.update(blocker)
-                target = blocker["state"]
-            elif research is not None:
+            if research is not None:
                 item.update(research)
                 target = research["state"]
             elif multi is not None:
