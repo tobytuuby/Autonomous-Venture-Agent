@@ -84,3 +84,8 @@ and the /49 denominator are unchanged; no ADV certification was run.
 Status: prompt/validator correction implemented for review. Autonomous internal
 MVP continuation remains blocked in this path. No commit, push, deployment, real
 CEO attachment, external action or capital action was performed.
+
+## Deployment verification (2026-11-01 UTC)
+
+The correction was committed and pushed on `main` as `648c1e9`.
+The production CEO review module at `/usr/local/lib/venture-ceo-level2c/agents/ceo/ceo_research_review.py` was replaced using the existing installation path after an on-VM backup (`.pre-boundary-20261101`). Its deployed SHA-256 matches the committed source: `3245054a3bb93b3d844a7cdb6f520e50546e753640bad3766c75f43bdbc89a13`. `venture-owner-research-ceo.service` restarted and reported active. No genuine fresh signed CEO MVP execution or Owner display was witnessed. Status: correction deployed; end-to-end MVP handoff acceptance blocked by absent current signed MVP execution authority and transition. Task03 full completion remains open.
