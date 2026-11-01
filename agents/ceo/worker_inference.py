@@ -78,12 +78,47 @@ def authorized(payload, *, actor, hierarchy):
     return policy, state, auth
 
 
+def research_charges(db, resolve):
+    """Read retained charges; pre-Task02 reservations are always round one."""
+    from agents.ceo.venture_workflow import research_identity
+    exists = db.execute("SELECT 1 FROM sqlite_master WHERE name='worker_research_charges'").fetchone()
+    saved = dict((r[0], (r[1], r[2])) for r in db.execute(
+        "SELECT identity,proposal_digest,round FROM worker_research_charges")) if exists else {}
+    charges = {}
+    resolved = {}
+    for key, wire in db.execute("SELECT identity,request FROM worker_reservations"):
+        reservation = json.loads(wire)
+        flow = reservation.get("workflow_id") if type(reservation) is dict else None
+        if type(flow) is not str or not flow:
+            raise ValueError("unverifiable prior worker budget")
+        if not flow.startswith("research-"):
+            continue
+        if flow not in resolved:
+            state = resolve(flow)
+            if state is None:
+                raise ValueError("unattributable historical research charge")
+            resolved[flow] = research_identity(state)
+        fingerprint = resolved[flow]
+        binding = saved.get(key, (fingerprint, 1))
+        if binding[0] != fingerprint or type(binding[1]) is not int or not 1 <= binding[1] <= 3:
+            raise ValueError("invalid research charge binding")
+        charges[key] = binding
+    return charges
+
+
+def budget_key(payload, state):
+    from agents.ceo.venture_workflow import research_rounds
+    fields = dict(domain="worker-budget-key-v1", workflow_id=payload["workflow_id"],
+                  assignment_id=payload["assignment_id"], identity=payload["identity"])
+    rounds = research_rounds(state)
+    if len(rounds) > 1:
+        fields["research_round"] = len(rounds)
+    return digest(canonical(fields).encode())
+
+
 def reserve_worker(payload, *, actor, hierarchy):
     policy, state, auth = authorized(payload, actor=actor, hierarchy=hierarchy)
-    key = digest(canonical(dict(domain="worker-budget-key-v1",
-                               workflow_id=payload["workflow_id"],
-                               assignment_id=payload["assignment_id"],
-                               identity=payload["identity"])).encode())
+    key = budget_key(payload, state)
     path = AUTHORITY_DIRECTORY / "resources.sqlite"
     db = sqlite3.connect(path, isolation_level=None, timeout=5)
     try:
@@ -99,18 +134,27 @@ def reserve_worker(payload, *, actor, hierarchy):
             db.execute("COMMIT")
             return dict(reserved=True, duplicate=True, identity=key)
         # Parse exact fields rather than substring/LIKE matching caller identifiers.
-        reservations = [json.loads(row[0]) for row in db.execute(
-            "SELECT request FROM worker_reservations")]
+        from agents.ceo.venture_workflow import research_identity, research_rounds
+        fingerprint = research_identity(state)
+        round_number = len(research_rounds(state))
+        charges = research_charges(db, hierarchy.state) if fingerprint else {}
+        if fingerprint and sum(p == fingerprint for p, r in charges.values()) >= 12:
+            raise ValueError("venture cumulative Worker quota exhausted")
+        reservations = [(row[0], json.loads(row[1])) for row in db.execute(
+            "SELECT identity,request FROM worker_reservations")]
         # The signed workflow is the accounting scope, across actors, policy
         # changes and epochs. Legacy rows without assignments still consume it.
         shared = []
         ceiling = policy["maximum_requests"]
-        for reservation in reservations:
+        for reservation_key, reservation in reservations:
             if (type(reservation) is not dict
                     or type(reservation.get("workflow_id")) is not str
                     or not reservation["workflow_id"]):
                 raise ValueError("unverifiable prior worker budget")
-            if reservation["workflow_id"] != payload["workflow_id"]:
+            if fingerprint:
+                if charges.get(reservation_key) != (fingerprint, round_number):
+                    continue
+            elif reservation["workflow_id"] != payload["workflow_id"]:
                 continue
             historical = reservation.get("policy")
             maximum = historical.get("maximum_requests") if type(historical) is dict else None
@@ -127,6 +171,15 @@ def reserve_worker(payload, *, actor, hierarchy):
             raise ValueError("shared workflow quota exhausted")
         auth._reserve_daily(db, key, policy["maximum_output_tokens"])
         db.execute("INSERT INTO worker_reservations VALUES(?,?)", (key,wire))
+        if fingerprint:
+            db.execute("""CREATE TABLE IF NOT EXISTS worker_research_charges(
+                identity TEXT PRIMARY KEY, proposal_digest TEXT NOT NULL,
+                round INTEGER NOT NULL CHECK(round BETWEEN 1 AND 3))""")
+            for old_key, (proposal, number) in charges.items():
+                db.execute("INSERT OR IGNORE INTO worker_research_charges VALUES(?,?,?)",
+                           (old_key, proposal, number))
+            db.execute("INSERT INTO worker_research_charges VALUES(?,?,?)",
+                       (key, fingerprint, round_number))
         db.execute("COMMIT")
     except BaseException:
         if db.in_transaction:
@@ -156,10 +209,7 @@ def execute_worker(payload, *, actor, hierarchy, provider):
             or digest(canonical(request).encode()) != res["request_sha256"]
             or provider.model != policy["model"] or provider.endpoint != policy["endpoint"]):
         raise ValueError("unbound Worker inference")
-    key = digest(canonical(dict(domain="worker-budget-key-v1",
-                               workflow_id=res["workflow_id"],
-                               assignment_id=res["assignment_id"],
-                               identity=res["identity"])).encode())
+    key = budget_key(res, state)
     dbpath = AUTHORITY_DIRECTORY / "resources.sqlite"
     db=sqlite3.connect(dbpath,isolation_level=None,timeout=5)
     try:

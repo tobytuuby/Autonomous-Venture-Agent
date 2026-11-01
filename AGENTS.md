@@ -14,7 +14,8 @@ This file is an operational index. Detailed policy requirements remain in the ca
 
 - `docs/operational-viability-project-plan-v2.4.md` — current owner-directed operational viability target, OR-0 full FOSS software readiness gate, fixed agent hierarchy, and mandatory GitHub/Claude review evidence. This does not itself authorize live operations. Reconcile conflicting older approval policy through a separately versioned policy change before enabling internal execution.
 
-- `docs/owner-venture-approval-policy-v1.0.md` — binding owner discussion and venture approval gate; supersedes prior CEO autonomous approval authority.
+- `docs/bounded-internal-research-continuation-policy-v1.0.md` — Task02 bounded internal research exception for already Owner-approved proposals; three signed rounds, four Worker calls each and twelve cumulatively. No repeated Owner review within that exact approval. No external, launch or capital authority. Supersedes conflicting internal-research wording only.
+- `docs/owner-venture-approval-policy-v1.0.md` — binding owner discussion and external venture approval gate; historical wording for internal research is narrowed by the bounded continuation policy above.
 - `project-phase-plan-v2.3.md` — current roadmap amendment; prior phase acceptance unchanged.
 - `docs/venture-operating-policy-v1.1-DRAFT.md`, `docs/venture-to-first-profit-plan-v1.4-DRAFT.md`, `docs/venture-finance-control-and-transaction-visibility-v1.2-DRAFT.md`, and `docs/core-synthetic-orchestration-plan-v1.1.md` — current core policy and plans.
 - Every new venture requires human owner discussion and durable proposal/version/scope approval before greenlight, funding, launch or operational manager execution. Research/proposals may precede approval; managers may autonomously delegate afterward within bounds. Live authority checks remain denied. Venture #1 is an unapproved pilot.
@@ -49,7 +50,7 @@ Before changing an existing implementation file, inspect its current contents an
 
 ## Safety and authority boundaries
 
-- Never attach a real CEO or enable a production CEO.
+- Never attach a real CEO or enable a production CEO. Implementing bounded internal research continuation does not activate or deploy it; the Task02 policy grants no production acceptance or external authority.
 - Never execute real capital, payment, venture-launch, deployment, or other external actions.
 - Keep P1 in shadow reasoning only.
 - `RealPaymentAdapter`, `BootstrapTreasury`, and red-team payment paths remain synthetic/red-team-only unless a separately approved phase changes that boundary.

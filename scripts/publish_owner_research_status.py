@@ -31,7 +31,7 @@ STATUS = {
 }
 
 
-def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=None, ceo_public_key=None):
+def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=None, ceo_public_key=None, resource_db=None):
     if (feedback.get("domain") != "owner-idea-research-feedback-v1"
             or feedback.get("advisory_only") is not True
             or feedback.get("venture_admission") is not False
@@ -53,7 +53,19 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
         item=dict(cycle_id=cycle,proposal_digest=fingerprint,workflow_id=flow,
             title=approval["proposal"]["title"],state="NOT_ADMITTED",
             research_status="APPROVED_NOT_ASSIGNED",independent_market_evidence=False,
-            artifacts=[])
+            artifacts=[], research_round=None, rounds_remaining=None,
+            worker_calls_used=None, worker_calls_remaining=None,
+            round_worker_calls_used=None, round_worker_calls_remaining=None,
+            objective=None, signed_ceo_recommendation=None, exhausted=None,
+            disposition=None, owner_action="No repeat review; internal research only",
+            financials=dict(spend_usd=None, authority_usd=None, status="unavailable"),
+            continuation=dict(status="AUTHORIZED", current_round=None, max_rounds=3,
+                rounds_remaining=None, worker_calls_used=None, worker_calls_remaining=None,
+                cumulative_worker_calls_used=None, cumulative_worker_calls_remaining=None,
+                objective=None, latest_signed_ceo_recommendation=None, progress=None,
+                evidence=[], terminal_disposition=None, exhausted=None, round_exhausted=None,
+                owner_action_required=False, owner_action="No repeat review; internal research only",
+                financial_expenditure=None, available_authority=None))
         if flow in listing:
             state=client.read(flow)
             if (state is None or state["id"]!=flow or state["venture_id"]!=flow
@@ -66,6 +78,35 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
                     or state["handoff"]["item_id"]!=flow
                     or state["handoff"]["review"]["item_id"]!=flow):
                 raise ValueError("research workflow provenance mismatch")
+            from agents.ceo.venture_workflow import research_rounds, research_identity, research_session
+            # The broker verifies journal signatures; the publisher resolves current
+            # authoritative reservations rather than inferring use from artifacts.
+            if 'last_command' in state:
+                if research_identity(state) != fingerprint:
+                    raise ValueError("research proposal identity mismatch")
+                history = research_rounds(state)
+                item.update(research_round=len(history), rounds_remaining=3-len(history),
+                    objective=history[-1]["objective"], disposition=state.get("research_disposition"))
+                item["signed_ceo_recommendation"] = state.get("research_disposition") or next(
+                    (entry["review"] for entry in reversed(history) if entry.get("review")), None)
+                if resource_db is not None:
+                    import sqlite3
+                    from contextlib import closing
+                    from agents.ceo.worker_inference import research_charges
+                    with closing(sqlite3.connect("file:"+str(resource_db)+"?mode=ro",uri=True)) as ledger:
+                        if ledger.execute("SELECT 1 FROM sqlite_master WHERE name='worker_reservations'").fetchone():
+                            charges = research_charges(ledger, client.read)
+                        else:
+                            charges = {}
+                    total = sum(p == fingerprint for p, r in charges.values())
+                    current = sum(p == fingerprint and r == len(history) for p, r in charges.values())
+                    item.update(worker_calls_used=total, worker_calls_remaining=max(0,12-total),
+                        round_worker_calls_used=current, round_worker_calls_remaining=max(0,4-current),
+                        round_exhausted=current>=4, exhausted=total>=12 or len(history)>=3)
+                if state.get("research_disposition"):
+                    item["owner_action"] = "Review internal recommendation; separate MVP/external scope approval required"
+                elif len(history) == 3:
+                    item["owner_action"] = "Await terminal CEO disposition; no fourth research round"
             item["state"]=state["state"]
             item["research_status"]=STATUS.get(state["state"],"BLOCKED")
             item["revision"]=state["revision"]
@@ -81,14 +122,14 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
                     raise ValueError("signed artifact digest mismatch")
                 doc=json.loads(raw)
                 if doc.get("scope_hash")!=state["scope_hash"]:
-                    raise ValueError("scope mismatch in worker evidence")
+                    continue  # Earlier round evidence remains in the signed journal.
                 item["artifacts"].append(dict(role=doc["role"],action=doc["action"],
                     deliverable=doc["deliverable"],explanation=doc["explanation"],
                     revision=doc["revision"]))
             worker_submissions=sum(a['role']=='worker' and a['action']=='submit'
                                    for a in item['artifacts'])
             if ceo_review_dir is not None and state['state']=='HOLD':
-                path=pathlib.Path(ceo_review_dir)/(flow+'.json')
+                path=pathlib.Path(ceo_review_dir)/(research_session(state)+'.json')
                 if path.is_file() and not path.is_symlink():
                     if path.stat().st_size>16000 or ceo_public_key is None:
                         raise ValueError('bounded signed CEO review required')
@@ -107,13 +148,32 @@ def collect(config, feedback, client=None, worker_limit=None, ceo_review_dir=Non
                             raise ValueError('CEO assessment authorization mismatch')
                         Ed25519PublicKey.from_public_bytes(ceo_public_key).verify(
                             bytes.fromhex(outcome['signature']),canonical(packet).encode())
+                        item['signed_ceo_recommendation']=outcome
                         item['ceo_review']=packet['assessment']
                         item['ceo_reviewed_utc']=packet['reviewed_utc']
                         item['research_status']='CEO_ASSESSMENT_COMPLETE'
             if (state['state']=='WORKER_PENDING' and worker_limit is not None
-                    and worker_submissions>=worker_limit):
+                    and (item['round_worker_calls_used'] if item['round_worker_calls_used'] is not None else worker_submissions)>=worker_limit):
                 item['research_status']='BLOCKED_WORKER_QUOTA'
-                item['blocking_reason']='Worker inference limit reached; manager did not approve the desk assessment. CEO scope correction is required.'
+                item['blocking_reason']='Worker research round allowance exhausted; await signed CEO continuation or disposition.'
+            item['continuation'] = dict(
+                status=('TERMINAL' if item['disposition'] else ('EXHAUSTED' if item['rounds_remaining'] is not None and item['rounds_remaining'] <= 0 else 'AUTHORIZED')),
+                current_round=item['research_round'], max_rounds=3,
+                rounds_remaining=item['rounds_remaining'],
+                worker_calls_used=item['round_worker_calls_used'],
+                worker_calls_remaining=item['round_worker_calls_remaining'],
+                cumulative_worker_calls_used=item['worker_calls_used'],
+                cumulative_worker_calls_remaining=item['worker_calls_remaining'],
+                objective=item['objective'],
+                latest_signed_ceo_recommendation=item['signed_ceo_recommendation'],
+                progress=item['research_status'], evidence=item['artifacts'],
+                terminal_disposition=item['disposition'],
+                exhausted=item['exhausted'], round_exhausted=item.get('round_exhausted'),
+                owner_action_required=item['owner_action'] not in (
+                    'No repeat review; internal research only',
+                    'Research continuation is authorized without additional Owner action'),
+                owner_action=item['owner_action'], financial_expenditure=None,
+                available_authority=None)
         output.append(item)
     return dict(domain="owner-research-progress-v1",advisory_only=True,
                 financial_authority=False,venture_admission=False,
@@ -150,6 +210,8 @@ def main():
     p.add_argument("--worker-policy",required=True)
     p.add_argument('--ceo-reviews',required=True)
     p.add_argument('--trust',required=True)
+    from agents.ceo.service_identity import AUTHORITY_DIRECTORY
+    p.add_argument('--resources',default=str(AUTHORITY_DIRECTORY/'resources.sqlite'))
     args=p.parse_args()
     policy=json.loads(pathlib.Path(args.worker_policy).read_text())
     if policy.get('domain')!='worker-preparation-inference-v1' or policy.get('enabled') is not True:
@@ -163,7 +225,8 @@ def main():
         raise ValueError('CEO pinned public key required')
     result=collect(json.loads(pathlib.Path(args.config).read_text()),
                    json.loads(pathlib.Path(args.feedback).read_text()),worker_limit=limit,
-                   ceo_review_dir=args.ceo_reviews,ceo_public_key=bytes.fromhex(signer['public_key']))
+                   ceo_review_dir=args.ceo_reviews,ceo_public_key=bytes.fromhex(signer['public_key']),
+                   resource_db=args.resources)
     write_atomic(result,args.out)
     print("published owner research statuses",[(x["title"],x["research_status"]) for x in result["records"]])
 

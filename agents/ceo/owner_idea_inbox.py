@@ -69,6 +69,23 @@ class OwnerIdeaInbox:
                 fingerprint=digest(proposal)
                 review=reviews.get((cycle,fingerprint))
                 research=progress.get((cycle,fingerprint)) if review and review['decision']=='APPROVE_FOR_RESEARCH' else None
+                if research and research.get("stale"):
+                    research = dict(research)
+                    for field in ("research_round", "rounds_remaining", "worker_calls_used",
+                                  "worker_calls_remaining", "round_worker_calls_used",
+                                  "round_worker_calls_remaining", "exhausted"):
+                        research[field] = None
+                    if isinstance(research.get("continuation"), dict):
+                        research["continuation"] = dict(research["continuation"])
+                        for field in ("current_round", "rounds_remaining", "worker_calls_used",
+                                      "worker_calls_remaining", "cumulative_worker_calls_used",
+                                      "cumulative_worker_calls_remaining", "objective",
+                                      "latest_signed_ceo_recommendation", "progress", "evidence",
+                                      "terminal_disposition", "exhausted", "round_exhausted"):
+                            research["continuation"][field] = None
+                        research["continuation"]["status"] = "UNAVAILABLE"
+                        research["continuation"]["owner_action_required"] = False
+                    research["owner_action"] = "Refresh authoritative progress; no repeat research review"
                 output.append(dict(cycle_id=cycle,digest=fingerprint,
                                    proposal=proposal,review=review,research=research))
         return output

@@ -43,6 +43,13 @@ class ResearchProgressTests(unittest.TestCase):
         result=publisher.collect({},feedback,client=Broker())
         self.assertEqual(result['records'][0]['research_status'],'MANAGER_REVIEW')
         self.assertEqual(result['records'][0]['artifacts'],[])
+        continuation=result['records'][0]['continuation']
+        self.assertEqual(continuation['status'],'AUTHORIZED')
+        self.assertIsNone(continuation['current_round'])
+        self.assertEqual(continuation['max_rounds'],3)
+        self.assertIsNone(continuation['financial_expenditure'])
+        self.assertIsNone(continuation['available_authority'])
+        self.assertFalse(continuation['owner_action_required'])
         self.assertFalse(result['venture_admission'])
         class DecompositionBroker(Broker):
             def research_list(self):

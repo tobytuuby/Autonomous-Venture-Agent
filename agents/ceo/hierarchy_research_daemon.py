@@ -13,12 +13,12 @@ from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from agents.ceo.escalation_inbox import canonical
-from agents.ceo.venture_workflow import hashed
+from agents.ceo.venture_workflow import hashed, research_rounds, research_session
 
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_service import run as role_tick
 
-STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","HOLD"},
+STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
           "worker":{"WORKER_PENDING"}}
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
@@ -46,14 +46,14 @@ def allowed_config(base, flow, snapshot):
     config=dict(base)
     config["workflow_id"]=flow
     original=Path(base["state_dir"])
-    state=original.parent / "research" / flow
+    state=original.parent / "research" / research_session(snapshot)
     if original.is_symlink() or state.is_symlink():
         raise ValueError("research state alias denied")
     state.mkdir(parents=True,exist_ok=True,mode=0o700)
     config["state_dir"]=str(state)
     if role in ("ceo","manager"):
         context=dict(base["context"])
-        context.update(session_id=flow,venture_id=flow,
+        context.update(session_id=research_session(snapshot),venture_id=flow,
                        objective="; ".join(snapshot["scope"]["tasks"]),rounds=2)
         config["context"]=context
     return config
@@ -70,18 +70,35 @@ def worker_submission_count(client,snapshot):
             raise ValueError('research worker evidence digest corrupted')
         evidence=json.loads(raw)
         if evidence.get('scope_hash')!=snapshot['scope_hash']:
-            raise ValueError('research worker evidence scope mismatch')
+            continue  # Retain earlier rounds, but do not charge their submissions twice.
         if evidence.get('role')=='worker' and evidence.get('action')=='submit':
             count+=1
     return count
 
 
+def worker_round_reservation_count(client, snapshot):
+    """Count paid-capacity reservations from the existing Control ledger."""
+    import sqlite3
+    from contextlib import closing
+    from agents.ceo.service_identity import AUTHORITY_DIRECTORY
+    from agents.ceo.worker_inference import research_charges
+    from agents.ceo.venture_workflow import research_identity, research_rounds
+    fingerprint = research_identity(snapshot)
+    round_number = len(research_rounds(snapshot))
+    with closing(sqlite3.connect("file:" + str(AUTHORITY_DIRECTORY / "resources.sqlite") + "?mode=ro", uri=True)) as db:
+        if not db.execute("SELECT 1 FROM sqlite_master WHERE name='worker_reservations'").fetchone():
+            return 0
+        charges = research_charges(db, client.read)
+    return sum(proposal == fingerprint and number == round_number
+               for proposal, number in charges.values())
+
+
 def hold_exhausted_research(client,config,snapshot,worker_limit):
-    """CEO signer records quota exhaustion; never infers, spends or funds."""
+    """CEO signer records reserved quota exhaustion; never infers, spends or funds."""
     if (config['role']!='ceo' or config['actor_id']!='service-ceo'
             or snapshot['state']!='WORKER_PENDING'
             or not RESEARCH_ID.fullmatch(snapshot['id'])
-            or worker_submission_count(client,snapshot)<worker_limit):
+            or worker_round_reservation_count(client,snapshot)<worker_limit):
         return False
     # The workflow itself is authenticated by the broker. Recheck all safety
     # constraints before invoking the existing role-signature gate.
@@ -104,6 +121,41 @@ def hold_exhausted_research(client,config,snapshot,worker_limit):
         raise ValueError('research quota hold not committed')
     logging.warning('CEO research workflow placed on signed quota hold: %s',snapshot['id'])
     return True
+
+
+def ensure_research_session(config, snapshot, client):
+    """CEO establishes the existing centrally capped session before Manager I/O."""
+    cfg = allowed_config(config, snapshot["id"], snapshot)
+    policy = json.loads(Path(config["policy"]).read_text())
+    identity = "research-session-" + hashed(cfg["context"])[:48]
+    payload = dict(context=cfg["context"], actor=config["actor_id"], role="ceo",
+        identity=identity, request_sha256=hashed(cfg["context"]),
+        attempt=hashed(dict(session=research_session(snapshot))),
+        policy=policy, endpoint=policy["roles"]["ceo"]["endpoint"],
+        model=policy["roles"]["ceo"]["model"])
+    if client._request("POST", "/v1/inference/reservations", payload).get("reserved") is not True:
+        raise ValueError("central research session denied")
+
+
+def direct_research(config, snapshot, client, signed):
+    """Signed CEO recommendation advances only this proposal's internal research."""
+    assessment = signed["packet"]["assessment"]
+    continuing = assessment["recommendation"] == "NEEDS_MORE_RESEARCH"
+    now = datetime.now(timezone.utc)
+    refs = [dict(ref=ref, sha256=sha) for ref, sha in snapshot["evidence"].items()
+            if ref.startswith("preparation-")][-8:]
+    command = dict(workflow_id=snapshot["id"],
+        request_id="research-decision-" + hashed(dict(snapshot=snapshot, issued_at=now.isoformat()))[:48],
+        actor_id="service-ceo", role="ceo", origin="control_plane",
+        action="continue_research" if continuing else "research_disposition",
+        revision=snapshot["revision"], previous_hash=hashed(snapshot),
+        version=snapshot["version"], scope_hash=snapshot["scope_hash"],
+        evidence=refs, payload=dict(round=len(research_rounds(snapshot))+int(continuing),
+            objective=assessment["next_internal_task"],
+            unanswered_question=assessment["evidence_gaps"], review=signed),
+        issued_at=now.isoformat(), expires_at=(now+timedelta(minutes=5)).isoformat(), live=False)
+    key = Ed25519PrivateKey.from_private_bytes(Path(config["signing_key"]).read_bytes())
+    return client.apply(command, key.sign(canonical(command).encode()).hex())
 
 
 def poll(config, *, once=False, interval=12,worker_limit_override=None):
@@ -137,16 +189,22 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                 if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
                     hold_exhausted_research(client,config,snapshot,worker_limit_override)
                     continue
-                if config['role']=='ceo' and snapshot['state']=='HOLD':
+                if config['role']=='ceo' and snapshot['state']=='MANAGER_PENDING':
+                    ensure_research_session(config,snapshot,client)
+                    continue
+                if config['role']=='ceo' and snapshot['state'] in ('HOLD','CEO_REVIEW','OWNER_REVIEW'):
+                    if snapshot.get('research_disposition') is not None:
+                        continue
                     from agents.ceo.ceo_research_review import review
-                    review(config,snapshot,client)
+                    signed=review(allowed_config(config,flow,snapshot),snapshot,client)
+                    direct_research(config,snapshot,client,signed)
                     continue
                 if worker_limit is not None:
-                    if flow in blocked:
+                    if research_session(snapshot) in blocked:
                         continue
                     if worker_submission_count(client,snapshot)>=worker_limit:
                         logging.warning('Worker research quota reached; no new calls: %s',flow)
-                        blocked.add(flow)
+                        blocked.add(research_session(snapshot))
                         continue
                 if config["role"] == "worker" and snapshot.get("decomposition"):
                     from agents.ceo.hierarchy_runner import ready_assignment

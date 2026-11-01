@@ -79,6 +79,8 @@ class ModelRoleCallback:
             assignment = ready_assignment(item, self.actor_id)
             if assignment is None:
                 raise ValueError("signed approval and ready assignment required")
+        from agents.ceo.venture_workflow import research_tasks
+        scoped_tasks = research_tasks(item)
         if state == "MANAGER_PENDING":
             if self.decomposition_workers is None:
                 allowed = allowed - {"propose_decomposition"}
@@ -86,11 +88,11 @@ class ModelRoleCallback:
                 workers = self.decomposition_workers
                 if (type(workers) is not dict or set(workers) != {"A", "B", "C"}
                         or len(set(workers.values())) != 3
-                        or len(item["scope"]["tasks"]) != 3):
+                        or len(scoped_tasks) != 3):
                     raise ValueError("three scoped tasks and distinct workers required")
                 assignments = [dict(id=name, worker_id=workers[name], task=task,
                                     depends_on=[] if name != "C" else ["A", "B"])
-                               for name, task in zip(("A", "B", "C"), item["scope"]["tasks"])]
+                               for name, task in zip(("A", "B", "C"), scoped_tasks)]
                 allowed = frozenset({"propose_decomposition", "reject_premise"})
         allowed = HierarchyRunner.allowed_actions(item) & (allowed | {"hold"})
         # Supply bounded, signed history; no private tokens, keys, or executable tools.

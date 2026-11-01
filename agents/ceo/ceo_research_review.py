@@ -45,7 +45,7 @@ def write_atomic(path,value):
 def review(config,state,client,provider=None):
     flow=state['id']
     if (config['role']!='ceo' or config['actor_id']!='service-ceo'
-            or not flow.startswith('research-') or state['state']!='HOLD'
+            or not flow.startswith('research-') or state['state'] not in ('HOLD','CEO_REVIEW','OWNER_REVIEW')
             or state['mode']!='PREPARATION_ONLY'
             or any(state[k] is not False for k in (
                 'operational_authority','external_actions_allowed',
@@ -53,7 +53,9 @@ def review(config,state,client,provider=None):
         raise ValueError('only bounded Owner research hold may receive CEO review')
     root=pathlib.Path(config['state_dir']).parent/'research-reviews'
     root.mkdir(parents=True,exist_ok=True,mode=0o700)
-    path=root/(flow+'.json')
+    from agents.ceo.venture_workflow import research_rounds, research_session
+    number=len(research_rounds(state)) if 'handoff' in state else 1
+    path=root/(research_session(state)+'.json') if 'handoff' in state else root/(flow+'.json')
     current=hashed(state)
     if path.is_symlink():
         raise ValueError('CEO review state alias denied')
@@ -75,13 +77,18 @@ def review(config,state,client,provider=None):
             raise ValueError('CEO research evidence digest mismatch')
         data=json.loads(raw)
         if data.get('scope_hash')!=state['scope_hash']:
-            raise ValueError('CEO research evidence scope mismatch')
+            continue
         artifacts.append(dict(role=data['role'],action=data['action'],
             deliverable=data['deliverable'][:500],explanation=data['explanation'][:160]))
     if not artifacts:
         raise ValueError('no signed Worker or Manager evidence to review')
-    request=dict(system=SYSTEM,json_object_mode=True,
+    system = SYSTEM if number < 3 else SYSTEM.replace(
+        'NEEDS_MORE_RESEARCH or READY_FOR_OWNER_DISCUSSION',
+        'PROCEED_TO_MVP or REJECT_OR_DEFER (internal recommendation only, never launch)')
+    request=dict(system=system,json_object_mode=True,
         opportunity=dict(workflow_id=flow,goal=state['scope']['tasks'][0],
+            role='ceo',state=state['state'],scope_hash=state['scope_hash'],
+            snapshot_sha256=current,research_round=number,
             research_state='QUOTA_HOLD',signed_artifacts=artifacts,
             external_market_evidence_verified=False))
     from agents.ceo.venture_exercise import configured_provider,strict_json
@@ -93,14 +100,25 @@ def review(config,state,client,provider=None):
     # a second paid request without an operator reconciliation.
     write_atomic(path,dict(state='PENDING',snapshot_hash=current,
         request_hash=hashed(request),created_utc=datetime.now(timezone.utc).isoformat()))
-    response=model(request,())
+    if provider is None:
+        from agents.ceo.hierarchy_providers import HierarchyProvider
+        policy=json.loads(pathlib.Path(config['policy']).read_text())
+        context=dict(config['context'],session_id=research_session(state),
+            venture_id=flow,objective='; '.join(state['scope']['tasks']),rounds=2)
+        metered=HierarchyProvider(role='ceo',actor='service-ceo',workflow_id=flow,
+            client=client,policy=policy,context=context,local_provider=model,
+            state_path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite')
+        response=metered(request,())
+    else:
+        response=model(request,())  # Explicit isolated-test provider; no runtime fallback.
     if type(response) is not dict or response.get('tool_call') is not None:
         raise ValueError('CEO tool call forbidden')
     result=strict_json(response['decision']['content'])
     if type(result) is not dict or set(result)!={
             'recommendation','assessment','evidence_gaps','next_internal_task'}:
         raise ValueError('CEO bounded review fields required')
-    if result['recommendation'] not in ('NEEDS_MORE_RESEARCH','READY_FOR_OWNER_DISCUSSION'):
+    permitted = ('NEEDS_MORE_RESEARCH','READY_FOR_OWNER_DISCUSSION') if number < 3 else ('PROCEED_TO_MVP','REJECT_OR_DEFER')
+    if result['recommendation'] not in permitted:
         raise ValueError('CEO recommendation outside internal scope')
     for field in ('assessment','evidence_gaps','next_internal_task'):
         if type(result[field]) is not str or not 40<=len(result[field])<=500:

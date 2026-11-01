@@ -66,6 +66,7 @@ class HierarchyProvider:
         if self.role == "ceo":
             from agents.ceo.hierarchy_runner import automatic_revision_allowed
             if (state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW")
+                    and not (state["id"].startswith("research-") and state["state"] in ("HOLD", "OWNER_REVIEW"))
                     and not automatic_revision_allowed(state)):
                 raise ValueError("CEO review missing")
         identity = (self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
@@ -115,7 +116,8 @@ class HierarchyProvider:
                 raise ValueError("worker budget reservation denied")
             result=self.client.worker_execute(dict(reservation=reservation,request=request))
         else:
-            if self.context is None or self.context["session_id"] != self.workflow_id:
+            from agents.ceo.venture_workflow import research_session
+            if self.context is None or self.context["session_id"] != research_session(state):
                 raise ValueError("CEO-established model context required")
             binding=self.policy["roles"][self.role]
             if binding["actor_id"] != self.actor:
