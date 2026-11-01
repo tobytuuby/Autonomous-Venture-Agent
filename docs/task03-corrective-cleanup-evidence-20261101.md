@@ -127,3 +127,7 @@ recorded in `verification.json`; the two cleanup documents link to existing
 project files. No historical documentation or signed production record was
 rewritten. User instructions explicitly prohibit commit/push/deploy for this
 cleanup, so earlier general publish/deploy workflow requirements were not applied.
+
+## Applied production deployment (2026-11-01 UTC)
+
+Corrective commit `4a1fbea` pushed to `origin/main`. Existing deployed copies of `agents/ceo/hierarchy_gateway.py`, `agents/ceo/hierarchy_research_daemon.py`, `agents/ceo/venture_workflow.py`, and `scripts/publish_owner_research_status.py` backed up with `.pre-task03-cleanup-20261101`; each installed in `/usr/local/lib/venture-ceo-level2c/` and byte-compared successfully to repository source. `venture-owner-research-ceo.service` restarted at 22:06 UTC and reported active. Broker mTLS and Owner API services reported active. No new signed blocker writes are admitted; historical blocker journal reconstruction remains intentionally supported. Production smoke evidence establishes installed source and healthy service starts, not a new signed CEO research decision or CTKFamily end-to-end rendering. Owner MVP action UI remains Task04. Local signed synthetic tests passed (33 focused, 167 expanded). No production customer, capital, or external actions taken. Task03 cleanup deployment complete; independent Claude re-review and genuine future production decision/display acceptance not claimed.
