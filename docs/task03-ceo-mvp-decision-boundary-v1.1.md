@@ -174,3 +174,7 @@ are outside this change.
 
 No commit, push, deployment, service restart, real CEO attachment, external action,
 capital action, grant creation or production authority mutation was performed.
+
+## Production deployment observation (2026-11-01 UTC)
+
+Commit `9875665` pushed to `origin/main`. Six existing Control production modules (`hierarchy_gateway`, `hierarchy_research_daemon`, `hierarchy_runner`, `preparation_broker`, `venture_workflow`, `publish_owner_research_status`) were backed up individually with `.pre-mvp-handoff-20261101`, then installed at `/usr/local/lib/venture-ceo-level2c/` with successful byte-for-byte comparisons against the committed source. `venture-owner-research-ceo.service` restarted at 18:46 UTC and reported active. Control broker and Owner API also reported active. This is deployment verification only: no eligible signed positive production disposition existed in the observed evidence, and no genuine CEO -> Manager -> Worker MVP run has occurred. The signed blocker path requires broker runtime verification before full acceptance; services being active do not prove signed blocker dispatch. An executable MVP handoff still lacks verified current proposal-bound development authority. Task03 end-to-end acceptance remains OPEN.
