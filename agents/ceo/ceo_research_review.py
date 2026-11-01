@@ -77,7 +77,13 @@ def review(config,state,client,provider=None):
         if hashlib.sha256(raw).hexdigest()!=sha:
             raise ValueError('CEO research evidence digest mismatch')
         data=json.loads(raw)
-        if data.get('scope_hash')!=state['scope_hash']:
+        # Research rounds deliberately change scope_hash as objectives narrow.
+        # The signed workflow's cumulative evidence map binds each digest to this
+        # Owner-approved proposal, so retain prior-round evidence after verifying
+        # its content hash. Manager and Worker records only are review material.
+        if data.get('role') not in ('worker','manager'):
+            continue
+        if data.get('action') not in ('submit','improve','reject_premise','manager_approve'):
             continue
         artifacts.append(dict(role=data['role'],action=data['action'],
             deliverable=data['deliverable'][:500],explanation=data['explanation'][:160]))
