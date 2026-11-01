@@ -29,10 +29,13 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
         opportunity = request['opportunity']
         if request['system']==RESEARCH_SYSTEM and not str(opportunity.get('workflow_id','')).startswith('research-'):
             raise ValueError('research system requires signed research flow')
+        expected_workflow = (reservation["context"]["venture_id"]
+            if request["system"] == RESEARCH_SYSTEM
+            else reservation["context"]["session_id"])
         if (hierarchy is None or type(opportunity) is not dict
                 or opportunity.get("role") != "manager"
                 or opportunity.get("state") not in ("MANAGER_PENDING", "MANAGER_REVIEW")
-                or opportunity.get("workflow_id") != reservation["context"]["session_id"]):
+                or opportunity.get("workflow_id") != expected_workflow):
             raise ValueError("signed Manager workflow required")
         state = hierarchy.state(opportunity["workflow_id"])
         from agents.ceo.venture_workflow import hashed

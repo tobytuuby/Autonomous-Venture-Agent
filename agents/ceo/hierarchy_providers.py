@@ -69,8 +69,15 @@ class HierarchyProvider:
                     and not (state["id"].startswith("research-") and state["state"] in ("HOLD", "OWNER_REVIEW"))
                     and not automatic_revision_allowed(state)):
                 raise ValueError("CEO review missing")
-        identity = (self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
-                    if assignment is not None else self.role+"-"+hashed(state)[:50])
+        if assignment is not None:
+            identity = self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
+        elif self.role == "manager" and self.workflow_id.startswith("research-"):
+            # Persist a distinct idempotency key for the exact signed research
+            # prompt. A code/schema change cannot collide with an earlier
+            # unexecuted reservation for the same workflow snapshot.
+            identity = self.role + "-" + hashed(dict(snapshot=state, request=request))[:50]
+        else:
+            identity = self.role + "-" + hashed(state)[:50]
         wire = canonical(request)
         db = sqlite3.connect(self.state_path, isolation_level=None, timeout=5)
         try:

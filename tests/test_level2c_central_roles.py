@@ -224,6 +224,35 @@ class CentralRolesTests(unittest.TestCase):
             execute_reserved(dict(reservation=reservation,request=request),
                 actor="manager",provider=provider,hierarchy=None)
 
+    def test_research_round_session_binds_to_venture_workflow(self):
+        from agents.ceo.provider_gateway import execute_reserved
+        from agents.ceo.hierarchy_model_callbacks import RESEARCH_SYSTEM
+        from agents.ceo.escalation_inbox import digest
+        from agents.ceo.venture_workflow import hashed
+        from types import SimpleNamespace
+        f=self.f
+        flow="research-"+"a"*24
+        context=dict(f.context,session_id=flow+"-r2",venture_id=flow,rounds=2)
+        state=dict(id=flow,state="MANAGER_PENDING",scope=dict(manager_id="manager",
+            tasks=["Review the second bounded internal evidence objective"]),
+            scope_hash="f"*64)
+        opportunity=dict(role="manager",state="MANAGER_PENDING",workflow_id=flow,
+            snapshot_sha256=hashed(state),scope_hash=state["scope_hash"],
+            tasks=state["scope"]["tasks"])
+        request=dict(system=RESEARCH_SYSTEM,json_object_mode=True,opportunity=opportunity)
+        reservation=dict(f.reservation_payload("manager-research-round-two"),
+            context=context,actor="manager",role="manager",
+            request_sha256=digest(canonical(request).encode()))
+        self.ceo.reserve_provider(dict(self.payload("ceo-research-round-two"),context=context))
+        f.client.reserve_provider(reservation)
+        provider=fixtures.FixtureProvider("manager")
+        response=execute_reserved(dict(reservation=reservation,request=request),
+            actor="manager",provider=provider,
+            hierarchy=SimpleNamespace(state=lambda key:state if key==flow else None))
+        self.assertIsNone(response["tool_call"])
+        self.assertEqual(len(provider.calls),1)
+        self.assertEqual(f.reservations(),(2,1024))
+
     def test_gateway_execution_requires_prior_reservation_and_caches_exact_result(self):
         from agents.ceo.provider_gateway import execute_reserved
         from agents.ceo.preparation_exchange import SYSTEM
