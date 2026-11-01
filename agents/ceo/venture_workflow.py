@@ -265,7 +265,7 @@ class VentureWorkflow(EscalationInbox):
         continuing = command["action"] == "continue_research"
         if (command["role"] != "ceo" or not history or (continuing and len(history) >= 3)
                 or prior.get("research_disposition") is not None
-                or prior["state"] not in {"HOLD", "CEO_REVIEW", "OWNER_REVIEW"}
+                or prior["state"] not in {"HOLD", "CEO_REVIEW", "OWNER_REVIEW", "CEO_REDIRECTION"}
                 or type(payload["round"]) is not int
                 or payload["round"] != len(history) + int(continuing)):
             raise ValueError("sequential bounded research continuation required")

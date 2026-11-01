@@ -18,7 +18,7 @@ from agents.ceo.venture_workflow import hashed, research_rounds, research_sessio
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_service import run as role_tick
 
-STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
+STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
           "worker":{"WORKER_PENDING"}}
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
@@ -192,7 +192,7 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                 if config['role']=='ceo' and snapshot['state']=='MANAGER_PENDING':
                     ensure_research_session(config,snapshot,client)
                     continue
-                if config['role']=='ceo' and snapshot['state'] in ('HOLD','CEO_REVIEW','OWNER_REVIEW'):
+                if config['role']=='ceo' and snapshot['state'] in ('HOLD','CEO_REVIEW','OWNER_REVIEW','CEO_REDIRECTION'):
                     if snapshot.get('research_disposition') is not None:
                         continue
                     from agents.ceo.ceo_research_review import review

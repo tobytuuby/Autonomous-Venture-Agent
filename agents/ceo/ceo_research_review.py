@@ -14,13 +14,14 @@ from agents.ceo.escalation_inbox import canonical
 from agents.ceo.venture_workflow import hashed
 
 SYSTEM=(
-    "You are the venture CEO reviewing signed internal research artifacts after a "
-    "bounded Worker quota hold. You may not contact customers, spend, launch, or "
-    "claim public market validation. Make a substantive internal assessment, "
+    "You are the venture CEO reviewing signed internal research artifacts after "
+    "a bounded research round or Manager escalation. You may not contact customers, "
+    "spend, launch, or claim public market validation. Make a substantive assessment, "
     "identifying strong work, missing externally verified demand/competitor "
     "evidence, and the smallest next research task. Return strict JSON with "
     "exactly recommendation,assessment,evidence_gaps,next_internal_task. "
-    "Recommendation must be NEEDS_MORE_RESEARCH or READY_FOR_OWNER_DISCUSSION. "
+    "Recommendation must be NEEDS_MORE_RESEARCH, READY_FOR_OWNER_DISCUSSION, or "
+    "REJECT_OR_DEFER. At Round 3, choose PROCEED_TO_MVP or REJECT_OR_DEFER. "
     "Each other field must be 40 to 500 characters. Do not fabricate citations."
 )
 
@@ -45,7 +46,7 @@ def write_atomic(path,value):
 def review(config,state,client,provider=None):
     flow=state['id']
     if (config['role']!='ceo' or config['actor_id']!='service-ceo'
-            or not flow.startswith('research-') or state['state'] not in ('HOLD','CEO_REVIEW','OWNER_REVIEW')
+            or not flow.startswith('research-') or state['state'] not in ('HOLD','CEO_REVIEW','OWNER_REVIEW','CEO_REDIRECTION')
             or state['mode']!='PREPARATION_ONLY'
             or any(state[k] is not False for k in (
                 'operational_authority','external_actions_allowed',
@@ -104,7 +105,7 @@ def review(config,state,client,provider=None):
         from agents.ceo.hierarchy_providers import HierarchyProvider
         policy=json.loads(pathlib.Path(config['policy']).read_text())
         context=dict(config['context'],session_id=research_session(state),
-            venture_id=flow,objective='; '.join(state['scope']['tasks']),rounds=2)
+            venture_id=flow,objective='; '.join(state['scope']['tasks']),rounds=number)
         metered=HierarchyProvider(role='ceo',actor='service-ceo',workflow_id=flow,
             client=client,policy=policy,context=context,local_provider=model,
             state_path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite')
@@ -117,7 +118,7 @@ def review(config,state,client,provider=None):
     if type(result) is not dict or set(result)!={
             'recommendation','assessment','evidence_gaps','next_internal_task'}:
         raise ValueError('CEO bounded review fields required')
-    permitted = ('NEEDS_MORE_RESEARCH','READY_FOR_OWNER_DISCUSSION') if number < 3 else ('PROCEED_TO_MVP','REJECT_OR_DEFER')
+    permitted = ('NEEDS_MORE_RESEARCH','READY_FOR_OWNER_DISCUSSION','REJECT_OR_DEFER') if number < 3 else ('PROCEED_TO_MVP','REJECT_OR_DEFER')
     if result['recommendation'] not in permitted:
         raise ValueError('CEO recommendation outside internal scope')
     for field in ('assessment','evidence_gaps','next_internal_task'):
