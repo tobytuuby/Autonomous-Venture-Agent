@@ -258,6 +258,50 @@ class ResearchContinuationTests(unittest.TestCase):
             self.reserve(self.payload("after-restart"))
         self.assertEqual(self.state()["version"],1)  # Research is not a correction version.
 
+    def test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier(self):
+        from agents.ceo.ceo_research_review import review
+        from tests.test_ceo_research_review import FakeModel, FakeClient
+        from cryptography.hazmat.primitives.serialization import PrivateFormat, NoEncryption
+        seed=self.fx.base/"task03-review-seed"
+        seed.write_bytes(self.keys["service-ceo"].private_bytes(
+            Encoding.Raw,PrivateFormat.Raw,NoEncryption()))
+        config=dict(role="ceo",actor_id="service-ceo",signing_key=str(seed),
+                    state_dir=str(self.fx.base/"task03-state"))
+        for number in (2,3):
+            with self.subTest(round=number):
+                self.apply(self.continuation())
+                self.act("hold")
+                # Distinct local storage roots isolate two hypothetical dispositions;
+                # the live journal is never rolled back or reset.
+                local=dict(config,state_dir=str(self.fx.base/("case-"+str(number))/"state"))
+                rec="PROCEED_TO_MVP" if number==3 else "READY_FOR_OWNER_DISCUSSION"
+                client=FakeClient(self.gate.artifact(self.ref["ref"],role="quota-ceo").encode())
+                signed=review(local,self.state(),client,FakeModel(rec))
+                before=self.state()
+                command=self.command("research_disposition",payload=dict(round=number,
+                    objective=signed["packet"]["assessment"]["next_internal_task"],
+                    unanswered_question=signed["packet"]["assessment"]["evidence_gaps"],
+                    review=signed))
+                # Verify with the real transition verifier without applying R2's
+                # hypothetical terminal choice, so R3 follows the same signed journal.
+                journal=VentureWorkflow(self.gate.directory/"workflow.sqlite",actors=self.gate.actors)
+                try:
+                    change=journal._research_transition(before,command)
+                finally:
+                    journal.close()
+                self.assertEqual(change["state"],"OWNER_REVIEW")
+                self.assertIsNone(change["owner_receipt"])
+                if number==3:
+                    after=self.apply(command)
+                    saved=copy.deepcopy(after["research_disposition"])
+                    with self.assertRaises(ValueError):
+                        self.apply(self.continuation())
+                    self.assertEqual(self.state()["research_disposition"],saved)
+                    self.assertEqual(len(research_rounds(self.state())),3)
+                    journal=VentureWorkflow(self.gate.directory/"workflow.sqlite",actors=self.gate.actors)
+                    try: journal.verify()
+                    finally: journal.close()
+
 
 if __name__=="__main__":
     unittest.main()
