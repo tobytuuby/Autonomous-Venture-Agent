@@ -60,9 +60,9 @@ def tick_research_task(config, client, actors, private, policy, blocked=None):
         try:
             task_config=allowed_config(config,flow,snapshot)
             provider=HierarchyProvider(role=role,actor=config["actor_id"],
-            workflow_id=flow,client=client,policy=policy,
-            context=task_config.get("context"),local_provider=None,
-            state_path=Path(task_config["state_dir"])/"inference.sqlite")
+                workflow_id=flow,client=client,policy=policy,
+                context=task_config.get("context"),local_provider=None,
+                state_path=Path(task_config["state_dir"])/"inference.sqlite")
             callback=ModelRoleCallback(role=role,provider=provider,
                 artifact_store=client.store,artifact_load=client.load,
                 actor_id=config["actor_id"],

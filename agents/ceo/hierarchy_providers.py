@@ -66,7 +66,7 @@ class HierarchyProvider:
         if self.role == "ceo":
             from agents.ceo.hierarchy_runner import automatic_revision_allowed
             if (state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW")
-                    and not (state["id"].startswith("research-") and state["state"] in ("HOLD", "OWNER_REVIEW"))
+                    and not (state["id"].startswith("research-") and state["state"] in ("HOLD", "OWNER_REVIEW", "CEO_REDIRECTION"))
                     and not automatic_revision_allowed(state)):
                 raise ValueError("CEO review missing")
         if assignment is not None:

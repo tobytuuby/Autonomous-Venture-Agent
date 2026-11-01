@@ -163,6 +163,21 @@ class ResearchContinuationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"owner approval"):
             self.apply(self.continuation())
 
+    def test_manager_rejection_returns_to_ceo_for_round_two_disposition(self):
+        self.apply(self.continuation())
+        self.act("reject_premise","service-manager",
+                 dict(reason="Round two evidence does not support the current premise."))
+        self.assertEqual(self.state()["state"],"CEO_REDIRECTION")
+        signed=self.recommendation("REJECT_OR_DEFER")
+        command=self.command("research_disposition",payload=dict(round=2,
+            objective=signed["packet"]["assessment"]["next_internal_task"],
+            unanswered_question=signed["packet"]["assessment"]["evidence_gaps"],
+            review=signed))
+        after=self.apply(command)
+        self.assertEqual(after["state"],"TERMINATED")
+        self.assertEqual(after["research_disposition"]["packet"]["assessment"]["recommendation"],
+                         "REJECT_OR_DEFER")
+
     def test_round_three_requires_terminal_disposition_and_never_launch(self):
         self.apply(self.continuation())
         self.act("hold")
