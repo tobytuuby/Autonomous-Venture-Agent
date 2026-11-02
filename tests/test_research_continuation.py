@@ -280,6 +280,79 @@ class ResearchContinuationTests(unittest.TestCase):
             self.reserve(self.payload("after-restart"))
         self.assertEqual(self.state()["version"],1)  # Research is not a correction version.
 
+    def test_historical_saved_ceo_response_advances_signed_hold_without_inference(self):
+        from agents.ceo.ceo_research_review import review, SYSTEM
+        from tests.test_ceo_research_review import FakeClient, FakeModel
+        from cryptography.hazmat.primitives.serialization import PrivateFormat, NoEncryption
+        from unittest.mock import Mock
+        self.apply(self.continuation())
+        self.act('hold')
+        before = self.state()
+        seed = self.fx.base / 'historical-ceo-seed'
+        seed.write_bytes(self.keys['service-ceo'].private_bytes(
+            Encoding.Raw, PrivateFormat.Raw, NoEncryption()))
+        root = self.fx.base / 'historical-recovery'
+        policy = self.fx.base / 'historical-policy.json'
+        policy.write_text(canonical(dict(roles=dict(
+            ceo=dict(actor_id='service-ceo', model='gpt-6-sol')))))
+        config = dict(role='ceo', actor_id='service-ceo', signing_key=str(seed),
+                      state_dir=str(root / 'state'), policy=str(policy))
+        client = FakeClient(self.gate.artifact(self.ref['ref'], role='quota-ceo').encode())
+        client.read = Mock(side_effect=self.gate.state)
+        old_system = SYSTEM.replace(
+            'next_internal_task; assessment must be 40..1000 characters; evidence_gaps and\n'
+            'next_internal_task must each be 40..500 characters. Use newline-separated',
+            'next_internal_task; each text field remains 40..500 characters. Use newline-separated')
+        model = FakeModel('READY_FOR_OWNER_DISCUSSION', mutate=lambda result: result.update(
+            recommendation=result['recommendation'] + ': Bounded internal MVP is plausible.'))
+        response = None
+        def crash_after_response(path, snapshot_hash, request, result):
+            nonlocal response
+            response = result
+            raise OSError('isolated crash after durable response')
+        with patch('agents.ceo.ceo_research_review.SYSTEM', old_system), patch(
+                'agents.ceo.ceo_research_review.preserve_provider_intent', crash_after_response):
+            with self.assertRaises(OSError):
+                review(config, before, client, model)
+        pending_path = next((root / 'research-reviews').glob('*.json'))
+        pending = pending_path.read_bytes()
+        dbpath = root / 'state' / 'research-review-inference.sqlite'
+        dbpath.parent.mkdir()
+        with sqlite3.connect(dbpath) as db:
+            db.execute('CREATE TABLE calls(identity TEXT PRIMARY KEY, request TEXT NOT NULL, response TEXT, attempt TEXT NOT NULL)')
+            db.execute('INSERT INTO calls VALUES(?,?,?,?)', ('ceo-' + hashed(before)[:50],
+                canonical(model.last_request), canonical(response), 'a' * 64))
+        durable = dbpath.read_bytes()
+        quotas = self.resources.read_bytes()
+        with patch('agents.ceo.venture_exercise.configured_provider',
+                   side_effect=AssertionError('provider forbidden')), patch(
+                'agents.ceo.hierarchy_providers.HierarchyProvider',
+                side_effect=AssertionError('metered inference forbidden')):
+            signed = review(config, before, client)
+        self.assertEqual(dbpath.read_bytes(), durable)
+        self.assertEqual(self.resources.read_bytes(), quotas)
+        self.assertEqual(model.calls, 1)
+        intent = json.loads(pending_path.with_name(pending_path.stem + '.provider-intent.json').read_text())
+        self.assertEqual(intent['pending'], json.loads(pending))
+        self.assertEqual(intent['request_hash'], hashed(model.last_request))
+        command = self.command('research_disposition', payload=dict(round=2,
+            objective=signed['packet']['assessment']['next_internal_task'],
+            unanswered_question=signed['packet']['assessment']['evidence_gaps'], review=signed))
+        after = self.apply(command)
+        self.assertEqual(after['state'], 'OWNER_REVIEW')
+        self.assertEqual(len(research_rounds(after)), 2)
+        self.assertEqual(self.resources.read_bytes(), quotas)
+        self.assertEqual(dbpath.read_bytes(), durable)
+        for field in ('operational_authority', 'external_actions_allowed',
+                      'money_released', 'execution_performed'):
+            self.assertIs(after[field], False)
+        journal = VentureWorkflow(self.gate.directory / 'workflow.sqlite', actors=self.gate.actors)
+        try:
+            journal.verify()
+            self.assertEqual(journal.read(self.flow), after)
+        finally:
+            journal.close()
+
     def test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier(self):
         from agents.ceo.ceo_research_review import review
         from tests.test_ceo_research_review import FakeModel, FakeClient

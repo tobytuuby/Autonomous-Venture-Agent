@@ -3,6 +3,7 @@
 Strictly internal: findings are hypotheses, not customer research evidence or
 authorization to launch, spend venture capital, or contact customers.
 """
+import hashlib
 import json
 import os
 import pathlib
@@ -65,6 +66,10 @@ next_internal_task starts Disposition: and records why to defer/reject.
 Use no fabricated citations or numerical business thresholds.
 At round 3 choose only PROCEED_TO_MVP or REJECT_OR_DEFER; never request round 4.
 """
+
+
+# Exact pre-af2340e prompt from c46d160; never authorize arbitrary prompt drift.
+HISTORICAL_SYSTEM_SHA256 = '41f163eff0415ca2613f4100e3d5c8fc74e468e39601bd45bbe8a92b14f9ec7b'
 
 
 RECOMMENDATIONS = (
@@ -244,7 +249,6 @@ def review(config,state,client,provider=None):
         if prior.get('state') != 'PENDING' or provider is not None:
             raise ValueError('ambiguous CEO provider outcome; manual reconciliation required')
     # Verify artifact digests before sending bounded text to the provider.
-    import hashlib
     artifacts=[]
     for ref,sha in list(state['evidence'].items())[-9:]:
         if not ref.startswith('preparation-') or not ref.endswith(sha):
@@ -275,7 +279,7 @@ def review(config,state,client,provider=None):
             external_market_evidence_verified=False))
     from agents.ceo.venture_exercise import strict_json
     if prior is not None:
-        response=recover_response(config,state,client,prior,request)
+        response,request=recover_response(config,state,client,prior,request)
         model_name='gpt-6-sol'
     else:
         response,model_name=request_response(config,state,client,provider,path,current,request)
@@ -301,10 +305,15 @@ def review(config,state,client,provider=None):
 
 
 def recover_response(config,state,client,prior,request):
-    """Read only an exact completed local call; never reserve, execute or repair it."""
+    """Return the completed response and its verified exact historical request.
+
+    The authenticated broker read supplies the verified signed workflow snapshot;
+    recovery never reserves, executes, rewrites the call, or repairs its content.
+    """
     import sqlite3
     if (set(prior) != {'state','snapshot_hash','request_hash','created_utc'}
-            or prior['request_hash'] != hashed(request)):
+            or prior['state'] != 'PENDING'
+            or prior['snapshot_hash'] != hashed(state)):
         raise ValueError('CEO pending request mismatch; manual reconciliation required')
     observed=client.read(state['id'])
     if observed is None or hashed(observed) != hashed(state):
@@ -324,12 +333,25 @@ def recover_response(config,state,client,prior,request):
         db.close()
     if row is None or row[1] is None:
         raise ValueError('CEO durable response unavailable; manual reconciliation required')
-    if row[0] != canonical(request):
-        raise ValueError('changed provider request denied')
+    from agents.ceo.venture_exercise import strict_json
+    saved_request=strict_json(row[0])
+    # The durable wire must be the exact canonical request committed by PENDING.
+    # A matching snapshot alone cannot authorize changed semantics or a new prompt.
+    if row[0] != canonical(saved_request) or hashed(saved_request) != prior['request_hash']:
+        if prior['request_hash'] == hashed(request):
+            raise ValueError('changed provider request denied')
+        raise ValueError('CEO pending request mismatch; manual reconciliation required')
+    if canonical(saved_request) != canonical(request):
+        if (type(saved_request) is not dict
+                or set(saved_request) != set(request)
+                or type(saved_request.get('system')) is not str
+                or hashlib.sha256(saved_request['system'].encode()).hexdigest()
+                    != HISTORICAL_SYSTEM_SHA256
+                or canonical(dict(saved_request,system=request['system'])) != canonical(request)):
+            raise ValueError('CEO pending request mismatch; manual reconciliation required')
     if type(row[2]) is not str or re.fullmatch(r'[0-9a-f]{64}',row[2]) is None:
         raise ValueError('CEO durable attempt identity invalid')
-    from agents.ceo.venture_exercise import strict_json
-    return strict_json(row[1])
+    return strict_json(row[1]),saved_request
 
 
 def request_response(config,state,client,provider,path,current,request):

@@ -335,6 +335,96 @@ class DurableRecoveryTests(unittest.TestCase):
         self.client.raw=b'changed evidence'
         self.denied('evidence digest mismatch')
 
+    def historical_request(self):
+        import copy
+        saved = copy.deepcopy(self.model.last_request)
+        saved['system'] = SYSTEM.replace(
+            'next_internal_task; assessment must be 40..1000 characters; evidence_gaps and\n'
+            'next_internal_task must each be 40..500 characters. Use newline-separated',
+            'next_internal_task; each text field remains 40..500 characters. Use newline-separated')
+        self.bind_saved_request(saved)
+        return saved
+
+    def bind_saved_request(self, saved, wire=None):
+        self.update('request', canonical(saved) if wire is None else wire)
+        pending = json.loads(self.pending)
+        pending['request_hash'] = hashed(saved)
+        self.path.write_text(canonical(pending))
+        self.pending = self.path.read_bytes()
+
+    def test_historical_prompt_recovers_exact_original_intent(self):
+        from agents.ceo.ceo_research_review import HISTORICAL_SYSTEM_SHA256
+        saved = self.historical_request()
+        self.assertEqual(hashlib.sha256(saved['system'].encode()).hexdigest(),
+                         HISTORICAL_SYSTEM_SHA256)
+        self.assertNotEqual(hashed(saved), hashed(self.model.last_request))
+        original = assessment('Studio operators use spreadsheets for stock.',
+                              'READY_FOR_OWNER_DISCUSSION')
+        original['recommendation'] += ': Bounded internal MVP is plausible.'
+        original['assessment'] += '\n' + 'Further internal inference only. ' * 7
+        self.assertGreater(len(original['assessment']), 500)
+        self.response['decision']['content'] = json.dumps(original, indent=3)
+        self.update('response', canonical(self.response))
+        before = self.dbpath.read_bytes()
+        signed = self.recover()
+        self.assertEqual(signed['state'], 'COMPLETE')
+        self.assertEqual(signed['packet']['assessment'],
+                         dict(original, recommendation='READY_FOR_OWNER_DISCUSSION'))
+        self.seed.public_key().verify(bytes.fromhex(signed['signature']),
+                                      canonical(signed['packet']).encode())
+        intent = json.loads(self.path.with_name(self.path.stem + '.provider-intent.json').read_text())
+        self.assertEqual(intent['request_hash'], hashed(saved))
+        self.assertEqual(intent['pending'], json.loads(self.pending))
+        self.assertEqual(intent['raw_provider_response'], self.response)
+        self.assertEqual(self.dbpath.read_bytes(), before)
+        self.assertEqual(self.recover(), signed)
+        self.assertEqual(self.model.calls, 1)
+
+    def test_historical_semantics_and_arbitrary_prompt_drift_denied(self):
+        import copy
+        saved = self.historical_request()
+        mutations = [dict(saved, system=saved['system'] + ' changed'),
+                     dict(saved, json_object_mode=1),
+                     dict(saved, extra='unapproved')]
+        for field in saved['opportunity']:
+            changed = copy.deepcopy(saved)
+            changed['opportunity'][field] = 'tampered'
+            mutations.append(changed)
+        changed = copy.deepcopy(saved)
+        changed['opportunity']['external_market_evidence_verified'] = 0
+        mutations.append(changed)
+        for changed in mutations:
+            with self.subTest(changed=changed.keys()):
+                self.bind_saved_request(changed)
+                self.denied('pending request mismatch')
+        self.bind_saved_request(saved, json.dumps(saved, indent=2))
+        self.denied('pending request mismatch')
+
+    def test_historical_checkpoint_hash_and_snapshot_remain_exact(self):
+        saved = self.historical_request()
+        self.update('request', canonical(dict(saved, system=SYSTEM)))
+        self.denied('pending request mismatch')
+        self.bind_saved_request(saved)
+        self.state = dict(self.state, scope_hash='changed scope')
+        self.denied('prior CEO review bound to changed workflow')
+
+    def test_historical_recovery_does_not_repair_invalid_other_fields(self):
+        self.historical_request()
+        original = assessment('Studio operators use spreadsheets for stock.',
+                              'READY_FOR_OWNER_DISCUSSION')
+        original['recommendation'] += ': Bounded internal MVP is plausible.'
+        for field, value, error in (
+                ('assessment', 'too short', 'text length bound'),
+                ('evidence_gaps', 'x' * 501, 'text length bound'),
+                ('next_internal_task', 'Deploy the prototype immediately.', 'text length bound')):
+            self.response['decision']['content'] = canonical(dict(original, **{field: value}))
+            self.update('response', canonical(self.response))
+            # Separate invalid captured responses cannot replace one another.
+            intent = self.path.with_name(self.path.stem + '.provider-intent.json')
+            if intent.exists():
+                intent.unlink()
+            self.denied(error)
+
     def test_changed_system_request_policy_or_alias_denied(self):
         from unittest.mock import patch
         with patch('agents.ceo.ceo_research_review.SYSTEM','changed instructions'):
