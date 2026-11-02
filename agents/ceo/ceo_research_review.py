@@ -67,6 +67,63 @@ At round 3 choose only PROCEED_TO_MVP or REJECT_OR_DEFER; never request round 4.
 """
 
 
+RECOMMENDATIONS = (
+    'NEEDS_MORE_RESEARCH', 'READY_FOR_OWNER_DISCUSSION',
+    'PROCEED_TO_MVP', 'REJECT_OR_DEFER',
+)
+
+
+def parse_recommendation(result):
+    """Decode one exact enum, optionally followed by a single colon explanation.
+
+    This changes only the wire encoding, never the decision or round eligibility.
+    The caller preserves the original provider content before decoding.
+    """
+    if type(result) is not dict or type(result.get('recommendation')) is not str:
+        raise ValueError('CEO exact recommendation enum required')
+    raw = result['recommendation']
+    mentions = re.findall(r'\b(?:' + '|'.join(RECOMMENDATIONS) + r')\b', raw)
+    if len(mentions) != 1:
+        raise ValueError('CEO unique recommendation enum required')
+    enum = mentions[0]
+    if raw != enum and (
+            not raw.startswith(enum + ': ')
+            or not raw[len(enum) + 2:].strip()
+            or '\n' in raw or '\r' in raw):
+        raise ValueError('CEO exact enum or enum colon explanation required')
+    return dict(result, recommendation=enum)
+
+
+def preserve_provider_intent(path, snapshot_hash, request, response):
+    """Create once; replay must match. Keep original checkpoint and content."""
+    intent_path = path.with_name(path.stem + '.provider-intent.json')
+    pending = json.loads(path.read_text())
+    intent = dict(domain='owner-internal-research-provider-intent-v1',
+                  snapshot_hash=snapshot_hash, request_hash=hashed(request),
+                  pending=pending, raw_provider_response=response)
+    wire = (canonical(intent) + '\n').encode()
+    fd, name = tempfile.mkstemp(prefix='.ceo-intent-', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'wb') as file:
+            file.write(wire)
+            file.flush()
+            os.fsync(file.fileno())
+        os.chmod(name, 0o400)
+        try:
+            os.link(name, intent_path)
+        except FileExistsError:
+            if intent_path.is_symlink() or intent_path.read_bytes() != wire:
+                raise ValueError('CEO immutable provider intent mismatch')
+        dirfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(dirfd)
+        finally:
+            os.close(dirfd)
+    finally:
+        if os.path.exists(name):
+            os.unlink(name)
+
+
 def validate_recommendation(result, number, artifacts, objectives):
     """Deterministic attribution/criteria checks, not independent market verification.
 
@@ -226,12 +283,14 @@ def review(config,state,client,provider=None):
             or type(response.get('decision')) is not dict
             or type(response['decision'].get('content')) is not str):
         raise ValueError('CEO tool call forbidden or malformed response')
-    result=strict_json(response['decision']['content'])
+    preserve_provider_intent(path,current,request,response)
+    result=parse_recommendation(strict_json(response['decision']['content']))
     objectives = [r['objective'] for r in research_rounds(state)] if 'handoff' in state else state['scope']['tasks']
     validate_recommendation(result, number, artifacts, objectives)
     packet=dict(domain='owner-internal-research-ceo-review-v1',
         workflow_id=flow,snapshot_hash=current,model=model_name,
-        assessment=result,external_market_evidence_verified=False,
+        assessment=result,provider_response_sha256=hashed(response),
+        external_market_evidence_verified=False,
         venture_admission=False,financial_authority=False,
         reviewed_utc=datetime.now(timezone.utc).isoformat())
     key=Ed25519PrivateKey.from_private_bytes(pathlib.Path(config['signing_key']).read_bytes())

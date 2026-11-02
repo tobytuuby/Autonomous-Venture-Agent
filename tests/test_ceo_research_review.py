@@ -178,8 +178,8 @@ class DurableRecoveryTests(unittest.TestCase):
         self.model=FakeModel()
         with self.assertRaises(OSError):
             from unittest.mock import patch
-            with patch('agents.ceo.ceo_research_review.validate_recommendation',
-                       side_effect=OSError('simulated crash before signing')):
+            with patch('agents.ceo.ceo_research_review.preserve_provider_intent',
+                       side_effect=OSError('simulated crash before intent capture')):
                 review(self.config,self.state,self.client,self.model)
         self.path=self.root/'research-reviews'/(self.state['id']+'.json')
         self.pending=self.path.read_bytes()
@@ -225,6 +225,75 @@ class DurableRecoveryTests(unittest.TestCase):
         self.assertEqual(self.dbpath.read_bytes(),before)
         self.assertEqual(self.recover(),result)
         self.assertEqual(self.model.calls,1)
+
+    def test_colon_response_preserves_content_checkpoint_ledger_and_signature(self):
+        original = assessment('Studio operators use spreadsheets for stock.',
+                              'READY_FOR_OWNER_DISCUSSION')
+        original['recommendation'] += (
+            ': The customer, problem, and proposed log are concrete enough to discuss '
+            'a bounded internal MVP, despite unverified demand.')
+        # Whitespace/escaping in the actual content string must survive verbatim.
+        self.response['decision']['content'] = json.dumps(original, indent=3)
+        self.update('response', canonical(self.response))
+        before = self.dbpath.read_bytes()
+        result = self.recover()
+        expected = dict(original, recommendation='READY_FOR_OWNER_DISCUSSION')
+        self.assertEqual(result['packet']['assessment'], expected)
+        self.assertEqual(result['packet']['provider_response_sha256'], hashed(self.response))
+        self.seed.public_key().verify(bytes.fromhex(result['signature']),
+                                      canonical(result['packet']).encode())
+        intent_path = self.path.with_name(self.path.stem + '.provider-intent.json')
+        saved = intent_path.read_bytes()
+        intent = json.loads(saved)
+        self.assertEqual(intent['pending'], json.loads(self.pending))
+        self.assertEqual(intent['raw_provider_response'], self.response)
+        self.assertEqual(intent_path.stat().st_mode & 0o777, 0o400)
+        self.assertEqual(self.recover(), result)
+        self.assertEqual(intent_path.read_bytes(), saved)
+        self.assertEqual(self.dbpath.read_bytes(), before)
+        self.assertEqual(self.model.calls, 1)
+
+    def test_colon_does_not_repair_missing_evidence_or_change_pending(self):
+        original = assessment('Invented excerpt.', 'READY_FOR_OWNER_DISCUSSION')
+        original['recommendation'] += ': A bounded internal MVP seems plausible.'
+        self.response['decision']['content'] = canonical(original)
+        self.update('response', canonical(self.response))
+        self.denied('CEO evidence excerpt not in signed artifacts')
+        intent_path = self.path.with_name(self.path.stem + '.provider-intent.json')
+        saved = intent_path.read_bytes()
+        self.assertEqual(json.loads(saved)['raw_provider_response'], self.response)
+        self.denied('CEO evidence excerpt not in signed artifacts')
+        self.assertEqual(intent_path.read_bytes(), saved)
+
+    def test_immutable_intent_refuses_replacement_or_symlink(self):
+        original = assessment('Invented excerpt.')
+        self.response['decision']['content'] = canonical(original)
+        self.update('response', canonical(self.response))
+        self.denied('CEO evidence excerpt not in signed artifacts')
+        intent_path = self.path.with_name(self.path.stem + '.provider-intent.json')
+        saved = intent_path.read_bytes()
+        self.response['decision']['content'] = canonical(assessment(
+            'Studio operators use spreadsheets for stock.'))
+        self.update('response', canonical(self.response))
+        self.denied('immutable provider intent mismatch')
+        self.assertEqual(intent_path.read_bytes(), saved)
+        target = intent_path.with_suffix('.saved')
+        intent_path.rename(target)
+        intent_path.symlink_to(target)
+        self.denied('immutable provider intent mismatch')
+        self.assertEqual(target.read_bytes(), saved)
+
+    def test_crash_after_capture_replays_without_mutating_intent(self):
+        from unittest.mock import patch
+        with patch('agents.ceo.ceo_research_review.validate_recommendation',
+                   side_effect=OSError('crash after immutable capture')):
+            with self.assertRaises(OSError):
+                self.recover()
+        intent_path = self.path.with_name(self.path.stem + '.provider-intent.json')
+        saved = intent_path.read_bytes()
+        self.assertEqual(self.path.read_bytes(), self.pending)
+        self.assertEqual(self.recover()['state'], 'COMPLETE')
+        self.assertEqual(intent_path.read_bytes(), saved)
 
     def test_absent_incomplete_or_other_identity_never_retries(self):
         self.update('response',None)
@@ -279,6 +348,42 @@ class DurableRecoveryTests(unittest.TestCase):
         self.dbpath.rename(target)
         self.dbpath.symlink_to(target)
         self.denied('durable response unavailable')
+
+
+class RecommendationEncodingTests(unittest.TestCase):
+    def test_only_exact_enum_or_unique_colon_explanation(self):
+        from agents.ceo.ceo_research_review import parse_recommendation, RECOMMENDATIONS
+        for enum in RECOMMENDATIONS:
+            for raw in (enum, enum + ': Bounded internal assessment, demand unverified.'):
+                original = dict(recommendation=raw, assessment='unchanged')
+                self.assertEqual(parse_recommendation(original),
+                                 dict(original, recommendation=enum))
+                self.assertEqual(original['recommendation'], raw)
+        for raw in (None, [], {}, 1, True, '', 'ready_for_owner_discussion',
+                    ' READY_FOR_OWNER_DISCUSSION', 'READY_FOR_OWNER_DISCUSSION ',
+                    'READY_FOR_OWNER_DISCUSSION:', 'READY_FOR_OWNER_DISCUSSION: ',
+                    'READY_FOR_OWNER_DISCUSSION: \nExplanation',
+                    'READY_FOR_OWNER_DISCUSSION: text\rmore',
+                    'READY_FOR_OWNER_DISCUSSION - Explanation',
+                    'Maybe READY_FOR_OWNER_DISCUSSION',
+                    'READY_FOR_OWNER_DISCUSSION: or REJECT_OR_DEFER',
+                    'READY_FOR_OWNER_DISCUSSION: READY_FOR_OWNER_DISCUSSION',
+                    'READY_FOR_OWNER_DISCUSSION_EXTRA: Explanation'):
+            with self.subTest(raw=raw), self.assertRaises(ValueError):
+                parse_recommendation(dict(recommendation=raw))
+
+    def test_encoding_does_not_change_round_semantics_or_criteria(self):
+        from agents.ceo.ceo_research_review import parse_recommendation
+        quote = 'Studio operators use spreadsheets for stock.'
+        result = assessment(quote, 'READY_FOR_OWNER_DISCUSSION')
+        result['recommendation'] += ': Discuss a bounded internal MVP.'
+        parsed = parse_recommendation(result)
+        validate_recommendation(parsed, 1, [dict(deliverable=quote, explanation='')], [])
+        with self.assertRaisesRegex(ValueError, 'outside internal scope'):
+            validate_recommendation(parsed, 3, [dict(deliverable=quote, explanation='')], [])
+        parsed['assessment'] = parsed['assessment'].replace('Validation:', 'Missing:')
+        with self.assertRaisesRegex(ValueError, 'Validation'):
+            validate_recommendation(parsed, 1, [dict(deliverable=quote, explanation='')], [])
 
 
 class DecisionCriteriaTests(unittest.TestCase):

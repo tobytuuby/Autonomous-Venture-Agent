@@ -298,7 +298,10 @@ class ResearchContinuationTests(unittest.TestCase):
                 local=dict(config,state_dir=str(self.fx.base/("case-"+str(number))/"state"))
                 rec="PROCEED_TO_MVP" if number==3 else "READY_FOR_OWNER_DISCUSSION"
                 client=FakeClient(self.gate.artifact(self.ref["ref"],role="quota-ceo").encode())
-                signed=review(local,self.state(),client,FakeModel(rec))
+                model=FakeModel(rec, mutate=lambda result: result.update(
+                    recommendation=result['recommendation'] + ': Bounded internal MVP is plausible.'))
+                signed=review(local,self.state(),client,model)
+                self.assertEqual(signed['packet']['assessment']['recommendation'],rec)
                 before=self.state()
                 command=self.command("research_disposition",payload=dict(round=number,
                     objective=signed["packet"]["assessment"]["next_internal_task"],
