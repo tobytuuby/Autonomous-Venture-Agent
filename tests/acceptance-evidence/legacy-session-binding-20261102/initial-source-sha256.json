@@ -1,0 +1,5 @@
+{
+  "agents/ceo/hierarchy_research_daemon.py": "77da37773a95771ddd7352a95826fc1fa64d3d5986d9ac052ee142989a074333",
+  "tests/test_research_abc_routing.py": "0440235165493c7a88426917f20c4e4999c3b360ad8da5407571a59e23c10b70",
+  "tests/test_level2c_central_roles.py": "0b8141217455fb906c79bf380f8ee9c1187e5d1d7c8de4a8cd322c733cbb7609"
+}

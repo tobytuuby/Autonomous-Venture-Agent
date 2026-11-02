@@ -80,8 +80,25 @@ def allowed_config(base, flow, snapshot):
     config["state_dir"]=str(state)
     if role in ("ceo","manager"):
         context=dict(base["context"])
+        rounds = len(research_rounds(snapshot))
+        command = snapshot.get("last_command", {})
+        recovered = (command.get("action") == "recover_legacy_worker"
+                     and command.get("actor_id") == "service-ceo"
+                     and command.get("role") == "ceo"
+                     and command.get("workflow_id") == flow
+                     and command.get("scope_hash") == snapshot["scope_hash"])
+        # Authenticated snapshots retain the legacy scope through signed A/B/C
+        # transitions even after last_command replaces the recovery command.
+        # Only its original session used the old two-round exchange binding.
+        # The broker still requires the exact established context and policy;
+        # this neither creates a replacement session nor changes quota history.
+        if (snapshot["scope"]["worker_id"] == "service-worker"
+                and rounds == 1 and research_session(snapshot) == flow
+                and (recovered or bool(plan))
+                and type(context.get("rounds")) is int and context["rounds"] == 2):
+            rounds = context["rounds"]
         context.update(session_id=research_session(snapshot),venture_id=flow,
-                       objective="; ".join(snapshot["scope"]["tasks"]),rounds=len(research_rounds(snapshot)))
+                       objective="; ".join(snapshot["scope"]["tasks"]),rounds=rounds)
         config["context"]=context
     return config
 

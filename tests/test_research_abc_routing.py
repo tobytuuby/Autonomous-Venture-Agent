@@ -58,6 +58,62 @@ class ResearchRoutingTests(unittest.TestCase):
             self.assertEqual(cfg["workflow_id"], self.flow)
         self.assertEqual(self.base, before)
 
+    def legacy_recovery(self):
+        self.snapshot["scope"]["worker_id"] = "service-worker"
+        self.snapshot["last_command"].update(action="recover_legacy_worker",
+            actor_id="service-ceo", role="ceo", workflow_id=self.flow,
+            scope_hash=self.snapshot["scope_hash"])
+        self.base["context"]["rounds"] = 2
+
+    def test_legacy_original_binding_is_shared_by_ceo_and_manager(self):
+        self.legacy_recovery()
+        before = copy.deepcopy(self.base)
+        contexts = [self.config(role)["context"] for role in ("ceo", "manager")]
+        self.assertEqual(contexts[0], contexts[1])
+        self.assertEqual(contexts[0]["rounds"], 2)
+        self.assertEqual(contexts[0]["session_id"], self.flow)
+        self.assertEqual(contexts[0]["objective"], "; ".join(self.snapshot["scope"]["tasks"]))
+        cfg = self.config()
+        self.assertEqual(daemon.allowed_config(cfg, self.flow, self.snapshot), cfg)
+        self.assertEqual(self.base, before)
+
+    def test_legacy_binding_survives_later_signed_abc_states(self):
+        self.legacy_recovery()
+        self.plan()
+        self.snapshot["last_command"] = dict(action="submit")
+        for state in ("DECOMPOSITION_REVIEW", "WORKER_PENDING", "MANAGER_REVIEW",
+                      "CEO_REVIEW", "HOLD"):
+            self.snapshot["state"] = state
+            for role in ("ceo", "manager"):
+                self.assertEqual(self.config(role)["context"]["rounds"], 2)
+
+    def test_legacy_exception_requires_provenance_and_original_session(self):
+        self.legacy_recovery()
+        original = copy.deepcopy(self.snapshot)
+        for change in (dict(action="delegate"), dict(actor_id="other-ceo"),
+                       dict(role="manager"), dict(workflow_id="other"),
+                       dict(scope_hash="other")):
+            self.snapshot = copy.deepcopy(original)
+            self.snapshot["last_command"].update(change)
+            self.assertEqual(self.config()["context"]["rounds"], 1)
+        self.snapshot = copy.deepcopy(original)
+        self.snapshot["last_command"] = dict(action="delegate")
+        self.snapshot["decomposition"] = {}
+        self.assertEqual(self.config()["context"]["rounds"], 1)
+        self.snapshot = copy.deepcopy(original)
+        self.snapshot["scope"]["worker_id"] = "worker-a"
+        self.assertEqual(self.config()["context"]["rounds"], 1)
+        self.snapshot = copy.deepcopy(original)
+        for arbitrary in (3, 99, True, "2"):
+            self.base["context"]["rounds"] = arbitrary
+            self.assertEqual(self.config()["context"]["rounds"], 1)
+        self.base["context"]["rounds"] = 2
+        self.snapshot["research_rounds"] = [dict(round=1), dict(round=2)]
+        cfg = self.config()
+        self.assertEqual(cfg["context"]["session_id"], self.flow + "-r2")
+        self.snapshot["research_rounds"].append(dict(round=3))
+        self.assertEqual(self.config()["context"]["rounds"], 3)
+
     def test_scoping_is_idempotent_and_does_not_create_nested_ledgers(self):
         first = self.config()
         self.assertEqual(daemon.allowed_config(first, self.flow, self.snapshot), first)

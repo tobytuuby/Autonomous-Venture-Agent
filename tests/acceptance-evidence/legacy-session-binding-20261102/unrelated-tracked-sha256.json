@@ -1,0 +1,8 @@
+{
+  "agents/ceo/service_identity.py": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+  "agents/ceo/venture_workflow.py": "7d979f29ffa6d583def8b7869ba6d342a30a8e27cde6c8b77681fa86cbd7e0e8",
+  "docs/PROJECT_STATUS.md": "27787af1591b2b47cd4057a86ecbc35c7da977bf9b867b202e7e58dde3c7a88b",
+  "kernel/synthetic_venture_store.py": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+  "kernel/venture_admission.py": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+  "tests/test_owner_approval.py": "442dfc9b12a51f47f29bab6946e62cd0a8af9aa8319d0a379117d5830121df01"
+}

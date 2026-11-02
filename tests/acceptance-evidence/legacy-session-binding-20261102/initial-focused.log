@@ -1,0 +1,60 @@
+test_changed_payload_cannot_reset_scope_budget_version_or_round (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_changed_payload_cannot_reset_scope_budget_version_or_round) ... ok
+test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event) ... ok
+test_cumulative_ceiling_and_stale_accounting_fail_without_append (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_cumulative_ceiling_and_stale_accounting_fail_without_append) ... ok
+test_daemon_periodic_poll_response_loss_restart_and_retirement (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_daemon_periodic_poll_response_loss_restart_and_retirement) ... ERROR:root:research role ceo error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-session-binding-20261102/clean/agents/ceo/hierarchy_research_daemon.py", line 252, in poll
+    if recover_legacy_worker(client, config, snapshot):
+       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-session-binding-20261102/clean/agents/ceo/hierarchy_research_daemon.py", line 215, in recover_legacy_worker
+    result = client.apply(command, key.sign(canonical(command).encode()).hex())
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-session-binding-20261102/clean/tests/test_legacy_worker_recovery.py", line 267, in lost_response
+    raise OSError("lost after signed commit")
+OSError: lost after signed commit
+ok
+test_historical_correction_version_is_retained_without_another_correction (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_historical_correction_version_is_retained_without_another_correction) ... ok
+test_insufficient_quota_missing_ledger_and_effort_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_insufficient_quota_missing_ledger_and_effort_fail_closed) ... ok
+test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call) ... ok
+test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay) ... ok
+test_unauthorized_signer_and_changed_approval_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_unauthorized_signer_and_changed_approval_fail_closed) ... ok
+test_existing_ambiguous_intent_requires_exact_remote_reconciliation (tests.test_research_abc_routing.ResearchRoutingTests.test_existing_ambiguous_intent_requires_exact_remote_reconciliation) ... ok
+test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow) ... ok
+test_legacy_binding_survives_later_signed_abc_states (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_binding_survives_later_signed_abc_states) ... ok
+test_legacy_exception_requires_provenance_and_original_session (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_exception_requires_provenance_and_original_session) ... ok
+test_legacy_original_binding_is_shared_by_ceo_and_manager (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_original_binding_is_shared_by_ceo_and_manager) ... ok
+test_manager_callback_proposes_abc_under_existing_research_objective (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_callback_proposes_abc_under_existing_research_objective) ... ok
+test_manager_gets_fixed_decomposition_without_changing_existing_binding (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_gets_fixed_decomposition_without_changing_existing_binding) ... ok
+test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers) ... ok
+test_worker_requires_signed_plan_and_both_dependencies (tests.test_research_abc_routing.ResearchRoutingTests.test_worker_requires_signed_plan_and_both_dependencies) ... ok
+test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied (tests.test_research_abc_routing.ResearchRoutingTests.test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied) ... ok
+test_ceo_entrypoint_uses_https_and_never_opens_local_authority (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_entrypoint_uses_https_and_never_opens_local_authority) ... {"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+ok
+test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role) ... ok
+test_ceo_remote_model_ambiguity_never_falls_back (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_model_ambiguity_never_falls_back) ... ok
+test_ceo_remote_quota_accepts_local_provider_without_broker_binding (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_quota_accepts_local_provider_without_broker_binding) ... ok
+test_ceo_retry_changes_and_corrupt_quota_fail_closed (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_retry_changes_and_corrupt_quota_fail_closed) ... ok
+test_concurrent_fresh_ceo_bootstrap_is_one_charge (tests.test_level2c_central_roles.CentralRolesTests.test_concurrent_fresh_ceo_bootstrap_is_one_charge) ... ok
+test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling (tests.test_level2c_central_roles.CentralRolesTests.test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling) ... ok
+test_gateway_execution_requires_prior_reservation_and_caches_exact_result (tests.test_level2c_central_roles.CentralRolesTests.test_gateway_execution_requires_prior_reservation_and_caches_exact_result) ... ok
+test_hierarchy_manager_system_allowed_only_for_signed_matching_state (tests.test_level2c_central_roles.CentralRolesTests.test_hierarchy_manager_system_allowed_only_for_signed_matching_state) ... ok
+test_manager_adapter_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_adapter_restart_recovers_broker_complete_without_duplicate) ... ok
+test_manager_reconciliation_all_states_and_tampering_without_paid_retry (tests.test_level2c_central_roles.CentralRolesTests.test_manager_reconciliation_all_states_and_tampering_without_paid_retry) ... ok
+test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial) ... ok
+test_provider_backed_local_model_is_forbidden (tests.test_level2c_central_roles.CentralRolesTests.test_provider_backed_local_model_is_forbidden) ... ok
+test_recovered_legacy_context_reuses_binding_without_quota_reset (tests.test_level2c_central_roles.CentralRolesTests.test_recovered_legacy_context_reuses_binding_without_quota_reset) ... ok
+test_research_round_session_binds_to_venture_workflow (tests.test_level2c_central_roles.CentralRolesTests.test_research_round_session_binds_to_venture_workflow) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 17.228s
+
+OK

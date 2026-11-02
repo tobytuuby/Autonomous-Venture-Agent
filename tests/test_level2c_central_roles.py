@@ -102,6 +102,42 @@ class CentralRolesTests(unittest.TestCase):
                     polling_pins={f.tls.pin("poll")}, reservation_actor="manager",
                     ceo_reservation_pins=pins, ceo_reservation_actor=actor)
 
+    def test_recovered_legacy_context_reuses_binding_without_quota_reset(self):
+        from tests.test_research_abc_routing import ResearchRoutingTests
+        from agents.ceo.hierarchy_research_daemon import allowed_config
+        fixture = ResearchRoutingTests(methodName="runTest")
+        fixture.setUp()
+        self.addCleanup(fixture.doCleanups)
+        fixture.legacy_recovery()
+        fixture.base["context"] = dict(self.f.context, rounds=2)
+        original = dict(self.f.context, session_id=fixture.flow,
+            venture_id=fixture.flow, objective="; ".join(fixture.snapshot["scope"]["tasks"]))
+        ceo = dict(self.payload("legacy-established"), context=original)
+        first = self.ceo.reserve_provider(ceo)
+        ledger = self.f.authority.directory / "resources.sqlite"
+        with sqlite3.connect(ledger) as db:
+            binding = db.execute("SELECT * FROM exchange_sessions").fetchall()
+        for role, client, payload in (
+                ("ceo", self.ceo, ceo),
+                ("manager", self.f.client, self.f.reservation_payload("legacy-manager"))):
+            base = dict(fixture.base, role=role, actor_id="service-" + role)
+            context = allowed_config(base, fixture.flow, fixture.snapshot)["context"]
+            self.assertEqual(context, original)
+            request = dict(payload, context=context)
+            reply = client.reserve_provider(request)
+            self.assertEqual(client.reserve_provider(request), reply)
+            for change in (dict(rounds=1), dict(rounds=3),
+                           dict(objective="changed"), dict(venture_id="changed")):
+                with self.assertRaises(ValueError):
+                    client.reserve_provider(dict(request, context=dict(context, **change)))
+        self.assertEqual(self.ceo.reserve_provider(ceo), first)
+        self.assertEqual(self.f.reservations(), (2, 1024))
+        with sqlite3.connect(ledger) as db:
+            self.assertEqual(db.execute("SELECT * FROM exchange_sessions").fetchall(), binding)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM remote_reservations").fetchone()[0], 2)
+        self.assertFalse(self.f.providers["ceo"].calls)
+        self.assertFalse(self.f.providers["manager"].calls)
+
     def test_ceo_retry_changes_and_corrupt_quota_fail_closed(self):
         f = self.f
         payload = self.payload()
