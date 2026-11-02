@@ -230,7 +230,11 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                         logging.warning('Worker research quota reached; no new calls: %s',flow)
                         blocked.add(research_session(snapshot))
                         continue
-                if config["role"] == "worker" and snapshot.get("decomposition"):
+                if config["role"] == "worker":
+                    # Historical single-Worker research is immutable, and cannot be
+                    # executed by A/B/C without a signed approved decomposition.
+                    if not snapshot.get("decomposition"):
+                        continue
                     from agents.ceo.hierarchy_runner import ready_assignment
                     if ready_assignment(snapshot, config["actor_id"]) is None:
                         continue
