@@ -1,0 +1,20 @@
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+......F......{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+.........{"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+......................................................WARNING:root:CEO research workflow placed on signed quota hold: research-aaaaaaaaaaaaaaaaaaaaaaaa
+...............................
+======================================================================
+FAIL: test_review_state_does_not_gain_pending_recovery (tests.test_research_recovery.ProviderRecoveryTests.test_review_state_does_not_gain_pending_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 108, in test_review_state_does_not_gain_pending_recovery
+    with self.assertRaisesRegex(RecoveryImpossible, "LOCAL_EXECUTION_AMBIGUOUS"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: RecoveryImpossible not raised
+
+----------------------------------------------------------------------
+Ran 107 tests in 23.551s
+
+FAILED (failures=1)

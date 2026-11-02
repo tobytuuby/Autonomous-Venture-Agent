@@ -73,7 +73,10 @@ def tick_research_task(config, client, actors, private, policy, blocked=None):
                 role_filter=role,signers={config["actor_id"]:private.sign})
             after=runner.tick(flow)
         except Exception as exc:
-            blocked.add(intent)
+            # Manager pending intents reconcile through the durable broker on
+            # the next poll. Other role/state failures retain their old block.
+            if role != "manager" or snapshot["state"] != "MANAGER_PENDING":
+                blocked.add(intent)
             print(json.dumps(dict(role=role,workflow_id=flow,
                 status="RESEARCH_TASK_BLOCKED",error_type=type(exc).__name__,
                 operational_authority=False)),flush=True)

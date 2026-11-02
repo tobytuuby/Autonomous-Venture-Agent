@@ -17,6 +17,10 @@ MAX_EXECUTE = 16384
 
 
 def execute_reserved(payload, *, actor, provider, hierarchy=None):
+    probe = type(payload) is dict and payload.get("reconcile_only") is True
+    if probe:
+        exact(payload, ("reservation", "request", "reconcile_only"))
+        payload = {k: payload[k] for k in ("reservation", "request")}
     exact(payload, ("reservation", "request"))
     reservation, request = payload["reservation"], payload["request"]
     exact(reservation, ("context", "actor", "role", "identity", "request_sha256",
@@ -96,11 +100,18 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
         if row is not None:
             if row[0] != wire:
                 raise ValueError("changed inference request denied")
+            if probe:
+                db.execute("COMMIT")
+                return dict(reconciliation=row[2], request_sha256=reservation["request_sha256"],
+                            result=json.loads(row[1]) if row[2] == "COMPLETE" else None)
             if row[2] != "COMPLETE":
                 raise ValueError("ambiguous provider execution requires reconciliation")
             result = json.loads(row[1])
             db.execute("COMMIT")
             return result
+        if probe:
+            db.execute("COMMIT")
+            return dict(reconciliation="NOT_STARTED", request_sha256=reservation["request_sha256"], result=None)
         db.execute("INSERT INTO remote_executions VALUES(?,?,NULL,'PENDING')",
                    (call, wire))
         db.execute("COMMIT")

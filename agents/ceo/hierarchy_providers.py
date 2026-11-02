@@ -11,6 +11,10 @@ from agents.ceo.escalation_inbox import canonical, digest, exact, identifier
 from agents.ceo.venture_workflow import hashed
 
 
+class RecoveryImpossible(ValueError):
+    """The durable intent cannot be safely resumed automatically."""
+
+
 class HierarchyProvider:
     def __init__(self, *, role, actor, workflow_id, client, policy, context=None,
                  local_provider=None, state_path):
@@ -72,17 +76,34 @@ class HierarchyProvider:
         if assignment is not None:
             identity = self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
         elif self.role == "manager" and self.workflow_id.startswith("research-"):
-            # Persist a distinct idempotency key for the exact signed research
-            # prompt. A code/schema change cannot collide with an earlier
-            # unexecuted reservation for the same workflow snapshot.
+            # New intents bind the exact prompt; recovery also checks historical
+            # snapshot-only keys before allowing a new intent.
             identity = self.role + "-" + hashed(dict(snapshot=state, request=request))[:50]
         else:
             identity = self.role + "-" + hashed(state)[:50]
         wire = canonical(request)
+        recovering = False
         db = sqlite3.connect(self.state_path, isolation_level=None, timeout=5)
         try:
             db.execute("PRAGMA synchronous=FULL")
             db.execute("BEGIN IMMEDIATE")
+            # Older releases used snapshot-only keys. Never mint a fresh intent
+            # when any historical intent already binds this signed snapshot.
+            matches = []
+            safe_manager = (self.role == "manager"
+                and self.workflow_id.startswith("research-")
+                and state["state"] == "MANAGER_PENDING")
+            if safe_manager:
+                for row in db.execute("SELECT identity,request,response,attempt FROM calls ORDER BY rowid"):
+                    old = json.loads(row[1])
+                    if old.get("opportunity", {}).get("snapshot_sha256") == hashed(state):
+                        matches.append(row)
+                if len(matches) > 1:
+                    raise RecoveryImpossible("MULTIPLE_DURABLE_INTENTS")
+                if matches:
+                    if matches[0][1] != wire:
+                        raise RecoveryImpossible("PROMPT_CHANGED")
+                    identity = matches[0][0]
             prior = db.execute("SELECT request,response,attempt FROM calls WHERE identity=?",(identity,)).fetchone()
             if prior:
                 if prior[0] != wire:
@@ -91,13 +112,9 @@ class HierarchyProvider:
                     result=json.loads(prior[1])
                     db.execute("COMMIT")
                     return result
-                # Owner-operator reconciliation for ONE exact manager intent, after
-                # verifying centrally that remote execution never began. The
-                # existing broker ledger makes replay idempotent even if stale.
-                import os
-                if (self.role!="manager" or not self.workflow_id.startswith("research-")
-                        or os.environ.get("VENTURE_RESEARCH_RECONCILE_ID")!=identity):
-                    raise ValueError("ambiguous provider call requires reconciliation")
+                if not safe_manager:
+                    raise RecoveryImpossible("LOCAL_EXECUTION_AMBIGUOUS")
+                recovering = True
                 attempt=prior[2]
                 db.execute("COMMIT")
             else:
@@ -139,11 +156,18 @@ class HierarchyProvider:
                 self.local_provider.maximum_output_tokens=self.policy["maximum_output_tokens"]
                 result=self.local_provider(request,())
             else:
-                wrapper=self.client._request("POST","/v1/inference/execute",
-                                            dict(reservation=reservation,request=request))
-                if set(wrapper) != {"result"}:
-                    raise ValueError("uncorrelated manager response")
-                result=wrapper["result"]
+                payload = dict(reservation=reservation, request=request)
+                if recovering:
+                    wrapper = self.client._request("POST", "/v1/inference/execute",
+                                                   dict(payload, reconcile_only=True))
+                    exact(wrapper, ("result",))
+                    status = wrapper["result"]
+                    result = reconciled_result(status, request_sha)
+                if not recovering or status["reconciliation"] == "NOT_STARTED":
+                    wrapper=self.client._request("POST","/v1/inference/execute", payload)
+                    if set(wrapper) != {"result"}:
+                        raise ValueError("uncorrelated manager response")
+                    result=wrapper["result"]
         if (type(result) is not dict or result.get("tool_call") is not None
                 or type(result.get("decision")) is not dict
                 or type(result["decision"].get("content")) is not str):
@@ -163,3 +187,17 @@ class HierarchyProvider:
         finally:
             db.close()
         return result
+
+
+def reconciled_result(status, request_sha):
+    """Only an exact broker-owned COMPLETE result or never-started intent resumes."""
+    exact(status, ("reconciliation", "request_sha256", "result"))
+    if status["request_sha256"] != request_sha:
+        raise RecoveryImpossible("RECONCILIATION_BINDING")
+    if status["reconciliation"] == "COMPLETE":
+        if type(status["result"]) is not dict:
+            raise RecoveryImpossible("RECONCILIATION_RESULT")
+        return status["result"]
+    if status["reconciliation"] == "NOT_STARTED" and status["result"] is None:
+        return None
+    raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")

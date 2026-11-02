@@ -1,0 +1,171 @@
+E.EE............EEEEE..............................E...{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+.................................{"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+............
+======================================================================
+ERROR: test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ProviderRecoveryTests.test_pending_is_terminal_and_never_retried)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 86, in test_pending_is_terminal_and_never_retried
+    self.provider()(self.request, ())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 146, in __call__
+    if self.context is None or self.context["session_id"] != research_session(state):
+                                                             ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 75, in research_session
+    rounds = research_rounds(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 64, in research_rounds
+    fingerprint = research_identity(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 54, in research_identity
+    matches = [sha for ref, sha in item["evidence"].items()
+                                   ~~~~^^^^^^^^^^^^
+KeyError: 'evidence'
+
+======================================================================
+ERROR: test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ProviderRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 77, in test_remote_complete_response_loss_recovers_without_paid_call
+    self.assertEqual(self.provider()(self.request, ()), self.result)
+                     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 146, in __call__
+    if self.context is None or self.context["session_id"] != research_session(state):
+                                                             ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 75, in research_session
+    rounds = research_rounds(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 64, in research_rounds
+    fingerprint = research_identity(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 54, in research_identity
+    matches = [sha for ref, sha in item["evidence"].items()
+                                   ~~~~^^^^^^^^^^^^
+KeyError: 'evidence'
+
+======================================================================
+ERROR: test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ProviderRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 66, in test_restart_never_started_uses_original_identity_attempt_and_one_execution
+    self.assertEqual(self.provider()(self.request, ()), self.result)
+                     ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 146, in __call__
+    if self.context is None or self.context["session_id"] != research_session(state):
+                                                             ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 75, in research_session
+    rounds = research_rounds(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 64, in research_rounds
+    fingerprint = research_identity(item)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 54, in research_identity
+    matches = [sha for ref, sha in item["evidence"].items()
+                                   ~~~~^^^^^^^^^^^^
+KeyError: 'evidence'
+
+======================================================================
+ERROR: test_exhaustion_is_signed_terminal_exception_without_allowance_reset (tests.test_research_recovery.SignedRecoveryTests.test_exhaustion_is_signed_terminal_exception_without_allowance_reset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 120, in setUp
+    self.fx.act("delegate", "service-manager")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 74, in act
+    return self.apply(self.command(action,actor,payload,refs))
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 71, in apply
+    return self.gate.apply(dict(command=cmd,signature=signature),role=role)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_gateway.py", line 418, in apply
+    result = workflow.apply(cmd, payload["signature"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 616, in apply
+    raise ValueError("transition denied")
+ValueError: transition denied
+
+======================================================================
+ERROR: test_manager_exception_is_closed_by_ceo_without_inference (tests.test_research_recovery.SignedRecoveryTests.test_manager_exception_is_closed_by_ceo_without_inference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 120, in setUp
+    self.fx.act("delegate", "service-manager")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 74, in act
+    return self.apply(self.command(action,actor,payload,refs))
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 71, in apply
+    return self.gate.apply(dict(command=cmd,signature=signature),role=role)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_gateway.py", line 418, in apply
+    result = workflow.apply(cmd, payload["signature"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 616, in apply
+    raise ValueError("transition denied")
+ValueError: transition denied
+
+======================================================================
+ERROR: test_other_states_do_not_authorize_recovery (tests.test_research_recovery.SignedRecoveryTests.test_other_states_do_not_authorize_recovery)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 120, in setUp
+    self.fx.act("delegate", "service-manager")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 74, in act
+    return self.apply(self.command(action,actor,payload,refs))
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 71, in apply
+    return self.gate.apply(dict(command=cmd,signature=signature),role=role)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_gateway.py", line 418, in apply
+    result = workflow.apply(cmd, payload["signature"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 616, in apply
+    raise ValueError("transition denied")
+ValueError: transition denied
+
+======================================================================
+ERROR: test_signed_retired_recovery_survives_every_restart_preserves_approval_and_effort (tests.test_research_recovery.SignedRecoveryTests.test_signed_retired_recovery_survives_every_restart_preserves_approval_and_effort)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 120, in setUp
+    self.fx.act("delegate", "service-manager")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 74, in act
+    return self.apply(self.command(action,actor,payload,refs))
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 71, in apply
+    return self.gate.apply(dict(command=cmd,signature=signature),role=role)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_gateway.py", line 418, in apply
+    result = workflow.apply(cmd, payload["signature"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 616, in apply
+    raise ValueError("transition denied")
+ValueError: transition denied
+
+======================================================================
+ERROR: test_wrong_signer_and_operational_tampering_denied (tests.test_research_recovery.SignedRecoveryTests.test_wrong_signer_and_operational_tampering_denied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_recovery.py", line 120, in setUp
+    self.fx.act("delegate", "service-manager")
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 74, in act
+    return self.apply(self.command(action,actor,payload,refs))
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_research_continuation.py", line 71, in apply
+    return self.gate.apply(dict(command=cmd,signature=signature),role=role)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_gateway.py", line 418, in apply
+    result = workflow.apply(cmd, payload["signature"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/venture_workflow.py", line 616, in apply
+    raise ValueError("transition denied")
+ValueError: transition denied
+
+======================================================================
+ERROR: test_existing_ambiguous_intent_is_preserved_without_remote_io (tests.test_research_abc_routing.ResearchRoutingTests.test_existing_ambiguous_intent_is_preserved_without_remote_io)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_abc_routing.py", line 94, in test_existing_ambiguous_intent_is_preserved_without_remote_io
+    provider(request, ())
+    ~~~~~~~~^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 148, in __call__
+    binding=self.policy["roles"][self.role]
+            ~~~~~~~~~~~^^^^^^^^^
+KeyError: 'roles'
+
+----------------------------------------------------------------------
+Ran 100 tests in 23.218s
+
+FAILED (errors=9)

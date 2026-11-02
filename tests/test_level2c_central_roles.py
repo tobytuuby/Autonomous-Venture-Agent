@@ -280,6 +280,35 @@ class CentralRolesTests(unittest.TestCase):
             execute_reserved(payload, actor="ceo", provider=provider)
         self.assertEqual(f.reservations(), (2, 1024))
 
+    def test_manager_reconciliation_all_states_and_tampering_without_paid_retry(self):
+        from agents.ceo.provider_gateway import execute_reserved
+        from agents.ceo.preparation_exchange import SYSTEM
+        from agents.ceo.escalation_inbox import digest
+        f = self.f
+        request = dict(system=SYSTEM, json_object_mode=True, opportunity={})
+        reservation = dict(f.reservation_payload("manager-recovery"), request_sha256=digest(canonical(request).encode()))
+        data = dict(reservation=reservation, request=request)
+        probe = dict(data, reconcile_only=True)
+        provider = fixtures.FixtureProvider("manager")
+        self.ceo.reserve_provider(self.payload("ceo-recovery"))
+        f.client.reserve_provider(reservation)
+        def execute(payload):
+            return execute_reserved(payload, actor="manager", provider=provider)
+        self.assertEqual(execute(probe)["reconciliation"], "NOT_STARTED")
+        self.assertEqual(len(provider.calls), 0)
+        result = execute(data)
+        self.assertEqual(execute(probe)["result"], result)
+        self.assertEqual(execute(data), result)
+        with sqlite3.connect(f.authority.directory/"resources.sqlite") as db:
+            db.execute("UPDATE remote_executions SET status='PENDING',response=NULL")
+        self.assertEqual(execute(probe)["reconciliation"], "PENDING")
+        with self.assertRaises(ValueError):
+            execute(data)
+        with self.assertRaises(ValueError):
+            execute(dict(probe, reservation=dict(reservation, attempt="e"*64)))
+        self.assertEqual(len(provider.calls), 1)
+        self.assertEqual(f.reservations(), (2, 1024))
+
     def test_mtls_manager_execution_endpoint_and_ceo_denial(self):
         from agents.ceo.provider_gateway import execute_reserved, RemoteInferenceProvider
         from agents.ceo.preparation_exchange import SYSTEM
@@ -311,6 +340,17 @@ class CentralRolesTests(unittest.TestCase):
             pending = dict(reservation=payload, request=request)
             with self.assertRaises(ValueError):
                 ceo.execute_provider(pending)
+            # Recovery uses the hierarchy client; the legacy exchange client
+            # intentionally accepts decision results only.
+            from agents.ceo.hierarchy_client import HierarchyClient
+            hierarchy_client = HierarchyClient(
+                "https://localhost:" + str(server.server_port) + POLL_PATH,
+                ca_file=str(f.tls.ca), client_cert=str(f.tls.paths["poll"][0]),
+                client_key=str(f.tls.paths["poll"][1]))
+            status = hierarchy_client._request("POST", "/v1/inference/execute",
+                dict(pending, reconcile_only=True))["result"]
+            self.assertEqual(status["reconciliation"], "NOT_STARTED")
+            self.assertEqual(len(provider.calls), 0)
             remote = RemoteInferenceProvider(mgr, endpoint=provider.endpoint, model=provider.model)
             remote.bind_reservation(payload)
             result = remote(request, ())
@@ -320,6 +360,56 @@ class CentralRolesTests(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join()
+
+    def test_manager_adapter_restart_recovers_broker_complete_without_duplicate(self):
+        from pathlib import Path
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from agents.ceo.hierarchy_providers import HierarchyProvider
+        from agents.ceo.provider_gateway import execute_reserved
+        from agents.ceo.provider_reservation import reserve_exchange
+        from agents.ceo.hierarchy_model_callbacks import RESEARCH_SYSTEM
+        from agents.ceo.venture_workflow import hashed
+        f = self.f
+        flow = "research-" + "a" * 24
+        state = dict(id=flow, venture_id=flow, mode="PREPARATION_ONLY",
+            state="MANAGER_PENDING", scope_hash="f"*64,
+            scope=dict(manager_id="manager", tasks=["Grant Deadline Calendar"]),
+            handoff=dict(item_id=flow),
+            evidence={"research-approval-"+"a"*24: "a"*64})
+        context = dict(f.context, session_id=flow, venture_id=flow, rounds=1)
+        self.ceo.reserve_provider(dict(self.payload("ceo-manager-restart"), context=context))
+        request = dict(system=RESEARCH_SYSTEM, json_object_mode=True,
+            opportunity=dict(role="manager", state="MANAGER_PENDING", workflow_id=flow,
+                scope_hash=state["scope_hash"], snapshot_sha256=hashed(state),
+                tasks=state["scope"]["tasks"]))
+        client = Mock()
+        client.read.return_value = state
+        provider = fixtures.FixtureProvider("manager")
+        hierarchy = SimpleNamespace(state=lambda key: state if key == flow else None)
+        lost = [True]
+        def route(method, path, payload):
+            if path.endswith("/reservations"):
+                return reserve_exchange(payload, actor="manager", role="manager")
+            result = execute_reserved(payload, actor="manager", provider=provider, hierarchy=hierarchy)
+            if lost[0] and not payload.get("reconcile_only"):
+                lost[0] = False
+                raise OSError("lost after durable broker completion")
+            return dict(result=result)
+        client._request.side_effect = route
+        def adapter():
+            return HierarchyProvider(role="manager", actor="manager", workflow_id=flow,
+                client=client, context=context, policy=f.policy,
+                state_path=Path(f.home)/"manager-restart.sqlite")
+        with self.assertRaises(OSError):
+            adapter()(request, ())
+        result = adapter()(request, ())
+        self.assertEqual(adapter()(request, ()), result)
+        self.assertEqual(provider.calls, [request])
+        self.assertEqual(f.reservations(), (2, 1024))
+        with sqlite3.connect(Path(f.home)/"manager-restart.sqlite") as db:
+            rows = db.execute("SELECT request,response FROM calls").fetchall()
+        self.assertEqual(rows, [(canonical(request), canonical(result))])
 
     def test_provider_backed_local_model_is_forbidden(self):
         provider = OpenAICompatibleShadowModel.__new__(OpenAICompatibleShadowModel)

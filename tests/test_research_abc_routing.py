@@ -68,7 +68,7 @@ class ResearchRoutingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "session mismatch"):
             daemon.allowed_config(first, other["id"], other)
 
-    def test_existing_ambiguous_intent_is_preserved_without_remote_io(self):
+    def test_existing_ambiguous_intent_requires_exact_remote_reconciliation(self):
         import os
         import sqlite3
         from agents.ceo.hierarchy_providers import HierarchyProvider
@@ -78,7 +78,8 @@ class ResearchRoutingTests(unittest.TestCase):
         client = Mock()
         client.read.return_value = self.snapshot
         provider = HierarchyProvider(role="manager", actor="service-manager",
-            workflow_id=self.flow, client=client, policy={}, context=cfg["context"],
+            workflow_id=self.flow, client=client, policy=dict(roles=dict(manager=dict(
+                actor_id="service-manager", endpoint="fixture", model="fixture"))), context=cfg["context"],
             state_path=path)
         request = dict(system="fixture", json_object_mode=True,
             opportunity=dict(scope_hash=self.snapshot["scope_hash"],
@@ -88,12 +89,15 @@ class ResearchRoutingTests(unittest.TestCase):
             db.execute("INSERT INTO calls VALUES(?,?,NULL,?)",
                        (identity, canonical(request), "a" * 64))
         before = path.read_bytes()
+        client._request.side_effect = lambda method, path, payload: (
+            dict(reserved=True) if path.endswith("/reservations") else
+            dict(result=dict(reconciliation="PENDING", request_sha256=hashed(request), result=None)))
         with patch.dict(os.environ, {}, clear=True):
             for _ in range(2):
-                with self.assertRaisesRegex(ValueError, "requires reconciliation"):
+                with self.assertRaisesRegex(ValueError, "PROVIDER_EXECUTION_AMBIGUOUS"):
                     provider(request, ())
         self.assertEqual(path.read_bytes(), before)
-        client._request.assert_not_called()
+        self.assertEqual(client._request.call_count, 4)
 
     def test_scoped_service_ticks_only_selected_workflow(self):
         from agents.ceo import hierarchy_service as service

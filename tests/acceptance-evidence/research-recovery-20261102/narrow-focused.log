@@ -1,0 +1,17 @@
+..........{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+.........{"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+..........E...............................
+======================================================================
+ERROR: test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_level2c_central_roles.py", line 343, in test_mtls_manager_execution_endpoint_and_ceo_denial
+    status = mgr.execute_provider(dict(pending, reconcile_only=True))
+  File "/home/epsilon/venture-control-workspace/agents/ceo/cross_vm_poll_client.py", line 172, in execute_provider
+    raise ValueError("untrusted broker provider result")
+ValueError: untrusted broker provider result
+
+----------------------------------------------------------------------
+Ran 61 tests in 17.031s
+
+FAILED (errors=1)

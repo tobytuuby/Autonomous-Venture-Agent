@@ -1,0 +1,8 @@
+{
+  "agents/ceo/hierarchy_providers.py": "40e5bbd9a61449cd745cae4a1848a8646d58ca745b36f684f875485c77953b8c",
+  "agents/ceo/hierarchy_service.py": "ed57d94872d30a8f23dc25364d50814fdc466646ed06fd3c31ca0ad670110f20",
+  "agents/ceo/provider_gateway.py": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813",
+  "tests/test_research_recovery.py": "4e1e9554a17a500cb83dbd1fb2cc7a2ef08ed5c1de18a39a0e90c8c2a919d688",
+  "tests/test_research_abc_routing.py": "d785f9685bdff532bbbde53840cdd980f0be1eec0a6a8aab9fd2709d37437206",
+  "tests/test_level2c_central_roles.py": "ccaf62a427f1075d5e1038cefedbfe33fbd00c557bb133f8c9adeb8a85abc8a6"
+}
