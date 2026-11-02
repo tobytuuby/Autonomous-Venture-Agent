@@ -149,6 +149,138 @@ class CEOResearchTests(unittest.TestCase):
                 external_actions_allowed=False,execution_performed=False,money_released=True),
                 FakeClient(b''),FakeModel())
 
+class DurableRecoveryTests(unittest.TestCase):
+    def setUp(self):
+        import sqlite3
+        from unittest.mock import Mock
+        self.tmp=tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name)
+        self.seed=Ed25519PrivateKey.generate()
+        (self.root/'seed').write_bytes(self.seed.private_bytes(
+            Encoding.Raw,PrivateFormat.Raw,NoEncryption()))
+        self.raw=canonical(dict(role='worker',action='submit',
+            deliverable='Studio operators use spreadsheets for stock.',
+            explanation='Internal desk hypothesis only.')).encode()
+        sha=hashlib.sha256(self.raw).hexdigest()
+        self.state=dict(id='research-'+'d'*24,state='HOLD',mode='PREPARATION_ONLY',
+            operational_authority=False,external_actions_allowed=False,
+            execution_performed=False,money_released=False,
+            scope=dict(tasks=['Desk research only']),scope_hash='scope',
+            evidence={'preparation-'+sha:sha})
+        self.client=FakeClient(self.raw)
+        self.client.read=Mock(return_value=self.state)
+        self.config=dict(role='ceo',actor_id='service-ceo',
+            signing_key=str(self.root/'seed'),state_dir=str(self.root/'state'),
+            policy=str(self.root/'policy.json'))
+        (self.root/'policy.json').write_text(json.dumps(dict(roles=dict(
+            ceo=dict(actor_id='service-ceo',model='gpt-6-sol')))))
+        self.model=FakeModel()
+        with self.assertRaises(OSError):
+            from unittest.mock import patch
+            with patch('agents.ceo.ceo_research_review.validate_recommendation',
+                       side_effect=OSError('simulated crash before signing')):
+                review(self.config,self.state,self.client,self.model)
+        self.path=self.root/'research-reviews'/(self.state['id']+'.json')
+        self.pending=self.path.read_bytes()
+        self.dbpath=self.root/'state'/'research-review-inference.sqlite'
+        self.dbpath.parent.mkdir()
+        self.identity='ceo-'+hashed(self.state)[:50]
+        self.response=dict(decision=dict(content=json.dumps(assessment(
+            'Studio operators use spreadsheets for stock.'))),tool_call=None)
+        with sqlite3.connect(self.dbpath) as db:
+            db.execute('CREATE TABLE calls(identity TEXT PRIMARY KEY, request TEXT NOT NULL, response TEXT, attempt TEXT NOT NULL)')
+            db.execute('INSERT INTO calls VALUES(?,?,?,?)',(self.identity,
+                canonical(self.model.last_request),canonical(self.response),'a'*64))
+
+    def recover(self):
+        from unittest.mock import patch
+        with patch('agents.ceo.venture_exercise.configured_provider',
+                   side_effect=AssertionError('provider configuration forbidden')), \
+             patch('agents.ceo.hierarchy_providers.HierarchyProvider',
+                   side_effect=AssertionError('metered provider forbidden')):
+            return review(self.config,self.state,self.client)
+
+    def update(self,column,value):
+        import sqlite3
+        self.assertIn(column,('request','response','attempt','identity'))
+        with sqlite3.connect(self.dbpath) as db:
+            db.execute('UPDATE calls SET '+column+'=?',(value,))
+
+    def denied(self,error):
+        before=self.dbpath.read_bytes()
+        with self.assertRaisesRegex(ValueError,error):
+            self.recover()
+        self.assertEqual(self.path.read_bytes(),self.pending)
+        self.assertEqual(self.dbpath.read_bytes(),before)
+        self.assertEqual(self.model.calls,1)
+
+    def test_completed_durable_response_signed_without_provider_or_ledger_write(self):
+        before=self.dbpath.read_bytes()
+        result=self.recover()
+        self.assertEqual(result['state'],'COMPLETE')
+        self.assertEqual(result['packet']['assessment'],json.loads(self.response['decision']['content']))
+        self.seed.public_key().verify(bytes.fromhex(result['signature']),
+                                      canonical(result['packet']).encode())
+        self.assertEqual(self.dbpath.read_bytes(),before)
+        self.assertEqual(self.recover(),result)
+        self.assertEqual(self.model.calls,1)
+
+    def test_absent_incomplete_or_other_identity_never_retries(self):
+        self.update('response',None)
+        self.denied('durable response unavailable')
+        self.update('identity','ceo-'+'f'*50)
+        self.denied('durable response unavailable')
+        self.dbpath.unlink()
+        with self.assertRaisesRegex(ValueError,'durable response unavailable'):
+            self.recover()
+        self.assertFalse(self.dbpath.exists())
+        self.assertEqual(self.path.read_bytes(),self.pending)
+
+    def test_request_and_pending_hash_must_match(self):
+        self.update('request',canonical(dict(changed=True)))
+        self.denied('changed provider request')
+        prior=json.loads(self.pending)
+        prior['request_hash']='0'*64
+        self.path.write_text(canonical(prior))
+        self.pending=self.path.read_bytes()
+        self.denied('pending request mismatch')
+
+    def test_invalid_response_reports_exact_validator_error_and_stays_pending(self):
+        invalid=assessment('Invented excerpt from nowhere.')
+        self.response['decision']['content']=canonical(invalid)
+        self.update('response',canonical(self.response))
+        self.denied('CEO evidence excerpt not in signed artifacts')
+
+    def test_malformed_response_and_attempt_denied(self):
+        self.update('response',canonical(dict(tool_call=dict(name='launch'))))
+        self.denied('CEO tool call forbidden')
+        self.update('response',canonical(self.response))
+        self.update('attempt','invalid')
+        self.denied('attempt identity invalid')
+
+    def test_stale_snapshot_and_changed_artifacts_denied(self):
+        self.client.read.return_value=dict(self.state,state='OWNER_REVIEW')
+        self.denied('stale CEO reconciliation snapshot')
+        self.client.read.return_value=self.state
+        self.client.raw=b'changed evidence'
+        self.denied('evidence digest mismatch')
+
+    def test_changed_system_request_policy_or_alias_denied(self):
+        from unittest.mock import patch
+        with patch('agents.ceo.ceo_research_review.SYSTEM','changed instructions'):
+            self.denied('pending request mismatch')
+        (self.root/'policy.json').write_text(json.dumps(dict(roles=dict(
+            ceo=dict(actor_id='service-ceo',model='other')))))
+        self.denied('model policy identity denied')
+        (self.root/'policy.json').write_text(json.dumps(dict(roles=dict(
+            ceo=dict(actor_id='service-ceo',model='gpt-6-sol')))))
+        target=self.root/'saved.sqlite'
+        self.dbpath.rename(target)
+        self.dbpath.symlink_to(target)
+        self.denied('durable response unavailable')
+
+
 class DecisionCriteriaTests(unittest.TestCase):
     def setUp(self):
         self.quote = 'Studio operators use spreadsheets and group chats for stock.'

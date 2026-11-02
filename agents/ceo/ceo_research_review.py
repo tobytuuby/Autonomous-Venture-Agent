@@ -175,13 +175,15 @@ def review(config,state,client,provider=None):
     current=hashed(state)
     if path.is_symlink():
         raise ValueError('CEO review state alias denied')
+    prior=None
     if path.exists():
         prior=json.loads(path.read_text())
         if prior.get('snapshot_hash') != current:
             raise ValueError('prior CEO review bound to changed workflow')
         if prior.get('state')=='COMPLETE':
             return prior
-        raise ValueError('ambiguous CEO provider outcome; manual reconciliation required')
+        if prior.get('state') != 'PENDING' or provider is not None:
+            raise ValueError('ambiguous CEO provider outcome; manual reconciliation required')
     # Verify artifact digests before sending bounded text to the provider.
     import hashlib
     artifacts=[]
@@ -212,7 +214,68 @@ def review(config,state,client,provider=None):
             snapshot_sha256=current,research_round=number,
             research_state='QUOTA_HOLD',signed_artifacts=artifacts,
             external_market_evidence_verified=False))
-    from agents.ceo.venture_exercise import configured_provider,strict_json
+    from agents.ceo.venture_exercise import strict_json
+    if prior is not None:
+        response=recover_response(config,state,client,prior,request)
+        model_name='gpt-6-sol'
+    else:
+        response,model_name=request_response(config,state,client,provider,path,current,request)
+    if (type(response) is not dict or response.get('tool_call') is not None
+            or type(response.get('decision')) is not dict
+            or type(response['decision'].get('content')) is not str):
+        raise ValueError('CEO tool call forbidden or malformed response')
+    result=strict_json(response['decision']['content'])
+    objectives = [r['objective'] for r in research_rounds(state)] if 'handoff' in state else state['scope']['tasks']
+    validate_recommendation(result, number, artifacts, objectives)
+    packet=dict(domain='owner-internal-research-ceo-review-v1',
+        workflow_id=flow,snapshot_hash=current,model=model_name,
+        assessment=result,external_market_evidence_verified=False,
+        venture_admission=False,financial_authority=False,
+        reviewed_utc=datetime.now(timezone.utc).isoformat())
+    key=Ed25519PrivateKey.from_private_bytes(pathlib.Path(config['signing_key']).read_bytes())
+    signed=dict(state='COMPLETE',snapshot_hash=current,packet=packet,
+        signature=key.sign(canonical(packet).encode()).hex())
+    write_atomic(path,signed)
+    return signed
+
+
+def recover_response(config,state,client,prior,request):
+    """Read only an exact completed local call; never reserve, execute or repair it."""
+    import sqlite3
+    if (set(prior) != {'state','snapshot_hash','request_hash','created_utc'}
+            or prior['request_hash'] != hashed(request)):
+        raise ValueError('CEO pending request mismatch; manual reconciliation required')
+    observed=client.read(state['id'])
+    if observed is None or hashed(observed) != hashed(state):
+        raise ValueError('stale CEO reconciliation snapshot')
+    policy=json.loads(pathlib.Path(config['policy']).read_text())
+    binding=policy['roles']['ceo']
+    if binding['actor_id'] != 'service-ceo' or binding['model'] != 'gpt-6-sol':
+        raise ValueError('CEO model policy identity denied')
+    path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite'
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('CEO durable response unavailable; manual reconciliation required')
+    db=sqlite3.connect(path.resolve().as_uri()+'?mode=ro',uri=True)
+    try:
+        row=db.execute('SELECT request,response,attempt FROM calls WHERE identity=?',
+                       ('ceo-'+hashed(state)[:50],)).fetchone()
+    finally:
+        db.close()
+    if row is None or row[1] is None:
+        raise ValueError('CEO durable response unavailable; manual reconciliation required')
+    if row[0] != canonical(request):
+        raise ValueError('changed provider request denied')
+    if type(row[2]) is not str or re.fullmatch(r'[0-9a-f]{64}',row[2]) is None:
+        raise ValueError('CEO durable attempt identity invalid')
+    from agents.ceo.venture_exercise import strict_json
+    return strict_json(row[1])
+
+
+def request_response(config,state,client,provider,path,current,request):
+    from agents.ceo.venture_exercise import configured_provider
+    from agents.ceo.venture_workflow import research_session, research_rounds
+    flow=state['id']
+    number=len(research_rounds(state)) if 'handoff' in state else 1
     model=provider or configured_provider(os.environ,required=True)
     if model.model!='gpt-6-sol':
         raise ValueError('CEO model identity denied')
@@ -232,18 +295,4 @@ def review(config,state,client,provider=None):
         response=metered(request,())
     else:
         response=model(request,())  # Explicit isolated-test provider; no runtime fallback.
-    if type(response) is not dict or response.get('tool_call') is not None:
-        raise ValueError('CEO tool call forbidden')
-    result=strict_json(response['decision']['content'])
-    objectives = [r['objective'] for r in research_rounds(state)] if 'handoff' in state else state['scope']['tasks']
-    validate_recommendation(result, number, artifacts, objectives)
-    packet=dict(domain='owner-internal-research-ceo-review-v1',
-        workflow_id=flow,snapshot_hash=current,model=model.model,
-        assessment=result,external_market_evidence_verified=False,
-        venture_admission=False,financial_authority=False,
-        reviewed_utc=datetime.now(timezone.utc).isoformat())
-    key=Ed25519PrivateKey.from_private_bytes(pathlib.Path(config['signing_key']).read_bytes())
-    signed=dict(state='COMPLETE',snapshot_hash=current,packet=packet,
-        signature=key.sign(canonical(packet).encode()).hex())
-    write_atomic(path,signed)
-    return signed
+    return response,model.model
