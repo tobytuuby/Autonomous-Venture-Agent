@@ -1,0 +1,10 @@
+{
+  "baseline_paths": 644,
+  "unchanged_paths": 643,
+  "expected_related_changes": [
+    "tests/test_owner_research_admission.py"
+  ],
+  "unexpected_changes": [],
+  "limitation": "Unlisted inaccessible runtime directories were not inspected; no installed runtime file was written.",
+  "python": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]"
+}

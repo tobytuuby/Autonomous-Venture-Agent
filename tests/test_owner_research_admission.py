@@ -25,6 +25,8 @@ class ApprovedResearchAdmissionTests(unittest.TestCase):
         self.keys={role:Ed25519PrivateKey.generate() for role in ("ceo","manager","worker")}
         self.actors={"service-"+role:(role,k.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
                      for role,k in self.keys.items()}
+        worker_a=Ed25519PrivateKey.generate()
+        self.actors["worker-a"]=("worker",worker_a.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
         self.gateway=HierarchyGateway(self.base/"hierarchy",self.actors)
         self.fingerprint=proposal_digest(PROPOSAL)
         self.flow="research-"+self.fingerprint[:24]
@@ -65,7 +67,7 @@ class ApprovedResearchAdmissionTests(unittest.TestCase):
         handoff=self.gateway.bootstrap_prepare(payload)
         self.assertEqual(self.gateway.bootstrap_prepare(payload),handoff)
         scope=dict(mode="PREPARATION_ONLY",manager_id="service-manager",
-                   worker_id="service-worker",tasks=handoff['review']['instructions'],
+                   worker_id="worker-a",tasks=handoff['review']['instructions'],
                    budget_units=5,seed_cents=1)
         now=datetime.now(timezone.utc)
         cmd=dict(workflow_id=self.flow,request_id="research-create-"+self.fingerprint[:20],

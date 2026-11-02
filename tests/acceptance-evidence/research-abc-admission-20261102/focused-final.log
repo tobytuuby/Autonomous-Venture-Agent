@@ -1,0 +1,18 @@
+test_historical_signed_legacy_record_remains_readable_unchanged (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_historical_signed_legacy_record_remains_readable_unchanged) ... ok
+test_live_money_and_handoff_overrides_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_live_money_and_handoff_overrides_denied) ... ok
+test_revoked_owner_approval_and_changed_objective_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_revoked_owner_approval_and_changed_objective_denied) ... ok
+test_signed_legacy_and_unauthorized_scope_workers_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_legacy_and_unauthorized_scope_workers_denied) ... ok
+test_signed_worker_a_genesis_replay_and_reopen (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_worker_a_genesis_replay_and_reopen) ... ok
+test_wrong_signer_and_post_signature_scope_tampering_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_wrong_signer_and_post_signature_scope_tampering_denied) ... ok
+test_no_owner_approval_no_handoff (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_no_owner_approval_no_handoff) ... ok
+test_real_digest_approved_flow_with_no_finance_authority (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_real_digest_approved_flow_with_no_finance_authority) ... ok
+test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow) ... ok
+test_manager_callback_proposes_abc_under_existing_research_objective (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_callback_proposes_abc_under_existing_research_objective) ... ok
+test_manager_gets_fixed_decomposition_without_changing_existing_binding (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_gets_fixed_decomposition_without_changing_existing_binding) ... ok
+test_worker_requires_signed_plan_and_both_dependencies (tests.test_research_abc_routing.ResearchRoutingTests.test_worker_requires_signed_plan_and_both_dependencies) ... ok
+test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied (tests.test_research_abc_routing.ResearchRoutingTests.test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.393s
+
+OK

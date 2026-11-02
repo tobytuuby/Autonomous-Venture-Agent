@@ -1,0 +1,8 @@
+git diff --check
+exit 0
+git diff --cached --check
+exit 0
+git diff --cached --check 6a6a01810607fb8b96196fecd8568658dfedeb8d
+exit 0
+Initial staged check flagged trailing spaces in raw unittest failure logs.
+The two initial expanded logs are now losslessly compressed; all final checks pass.

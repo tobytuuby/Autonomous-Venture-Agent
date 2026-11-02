@@ -123,7 +123,7 @@ class MvpHandoffTests(unittest.TestCase):
                 ("delegate", "service-manager", dict(reason="MVP")),
                 ("revise", "service-ceo", dict(scope=after["scope"], version=2, reason="MVP")),
                 ("propose_decomposition", "service-manager", dict(assignments=[])),
-                ("submit", "service-worker", dict(units=1)),
+                ("submit", "worker-a", dict(units=1)),
                 ("manager_approve", "service-manager", dict(reason="MVP")),
                 ("finance_request", "service-ceo", dict(amount_cents=1))):
             with self.subTest(action=action):

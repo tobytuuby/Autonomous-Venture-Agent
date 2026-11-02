@@ -262,7 +262,7 @@ class HierarchyGateway:
                 or cmd.get("payload",{}).get("venture_id")!=flow
                 or type(scope) is not dict or scope.get("mode")!="PREPARATION_ONLY"
                 or scope.get("manager_id")!="service-manager"
-                or scope.get("worker_id")!="service-worker"
+                or scope.get("worker_id")!="worker-a"
                 or scope.get("budget_units",10001)>5
                 or scope.get("seed_cents")!=1
                 or type(scope.get("tasks")) is not list

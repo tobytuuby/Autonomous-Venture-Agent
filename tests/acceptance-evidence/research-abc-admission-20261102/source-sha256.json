@@ -1,0 +1,6 @@
+{
+  "agents/ceo/hierarchy_gateway.py": "54e282fb87f13e9d65f0d5cd36b976c4a3a3254c129ea975665e9f8ee75a4d18",
+  "tests/test_owner_research_admission.py": "12362d36395d19b7f355a13644e56dc365133dadadf5e05a8bfea755bdfddf03",
+  "tests/test_research_broker_admission.py": "c4f987881664f7464cb20236ab85c6614dea3b54e8da03bb2d8e82c4382575d5",
+  "tests/test_mvp_handoff.py": "034206f7f19544b9e3ffab910001abdbf63f5cfef0e0246b4896b00be7709671"
+}

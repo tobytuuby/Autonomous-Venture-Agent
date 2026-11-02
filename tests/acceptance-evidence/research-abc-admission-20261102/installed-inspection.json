@@ -1,0 +1,33 @@
+{
+  "control_command": "systemctl show venture-control-broker-mtls.service venture-owner-research-ceo.service venture-owner-research-kickoff.service -p Id -p LoadState -p ActiveState -p SubState -p WorkingDirectory -p ExecStart --no-pager",
+  "services": [
+    {
+      "Id": "venture-control-broker-mtls.service",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running",
+      "WorkingDirectory": "/usr/local/lib/venture-control-broker-level2c"
+    },
+    {
+      "Id": "venture-owner-research-ceo.service",
+      "LoadState": "loaded",
+      "ActiveState": "active",
+      "SubState": "running",
+      "WorkingDirectory": "/usr/local/lib/venture-ceo-level2c"
+    },
+    {
+      "Id": "venture-owner-research-kickoff.service",
+      "LoadState": "loaded",
+      "ActiveState": "inactive",
+      "SubState": "dead",
+      "WorkingDirectory": "/usr/local/lib/venture-ceo-level2c"
+    }
+  ],
+  "raw_control_metadata_sha256": "da0fb211be628403edf0bf0ddfd8f506821efcb5c5c5e4b31e84ee09edcdad08",
+  "agents_workspace_discovery": "/home/epsilon/venture-agents-workspace",
+  "agents_inspection_projectPath": "/home/epsilon/venture-control-workspace",
+  "agents_error": "ENOENT: no such file or directory, stat '/home/epsilon/venture-control-workspace'",
+  "agents_error_code": "INVALID_ARGUMENT",
+  "installed_config_and_trust": "Not inspected: required paths lie outside the user-approved project root.",
+  "deployment": "Withheld; no services or installed files changed."
+}
