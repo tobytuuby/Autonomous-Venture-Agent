@@ -58,7 +58,7 @@ def kickoff(config,feedback):
         handoff=client.bootstrap_prepare(dict(cycle_id=cycle,proposal_digest=fingerprint,
             receipt=receipt,receipt_signature=signer(receipt)))
         scope=dict(mode="PREPARATION_ONLY",manager_id="service-manager",
-                   worker_id="service-worker",tasks=handoff["review"]["instructions"],
+                   worker_id="worker-a",tasks=handoff["review"]["instructions"],
                    budget_units=5,seed_cents=1)
         created=datetime.now(timezone.utc)
         command=dict(workflow_id=flow,request_id="research-create-"+fingerprint[:24],

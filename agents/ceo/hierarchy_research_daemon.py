@@ -21,6 +21,7 @@ from agents.ceo.hierarchy_service import run as role_tick
 STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
           "worker":{"WORKER_PENDING"}}
+RESEARCH_WORKERS = dict(A="worker-a", B="worker-b", C="worker-c")
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
 
 
@@ -33,17 +34,35 @@ def allowed_config(base, flow, snapshot):
     if snapshot["mode"] != "PREPARATION_ONLY" or any(snapshot[f] is not False for f in (
             "operational_authority","external_actions_allowed","execution_performed","money_released")):
         raise ValueError("operational authority denied")
-    if snapshot["scope"]["manager_id"] != "service-manager" or snapshot["scope"]["worker_id"] != "service-worker":
+    if snapshot["scope"]["manager_id"] != "service-manager" or snapshot["scope"]["worker_id"] not in ("service-worker", "worker-a"):
         raise ValueError("research role scope denied")
     if snapshot["scope"]["budget_units"] > 5 or snapshot["scope"]["seed_cents"] != 1:
         raise ValueError("unapproved research budget")
     if not snapshot["handoff"]["item_id"] == flow or not snapshot["handoff"]["review"]["item_id"] == flow:
         raise ValueError("approved handoff missing")
-    if snapshot.get("decomposition") and role == "worker":
+    expected_actor = {"ceo": "service-ceo", "manager": "service-manager"}.get(role)
+    if ((expected_actor is not None and base["actor_id"] != expected_actor)
+            or (role == "worker" and base["actor_id"] not in RESEARCH_WORKERS.values())):
+        raise ValueError("research actor denied")
+    configured_workers = base.get("decomposition_workers")
+    if configured_workers is not None and configured_workers != RESEARCH_WORKERS:
+        raise ValueError("research worker configuration denied")
+    plan = snapshot.get("decomposition")
+    if plan:
+        assignments = plan["assignments"]
+        if (len(assignments) != 3 or any(
+                a["id"] != name or a["worker_id"] != RESEARCH_WORKERS[name]
+                or a["depends_on"] != ([] if name != "C" else ["A", "B"])
+                for a, name in zip(assignments, ("A", "B", "C")))):
+            raise ValueError("research decomposition denied")
+    if role == "worker":
         from agents.ceo.hierarchy_runner import ready_assignment
         if ready_assignment(snapshot, base["actor_id"]) is None:
             raise ValueError("research Worker assignment not ready")
     config=dict(base)
+    # Override only the research task copy; preserve the configured signed workflow.
+    if role == "manager":
+        config["decomposition_workers"] = dict(RESEARCH_WORKERS)
     config["workflow_id"]=flow
     original=Path(base["state_dir"])
     state=original / "research" / research_session(snapshot)
