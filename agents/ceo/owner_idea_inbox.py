@@ -50,7 +50,7 @@ class OwnerIdeaInbox:
         progress={}
         status_file=self.decisions.parent/'research-status.json'
         if status_file.exists():
-            if status_file.is_symlink() or not status_file.is_file() or status_file.stat().st_size>65536:
+            if status_file.is_symlink() or not status_file.is_file() or status_file.stat().st_size>1048576:
                 raise ValueError('invalid private research status file')
             data=json.loads(status_file.read_text())
             if (data.get('domain')!='owner-research-progress-v1'
