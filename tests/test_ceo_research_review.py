@@ -289,6 +289,24 @@ class DecisionCriteriaTests(unittest.TestCase):
     def validate(self, result, number=1, objectives=()):
         validate_recommendation(result, number, self.artifacts, objectives)
 
+    def test_field_specific_text_bounds(self):
+        for field, maximum in (('assessment', 1000), ('evidence_gaps', 500),
+                               ('next_internal_task', 500)):
+            accepted_lengths = (550, maximum) if field == 'assessment' else (maximum,)
+            for length in accepted_lengths:
+                result = assessment(self.quote)
+                text = result[field]
+                result[field] = text[:-1] + 'x' * (length - len(text)) + text[-1]
+                with self.subTest(field=field, length=length):
+                    self.assertEqual(len(result[field]), length)
+                    self.validate(result)
+            for length in (39, maximum + 1):
+                result = assessment(self.quote)
+                result[field] = (result[field] + 'x' * length)[:length]
+                with self.subTest(field=field, length=length):
+                    with self.assertRaisesRegex(ValueError, 'text length bound'):
+                        self.validate(result)
+
     def test_rounds_and_mvp_despite_unknown_demand_and_competitors(self):
         for number in (1,2,3):
             rec = 'PROCEED_TO_MVP' if number == 3 else 'READY_FOR_OWNER_DISCUSSION'

@@ -41,7 +41,8 @@ This review supplies research scope only; it proves no MVP execution grant.
 Owner approval remains required for out-of-scope capital, launch, customer contact
 or external work. No launch, payments, deployment or customer contact here.
 Return strict JSON with exactly recommendation,assessment,evidence_gaps,
-next_internal_task; each text field remains 40..500 characters. Use newline-separated
+next_internal_task; assessment must be 40..1000 characters; evidence_gaps and
+next_internal_task must each be 40..500 characters. Use newline-separated
 Label: value lines within the text fields (no extra JSON fields).
 assessment must contain Verified facts: and Inference: lines, plus
 Evidence [N]: "exact excerpt" on its own line, quoting the signed artifact at one-based index N, its
@@ -80,8 +81,9 @@ def validate_recommendation(result, number, artifacts, objectives):
     permitted = ('NEEDS_MORE_RESEARCH', 'READY_FOR_OWNER_DISCUSSION', 'REJECT_OR_DEFER') if number < 3 else ('PROCEED_TO_MVP', 'REJECT_OR_DEFER')
     if result['recommendation'] not in permitted:
         raise ValueError('CEO recommendation outside internal scope')
-    for field in ('assessment', 'evidence_gaps', 'next_internal_task'):
-        if type(result[field]) is not str or not 40 <= len(result[field]) <= 500:
+    for field, maximum in (('assessment', 1000), ('evidence_gaps', 500),
+                           ('next_internal_task', 500)):
+        if type(result[field]) is not str or not 40 <= len(result[field]) <= maximum:
             raise ValueError('CEO review text length bound')
 
     def line(field, label):
