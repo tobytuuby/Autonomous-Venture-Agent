@@ -65,7 +65,15 @@ def allowed_config(base, flow, snapshot):
         config["decomposition_workers"] = dict(RESEARCH_WORKERS)
     config["workflow_id"]=flow
     original=Path(base["state_dir"])
-    state=original / "research" / research_session(snapshot)
+    root=Path(base.get("_research_state_root", original))
+    if "_research_state_root" in base:
+        # A scoped config belongs to exactly one signed session. Never turn it
+        # into a queue root, including for a different workflow or round.
+        if (base.get("workflow_id") != flow
+                or original != root / "research" / research_session(snapshot)):
+            raise ValueError("research config session mismatch")
+    config["_research_state_root"]=str(root)
+    state=root / "research" / research_session(snapshot)
     if original.is_symlink() or state.is_symlink():
         raise ValueError("research state alias denied")
     state.mkdir(parents=True,exist_ok=True,mode=0o700)

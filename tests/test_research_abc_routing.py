@@ -7,7 +7,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, NoEncryption
+from cryptography.hazmat.primitives.serialization import Encoding, PrivateFormat, PublicFormat, NoEncryption
 from agents.ceo import hierarchy_research_daemon as daemon
 from agents.ceo.hierarchy_model_callbacks import ModelRoleCallback
 from agents.ceo.escalation_inbox import ROOT, canonical
@@ -57,6 +57,69 @@ class ResearchRoutingTests(unittest.TestCase):
             self.assertEqual(cfg["decomposition_workers"], daemon.RESEARCH_WORKERS)
             self.assertEqual(cfg["workflow_id"], self.flow)
         self.assertEqual(self.base, before)
+
+    def test_scoping_is_idempotent_and_does_not_create_nested_ledgers(self):
+        first = self.config()
+        self.assertEqual(daemon.allowed_config(first, self.flow, self.snapshot), first)
+        self.assertFalse((Path(first["state_dir"]) / "research").exists())
+        other = copy.deepcopy(self.snapshot)
+        other["id"] = other["venture_id"] = "research-" + "b" * 24
+        other["handoff"] = dict(item_id=other["id"], review=dict(item_id=other["id"]))
+        with self.assertRaisesRegex(ValueError, "session mismatch"):
+            daemon.allowed_config(first, other["id"], other)
+
+    def test_existing_ambiguous_intent_is_preserved_without_remote_io(self):
+        import os
+        import sqlite3
+        from agents.ceo.hierarchy_providers import HierarchyProvider
+        from agents.ceo.venture_workflow import hashed
+        cfg = self.config()
+        path = Path(cfg["state_dir"]) / "inference.sqlite"
+        client = Mock()
+        client.read.return_value = self.snapshot
+        provider = HierarchyProvider(role="manager", actor="service-manager",
+            workflow_id=self.flow, client=client, policy={}, context=cfg["context"],
+            state_path=path)
+        request = dict(system="fixture", json_object_mode=True,
+            opportunity=dict(scope_hash=self.snapshot["scope_hash"],
+                snapshot_sha256=hashed(self.snapshot), state="MANAGER_PENDING", role="manager"))
+        identity = "manager-" + hashed(dict(snapshot=self.snapshot, request=request))[:50]
+        with sqlite3.connect(path) as db:
+            db.execute("INSERT INTO calls VALUES(?,?,NULL,?)",
+                       (identity, canonical(request), "a" * 64))
+        before = path.read_bytes()
+        with patch.dict(os.environ, {}, clear=True):
+            for _ in range(2):
+                with self.assertRaisesRegex(ValueError, "requires reconciliation"):
+                    provider(request, ())
+        self.assertEqual(path.read_bytes(), before)
+        client._request.assert_not_called()
+
+    def test_scoped_service_ticks_only_selected_workflow(self):
+        from agents.ceo import hierarchy_service as service
+        cfg = dict(self.config(), trust="fixture", signing_key="fixture",
+                   endpoint="fixture", ca_file="fixture", client_cert="fixture",
+                   client_key="fixture", policy="fixture")
+        key = Ed25519PrivateKey.generate()
+        seed = key.private_bytes(Encoding.Raw, PrivateFormat.Raw, NoEncryption())
+        public = key.public_key().public_bytes(Encoding.Raw,
+            PublicFormat.Raw)
+        client = Mock()
+        client.read.return_value = self.snapshot
+        with patch.object(service, "load_trust",
+                          return_value={"service-manager": ("manager", public)}), \
+             patch.object(Path, "read_bytes", return_value=seed), \
+             patch.object(Path, "read_text",
+                          return_value=json.dumps(dict(roles=dict(manager=dict(model="gpt-6-sol"))))), \
+             patch.object(service, "HierarchyClient", return_value=client), \
+             patch.object(service, "HierarchyProvider"), \
+             patch.object(service, "ModelRoleCallback"), \
+             patch.object(service, "HierarchyRunner") as runner, \
+             patch.object(service, "tick_research_task") as queue:
+            runner.return_value.tick.return_value = dict(state="DECOMPOSITION_REVIEW", revision=2)
+            service.run(cfg, once=True)
+        queue.assert_not_called()
+        runner.return_value.tick.assert_called_once_with(self.flow)
 
     def test_manager_callback_proposes_abc_under_existing_research_objective(self):
         cfg = self.config()

@@ -1,0 +1,30 @@
+test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers) ... FAIL
+test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+FAIL
+
+======================================================================
+FAIL: test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_abc_routing.py", line 63, in test_scoping_is_idempotent_and_does_not_create_nested_ledgers
+    self.assertEqual(daemon.allowed_config(first, self.flow, self.snapshot), first)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'rol[201 chars]aaaaa/research/research-aaaaaaaaaaaaaaaaaaaaaa[246 chars]-c'}} != {'rol[201 chars]aaaaa', 'context': {'session_id': 'research-aa[203 chars]-c'}}
+Diff is 836 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_research_abc_routing.py", line 121, in test_scoped_service_ticks_only_selected_workflow
+    queue.assert_not_called()
+    ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 947, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'tick_research_task' to not have been called. Called 1 times.
+Calls: [call({'role': 'manager', 'actor_id': 'service-manager', 'workflow_id': 'research-aaaaaaaaaaaaaaaaaaaaaaaa', 'state_dir': '/home/epsilon/venture-control-workspace/tmpbc6c3krb/research/research-aaaaaaaaaaaaaaaaaaaaaaaa', 'context': {'session_id': 'research-aaaaaaaaaaaaaaaaaaaaaaaa', 'venture_id': 'research-aaaaaaaaaaaaaaaaaaaaaaaa', 'objective': 'Assess the approved idea', 'rounds': 1}, 'decomposition_workers': {'A': 'worker-a', 'B': 'worker-b', 'C': 'worker-c'}, 'trust': 'fixture', 'signing_key': 'fixture', 'endpoint': 'fixture', 'ca_file': 'fixture', 'client_cert': 'fixture', 'client_key': 'fixture', 'policy': 'fixture'}, <Mock id='138448100173744'>, {'service-manager': ('manager', b'\xe0\x9eL)\xef\x96\x86\xb7\xc17\xfb\xf7\xa4r|]\x93z\x18\xff0\xeer\xf5\xfb\x0f\x0b$\xe2sn|')}, <cryptography.hazmat.bindings._rust.openssl.ed25519.Ed25519PrivateKey object at 0x7deaf5964130>, {'roles': {'manager': {'model': 'gpt-6-sol'}}}, set())].
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.014s
+
+FAILED (failures=2)

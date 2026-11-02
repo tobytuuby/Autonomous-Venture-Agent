@@ -135,7 +135,11 @@ def run(config, *, once=False, poll_seconds=3):
     blocked_research=set()
     while True:
         try:
-            tick_research_task(config,client,actors,private,policy,blocked_research)
+            # The research daemon already selected and scoped one task. Queue
+            # polling here would execute other tasks under its durable directory,
+            # then tick the selected task a second time.
+            if "_research_state_root" not in config:
+                tick_research_task(config,client,actors,private,policy,blocked_research)
             state=client.read(config["workflow_id"])
             if state is not None and state["state"] in allowed:
                 after=runner.tick(config["workflow_id"])
