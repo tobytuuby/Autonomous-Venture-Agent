@@ -1,0 +1,137 @@
+test_ceo_refused_venture_does_not_starve_fresh_task_or_retry_same_snapshot (tests.test_research_poll_isolation.PollIsolationTests.test_ceo_refused_venture_does_not_starve_fresh_task_or_retry_same_snapshot) ... ok
+test_diagnostics_do_not_expose_exception_text (tests.test_research_poll_isolation.PollIsolationTests.test_diagnostics_do_not_expose_exception_text) ... ok
+test_terminal_manager_refusal_visible_and_does_not_starve_next_task (tests.test_research_poll_isolation.PollIsolationTests.test_terminal_manager_refusal_visible_and_does_not_starve_next_task) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "97c1791371559703a5b886ffab7568fd2a58eb980aa96164c8cdf0af5a270bac", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ManagerReviewRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ManagerReviewRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ManagerReviewRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ManagerReviewRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ManagerReviewRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ManagerReviewRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ProviderRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "6a0a56cf9d97140d2a53d15539d00766fcc6c8c3ce8bff50afdb5a0cbd859c89", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ProviderRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ProviderRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ProviderRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ProviderRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ProviderRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ProviderRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ProviderRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_changed_payload_cannot_reset_scope_budget_version_or_round (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_changed_payload_cannot_reset_scope_budget_version_or_round) ... ok
+test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event) ... ok
+test_cumulative_ceiling_and_stale_accounting_fail_without_append (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_cumulative_ceiling_and_stale_accounting_fail_without_append) ... ok
+test_daemon_periodic_poll_response_loss_restart_and_retirement (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_daemon_periodic_poll_response_loss_restart_and_retirement) ... ERROR:root:research workflow blocked role=ceo workflow=research-f2b72a9c3b3f58d48152e43e snapshot=3087a382b82b9e287f7a79cf2ed5c400f8961f302077320e0020790b118f3451 reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role ceo error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 257, in poll
+    if recover_legacy_worker(client, config, snapshot):
+       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 215, in recover_legacy_worker
+    result = client.apply(command, key.sign(canonical(command).encode()).hex())
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/epsilon/venture-control-workspace/tests/test_legacy_worker_recovery.py", line 267, in lost_response
+    raise OSError("lost after signed commit")
+OSError: lost after signed commit
+ok
+test_historical_correction_version_is_retained_without_another_correction (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_historical_correction_version_is_retained_without_another_correction) ... ok
+test_insufficient_quota_missing_ledger_and_effort_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_insufficient_quota_missing_ledger_and_effort_fail_closed) ... ok
+test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call) ... ok
+test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay) ... ok
+test_unauthorized_signer_and_changed_approval_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_unauthorized_signer_and_changed_approval_fail_closed) ... ok
+test_existing_ambiguous_intent_requires_exact_remote_reconciliation (tests.test_research_abc_routing.ResearchRoutingTests.test_existing_ambiguous_intent_requires_exact_remote_reconciliation) ... ok
+test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow) ... ok
+test_legacy_binding_survives_later_signed_abc_states (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_binding_survives_later_signed_abc_states) ... ok
+test_legacy_exception_requires_provenance_and_original_session (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_exception_requires_provenance_and_original_session) ... ok
+test_legacy_original_binding_is_shared_by_ceo_and_manager (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_original_binding_is_shared_by_ceo_and_manager) ... ok
+test_manager_callback_proposes_abc_under_existing_research_objective (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_callback_proposes_abc_under_existing_research_objective) ... ok
+test_manager_gets_fixed_decomposition_without_changing_existing_binding (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_gets_fixed_decomposition_without_changing_existing_binding) ... ok
+test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers) ... ok
+test_worker_requires_signed_plan_and_both_dependencies (tests.test_research_abc_routing.ResearchRoutingTests.test_worker_requires_signed_plan_and_both_dependencies) ... ok
+test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied (tests.test_research_abc_routing.ResearchRoutingTests.test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied) ... ok
+test_ceo_entrypoint_uses_https_and_never_opens_local_authority (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_entrypoint_uses_https_and_never_opens_local_authority) ... {"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+ok
+test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role) ... ok
+test_ceo_remote_model_ambiguity_never_falls_back (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_model_ambiguity_never_falls_back) ... ok
+test_ceo_remote_quota_accepts_local_provider_without_broker_binding (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_quota_accepts_local_provider_without_broker_binding) ... ok
+test_ceo_retry_changes_and_corrupt_quota_fail_closed (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_retry_changes_and_corrupt_quota_fail_closed) ... ok
+test_concurrent_fresh_ceo_bootstrap_is_one_charge (tests.test_level2c_central_roles.CentralRolesTests.test_concurrent_fresh_ceo_bootstrap_is_one_charge) ... ok
+test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling (tests.test_level2c_central_roles.CentralRolesTests.test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling) ... ok
+test_gateway_execution_requires_prior_reservation_and_caches_exact_result (tests.test_level2c_central_roles.CentralRolesTests.test_gateway_execution_requires_prior_reservation_and_caches_exact_result) ... ok
+test_hierarchy_manager_system_allowed_only_for_signed_matching_state (tests.test_level2c_central_roles.CentralRolesTests.test_hierarchy_manager_system_allowed_only_for_signed_matching_state) ... ok
+test_manager_adapter_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_adapter_restart_recovers_broker_complete_without_duplicate) ... ok
+test_manager_reconciliation_all_states_and_tampering_without_paid_retry (tests.test_level2c_central_roles.CentralRolesTests.test_manager_reconciliation_all_states_and_tampering_without_paid_retry) ... ok
+test_manager_review_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_review_restart_recovers_broker_complete_without_duplicate) ... ok
+test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial) ... ok
+test_provider_backed_local_model_is_forbidden (tests.test_level2c_central_roles.CentralRolesTests.test_provider_backed_local_model_is_forbidden) ... ok
+test_recovered_legacy_context_reuses_binding_without_quota_reset (tests.test_level2c_central_roles.CentralRolesTests.test_recovered_legacy_context_reuses_binding_without_quota_reset) ... ok
+test_research_round_session_binds_to_venture_workflow (tests.test_level2c_central_roles.CentralRolesTests.test_research_round_session_binds_to_venture_workflow) ... ok
+test_historical_signed_legacy_record_remains_readable_unchanged (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_historical_signed_legacy_record_remains_readable_unchanged) ... ok
+test_live_money_and_handoff_overrides_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_live_money_and_handoff_overrides_denied) ... ok
+test_revoked_owner_approval_and_changed_objective_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_revoked_owner_approval_and_changed_objective_denied) ... ok
+test_signed_legacy_and_unauthorized_scope_workers_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_legacy_and_unauthorized_scope_workers_denied) ... ok
+test_signed_worker_a_genesis_replay_and_reopen (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_worker_a_genesis_replay_and_reopen) ... ok
+test_wrong_signer_and_post_signature_scope_tampering_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_wrong_signer_and_post_signature_scope_tampering_denied) ... ok
+test_provider_gateway (unittest.loader._FailedTest.test_provider_gateway) ... ERROR
+test_assignments_share_existing_workflow_ceiling_and_daily_ledger (tests.test_worker_inference.WorkerInferenceTests.test_assignments_share_existing_workflow_ceiling_and_daily_ledger) ... ok
+test_caller_cannot_supply_venture_accounting_scope (tests.test_worker_inference.WorkerInferenceTests.test_caller_cannot_supply_venture_accounting_scope) ... ok
+test_central_ceiling_failure_rolls_back_worker_reservation (tests.test_worker_inference.WorkerInferenceTests.test_central_ceiling_failure_rolls_back_worker_reservation) ... ok
+test_concurrent_reservations_cannot_exceed_shared_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_concurrent_reservations_cannot_exceed_shared_ceiling) ... ok
+test_current_downgrade_denies_before_charging (tests.test_worker_inference.WorkerInferenceTests.test_current_downgrade_denies_before_charging) ... ok
+test_distinct_signed_workflows_each_have_four_calls_for_same_venture (tests.test_worker_inference.WorkerInferenceTests.test_distinct_signed_workflows_each_have_four_calls_for_same_venture) ... ok
+test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow (tests.test_worker_inference.WorkerInferenceTests.test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow) ... ok
+test_exact_reservation_duplicate_at_limit_and_changed_replay (tests.test_worker_inference.WorkerInferenceTests.test_exact_reservation_duplicate_at_limit_and_changed_replay) ... ok
+test_execution_rechecks_hold_and_request_assignment_binding (tests.test_worker_inference.WorkerInferenceTests.test_execution_rechecks_hold_and_request_assignment_binding) ... ok
+test_failed_provider_attempt_is_never_refunded_or_reexecuted (tests.test_worker_inference.WorkerInferenceTests.test_failed_provider_attempt_is_never_refunded_or_reexecuted) ... ok
+test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart (tests.test_worker_inference.WorkerInferenceTests.test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart) ... ok
+test_legacy_signed_audit_remains_verifiable_after_inference_retirement (tests.test_worker_inference.WorkerInferenceTests.test_legacy_signed_audit_remains_verifiable_after_inference_retirement) ... ok
+test_multiworker_policy_shares_one_budget_under_concurrency (tests.test_worker_inference.WorkerInferenceTests.test_multiworker_policy_shares_one_budget_under_concurrency) ... ok
+test_only_enrolled_worker_policies_are_valid (tests.test_worker_inference.WorkerInferenceTests.test_only_enrolled_worker_policies_are_valid) ... ok
+test_policy_change_cannot_expand_existing_workflow_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_policy_change_cannot_expand_existing_workflow_ceiling) ... ok
+test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider (tests.test_worker_inference.WorkerInferenceTests.test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider) ... ok
+test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal (tests.test_worker_inference.WorkerInferenceTests.test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal) ... ok
+test_requires_signed_worker_delegate_and_central_reservation (tests.test_worker_inference.WorkerInferenceTests.test_requires_signed_worker_delegate_and_central_reservation) ... ok
+test_reservation_precedes_real_execution_and_exact_retry_is_cached (tests.test_worker_inference.WorkerInferenceTests.test_reservation_precedes_real_execution_and_exact_retry_is_cached) ... ok
+test_retired_worker_rows_remain_charged_and_new_calls_are_denied (tests.test_worker_inference.WorkerInferenceTests.test_retired_worker_rows_remain_charged_and_new_calls_are_denied) ... ok
+test_simultaneous_execution_cannot_call_provider_twice (tests.test_worker_inference.WorkerInferenceTests.test_simultaneous_execution_cannot_call_provider_twice) ... ok
+test_stale_snapshot_denied_after_sibling_completion (tests.test_worker_inference.WorkerInferenceTests.test_stale_snapshot_denied_after_sibling_completion) ... ok
+test_two_full_workflows_share_central_daily_request_and_token_limits (tests.test_worker_inference.WorkerInferenceTests.test_two_full_workflows_share_central_daily_request_and_token_limits) ... ok
+test_unapproved_proposal_denied (tests.test_worker_inference.WorkerInferenceTests.test_unapproved_proposal_denied) ... ok
+test_unattributable_history_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unattributable_history_fails_closed) ... ok
+test_unknown_old_workflow_does_not_require_its_current_journal (tests.test_worker_inference.WorkerInferenceTests.test_unknown_old_workflow_does_not_require_its_current_journal) ... ok
+test_unverifiable_relevant_historical_ceiling_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unverifiable_relevant_historical_ceiling_fails_closed) ... ok
+test_workflow_approves_fixture_actor_only (tests.test_worker_inference.WorkerInferenceTests.test_workflow_approves_fixture_actor_only) ... ok
+test_wrong_worker_and_blocked_c_then_durable_dependency_release (tests.test_worker_inference.WorkerInferenceTests.test_wrong_worker_and_blocked_c_then_durable_dependency_release) ... ok
+
+======================================================================
+ERROR: test_provider_gateway (unittest.loader._FailedTest.test_provider_gateway)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_provider_gateway
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+ModuleNotFoundError: No module named 'tests.test_provider_gateway'
+
+
+----------------------------------------------------------------------
+Ran 95 tests in 22.165s
+
+FAILED (errors=1)

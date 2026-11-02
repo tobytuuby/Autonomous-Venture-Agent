@@ -1,0 +1,5 @@
+{
+  "agents/ceo/hierarchy_service.py": "9673ec95e974f847415b022659816ec20f224894f78882e2bde2914ee5995e69",
+  "agents/ceo/hierarchy_research_daemon.py": "339e02726f0940731b0df91706cf30d33c42f9170c9d5cc2ac9dfadba46441ab",
+  "tests/test_research_poll_isolation.py": "9998aa3b09284e16a8c77bc2ba758c697c9a16ea2b2941b9e01b800425a4797a"
+}

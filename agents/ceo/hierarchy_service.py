@@ -15,7 +15,7 @@ from agents.ceo.control_plane import load_trust
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_runner import HierarchyRunner
 from agents.ceo.hierarchy_model_callbacks import ModelRoleCallback
-from agents.ceo.hierarchy_providers import HierarchyProvider
+from agents.ceo.hierarchy_providers import HierarchyProvider, RecoveryImpossible
 
 
 class RemoteWorkflow:
@@ -29,6 +29,15 @@ class RemoteWorkflow:
     def apply(self, command, signature):
         return self.client.apply(command, signature)
 
+
+
+def recovery_reason(exc):
+    """Expose only fixed diagnostic codes, never prompts or remote exception text."""
+    codes = {"MALFORMED_DURABLE_INTENT", "MULTIPLE_DURABLE_INTENTS",
+             "PROMPT_CHANGED", "LOCAL_EXECUTION_AMBIGUOUS",
+             "RECONCILIATION_BINDING", "RECONCILIATION_RESULT",
+             "PROVIDER_EXECUTION_AMBIGUOUS"}
+    return str(exc) if isinstance(exc, RecoveryImpossible) and str(exc) in codes else "RECONCILIATION_REQUIRED"
 
 
 def tick_research_task(config, client, actors, private, policy, blocked=None):
@@ -75,10 +84,14 @@ def tick_research_task(config, client, actors, private, policy, blocked=None):
         except Exception as exc:
             # Manager inference intents reconcile through the durable broker on
             # the next poll. Other role/state failures retain their old block.
-            if role != "manager" or snapshot["state"] not in ("MANAGER_PENDING", "MANAGER_REVIEW"):
+            terminal = isinstance(exc, RecoveryImpossible)
+            if terminal or role != "manager" or snapshot["state"] not in ("MANAGER_PENDING", "MANAGER_REVIEW"):
                 blocked.add(intent)
             print(json.dumps(dict(role=role,workflow_id=flow,
                 status="RESEARCH_TASK_BLOCKED",error_type=type(exc).__name__,
+                reason=recovery_reason(exc), snapshot_sha256=intent[1],
+                next_action=("Inspect original durable intent, broker reservation and execution evidence; preserve identities and charges. No automatic replay for this snapshot."
+                             if intent in blocked else "Next poll reconciles the original intent through the broker ledger."),
                 operational_authority=False)),flush=True)
             return True
         print(json.dumps(dict(role=role,workflow_id=flow,

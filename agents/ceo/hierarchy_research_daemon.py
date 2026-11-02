@@ -16,7 +16,7 @@ from agents.ceo.escalation_inbox import canonical
 from agents.ceo.venture_workflow import hashed, research_rounds, research_session
 
 from agents.ceo.hierarchy_client import HierarchyClient
-from agents.ceo.hierarchy_service import run as role_tick
+from agents.ceo.hierarchy_service import run as role_tick, recovery_reason
 
 STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
@@ -243,40 +243,58 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                 permitted=STATES[config['role']] | ({'WORKER_PENDING'} if config['role']=='ceo' else set())
                 if not RESEARCH_ID.fullmatch(flow) or item['state'] not in permitted:
                     continue
-                snapshot=client.read(flow)
-                if snapshot is None or snapshot["state"] != item["state"]:
-                    continue
-                if snapshot.get("research_disposition") is not None:
-                    continue
-                if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
-                    if recover_legacy_worker(client, config, snapshot):
+                intent = None
+                try:
+                    snapshot=client.read(flow)
+                    if snapshot is None or snapshot["state"] != item["state"]:
                         continue
-                    hold_exhausted_research(client,config,snapshot,worker_limit_override)
-                    continue
-                if config['role']=='ceo' and snapshot['state']=='MANAGER_PENDING':
-                    ensure_research_session(config,snapshot,client)
-                    continue
-                if config['role']=='ceo' and snapshot['state'] in ('HOLD','CEO_REVIEW','OWNER_REVIEW','CEO_REDIRECTION'):
-                    from agents.ceo.ceo_research_review import review
-                    signed=review(allowed_config(config,flow,snapshot),snapshot,client)
-                    direct_research(config,snapshot,client,signed)
-                    continue
-                if worker_limit is not None:
-                    if research_session(snapshot) in blocked:
+                    intent = (flow, hashed(snapshot))
+                    if intent in blocked:
                         continue
-                    if worker_submission_count(client,snapshot)>=worker_limit:
-                        logging.warning('Worker research quota reached; no new calls: %s',flow)
-                        blocked.add(research_session(snapshot))
+                    if snapshot.get("research_disposition") is not None:
                         continue
-                if config["role"] == "worker":
-                    # Historical single-Worker research is immutable, and cannot be
-                    # executed by A/B/C without a signed approved decomposition.
-                    if not snapshot.get("decomposition"):
+                    if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
+                        if recover_legacy_worker(client, config, snapshot):
+                            continue
+                        hold_exhausted_research(client,config,snapshot,worker_limit_override)
                         continue
-                    from agents.ceo.hierarchy_runner import ready_assignment
-                    if ready_assignment(snapshot, config["actor_id"]) is None:
+                    if config['role']=='ceo' and snapshot['state']=='MANAGER_PENDING':
+                        ensure_research_session(config,snapshot,client)
                         continue
-                role_tick(allowed_config(config,flow,snapshot),once=True)
+                    if config['role']=='ceo' and snapshot['state'] in ('HOLD','CEO_REVIEW','OWNER_REVIEW','CEO_REDIRECTION'):
+                        from agents.ceo.ceo_research_review import review
+                        signed=review(allowed_config(config,flow,snapshot),snapshot,client)
+                        direct_research(config,snapshot,client,signed)
+                        continue
+                    if worker_limit is not None:
+                        if research_session(snapshot) in blocked:
+                            continue
+                        if worker_submission_count(client,snapshot)>=worker_limit:
+                            logging.warning('Worker research quota reached; no new calls: %s',flow)
+                            blocked.add(research_session(snapshot))
+                            continue
+                    if config["role"] == "worker":
+                        # Historical single-Worker research is immutable, and cannot be
+                        # executed by A/B/C without a signed approved decomposition.
+                        if not snapshot.get("decomposition"):
+                            continue
+                        from agents.ceo.hierarchy_runner import ready_assignment
+                        if ready_assignment(snapshot, config["actor_id"]) is None:
+                            continue
+                    role_tick(allowed_config(config,flow,snapshot),once=True)
+                except Exception as exc:
+                    # Isolate a refused venture so later approved tasks still poll.
+                    # A changed signed snapshot is a new intent; never edit history.
+                    if isinstance(exc, ValueError) and intent is not None:
+                        blocked.add(intent)
+                    logging.error("research workflow blocked role=%s workflow=%s snapshot=%s reason=%s next_action=%s",
+                        config["role"], flow, intent[1] if intent else "unavailable",
+                        (recovery_reason(exc) if recovery_reason(exc) != "RECONCILIATION_REQUIRED" else
+                         "VALIDATION_OR_AUTHORITY_DENIED" if isinstance(exc, ValueError) else "READ_OR_TRANSPORT_UNAVAILABLE"),
+                        "Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges")
+                    if once:
+                        raise
+
         except Exception as exc:
             logging.exception("research role %s error: %s",config["role"],type(exc).__name__)
             if once:

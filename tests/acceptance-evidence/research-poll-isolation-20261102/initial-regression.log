@@ -1,0 +1,655 @@
+test_ceo_refused_venture_does_not_starve_fresh_task_or_retry_same_snapshot (tests.test_research_poll_isolation.PollIsolationTests.test_ceo_refused_venture_does_not_starve_fresh_task_or_retry_same_snapshot) ... ok
+test_diagnostics_do_not_expose_exception_text (tests.test_research_poll_isolation.PollIsolationTests.test_diagnostics_do_not_expose_exception_text) ... ok
+test_terminal_manager_refusal_visible_and_does_not_starve_next_task (tests.test_research_poll_isolation.PollIsolationTests.test_terminal_manager_refusal_visible_and_does_not_starve_next_task) ... ok
+test_changed_payload_cannot_reset_scope_budget_version_or_round (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_changed_payload_cannot_reset_scope_budget_version_or_round) ... ok
+test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event) ... ok
+test_cumulative_ceiling_and_stale_accounting_fail_without_append (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_cumulative_ceiling_and_stale_accounting_fail_without_append) ... ok
+test_daemon_periodic_poll_response_loss_restart_and_retirement (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_daemon_periodic_poll_response_loss_restart_and_retirement) ... ERROR:root:research workflow blocked role=ceo workflow=research-f2b72a9c3b3f58d48152e43e snapshot=b8553ffc8e2eb8c8ec655da0a59223e7c5fb4e594212427a0f4f1c1f1777f10c reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role ceo error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/artifacts/research-poll-isolation-clean/agents/ceo/hierarchy_research_daemon.py", line 257, in poll
+    if recover_legacy_worker(client, config, snapshot):
+       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/artifacts/research-poll-isolation-clean/agents/ceo/hierarchy_research_daemon.py", line 215, in recover_legacy_worker
+    result = client.apply(command, key.sign(canonical(command).encode()).hex())
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/epsilon/venture-control-workspace/artifacts/research-poll-isolation-clean/tests/test_legacy_worker_recovery.py", line 267, in lost_response
+    raise OSError("lost after signed commit")
+OSError: lost after signed commit
+ok
+test_historical_correction_version_is_retained_without_another_correction (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_historical_correction_version_is_retained_without_another_correction) ... ok
+test_insufficient_quota_missing_ledger_and_effort_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_insufficient_quota_missing_ledger_and_effort_fail_closed) ... ok
+test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call) ... ok
+test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay) ... ok
+test_unauthorized_signer_and_changed_approval_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_unauthorized_signer_and_changed_approval_fail_closed) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "97c1791371559703a5b886ffab7568fd2a58eb980aa96164c8cdf0af5a270bac", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ManagerReviewRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ManagerReviewRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ManagerReviewRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ManagerReviewRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ManagerReviewRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ManagerReviewRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ProviderRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "6a0a56cf9d97140d2a53d15539d00766fcc6c8c3ce8bff50afdb5a0cbd859c89", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ProviderRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ProviderRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ProviderRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ProviderRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ProviderRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ProviderRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ProviderRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_existing_ambiguous_intent_requires_exact_remote_reconciliation (tests.test_research_abc_routing.ResearchRoutingTests.test_existing_ambiguous_intent_requires_exact_remote_reconciliation) ... ok
+test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow) ... ok
+test_legacy_binding_survives_later_signed_abc_states (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_binding_survives_later_signed_abc_states) ... ok
+test_legacy_exception_requires_provenance_and_original_session (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_exception_requires_provenance_and_original_session) ... ok
+test_legacy_original_binding_is_shared_by_ceo_and_manager (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_original_binding_is_shared_by_ceo_and_manager) ... ok
+test_manager_callback_proposes_abc_under_existing_research_objective (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_callback_proposes_abc_under_existing_research_objective) ... ok
+test_manager_gets_fixed_decomposition_without_changing_existing_binding (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_gets_fixed_decomposition_without_changing_existing_binding) ... ok
+test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers) ... ok
+test_worker_requires_signed_plan_and_both_dependencies (tests.test_research_abc_routing.ResearchRoutingTests.test_worker_requires_signed_plan_and_both_dependencies) ... ok
+test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied (tests.test_research_abc_routing.ResearchRoutingTests.test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied) ... ok
+test_historical_signed_legacy_record_remains_readable_unchanged (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_historical_signed_legacy_record_remains_readable_unchanged) ... ok
+test_live_money_and_handoff_overrides_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_live_money_and_handoff_overrides_denied) ... ok
+test_revoked_owner_approval_and_changed_objective_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_revoked_owner_approval_and_changed_objective_denied) ... ok
+test_signed_legacy_and_unauthorized_scope_workers_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_legacy_and_unauthorized_scope_workers_denied) ... ok
+test_signed_worker_a_genesis_replay_and_reopen (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_signed_worker_a_genesis_replay_and_reopen) ... ok
+test_wrong_signer_and_post_signature_scope_tampering_denied (tests.test_research_broker_admission.ResearchBrokerAdmissionTests.test_wrong_signer_and_post_signature_scope_tampering_denied) ... ok
+test_client_rejects_invalid_counts_and_query_errors (tests.test_research_reservation_counts.ResearchCountTests.test_client_rejects_invalid_counts_and_query_errors) ... ok
+test_missing_corrupt_ledger_and_unsigned_state_fail_closed (tests.test_research_reservation_counts.ResearchCountTests.test_missing_corrupt_ledger_and_unsigned_state_fail_closed) ... /usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 503: 'Service Unavailable'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 400: 'Bad Request'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_retained_counts_read_only_modes_and_stale_snapshot (tests.test_research_reservation_counts.ResearchCountTests.test_retained_counts_read_only_modes_and_stale_snapshot) ... ok
+test_round_four_and_cumulative_twelve_trigger_existing_hold_path (tests.test_research_reservation_counts.ResearchCountTests.test_round_four_and_cumulative_twelve_trigger_existing_hold_path) ... ok
+test_tls_roles_exact_workflow_and_missing_state_denied (tests.test_research_reservation_counts.ResearchCountTests.test_tls_roles_exact_workflow_and_missing_state_denied) ... ok
+test_no_owner_approval_no_handoff (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_no_owner_approval_no_handoff) ... ok
+test_real_digest_approved_flow_with_no_finance_authority (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_real_digest_approved_flow_with_no_finance_authority) ... ok
+test_cross_workflow_proposal_charges_cannot_reset_allowance (tests.test_research_continuation.ResearchContinuationTests.test_cross_workflow_proposal_charges_cannot_reset_allowance) ... ok
+test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier (tests.test_research_continuation.ResearchContinuationTests.test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier) ... ok
+test_historical_saved_ceo_response_advances_signed_hold_without_inference (tests.test_research_continuation.ResearchContinuationTests.test_historical_saved_ceo_response_advances_signed_hold_without_inference) ... ok
+test_legacy_round_one_and_round_limits_do_not_replenish (tests.test_research_continuation.ResearchContinuationTests.test_legacy_round_one_and_round_limits_do_not_replenish) ... ok
+test_manager_rejection_returns_to_ceo_for_round_two_disposition (tests.test_research_continuation.ResearchContinuationTests.test_manager_rejection_returns_to_ceo_for_round_two_disposition) ... ok
+test_no_owner_reapproval_and_revoked_snapshot_denies (tests.test_research_continuation.ResearchContinuationTests.test_no_owner_reapproval_and_revoked_snapshot_denies) ... ok
+test_replay_out_of_order_duplicate_objective_and_unauthorized (tests.test_research_continuation.ResearchContinuationTests.test_replay_out_of_order_duplicate_objective_and_unauthorized) ... ok
+test_round_budget_concurrency_and_restart (tests.test_research_continuation.ResearchContinuationTests.test_round_budget_concurrency_and_restart) ... ok
+test_round_three_requires_terminal_disposition_and_never_launch (tests.test_research_continuation.ResearchContinuationTests.test_round_three_requires_terminal_disposition_and_never_launch) ... ok
+test_signed_round_two_manager_workers_execution_is_isolated_only (tests.test_research_continuation.ResearchContinuationTests.test_signed_round_two_manager_workers_execution_is_isolated_only) ... ok
+test_digest_bound_artifacts_reject_role_override (tests.test_hierarchy_gateway.HierarchyGatewayTests.test_digest_bound_artifacts_reject_role_override) ... ok
+test_gateway_signed_decomposition_and_authoritative_inference_state (tests.test_hierarchy_gateway.HierarchyGatewayTests.test_gateway_signed_decomposition_and_authoritative_inference_state) ... ok
+test_signed_manager_worker_ceo_transitions_and_denials (tests.test_hierarchy_gateway.HierarchyGatewayTests.test_signed_manager_worker_ceo_transitions_and_denials) ... ok
+test_existing_manager_service_routes_approved_research_workflow (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_existing_manager_service_routes_approved_research_workflow) ... ok
+test_research_queue_is_bounded_before_role_execution (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_research_queue_is_bounded_before_role_execution) ... ok
+test_worker_service_ignores_non_worker_states (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_worker_service_ignores_non_worker_states) ... ok
+test_bad_units_and_unauthorized_operational_modes_denied (tests.test_hierarchy_model_callbacks.RoleCallbackTests.test_bad_units_and_unauthorized_operational_modes_denied) ... ok
+test_manager_improvement_requires_nonempty_evidence (tests.test_hierarchy_model_callbacks.RoleCallbackTests.test_manager_improvement_requires_nonempty_evidence) ... ok
+test_manager_receives_verified_worker_deliverable (tests.test_hierarchy_model_callbacks.RoleCallbackTests.test_manager_receives_verified_worker_deliverable) ... ok
+test_worker_content_is_digest_bound_and_has_no_execution_authority (tests.test_hierarchy_model_callbacks.RoleCallbackTests.test_worker_content_is_digest_bound_and_has_no_execution_authority) ... ok
+test_wrong_role_action_or_tool_call_denied_without_artifact (tests.test_hierarchy_model_callbacks.RoleCallbackTests.test_wrong_role_action_or_tool_call_denied_without_artifact) ... ok
+test_invalid_workflow_id_denied (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_invalid_workflow_id_denied) ... ok
+test_validated_workflow_id_is_not_discarded (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_validated_workflow_id_is_not_discarded) ... ok
+test_absent_keys_forged_signatures_and_expired_commands (tests.test_venture_workflow.WorkflowTests.test_absent_keys_forged_signatures_and_expired_commands) ... ok
+test_actor_role_origin_and_signature_bypasses (tests.test_venture_workflow.WorkflowTests.test_actor_role_origin_and_signature_bypasses) ... ok
+test_changed_scope_revision_restarts_gate_and_old_commands_stale (tests.test_venture_workflow.WorkflowTests.test_changed_scope_revision_restarts_gate_and_old_commands_stale) ... ok
+test_crash_tamper_capacity_and_inherited_api_denied (tests.test_venture_workflow.WorkflowTests.test_crash_tamper_capacity_and_inherited_api_denied) ... ok
+test_creation_binds_real_inbox_manager_ceo_and_packet (tests.test_venture_workflow.WorkflowTests.test_creation_binds_real_inbox_manager_ceo_and_packet) ... ok
+test_every_unlisted_transition_fails_closed (tests.test_venture_workflow.WorkflowTests.test_every_unlisted_transition_fails_closed) ... ok
+test_exhaustion_is_durable_and_cannot_be_approved (tests.test_venture_workflow.WorkflowTests.test_exhaustion_is_durable_and_cannot_be_approved) ... ok
+test_hold_security_and_termination_invalidate_approval (tests.test_venture_workflow.WorkflowTests.test_hold_security_and_termination_invalidate_approval) ... ok
+test_inbox_requires_actual_signed_handoff_not_advisory_review (tests.test_venture_workflow.WorkflowTests.test_inbox_requires_actual_signed_handoff_not_advisory_review) ... ok
+test_multi_approval_signature_actor_and_proposal_binding (tests.test_venture_workflow.WorkflowTests.test_multi_approval_signature_actor_and_proposal_binding) ... ok
+test_multi_improvement_revision_hold_and_budget_require_new_gates (tests.test_venture_workflow.WorkflowTests.test_multi_improvement_revision_hold_and_budget_require_new_gates) ... ok
+test_multi_invalid_proposals_are_atomic (tests.test_venture_workflow.WorkflowTests.test_multi_invalid_proposals_are_atomic) ... ok
+test_multi_no_computation_before_approval_or_dependencies (tests.test_venture_workflow.WorkflowTests.test_multi_no_computation_before_approval_or_dependencies) ... ok
+test_multi_rehashed_assignment_state_or_approval_tamper_denied (tests.test_venture_workflow.WorkflowTests.test_multi_rehashed_assignment_state_or_approval_tamper_denied) ... ok
+test_multi_signed_approval_dependency_order_and_restart (tests.test_venture_workflow.WorkflowTests.test_multi_signed_approval_dependency_order_and_restart) ... ok
+test_multi_signed_synthetic_result_is_recorded_per_assignment (tests.test_venture_workflow.WorkflowTests.test_multi_signed_synthetic_result_is_recorded_per_assignment) ... ok
+test_no_payment_or_operational_admission_is_called (tests.test_venture_workflow.WorkflowTests.test_no_payment_or_operational_admission_is_called) ... ok
+test_owner_expiry_and_finance_ceiling (tests.test_venture_workflow.WorkflowTests.test_owner_expiry_and_finance_ceiling) ... ok
+test_owner_rejection_correction_cannot_skip_gates (tests.test_venture_workflow.WorkflowTests.test_owner_rejection_correction_cannot_skip_gates) ... ok
+test_positive_improvement_final_owner_and_finance_request_only (tests.test_venture_workflow.WorkflowTests.test_positive_improvement_final_owner_and_finance_request_only) ... ok
+test_premise_rejection_requires_ceo_new_version_and_all_reviews (tests.test_venture_workflow.WorkflowTests.test_premise_rejection_requires_ceo_new_version_and_all_reviews) ... ok
+test_retry_conflict_concurrency_and_correction (tests.test_venture_workflow.WorkflowTests.test_retry_conflict_concurrency_and_correction) ... ok
+test_scope_version_budget_and_evidence_binding (tests.test_venture_workflow.WorkflowTests.test_scope_version_budget_and_evidence_binding) ... ok
+test_signed_history_rejects_command_rewrite_with_rehashed_event (tests.test_venture_workflow.WorkflowTests.test_signed_history_rejects_command_rewrite_with_rehashed_event) ... ok
+test_single_worker_synthetic_submission_and_retry_retained (tests.test_venture_workflow.WorkflowTests.test_single_worker_synthetic_submission_and_retry_retained) ... ok
+test_assignments_share_existing_workflow_ceiling_and_daily_ledger (tests.test_worker_inference.WorkerInferenceTests.test_assignments_share_existing_workflow_ceiling_and_daily_ledger) ... ok
+test_caller_cannot_supply_venture_accounting_scope (tests.test_worker_inference.WorkerInferenceTests.test_caller_cannot_supply_venture_accounting_scope) ... ok
+test_central_ceiling_failure_rolls_back_worker_reservation (tests.test_worker_inference.WorkerInferenceTests.test_central_ceiling_failure_rolls_back_worker_reservation) ... ok
+test_concurrent_reservations_cannot_exceed_shared_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_concurrent_reservations_cannot_exceed_shared_ceiling) ... ok
+test_current_downgrade_denies_before_charging (tests.test_worker_inference.WorkerInferenceTests.test_current_downgrade_denies_before_charging) ... ok
+test_distinct_signed_workflows_each_have_four_calls_for_same_venture (tests.test_worker_inference.WorkerInferenceTests.test_distinct_signed_workflows_each_have_four_calls_for_same_venture) ... ok
+test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow (tests.test_worker_inference.WorkerInferenceTests.test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow) ... ok
+test_exact_reservation_duplicate_at_limit_and_changed_replay (tests.test_worker_inference.WorkerInferenceTests.test_exact_reservation_duplicate_at_limit_and_changed_replay) ... ok
+test_execution_rechecks_hold_and_request_assignment_binding (tests.test_worker_inference.WorkerInferenceTests.test_execution_rechecks_hold_and_request_assignment_binding) ... ok
+test_failed_provider_attempt_is_never_refunded_or_reexecuted (tests.test_worker_inference.WorkerInferenceTests.test_failed_provider_attempt_is_never_refunded_or_reexecuted) ... ok
+test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart (tests.test_worker_inference.WorkerInferenceTests.test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart) ... ok
+test_legacy_signed_audit_remains_verifiable_after_inference_retirement (tests.test_worker_inference.WorkerInferenceTests.test_legacy_signed_audit_remains_verifiable_after_inference_retirement) ... ok
+test_multiworker_policy_shares_one_budget_under_concurrency (tests.test_worker_inference.WorkerInferenceTests.test_multiworker_policy_shares_one_budget_under_concurrency) ... ok
+test_only_enrolled_worker_policies_are_valid (tests.test_worker_inference.WorkerInferenceTests.test_only_enrolled_worker_policies_are_valid) ... ok
+test_policy_change_cannot_expand_existing_workflow_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_policy_change_cannot_expand_existing_workflow_ceiling) ... ok
+test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider (tests.test_worker_inference.WorkerInferenceTests.test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider) ... ok
+test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal (tests.test_worker_inference.WorkerInferenceTests.test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal) ... ok
+test_requires_signed_worker_delegate_and_central_reservation (tests.test_worker_inference.WorkerInferenceTests.test_requires_signed_worker_delegate_and_central_reservation) ... ok
+test_reservation_precedes_real_execution_and_exact_retry_is_cached (tests.test_worker_inference.WorkerInferenceTests.test_reservation_precedes_real_execution_and_exact_retry_is_cached) ... ok
+test_retired_worker_rows_remain_charged_and_new_calls_are_denied (tests.test_worker_inference.WorkerInferenceTests.test_retired_worker_rows_remain_charged_and_new_calls_are_denied) ... ok
+test_simultaneous_execution_cannot_call_provider_twice (tests.test_worker_inference.WorkerInferenceTests.test_simultaneous_execution_cannot_call_provider_twice) ... ok
+test_stale_snapshot_denied_after_sibling_completion (tests.test_worker_inference.WorkerInferenceTests.test_stale_snapshot_denied_after_sibling_completion) ... ok
+test_two_full_workflows_share_central_daily_request_and_token_limits (tests.test_worker_inference.WorkerInferenceTests.test_two_full_workflows_share_central_daily_request_and_token_limits) ... ok
+test_unapproved_proposal_denied (tests.test_worker_inference.WorkerInferenceTests.test_unapproved_proposal_denied) ... ok
+test_unattributable_history_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unattributable_history_fails_closed) ... ok
+test_unknown_old_workflow_does_not_require_its_current_journal (tests.test_worker_inference.WorkerInferenceTests.test_unknown_old_workflow_does_not_require_its_current_journal) ... ok
+test_unverifiable_relevant_historical_ceiling_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unverifiable_relevant_historical_ceiling_fails_closed) ... ok
+test_workflow_approves_fixture_actor_only (tests.test_worker_inference.WorkerInferenceTests.test_workflow_approves_fixture_actor_only) ... ok
+test_wrong_worker_and_blocked_c_then_durable_dependency_release (tests.test_worker_inference.WorkerInferenceTests.test_wrong_worker_and_blocked_c_then_durable_dependency_release) ... ok
+test_ceo_signs_only_preparation_hold_after_digest_verified_worker_limit (tests.test_owner_research_quota_hold.ResearchQuotaHoldTests.test_ceo_signs_only_preparation_hold_after_digest_verified_worker_limit) ... WARNING:root:CEO research workflow placed on signed quota hold: research-aaaaaaaaaaaaaaaaaaaaaaaa
+ok
+test_ceo_entrypoint_uses_https_and_never_opens_local_authority (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_entrypoint_uses_https_and_never_opens_local_authority) ... {"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+ok
+test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role) ... ok
+test_ceo_remote_model_ambiguity_never_falls_back (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_model_ambiguity_never_falls_back) ... ok
+test_ceo_remote_quota_accepts_local_provider_without_broker_binding (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_quota_accepts_local_provider_without_broker_binding) ... ok
+test_ceo_retry_changes_and_corrupt_quota_fail_closed (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_retry_changes_and_corrupt_quota_fail_closed) ... ok
+test_concurrent_fresh_ceo_bootstrap_is_one_charge (tests.test_level2c_central_roles.CentralRolesTests.test_concurrent_fresh_ceo_bootstrap_is_one_charge) ... ok
+test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling (tests.test_level2c_central_roles.CentralRolesTests.test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling) ... ok
+test_gateway_execution_requires_prior_reservation_and_caches_exact_result (tests.test_level2c_central_roles.CentralRolesTests.test_gateway_execution_requires_prior_reservation_and_caches_exact_result) ... ok
+test_hierarchy_manager_system_allowed_only_for_signed_matching_state (tests.test_level2c_central_roles.CentralRolesTests.test_hierarchy_manager_system_allowed_only_for_signed_matching_state) ... /usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c98b80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c98e50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c989a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c98f40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99210>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c997b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99030>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c995d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99300>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c98d60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c998a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a020>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99990>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c994e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99f30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a2f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a110>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c99c60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a200>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a3e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a4d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a5c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a6b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a7a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a890>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9a980>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9aa70>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9ab60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9ac50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9ad40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9af20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b010>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b1f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b2e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b100>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b4c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b5b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b6a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b3d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b880>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9b970>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9bd30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9be20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9ba60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9bc40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9bb50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52c9bf10>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c040>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c130>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c220>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c310>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c400>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c4f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c5e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c6d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c7c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c8b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8c9a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8ca90>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8cc70>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8cd60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8cb80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8cf40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8d030>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8d120>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8ce50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8d300>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8d990>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8de40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e3e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e2f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e110>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e5c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8dd50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e890>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52ecea70>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8df30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8da80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e6b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8dc60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f1f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8e7a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8ed40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f4c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f100>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f3d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8ec50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f6a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8f790>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8fe20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52ecef20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52b8fb50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128dd50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e110>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128eb60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e020>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e4d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e5c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128ef20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128ee30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128de40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e890>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128ff10>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52ecf010>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f2e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128df30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128d300>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128ed40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128fb50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128fd30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f880>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e7a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f6a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128d3f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e3e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f5b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128fc40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f1f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128fe20>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f790>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc220>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc130>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc400>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc310>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc5e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc4f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc7c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128e6b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adc8b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e5128f3d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adca90>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adcc70>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adcb80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adcd60>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adcf40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adce50>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add030>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add210>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add120>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add300>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add4e0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add3f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add5d0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add7b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add6c0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add8a0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adda80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52add990>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52ade2f0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adee30>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52adf5b0>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52934040>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52935120>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52934f40>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52934b80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/urllib/parse.py:474: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x748e52935a80>
+  @functools.lru_cache(typed=True)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_manager_adapter_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_adapter_restart_recovers_broker_complete_without_duplicate) ... ok
+test_manager_reconciliation_all_states_and_tampering_without_paid_retry (tests.test_level2c_central_roles.CentralRolesTests.test_manager_reconciliation_all_states_and_tampering_without_paid_retry) ... ok
+test_manager_review_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_review_restart_recovers_broker_complete_without_duplicate) ... ok
+test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial) ... ok
+test_provider_backed_local_model_is_forbidden (tests.test_level2c_central_roles.CentralRolesTests.test_provider_backed_local_model_is_forbidden) ... ok
+test_recovered_legacy_context_reuses_binding_without_quota_reset (tests.test_level2c_central_roles.CentralRolesTests.test_recovered_legacy_context_reuses_binding_without_quota_reset) ... ok
+test_research_round_session_binds_to_venture_workflow (tests.test_level2c_central_roles.CentralRolesTests.test_research_round_session_binds_to_venture_workflow) ... ok
+
+----------------------------------------------------------------------
+Ran 150 tests in 33.757s
+
+OK
