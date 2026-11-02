@@ -1,0 +1,6 @@
+{
+  "agents/ceo/venture_workflow.py": "065cac4483555fbe136780dc16ed2ddfef60e8646902d2b877a25ac1b99949b3",
+  "agents/ceo/hierarchy_gateway.py": "0468e6f4e0cb17414396bc81e294567fe99c32ae9a1e353d204c1eff205a69b4",
+  "agents/ceo/hierarchy_research_daemon.py": "95c10d1584794452e8e551655f35babb20757704b6dda928fb04733151095fcd",
+  "tests/test_legacy_worker_recovery.py": "68398e14a6e75732a09a4df40943871a8068efa31781e507b527ea8b3fa1c574"
+}

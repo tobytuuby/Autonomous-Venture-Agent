@@ -190,6 +190,31 @@ class VentureWorkflow(EscalationInbox):
             return actor in {a["worker_id"] for a in item["decomposition"]["assignments"]}
         return role not in ("manager", "worker") or actor == item["scope"][role + "_id"]
 
+    def _legacy_worker_recovery(self, prior, command):
+        """Same-scope routing repair; replay reconstructs every retained field."""
+        if command["action"] != "recover_legacy_worker":
+            return None
+        exact(command["payload"], ("reason",))
+        bounded(command["payload"]["reason"])
+        fingerprint = research_identity(prior)
+        scope = prior["scope"]
+        if (command["role"] != "ceo" or command["actor_id"] != "service-ceo"
+                or fingerprint is None or prior["id"] != "research-" + fingerprint[:24]
+                or prior["venture_id"] != prior["id"]
+                or prior["state"] != "WORKER_PENDING" or prior.get("decomposition") is not None
+                or prior.get("research_disposition") is not None
+                or scope["manager_id"] != "service-manager"
+                or scope["worker_id"] != "service-worker" or len(scope["tasks"]) != 1
+                or scope["mode"] != "PREPARATION_ONLY"
+                or scope["seed_cents"] != 1 or scope["budget_units"] > 5
+                or scope["budget_units"] - prior["used_units"] < 3
+                or not 1 <= len(research_rounds(prior)) <= 3):
+            raise ValueError("legacy Worker recovery denied")
+        if any(self.actors.get(actor, (None,))[0] != "worker"
+               for actor in ("worker-a", "worker-b", "worker-c")):
+            raise ValueError("active research Workers required")
+        return dict(state="MANAGER_PENDING")
+
     def _decomposition_transition(self, prior, command, signature):
         """Reconstruct assignment state from signed commands, including on restart."""
         action, role, payload = command["action"], command["role"], command["payload"]
@@ -369,7 +394,8 @@ class VentureWorkflow(EscalationInbox):
             if item["handoff"] != prior["handoff"]:
                 raise ValueError("handoff immutable")
             multi = self._decomposition_transition(prior, command, item["signature"])
-            research = self._research_transition(prior, command)
+            research = (self._legacy_worker_recovery(prior, command)
+                        or self._research_transition(prior, command))
             blocker = self._mvp_blocker_transition(prior, command)
             if blocker is not None:
                 expected.update(blocker)
@@ -570,7 +596,8 @@ class VentureWorkflow(EscalationInbox):
                     and action in {"improve", "delegate", "propose_decomposition", "revise"}):
                 raise ValueError("budget exhausted: Worker cycle restart denied")
             multi = self._decomposition_transition(item, command, signature)
-            research = self._research_transition(item, command)
+            research = (self._legacy_worker_recovery(item, command)
+                        or self._research_transition(item, command))
             if research is not None:
                 item.update(research)
                 target = research["state"]

@@ -1,0 +1,41 @@
+test_changed_payload_cannot_reset_scope_budget_version_or_round (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_changed_payload_cannot_reset_scope_budget_version_or_round) ... ok
+test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_conflicting_duplicate_stale_replay_and_role_fail_without_new_event) ... ok
+test_daemon_periodic_poll_response_loss_restart_and_retirement (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_daemon_periodic_poll_response_loss_restart_and_retirement) ... ERROR:root:research role ceo error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-worker-recovery-clean/agents/ceo/hierarchy_research_daemon.py", line 235, in poll
+    if recover_legacy_worker(client, config, snapshot):
+       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-worker-recovery-clean/agents/ceo/hierarchy_research_daemon.py", line 198, in recover_legacy_worker
+    result = client.apply(command, key.sign(canonical(command).encode()).hex())
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-worker-recovery-clean/tests/test_legacy_worker_recovery.py", line 239, in lost_response
+    raise OSError("lost after signed commit")
+OSError: lost after signed commit
+ok
+test_insufficient_quota_missing_ledger_and_effort_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_insufficient_quota_missing_ledger_and_effort_fail_closed) ... ok
+test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call) ... ERROR
+test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_signed_rev2_history_append_only_same_scope_reopen_and_exact_replay) ... ok
+test_unauthorized_signer_and_changed_approval_fail_closed (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_unauthorized_signer_and_changed_approval_fail_closed) ... ok
+
+======================================================================
+ERROR: test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call (tests.test_legacy_worker_recovery.LegacyWorkerRecoveryTests.test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-worker-recovery-clean/tests/test_legacy_worker_recovery.py", line 185, in test_legacy_charges_preserved_abc_fake_execution_and_no_duplicate_paid_call
+    wi.reserve_worker(payload["reservation"], actor=actor, hierarchy=self.gate)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/artifacts/legacy-worker-recovery-clean/agents/ceo/worker_inference.py", line 162, in reserve_worker
+    raise ValueError("unverifiable prior worker budget")
+ValueError: unverifiable prior worker budget
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.751s
+
+FAILED (errors=1)

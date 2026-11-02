@@ -6,7 +6,7 @@ Role-scoped mTLS callers supply their own Ed25519-signed commands.
 import re
 from pathlib import Path
 from agents.ceo.escalation_inbox import exact
-from agents.ceo.venture_workflow import VentureWorkflow
+from agents.ceo.venture_workflow import VentureWorkflow, hashed
 from agents.ceo.hierarchy_artifact_store import DurableRoleArtifactStore
 
 STATE_PREFIX = "/v1/hierarchy/state/"
@@ -385,7 +385,7 @@ class HierarchyGateway:
         if type(cmd) is not dict:
             raise ValueError("signed hierarchy command required")
         expected = {"quota-ceo":"ceo", "poll":"manager", "worker":"worker"}.get(role)
-        actions=("research_disposition", "continue_research", "propose_decomposition", "approve_decomposition",
+        actions=("recover_legacy_worker", "research_disposition", "continue_research", "propose_decomposition", "approve_decomposition",
                  "delegate", "submit", "improve", "manager_approve",
                  "reject_premise", "ceo_approve", "redirect", "revise")
         research_hold=(role=='quota-ceo' and cmd.get('action')=='hold'
@@ -400,6 +400,20 @@ class HierarchyGateway:
         valid_id(cmd.get("workflow_id"))
         workflow = VentureWorkflow(self.directory / "workflow.sqlite", actors=self.actors)
         try:
+            if cmd["action"] == "recover_legacy_worker" and workflow._retry(cmd) is None:
+                current = workflow.read(cmd["workflow_id"])
+                self.research_authority(current)
+                workflow._legacy_worker_recovery(current, cmd)
+                counts = self.worker_research_counts(cmd["workflow_id"])
+                # A/B/C need three remaining charges; repair grants no allowance.
+                if (counts["snapshot_sha256"] != hashed(current)
+                        or counts["round_count"] + 3 > 4
+                        or counts["venture_count"] + 3 > 12):
+                    raise ValueError("legacy recovery Worker allowance unavailable")
+            if cmd["workflow_id"].startswith("research-") and cmd["action"] == "delegate":
+                current = workflow.read(cmd["workflow_id"])
+                if current["scope"]["worker_id"] == "service-worker" and workflow._retry(cmd) is None:
+                    raise ValueError("legacy Worker delegation retired")
             if manager_hold:
                 current = workflow.read(cmd["workflow_id"])
                 if workflow._retry(cmd) is None and (

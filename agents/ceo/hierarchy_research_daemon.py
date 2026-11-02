@@ -176,6 +176,31 @@ def direct_research(config, snapshot, client, signed):
     return client.apply(command, key.sign(canonical(command).encode()).hex())
 
 
+def recover_legacy_worker(client, config, snapshot):
+    """One append-only routing repair; concurrent polls use signed CAS lineage."""
+    if (config["role"] != "ceo" or snapshot["state"] != "WORKER_PENDING"
+            or snapshot["scope"]["worker_id"] != "service-worker"
+            or snapshot.get("decomposition") is not None):
+        return False
+    allowed_config(config, snapshot["id"], snapshot)
+    now = datetime.now(timezone.utc)
+    command = dict(workflow_id=snapshot["id"],
+        request_id="legacy-worker-recovery-" + hashed(snapshot)[:40],
+        actor_id=config["actor_id"], role="ceo", origin="control_plane",
+        action="recover_legacy_worker", revision=snapshot["revision"],
+        previous_hash=hashed(snapshot), version=snapshot["version"],
+        scope_hash=snapshot["scope_hash"],
+        evidence=snapshot["last_command"]["evidence"],
+        payload=dict(reason="Retired Worker routing repair within the exact approved research scope; Manager must propose A/B/C decomposition."),
+        issued_at=now.isoformat(), expires_at=(now+timedelta(minutes=5)).isoformat(),
+        live=False)
+    key = Ed25519PrivateKey.from_private_bytes(Path(config["signing_key"]).read_bytes())
+    result = client.apply(command, key.sign(canonical(command).encode()).hex())
+    if result["state"] != "MANAGER_PENDING":
+        raise ValueError("legacy Worker recovery not committed")
+    return True
+
+
 def poll(config, *, once=False, interval=12,worker_limit_override=None):
     if config["role"] not in STATES:
         raise ValueError("unsupported research role")
@@ -207,6 +232,8 @@ def poll(config, *, once=False, interval=12,worker_limit_override=None):
                 if snapshot.get("research_disposition") is not None:
                     continue
                 if config['role']=='ceo' and snapshot['state']=='WORKER_PENDING':
+                    if recover_legacy_worker(client, config, snapshot):
+                        continue
                     hold_exhausted_research(client,config,snapshot,worker_limit_override)
                     continue
                 if config['role']=='ceo' and snapshot['state']=='MANAGER_PENDING':
