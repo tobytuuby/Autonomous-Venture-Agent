@@ -85,7 +85,12 @@ def worker_round_reservation_count(client, snapshot):
     from agents.ceo.venture_workflow import research_identity, research_rounds
     fingerprint = research_identity(snapshot)
     round_number = len(research_rounds(snapshot))
-    with closing(sqlite3.connect("file:" + str(AUTHORITY_DIRECTORY / "resources.sqlite") + "?mode=ro", uri=True)) as db:
+    ledger = AUTHORITY_DIRECTORY / 'resources.sqlite'
+    if not ledger.is_file():
+        # On Control the live ledger is owned by the broker deployment, whereas
+        # isolated fixtures supply their own ledger via AUTHORITY_DIRECTORY.
+        ledger = Path('/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite')
+    with closing(sqlite3.connect('file:' + str(ledger) + '?mode=ro', uri=True)) as db:
         if not db.execute("SELECT 1 FROM sqlite_master WHERE name='worker_reservations'").fetchone():
             return 0
         charges = research_charges(db, client.read)
