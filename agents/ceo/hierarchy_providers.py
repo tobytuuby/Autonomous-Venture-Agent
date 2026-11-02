@@ -81,6 +81,8 @@ class HierarchyProvider:
             identity = self.role + "-" + hashed(dict(snapshot=state, request=request))[:50]
         else:
             identity = self.role + "-" + hashed(state)[:50]
+        tracked_ceo = (self.role == "ceo" and self.workflow_id.startswith("research-")
+                       and request["opportunity"].get("research_state") == "QUOTA_HOLD")
         wire = canonical(request)
         recovering = False
         db = sqlite3.connect(self.state_path, isolation_level=None, timeout=5)
@@ -118,7 +120,7 @@ class HierarchyProvider:
                     result=json.loads(prior[1])
                     db.execute("COMMIT")
                     return result
-                if not safe_manager:
+                if not (safe_manager or tracked_ceo):
                     raise RecoveryImpossible("LOCAL_EXECUTION_AMBIGUOUS")
                 recovering = True
                 attempt=prior[2]
@@ -155,10 +157,39 @@ class HierarchyProvider:
             reservation=dict(context=self.context,role=self.role,actor=self.actor,
                 identity=identity,attempt=attempt,request_sha256=request_sha,
                 policy=self.policy,endpoint=binding["endpoint"],model=binding["model"])
-            receipt=self.client._request("POST","/v1/inference/reservations",reservation)
+            if tracked_ceo:
+                reservation["execution_mode"] = "CONTROL_LEDGER_V1"
+            if tracked_ceo and recovering:
+                # The original CEO path could execute only AFTER a committed
+                # reservation. Under the existing atomic unique-call gate, an
+                # absent reservation proves no execution; a legacy reservation
+                # conflicts with the mode binding and remains blocked.
+                from agents.ceo.provider_reservation import reserve_exchange
+                try:
+                    receipt = reserve_exchange(reservation, actor=self.actor, role="ceo",
+                                               existing_session_only=True)
+                except ValueError as exc:
+                    if str(exc) == "changed or replayed reservation":
+                        raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED") from exc
+                    raise
+            else:
+                receipt = self.client._request("POST","/v1/inference/reservations",reservation)
             if receipt.get("reserved") is not True:
                 raise ValueError("central inference reservation denied")
-            if self.role == "ceo":
+            if tracked_ceo:
+                from types import SimpleNamespace
+                from agents.ceo.provider_gateway import execute_reserved
+                payload = dict(reservation=reservation, request=request)
+                def execute(data):
+                    return execute_reserved(data, actor=self.actor, role="ceo",
+                        provider=self.local_provider,
+                        hierarchy=SimpleNamespace(state=self.client.read))
+                if recovering:
+                    status = execute(dict(payload, reconcile_only=True))
+                    result = reconciled_result(status, request_sha)
+                if not recovering or status["reconciliation"] == "NOT_STARTED":
+                    result = execute(payload)
+            elif self.role == "ceo":
                 self.local_provider.maximum_output_tokens=self.policy["maximum_output_tokens"]
                 result=self.local_provider(request,())
             else:

@@ -11,14 +11,17 @@ RESERVATION_PATH = "/v1/inference/reservations"
 MAX_RESERVATION = 8192
 
 
-def reserve_exchange(payload, *, actor, role="manager"):
+def reserve_exchange(payload, *, actor, role="manager", existing_session_only=False):
     """Trusted broker callback; actor comes from TLS pin configuration, never JSON.
 
     A CEO-established session is mandatory. Exact retry of one durable intent is
     idempotent; a fresh intent for the same logical call is a replay and denied.
     """
     from agents.ceo.preparation_exchange import StandingModel
-    exact(payload, ("context", "actor", "role", "identity", "request_sha256",
+    tracked = payload.get("execution_mode") == "CONTROL_LEDGER_V1"
+    if "execution_mode" in payload and (not tracked or role != "ceo"):
+        raise ValueError("execution mode denied")
+    exact(payload, (("execution_mode",) if tracked else ()) + ("context", "actor", "role", "identity", "request_sha256",
                     "attempt", "policy", "endpoint", "model"))
     if role not in ("ceo", "manager") or payload["role"] != role or payload["actor"] != actor:
         raise ValueError("reservation role denied")
@@ -51,6 +54,9 @@ def reserve_exchange(payload, *, actor, role="manager"):
         session=context["session_id"], actor=actor, identity=payload["identity"])).encode())
     wire = canonical(payload)
     path = inside_root(authority.directory / "resources.sqlite")
+    if existing_session_only and not path.is_file():
+        from agents.ceo.hierarchy_providers import RecoveryImpossible
+        raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED")
     # Only the authenticated CEO may bootstrap broker-owned quota state.
     if not path.exists() and role == "ceo":
         try:
@@ -76,6 +82,9 @@ def reserve_exchange(payload, *, actor, role="manager"):
         session = context["session_id"]
         row = db.execute("SELECT binding FROM exchange_sessions WHERE session=?", (session,)).fetchone()
         if row is None:
+            if existing_session_only:
+                from agents.ceo.hierarchy_providers import RecoveryImpossible
+                raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED")
             if role != "ceo":
                 raise ValueError("CEO-established Control session required")
             db.execute("INSERT INTO exchange_sessions VALUES(?,?)", (session, binding))

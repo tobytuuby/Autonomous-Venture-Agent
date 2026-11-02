@@ -1,4 +1,4 @@
-"""Manager-only centrally metered inference via authenticated Control mTLS.
+"""Centrally metered inference: Manager mTLS and Control-local CEO review.
 
 No provider credentials or fallback are present on Agents. A durable pending
 record is committed BEFORE external I/O; ambiguous outcomes never retrigger
@@ -16,20 +16,28 @@ EXECUTE_PATH = "/v1/inference/execute"
 MAX_EXECUTE = 16384
 
 
-def execute_reserved(payload, *, actor, provider, hierarchy=None):
+def execute_reserved(payload, *, actor, provider, hierarchy=None, role="manager"):
     probe = type(payload) is dict and payload.get("reconcile_only") is True
     if probe:
         exact(payload, ("reservation", "request", "reconcile_only"))
         payload = {k: payload[k] for k in ("reservation", "request")}
     exact(payload, ("reservation", "request"))
     reservation, request = payload["reservation"], payload["request"]
-    exact(reservation, ("context", "actor", "role", "identity", "request_sha256",
+    if role not in ("manager", "ceo"):
+        raise ValueError("execution role denied")
+    tracked_ceo = role == "ceo" and reservation.get("execution_mode") == "CONTROL_LEDGER_V1"
+    if role == "ceo" and not tracked_ceo:
+        from agents.ceo.hierarchy_providers import RecoveryImpossible
+        raise RecoveryImpossible("LEGACY_CEO_EXECUTION_UNPROVEN")
+    exact(reservation, (("execution_mode",) if tracked_ceo else ()) + ("context", "actor", "role", "identity", "request_sha256",
                        "attempt", "policy", "endpoint", "model"))
     exact(request, ("system", "json_object_mode", "opportunity"))
     from agents.ceo.preparation_exchange import SYSTEM
     from agents.ceo.hierarchy_model_callbacks import SYSTEM as HIERARCHY_SYSTEM, RESEARCH_SYSTEM
     from agents.ceo.preparation_exchange import SYSTEM as EXCHANGE_SYSTEM
-    if request['system'] in (HIERARCHY_SYSTEM,RESEARCH_SYSTEM):
+    if tracked_ceo:
+        validate_ceo_review(request, reservation, actor, hierarchy)
+    elif request['system'] in (HIERARCHY_SYSTEM,RESEARCH_SYSTEM):
         opportunity = request['opportunity']
         if request['system']==RESEARCH_SYSTEM and not str(opportunity.get('workflow_id','')).startswith('research-'):
             raise ValueError('research system requires signed research flow')
@@ -51,8 +59,8 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
             raise ValueError("stale or unauthorized Manager inference")
     elif request["system"] != EXCHANGE_SYSTEM:
         raise ValueError("model system boundary denied")
-    if (actor != reservation["context"]["manager_id"] or reservation["role"] != "manager"
-            or reservation["actor"] != actor or request["system"] not in (EXCHANGE_SYSTEM, HIERARCHY_SYSTEM, RESEARCH_SYSTEM)
+    if (actor != reservation["context"][role + "_id"] or reservation["role"] != role
+            or reservation["actor"] != actor or (not tracked_ceo and request["system"] not in (EXCHANGE_SYSTEM, HIERARCHY_SYSTEM, RESEARCH_SYSTEM))
             or request["json_object_mode"] is not True
             or type(request["opportunity"]) is not dict
             or digest(canonical(request).encode()) != reservation["request_sha256"]
@@ -84,13 +92,16 @@ def execute_reserved(payload, *, actor, provider, hierarchy=None):
         db.execute("BEGIN IMMEDIATE")
         row = db.execute("SELECT request FROM remote_reservations WHERE identity=?", (call,)).fetchone()
         if row is None or row[0] != canonical(reservation):
+            if tracked_ceo:
+                from agents.ceo.hierarchy_providers import RecoveryImpossible
+                raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED")
             raise ValueError("prior bound reservation required")
         db.execute("COMMIT")
     finally:
         db.close()
     # Exact retried reservation observes the same central budget slot
     # while validating current policy, revocation, and session binding.
-    reserve_exchange(reservation, actor=actor, role="manager")
+    reserve_exchange(reservation, actor=actor, role=role)
     wire = canonical(payload)
     db = sqlite3.connect(path, isolation_level=None, timeout=5)
     try:
@@ -172,3 +183,30 @@ class RemoteInferenceProvider:
         result = self.client.execute_provider(dict(reservation=p, request=request))
         self.pending = None
         return result
+
+
+def validate_ceo_review(request, reservation, actor, hierarchy):
+    """Control-local only; the HTTP gateway continues to select Manager role."""
+    import hashlib
+    from agents.ceo.ceo_research_review import SYSTEM, HISTORICAL_SYSTEM_SHA256
+    from agents.ceo.venture_workflow import hashed, research_session
+    opportunity = request.get("opportunity")
+    if (actor != "service-ceo" or hierarchy is None
+            or type(opportunity) is not dict or type(request.get("system")) is not str
+            or (request["system"] != SYSTEM and
+                hashlib.sha256(request["system"].encode()).hexdigest() != HISTORICAL_SYSTEM_SHA256)
+            or opportunity.get("role") != "ceo"
+            or not str(opportunity.get("workflow_id", "")).startswith("research-")):
+        raise ValueError("signed CEO review required")
+    state = hierarchy.state(opportunity["workflow_id"])
+    if (state is None or hashed(state) != opportunity.get("snapshot_sha256")
+            or state["state"] not in ("HOLD", "CEO_REVIEW", "OWNER_REVIEW", "CEO_REDIRECTION")
+            or state["state"] != opportunity.get("state")
+            or state["scope_hash"] != opportunity.get("scope_hash")
+            or state["mode"] != "PREPARATION_ONLY"
+            or any(state[k] is not False for k in (
+                "operational_authority", "external_actions_allowed",
+                "execution_performed", "money_released"))
+            or reservation["context"]["venture_id"] != state["id"]
+            or reservation["context"]["session_id"] != research_session(state)):
+        raise ValueError("stale or unauthorized CEO review")

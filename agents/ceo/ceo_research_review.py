@@ -305,11 +305,7 @@ def review(config,state,client,provider=None):
 
 
 def recover_response(config,state,client,prior,request):
-    """Return the completed response and its verified exact historical request.
-
-    The authenticated broker read supplies the verified signed workflow snapshot;
-    recovery never reserves, executes, rewrites the call, or repairs its content.
-    """
+    """Replay accepted bytes, or reconcile an exact broker-tracked CEO intent."""
     import sqlite3
     if (set(prior) != {'state','snapshot_hash','request_hash','created_utc'}
             or prior['state'] != 'PENDING'
@@ -331,7 +327,7 @@ def recover_response(config,state,client,prior,request):
                        ('ceo-'+hashed(state)[:50],)).fetchone()
     finally:
         db.close()
-    if row is None or row[1] is None:
+    if row is None:
         raise ValueError('CEO durable response unavailable; manual reconciliation required')
     from agents.ceo.venture_exercise import strict_json
     saved_request=strict_json(row[0])
@@ -351,7 +347,35 @@ def recover_response(config,state,client,prior,request):
             raise ValueError('CEO pending request mismatch; manual reconciliation required')
     if type(row[2]) is not str or re.fullmatch(r'[0-9a-f]{64}',row[2]) is None:
         raise ValueError('CEO durable attempt identity invalid')
-    return strict_json(row[1]),saved_request
+    if row[1] is not None:
+        return strict_json(row[1]),saved_request
+    if "context" not in config:
+        raise ValueError('CEO durable response unavailable; manual reconciliation required')
+    # Credentials are configured only after proof permits the original execution.
+    class DeferredModel:
+        endpoint = binding["endpoint"]
+        model = binding["model"]
+        maximum_output_tokens = None
+
+        def __call__(self, original, tools):
+            from agents.ceo.venture_exercise import configured_provider
+            model = configured_provider(os.environ, required=True)
+            if model.endpoint != self.endpoint or model.model != self.model:
+                raise ValueError("CEO model identity denied")
+            model.maximum_output_tokens = self.maximum_output_tokens
+            return model(original, tools)
+
+    return metered_review(config, state, client, DeferredModel(), saved_request), saved_request
+
+
+def metered_review(config, state, client, model, request):
+    from agents.ceo.hierarchy_providers import HierarchyProvider
+    policy=json.loads(pathlib.Path(config['policy']).read_text())
+    # allowed_config owns the original session binding, including legacy rounds.
+    metered=HierarchyProvider(role='ceo',actor='service-ceo',workflow_id=state['id'],
+        client=client,policy=policy,context=config['context'],local_provider=model,
+        state_path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite')
+    return metered(request,())
 
 
 def request_response(config,state,client,provider,path,current,request):
@@ -368,14 +392,7 @@ def request_response(config,state,client,provider,path,current,request):
     write_atomic(path,dict(state='PENDING',snapshot_hash=current,
         request_hash=hashed(request),created_utc=datetime.now(timezone.utc).isoformat()))
     if provider is None:
-        from agents.ceo.hierarchy_providers import HierarchyProvider
-        policy=json.loads(pathlib.Path(config['policy']).read_text())
-        context=dict(config['context'],session_id=research_session(state),
-            venture_id=flow,objective='; '.join(state['scope']['tasks']),rounds=number)
-        metered=HierarchyProvider(role='ceo',actor='service-ceo',workflow_id=flow,
-            client=client,policy=policy,context=context,local_provider=model,
-            state_path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite')
-        response=metered(request,())
+        response=metered_review(config,state,client,model,request)
     else:
         response=model(request,())  # Explicit isolated-test provider; no runtime fallback.
     return response,model.model

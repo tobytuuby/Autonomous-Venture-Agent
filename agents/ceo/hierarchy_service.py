@@ -36,7 +36,8 @@ def recovery_reason(exc):
     codes = {"MALFORMED_DURABLE_INTENT", "MULTIPLE_DURABLE_INTENTS",
              "PROMPT_CHANGED", "LOCAL_EXECUTION_AMBIGUOUS",
              "RECONCILIATION_BINDING", "RECONCILIATION_RESULT",
-             "PROVIDER_EXECUTION_AMBIGUOUS"}
+             "PROVIDER_EXECUTION_AMBIGUOUS", "CEO_RESERVATION_PROOF_REQUIRED",
+             "LEGACY_CEO_EXECUTION_UNPROVEN"}
     return str(exc) if isinstance(exc, RecoveryImpossible) and str(exc) in codes else "RECONCILIATION_REQUIRED"
 
 

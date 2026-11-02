@@ -1,0 +1,18 @@
+test_ambiguous_execution_explicitly_blocks_without_retry (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_ambiguous_execution_explicitly_blocks_without_retry) ... ok
+test_changed_attempt_identity_context_or_policy_cannot_reconcile (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_changed_attempt_identity_context_or_policy_cannot_reconcile) ... ok
+test_executed_response_retrieved_without_configuring_or_calling_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_executed_response_retrieved_without_configuring_or_calling_provider) ... ok
+test_future_venture_restart_after_reservation_and_after_execution (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_future_venture_restart_after_reservation_and_after_execution) ... ok
+test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof) ... ok
+test_manager_execution_entrypoint_cannot_select_ceo_role_from_body (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_manager_execution_entrypoint_cannot_select_ceo_role_from_body) ... ok
+test_missing_ledger_or_session_is_not_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_missing_ledger_or_session_is_not_nonexecution_proof) ... ok
+test_no_original_reservation_proves_original_was_never_executed (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_no_original_reservation_proves_original_was_never_executed) ... ok
+test_pending_checkpoint_hash_and_prompt_change_still_refused (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_pending_checkpoint_hash_and_prompt_change_still_refused) ... ok
+test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot) ... ok
+test_quota_exhaustion_blocks_unreserved_intent_without_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_blocks_unreserved_intent_without_provider) ... ok
+test_reserved_unexecuted_same_identity_attempt_authorization_only (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_reserved_unexecuted_same_identity_attempt_authorization_only) ... ok
+test_revoked_authority_blocks_unstarted_and_completed_replay (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_revoked_authority_blocks_unstarted_and_completed_replay) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.702s
+
+OK
