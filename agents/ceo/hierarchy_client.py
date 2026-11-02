@@ -93,6 +93,22 @@ class HierarchyClient:
             raise ValueError("unexpected workflow genesis")
         return r["state"]
 
+    def worker_research_counts(self, snapshot):
+        from agents.ceo.hierarchy_gateway import WORKER_COUNTS_PREFIX
+        from agents.ceo.venture_workflow import hashed, research_rounds
+        r = self._request("GET", WORKER_COUNTS_PREFIX + valid_id(snapshot["id"]))
+        if (type(r) is not dict or set(r) != {
+                "workflow_id", "snapshot_sha256", "round", "round_count", "venture_count"}
+                or r["workflow_id"] != snapshot["id"]
+                or r["snapshot_sha256"] != hashed(snapshot)
+                or type(r["round"]) is not int
+                or r["round"] != len(research_rounds(snapshot))
+                or not 1 <= r["round"] <= 3
+                or any(type(r[k]) is not int or r[k] < 0 for k in ("round_count", "venture_count"))
+                or r["round_count"] > r["venture_count"]):
+            raise ValueError("unexpected research reservation counts")
+        return r
+
     def worker_reserve(self, payload):
         return self._request("POST", "/v1/inference/worker-reservations", payload)
 

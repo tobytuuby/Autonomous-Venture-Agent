@@ -104,33 +104,19 @@ def worker_submission_count(client,snapshot):
 
 
 def worker_round_reservation_count(client, snapshot):
-    """Count paid-capacity reservations from the existing Control ledger."""
-    import sqlite3
-    from contextlib import closing
-    from agents.ceo.service_identity import AUTHORITY_DIRECTORY
-    from agents.ceo.worker_inference import research_charges
-    from agents.ceo.venture_workflow import research_identity, research_rounds
-    fingerprint = research_identity(snapshot)
-    round_number = len(research_rounds(snapshot))
-    ledger = AUTHORITY_DIRECTORY / 'resources.sqlite'
-    if not ledger.is_file():
-        # On Control the live ledger is owned by the broker deployment, whereas
-        # isolated fixtures supply their own ledger via AUTHORITY_DIRECTORY.
-        ledger = Path('/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite')
-    with closing(sqlite3.connect('file:' + str(ledger) + '?mode=ro', uri=True)) as db:
-        if not db.execute("SELECT 1 FROM sqlite_master WHERE name='worker_reservations'").fetchone():
-            return 0
-        charges = research_charges(db, client.read)
-    return sum(proposal == fingerprint and number == round_number
-               for proposal, number in charges.values())
+    """Read broker-owned counts over the existing authenticated hierarchy client."""
+    counts = client.worker_research_counts(snapshot)
+    return counts["round_count"]
 
 
 def hold_exhausted_research(client,config,snapshot,worker_limit):
     """CEO signer records reserved quota exhaustion; never infers, spends or funds."""
     if (config['role']!='ceo' or config['actor_id']!='service-ceo'
             or snapshot['state']!='WORKER_PENDING'
-            or not RESEARCH_ID.fullmatch(snapshot['id'])
-            or worker_round_reservation_count(client,snapshot)<worker_limit):
+            or not RESEARCH_ID.fullmatch(snapshot['id'])):
+        return False
+    counts = client.worker_research_counts(snapshot)
+    if counts["round_count"] < min(worker_limit, 4) and counts["venture_count"] < 12:
         return False
     # The workflow itself is authenticated by the broker. Recheck all safety
     # constraints before invoking the existing role-signature gate.

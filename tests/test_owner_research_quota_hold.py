@@ -1,7 +1,5 @@
 import hashlib
 import json
-import sqlite3
-from unittest.mock import patch
 import tempfile
 import unittest
 from pathlib import Path
@@ -14,6 +12,10 @@ class Client:
     def __init__(self, evidence):
         self.evidence=evidence
         self.command=None
+        self.round_count=0
+        self.venture_count=0
+    def worker_research_counts(self,snapshot):
+        return dict(round_count=self.round_count,venture_count=self.venture_count)
     def load(self,ref):
         return self.evidence
     def apply(self,command,signature):
@@ -43,19 +45,11 @@ class ResearchQuotaHoldTests(unittest.TestCase):
                 evidence={ref:sha, "research-approval-"+fingerprint[:24]:fingerprint},last_command=dict(evidence=[dict(ref=ref,sha256=sha)]),
                 version=1,revision=3)
             client=Client(evidence)
-            client.read=lambda workflow_id: snapshot if workflow_id==flow else None
-            with sqlite3.connect(root/'resources.sqlite') as db:
-                db.execute("CREATE TABLE worker_reservations(identity TEXT PRIMARY KEY,request TEXT NOT NULL)")
-            # Use a local retained reservation ledger, never the installed authority store.
-            authority_patch=patch('agents.ceo.service_identity.AUTHORITY_DIRECTORY',root)
-            authority_patch.start()
-            self.addCleanup(authority_patch.stop)
             self.assertFalse(hold_exhausted_research(client,config=dict(role='ceo',actor_id='service-ceo'),
                                                      snapshot=snapshot,worker_limit=1))
             self.assertIsNone(client.command)
-            with sqlite3.connect(root/'resources.sqlite') as db:
-                db.execute("INSERT INTO worker_reservations VALUES(?,?)",
-                           ('fixture',canonical(dict(workflow_id=flow))))
+            client.round_count=1
+            client.venture_count=1
             config=dict(role='ceo',actor_id='service-ceo',
                 signing_key=str(signer),state_dir=str(root/'run5'),
                 context=dict(session_id='fixture',venture_id='fixture',ceo_id='service-ceo',manager_id='service-manager',objective='fixture',rounds=2))

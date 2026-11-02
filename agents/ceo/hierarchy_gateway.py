@@ -15,6 +15,7 @@ COMMAND_PATH = "/v1/hierarchy/command"
 ARTIFACT_PATH = "/v1/hierarchy/artifact"
 BOOTSTRAP_PREPARE_PATH = "/v1/hierarchy/bootstrap/prepare"
 BOOTSTRAP_COMMIT_PATH = "/v1/hierarchy/bootstrap/commit"
+WORKER_COUNTS_PREFIX = "/v1/hierarchy/research-worker-counts/"
 MAX_COMMAND = 16000
 # Exact owner-authorized fixtures; never accept arbitrary retry suffixes.
 MULTI_FIXTURES = {
@@ -308,6 +309,45 @@ class HierarchyGateway:
         finally:
             workflow.close()
 
+    def worker_research_counts(self, workflow_id):
+        """Verify signed accounting scope and read private ledgers without writes."""
+        import json
+        import sqlite3
+        from contextlib import closing
+        from agents.ceo.service_identity import AUTHORITY_DIRECTORY
+        from agents.ceo.worker_inference import research_charges
+        from agents.ceo.venture_workflow import hashed, research_identity, research_rounds
+        if type(workflow_id) is not str or not re.fullmatch(r"research-[0-9a-f]{24}", workflow_id):
+            raise ValueError("exact research workflow required")
+        with closing(_ReadOnlyWorkflow(self.directory / "workflow.sqlite", self.actors)) as journal:
+            journal.db.execute("BEGIN")
+            journal.verify()
+            def resolve(flow):
+                row = journal.db.execute("SELECT snapshot FROM inbox WHERE id=?", (flow,)).fetchone()
+                if row is None:
+                    raise ValueError("signed research workflow unavailable")
+                return json.loads(row[0])
+            state = resolve(workflow_id)
+            fingerprint = research_identity(state)
+            if (fingerprint is None or state["id"] != workflow_id
+                    or state["venture_id"] != workflow_id
+                    or workflow_id != "research-" + fingerprint[:24]):
+                raise ValueError("signed research identity mismatch")
+            round_number = len(research_rounds(state))
+            if not 1 <= round_number <= 3:
+                raise ValueError("bounded signed research round required")
+            ledger = AUTHORITY_DIRECTORY / "resources.sqlite"
+            with closing(sqlite3.connect(ledger.as_uri() + "?mode=ro", uri=True)) as db:
+                db.execute("BEGIN")
+                # An existing empty ledger has no reservations; missing/unreadable
+                # databases and malformed historical rows must fail closed.
+                exists = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='worker_reservations'").fetchone()
+                charges = research_charges(db, resolve) if exists else {}
+            return dict(workflow_id=workflow_id, snapshot_sha256=hashed(state),
+                        round=round_number,
+                        round_count=sum(p == fingerprint and r == round_number for p, r in charges.values()),
+                        venture_count=sum(p == fingerprint for p, r in charges.values()))
+
     def research_authority(self, state):
         """Recheck the full signed proposal against the operator's Owner snapshot."""
         from agents.ceo.venture_workflow import research_identity, hashed
@@ -405,3 +445,15 @@ class HierarchyGateway:
             return db.load(ref).decode("utf-8")
         finally:
             db.close()
+
+
+class _ReadOnlyWorkflow(VentureWorkflow):
+    """Use the existing signature/transition verifier without schema initialization."""
+    def __init__(self, database, actors):
+        import sqlite3
+        from agents.ceo.escalation_inbox import inside_root
+        path = inside_root(database)
+        if not path.is_file() or path.stat().st_nlink != 1:
+            raise ValueError("existing private workflow database required")
+        self.actors = dict(actors)
+        self.db = sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)

@@ -1,0 +1,27 @@
+test_client_rejects_invalid_counts_and_query_errors (tests.test_research_reservation_counts.ResearchCountTests.test_client_rejects_invalid_counts_and_query_errors) ... ok
+test_missing_corrupt_ledger_and_unsigned_state_fail_closed (tests.test_research_reservation_counts.ResearchCountTests.test_missing_corrupt_ledger_and_unsigned_state_fail_closed) ... /usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 503: 'Service Unavailable'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 400: 'Bad Request'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_retained_counts_read_only_modes_and_stale_snapshot (tests.test_research_reservation_counts.ResearchCountTests.test_retained_counts_read_only_modes_and_stale_snapshot) ... ok
+test_round_four_and_cumulative_twelve_trigger_existing_hold_path (tests.test_research_reservation_counts.ResearchCountTests.test_round_four_and_cumulative_twelve_trigger_existing_hold_path) ... ok
+test_tls_roles_exact_workflow_and_missing_state_denied (tests.test_research_reservation_counts.ResearchCountTests.test_tls_roles_exact_workflow_and_missing_state_denied) ... ok
+test_ceo_signs_only_preparation_hold_after_digest_verified_worker_limit (tests.test_owner_research_quota_hold.ResearchQuotaHoldTests.test_ceo_signs_only_preparation_hold_after_digest_verified_worker_limit) ... WARNING:root:CEO research workflow placed on signed quota hold: research-aaaaaaaaaaaaaaaaaaaaaaaa
+ok
+test_no_owner_approval_no_handoff (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_no_owner_approval_no_handoff) ... ok
+test_real_digest_approved_flow_with_no_finance_authority (tests.test_owner_research_admission.ApprovedResearchAdmissionTests.test_real_digest_approved_flow_with_no_finance_authority) ... ok
+test_cross_workflow_proposal_charges_cannot_reset_allowance (tests.test_research_continuation.ResearchContinuationTests.test_cross_workflow_proposal_charges_cannot_reset_allowance) ... ok
+test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier (tests.test_research_continuation.ResearchContinuationTests.test_generated_ceo_mvp_round_two_and_three_matches_existing_verifier) ... ok
+test_legacy_round_one_and_round_limits_do_not_replenish (tests.test_research_continuation.ResearchContinuationTests.test_legacy_round_one_and_round_limits_do_not_replenish) ... ok
+test_manager_rejection_returns_to_ceo_for_round_two_disposition (tests.test_research_continuation.ResearchContinuationTests.test_manager_rejection_returns_to_ceo_for_round_two_disposition) ... ok
+test_no_owner_reapproval_and_revoked_snapshot_denies (tests.test_research_continuation.ResearchContinuationTests.test_no_owner_reapproval_and_revoked_snapshot_denies) ... ok
+test_replay_out_of_order_duplicate_objective_and_unauthorized (tests.test_research_continuation.ResearchContinuationTests.test_replay_out_of_order_duplicate_objective_and_unauthorized) ... ok
+test_round_budget_concurrency_and_restart (tests.test_research_continuation.ResearchContinuationTests.test_round_budget_concurrency_and_restart) ... ok
+test_round_three_requires_terminal_disposition_and_never_launch (tests.test_research_continuation.ResearchContinuationTests.test_round_three_requires_terminal_disposition_and_never_launch) ... ok
+test_signed_round_two_manager_workers_execution_is_isolated_only (tests.test_research_continuation.ResearchContinuationTests.test_signed_round_two_manager_workers_execution_is_isolated_only) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 6.976s
+
+OK
