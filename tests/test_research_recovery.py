@@ -11,18 +11,20 @@ from agents.ceo.hierarchy_providers import HierarchyProvider, reconciled_result,
 
 
 class ProviderRecoveryTests(unittest.TestCase):
+    manager_state = "MANAGER_PENDING"
+
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.path = Path(self.tmp.name)/"inference.sqlite"
         self.flow = "research-"+"a"*24
-        self.state = dict(id=self.flow, mode="PREPARATION_ONLY", state="MANAGER_PENDING",
+        self.state = dict(id=self.flow, mode="PREPARATION_ONLY", state=self.manager_state,
                           scope_hash="scope", scope=dict(manager_id="service-manager", tasks=["Grant Deadline Calendar"]),
                           venture_id=self.flow, handoff=dict(item_id=self.flow),
                           evidence={"research-approval-"+"a"*24:"a"*64})
         self.request = dict(system="fixture", json_object_mode=True,
             opportunity=dict(scope_hash="scope", snapshot_sha256=hashed(self.state),
-                             state="MANAGER_PENDING", role="manager"))
+                             state=self.manager_state, role="manager"))
         self.context = dict(session_id=self.flow)
         self.policy = dict(roles=dict(manager=dict(actor_id="service-manager",
             endpoint="fixture", model="fixture")))
@@ -95,20 +97,34 @@ class ProviderRecoveryTests(unittest.TestCase):
             self.provider()(self.request, ())
         self.client._request.assert_not_called()
 
-    def test_review_state_does_not_gain_pending_recovery(self):
-        self.state["state"] = "MANAGER_REVIEW"
-        self.request["opportunity"].update(
-            state="MANAGER_REVIEW", snapshot_sha256=hashed(self.state))
-        self.seed(identity="manager-" + hashed(dict(
-            snapshot=self.state, request=self.request))[:50])
+    def test_non_research_intent_remains_ambiguous(self):
+        self.flow = "preparation-fixture"
+        self.state.update(id=self.flow, venture_id=self.flow)
+        self.request["opportunity"]["snapshot_sha256"] = hashed(self.state)
+        self.seed(identity="manager-" + hashed(self.state)[:50])
         with self.assertRaisesRegex(RecoveryImpossible, "LOCAL_EXECUTION_AMBIGUOUS"):
             self.provider()(self.request, ())
         self.client._request.assert_not_called()
 
+    def test_malformed_durable_intents_refuse_before_remote_io(self):
+        self.seed()
+        for wire in ("{", "null", "[]", "{}", '{"opportunity":null}',
+                     '{"opportunity":[]}', '{"opportunity":{}}',
+                     '{"opportunity":{"snapshot_sha256":null}}'):
+            with self.subTest(wire=wire):
+                with sqlite3.connect(self.path) as db:
+                    db.execute("UPDATE calls SET request=?", (wire,))
+                with self.assertRaisesRegex(RecoveryImpossible, "MALFORMED_DURABLE_INTENT"):
+                    self.provider()(self.request, ())
+                self.client._request.assert_not_called()
+                with sqlite3.connect(self.path) as db:
+                    self.assertEqual(db.execute("SELECT request,response,attempt FROM calls").fetchall(),
+                                     [(wire, None, "b"*64)])
+
     def test_lost_response_poll_and_restart_use_same_intent_without_another_call(self):
         from agents.ceo import hierarchy_service as service
         self.client.research_list.return_value = [
-            dict(workflow_id=self.flow, state="MANAGER_PENDING")]
+            dict(workflow_id=self.flow, state=self.manager_state)]
         original = self.client._request.side_effect
         def lost_once(method, path, payload):
             result = original(method, path, payload)
@@ -150,8 +166,13 @@ class ProviderRecoveryTests(unittest.TestCase):
     def test_stale_snapshot_and_role_denied_before_reconciliation(self):
         self.seed()
         for field, value in (("role", "worker"), ("snapshot_sha256", "bad"),
-                             ("scope_hash", "bad"), ("state", "MANAGER_REVIEW")):
+                             ("scope_hash", "bad"), ("state", "WORKER_PENDING")):
             req = dict(self.request, opportunity=dict(self.request["opportunity"], **{field:value}))
             with self.assertRaises(ValueError):
                 self.provider()(req, ())
         self.client._request.assert_not_called()
+
+
+class ManagerReviewRecoveryTests(ProviderRecoveryTests):
+    """Run the same restart and refusal contract for post-Worker review."""
+    manager_state = "MANAGER_REVIEW"

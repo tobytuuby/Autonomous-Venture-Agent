@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 
 from agents.ceo.hierarchy_gateway import HierarchyGateway
 from agents.ceo.hierarchy_model_callbacks import ModelRoleCallback
-from agents.ceo.hierarchy_providers import HierarchyProvider
+from agents.ceo.hierarchy_providers import HierarchyProvider, RecoveryImpossible
 from agents.ceo.hierarchy_runner import HierarchyRunner
 from agents.ceo.hierarchy_service import RemoteWorkflow
 from agents.ceo.venture_workflow import canonical, hashed, VentureWorkflow
@@ -201,7 +201,7 @@ class RedirectionTests(unittest.TestCase):
                 artifact_store=self.h.store.store, artifact_load=self.h.store.load)
         with self.assertRaises(OSError):
             callback(provider())(rejected)
-        with self.assertRaisesRegex(ValueError, "ambiguous provider call"):
+        with self.assertRaisesRegex(RecoveryImpossible, "LOCAL_EXECUTION_AMBIGUOUS"):
             callback(provider())(rejected)
         self.assertEqual(client._request.call_count, 1)
         self.assertEqual(local.call_count, 1)

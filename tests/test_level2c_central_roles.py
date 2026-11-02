@@ -398,6 +398,12 @@ class CentralRolesTests(unittest.TestCase):
             thread.join()
 
     def test_manager_adapter_restart_recovers_broker_complete_without_duplicate(self):
+        self.check_manager_restart("MANAGER_PENDING")
+
+    def test_manager_review_restart_recovers_broker_complete_without_duplicate(self):
+        self.check_manager_restart("MANAGER_REVIEW")
+
+    def check_manager_restart(self, manager_state):
         from pathlib import Path
         from types import SimpleNamespace
         from unittest.mock import Mock
@@ -409,14 +415,14 @@ class CentralRolesTests(unittest.TestCase):
         f = self.f
         flow = "research-" + "a" * 24
         state = dict(id=flow, venture_id=flow, mode="PREPARATION_ONLY",
-            state="MANAGER_PENDING", scope_hash="f"*64,
+            state=manager_state, scope_hash="f"*64,
             scope=dict(manager_id="manager", tasks=["Grant Deadline Calendar"]),
             handoff=dict(item_id=flow),
             evidence={"research-approval-"+"a"*24: "a"*64})
         context = dict(f.context, session_id=flow, venture_id=flow, rounds=1)
         self.ceo.reserve_provider(dict(self.payload("ceo-manager-restart"), context=context))
         request = dict(system=RESEARCH_SYSTEM, json_object_mode=True,
-            opportunity=dict(role="manager", state="MANAGER_PENDING", workflow_id=flow,
+            opportunity=dict(role="manager", state=manager_state, workflow_id=flow,
                 scope_hash=state["scope_hash"], snapshot_sha256=hashed(state),
                 tasks=state["scope"]["tasks"]))
         client = Mock()

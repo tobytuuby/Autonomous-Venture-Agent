@@ -92,11 +92,17 @@ class HierarchyProvider:
             matches = []
             safe_manager = (self.role == "manager"
                 and self.workflow_id.startswith("research-")
-                and state["state"] == "MANAGER_PENDING")
+                and state["state"] in ("MANAGER_PENDING", "MANAGER_REVIEW"))
             if safe_manager:
                 for row in db.execute("SELECT identity,request,response,attempt FROM calls ORDER BY rowid"):
-                    old = json.loads(row[1])
-                    if old.get("opportunity", {}).get("snapshot_sha256") == hashed(state):
+                    try:
+                        old = json.loads(row[1])
+                    except (ValueError, TypeError) as exc:
+                        raise RecoveryImpossible("MALFORMED_DURABLE_INTENT") from exc
+                    if (type(old) is not dict or type(old.get("opportunity")) is not dict
+                            or type(old["opportunity"].get("snapshot_sha256")) is not str):
+                        raise RecoveryImpossible("MALFORMED_DURABLE_INTENT")
+                    if old["opportunity"].get("snapshot_sha256") == hashed(state):
                         matches.append(row)
                 if len(matches) > 1:
                     raise RecoveryImpossible("MULTIPLE_DURABLE_INTENTS")
