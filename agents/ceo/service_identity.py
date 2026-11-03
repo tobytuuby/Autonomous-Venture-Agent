@@ -32,7 +32,7 @@ def private_directory(path):
     if not path.is_relative_to(ROOT / "artifacts"):
         raise ValueError("service state must stay in ignored project artifacts")
     info = path.stat()
-    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.geteuid() or info.st_mode & 0o077:
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.geteuid() or stat.S_IMODE(info.st_mode) != 0o700:
         raise ValueError("private service directory required")
     return path
 

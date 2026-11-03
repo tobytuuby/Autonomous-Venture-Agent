@@ -65,7 +65,8 @@ class SyntheticVentureStore:
             if (worker is None or request.get("operation") != expected_operation[
                     json.loads(worker["artifact"]["content"])["worker_type"]]):
                 raise OwnerApprovalDenied("manager task is outside the approved registered flow")
-        return self.admission.admit(venture_id, task_id=task_id, **request)
+        return self.admission.admit(
+            venture_id, task_id=task_id, expected_proposal_hash=digest(canonical(proposal)), **request)
 
     def close(self) -> None:
         self.db.close()

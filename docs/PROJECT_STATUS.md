@@ -1,5 +1,10 @@
 # Autonomous Venture Agent — Project Status
 
+## Level2D bounded continuation — 2026-10-31
+
+Live signature replay distinguishes the single-worker `level2d-acceptance-5` OWNER_REVIEW from the three-worker `level2d-multiworker-remediation-1` BUDGET_EXHAUSTED journal, both revision 11. Exhausted history is preserved. One exact new five-unit fixture and the existing CTKFamily status correction are documented in [the bounded continuation contract](level2d-multiworker-acceptance-v1.0.md). Real multiworker acceptance remains pending; no quota or capital grant is added.
+
+
 ## Core owner approval change — 2026-10-26
 
 Every new venture now requires human owner discussion and explicit durable approval tied to the exact proposal/version and authorized scope before CEO greenlight, funding, launch or operational manager execution. CEO research and proposal preparation remain allowed. After approval, managers may autonomously delegate within approved bounds; all live authority checks remain denied. Venture #1 is an unapproved pilot, with no grandfathered funding or launch.

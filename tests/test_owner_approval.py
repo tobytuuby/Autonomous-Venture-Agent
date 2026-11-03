@@ -126,7 +126,7 @@ class OwnerApprovalTests(unittest.TestCase):
                 self.gate.record_owner_decision(candidate, signature)
         for changes in ({"origin": "model"}, {"discussion_reference": ""},
                         {"owner_id": "CEO"}, {"decision": "PENDING"},
-                        {"scope_hash": "0" * 64}, {"sequence": True}):
+                        {"scope_hash": "0" * 64}, {"sequence": True}, {"proposal_version": True}):
             with self.subTest(changes=changes), self.assertRaises(OwnerApprovalDenied):
                 self.decide(**changes)
 
@@ -210,6 +210,24 @@ class OwnerApprovalTests(unittest.TestCase):
             with self.subTest(changes=changes), self.assertRaises(OwnerApprovalDenied):
                 self.admit(action="manager_execute", **changes)
         self.admit(action="manager_execute", task_id="cost-1", operation="build")
+
+    def test_signed_model_origin_receipt_inserted_directly_is_still_denied(self):
+        receipt = self.decide()
+        receipt["origin"] = "model"
+        with self.store.db:
+            self.store.db.execute(
+                "UPDATE owner_decisions SET receipt_json=?,signature=?,receipt_hash=?",
+                (canonical(receipt), self.sign(receipt), digest(canonical(receipt))))
+        with self.assertRaises(OwnerApprovalDenied):
+            self.admit()
+
+    def test_admission_rejects_proposal_changed_since_registry_scope_check(self):
+        self.decide()
+        with self.assertRaises(OwnerApprovalDenied):
+            self.gate.admit(
+                self.venture_id, proposal_version=1, action="greenlight",
+                manager_id="manager-" + self.venture_id, operation="build",
+                expected_proposal_hash="0" * 64)
 
     def test_proposal_versions_remain_auditable(self):
         prop = self.gate.proposal(self.venture_id)

@@ -1,0 +1,37 @@
+[Unit]
+Description=Bounded Level 2D preparation Worker (Agents only)
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/home/epsilon/venture-control-workspace/runtime/level2d-worker/config.json
+
+[Service]
+Type=simple
+User=venture-worker
+Group=venture-worker
+WorkingDirectory=/home/epsilon/venture-control-workspace
+Environment=PYTHONDONTWRITEBYTECODE=1
+UnsetEnvironment=OPENAI_API_KEY OPENAI_ADMIN_KEY CEO_PROVIDER_API_KEY
+ExecStart=/usr/bin/python3 -m agents.ceo.hierarchy_worker_service --config runtime/level2d-worker/config.json
+Restart=no
+RuntimeMaxSec=300
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/epsilon/venture-control-workspace/runtime/level2d-worker/state
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+LockPersonality=true
+MemoryMax=256M
+TasksMax=16
+CPUQuota=50%
+
+# Deliberately no Install section: explicit bounded operator start only.

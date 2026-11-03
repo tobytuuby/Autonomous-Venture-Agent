@@ -1,0 +1,13 @@
+{
+  "role": "worker",
+  "actor_id": "service-worker",
+  "workflow_id": "level2d-acceptance-1",
+  "endpoint": "https://REPLACE-WITH-EXISTING-BROKER/v1/assignments/pending",
+  "trust": "artifacts/hierarchy-trust.json",
+  "signing_key": "runtime/level2d-worker/signing.key",
+  "client_cert": "runtime/level2d-worker/client.crt",
+  "client_key": "runtime/level2d-worker/client.key",
+  "ca_file": "runtime/level2d-worker/ca.crt",
+  "state_dir": "runtime/level2d-worker/state",
+  "policy": "infrastructure/level2d-worker-policy.json"
+}

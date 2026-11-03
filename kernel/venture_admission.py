@@ -15,6 +15,11 @@ from kernel.p6.registry import LIVE_FIELDS, canonical, digest
 
 ACTIONS = frozenset({"greenlight", "fund", "launch", "manager_execute"})
 OPERATIONS = frozenset({"research", "build", "review"})
+RECEIPT_FIELDS = frozenset({
+    "venture_id", "proposal_version", "proposal_hash", "scope_hash", "owner_id",
+    "origin", "discussion_reference", "decision", "issued_at", "expires_at",
+    "sequence", "previous_receipt_hash",
+})
 
 
 class OwnerApprovalDenied(PermissionError):
@@ -174,7 +179,14 @@ class VentureAdmissionRegistry:
             try:
                 receipt = json.loads(row[1])
                 self._verify(receipt, row[2])
-                if (row[0] != index or receipt["sequence"] != index
+                if (set(receipt) != RECEIPT_FIELDS
+                        or receipt.get("owner_id") != self.owner_id
+                        or receipt.get("origin") != "human_out_of_band"
+                        or not _text(receipt.get("discussion_reference"))
+                        or receipt.get("decision") not in {"APPROVED", "DENIED"}
+                        or type(receipt.get("proposal_version")) is not int
+                        or type(receipt.get("sequence")) is not int
+                        or row[0] != index or receipt["sequence"] != index
                         or receipt["venture_id"] != venture_id
                         or receipt["previous_receipt_hash"] != previous
                         or digest(canonical(receipt)) != row[3]):
@@ -194,13 +206,11 @@ class VentureAdmissionRegistry:
             proposal = self.proposal(item["venture_id"])
             history = self._history(item["venture_id"])
             previous = digest(canonical(history[-1])) if history else "GENESIS"
-            if (set(item) != {"venture_id", "proposal_version", "proposal_hash",
-                            "scope_hash", "owner_id", "origin", "discussion_reference",
-                            "decision", "issued_at", "expires_at", "sequence",
-                            "previous_receipt_hash"}
+            if (set(item) != RECEIPT_FIELDS
                     or item["owner_id"] != self.owner_id or item["origin"] != "human_out_of_band"
                     or not _text(item["discussion_reference"])
                     or item["decision"] not in {"APPROVED", "DENIED"}
+                    or type(item["proposal_version"]) is not int
                     or item["proposal_version"] != proposal["version"]
                     or item["proposal_hash"] != digest(canonical(proposal))
                     or item["scope_hash"] != digest(canonical(proposal["scope"]))
@@ -238,7 +248,8 @@ class VentureAdmissionRegistry:
     @_serialized
     def admit(self, venture_id: str, *, proposal_version: int, action: str,
               manager_id: str, operation: str, amount_cents: int = 0,
-              live: bool = False, task_id: str | None = None) -> dict[str, Any]:
+              live: bool = False, task_id: str | None = None,
+              expected_proposal_hash: str | None = None) -> dict[str, Any]:
         """Check every greenlight/funding/launch/task admission against owner scope.
 
         This records a local eligibility decision, never executes or spends.
@@ -247,6 +258,9 @@ class VentureAdmissionRegistry:
         if live is not False:
             raise OwnerApprovalDenied("all live authorities remain denied")
         proposal = self.proposal(venture_id)
+        if (expected_proposal_hash is not None
+                and expected_proposal_hash != digest(canonical(proposal))):
+            raise OwnerApprovalDenied("proposal changed during admission")
         scope = proposal["scope"]
         if (self.status(venture_id) != "APPROVED" or action not in ACTIONS
                 or type(proposal_version) is not int or proposal_version != proposal["version"]
