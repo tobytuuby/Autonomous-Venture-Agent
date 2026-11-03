@@ -104,7 +104,7 @@ class LegacyWorkerRecoveryTests(unittest.TestCase):
                     ("retained-" + str(i), canonical(dict(workflow_id=self.flow, worker_id="service-worker", policy=dict(maximum_requests=4)))))
 
     def decompose(self):
-        assignments = [dict(id=name, worker_id=actor, task=task, depends_on=[] if name != "C" else ["A", "B"])
+        assignments = [dict(id=name, worker_id=actor, task=task, depends_on=[])
             for name, actor, task in zip(("A", "B", "C"), ("worker-a", "worker-b", "worker-c"), research_tasks(self.state()))]
         self.apply(self.command("propose_decomposition", "service-manager", dict(assignments=assignments)))
         self.apply(self.command("approve_decomposition", payload=dict(proposal_hash=hashed(assignments))))

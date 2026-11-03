@@ -387,13 +387,13 @@ class WorkflowTests(unittest.TestCase):
 
 
     def propose_multi(self):
-        self.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
+        self.scope["tasks"] = ["Prepare A", "Prepare B", "Prepare C"]
         self.create()
         assignments = [
             dict(id=name, worker_id=worker, task=task, depends_on=deps)
             for name, worker, task, deps in zip(
                 ("A", "B", "C"), ("worker", "worker-b", "worker-c"),
-                self.scope["tasks"], ([], [], ["A", "B"]))]
+                self.scope["tasks"], ([], [], []))]
         self.act("propose_decomposition", "manager", dict(assignments=assignments))
         return assignments
 
@@ -404,23 +404,20 @@ class WorkflowTests(unittest.TestCase):
     def submit_assignment(self, name, actor, units=1):
         return self.act("submit", actor, dict(assignment_id=name, units=units))
 
-    def test_multi_signed_approval_dependency_order_and_restart(self):
+    def test_multi_signed_approval_runs_all_workers_independently_and_survives_restart(self):
         assignments = self.propose_multi()
         item = self.approve_multi(assignments)
         self.assertEqual(item["decomposition"]["states"],
-                         dict(A="READY", B="READY", C="BLOCKED"))
-        # B can finish first; A and B are independent.
+                         dict(A="READY", B="READY", C="READY"))
+        # Any Worker can finish first; the other two remain ready.
         item = self.submit_assignment("B", "worker-b")
         self.assertEqual(item["decomposition"]["states"],
-                         dict(A="READY", B="COMPLETE", C="BLOCKED"))
-        with self.assertRaises(ValueError):
-            self.submit_assignment("C", "worker-c")
+                         dict(A="READY", B="COMPLETE", C="READY"))
+        item = self.submit_assignment("C", "worker-c")
         self.workflow.close()
         self.workflow = VentureWorkflow(self.path, actors=self.actors)
         self.assertEqual(self.workflow.read("studio-flow"), item)
         item = self.submit_assignment("A", "worker")
-        self.assertEqual(item["decomposition"]["states"]["C"], "READY")
-        item = self.submit_assignment("C", "worker-c")
         self.assertEqual(item["state"], "MANAGER_REVIEW")
         self.assertEqual(item["used_units"], 3)
         self.assertEqual(set(item["decomposition"]["states"].values()), {"COMPLETE"})
@@ -431,7 +428,7 @@ class WorkflowTests(unittest.TestCase):
         self.workflow = VentureWorkflow(self.path, actors=self.actors)
         self.workflow.verify()
 
-    def test_multi_no_computation_before_approval_or_dependencies(self):
+    def test_multi_no_computation_before_approval_and_all_workers_ready_afterward(self):
         assignments = self.propose_multi()
         with patch("kernel.synthetic_orchestration.run_synthetic_orchestration",
                    side_effect=AssertionError("worker must not run")) as run:
@@ -440,9 +437,9 @@ class WorkflowTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     self.workflow.apply(cmd, self.sign(cmd, actor), synthetic_input={})
             self.approve_multi(assignments)
-            cmd = self.command("submit", "worker-c", dict(assignment_id="C", units=1))
-            with self.assertRaises(ValueError):
-                self.workflow.apply(cmd, self.sign(cmd, "worker-c"), synthetic_input={})
+            item = self.submit_assignment("C", "worker-c")
+            self.assertEqual(item["decomposition"]["states"],
+                             dict(A="READY", B="READY", C="COMPLETE"))
             run.assert_not_called()
 
     def test_multi_approval_signature_actor_and_proposal_binding(self):

@@ -43,12 +43,12 @@ class WorkerInferenceTests(unittest.TestCase):
         self.fx.keys["worker-a"] = self.fx.keys["worker"]
         self.fx.workflow.close()
         self.fx.workflow = VentureWorkflow(self.fx.path, actors=self.fx.actors)
-        self.fx.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
+        self.fx.scope["tasks"] = ["Prepare A", "Prepare B", "Prepare C"]
         self.fx.create()
         self.assignments = [dict(id=name, worker_id=worker, task=task, depends_on=deps)
             for name, worker, task, deps in zip(("A", "B", "C"),
                 ("worker-a", "worker-b", "worker-c"), self.fx.scope["tasks"],
-                ([], [], ["A", "B"]))]
+                ([], [], []))]
         self.fx.act("propose_decomposition", "manager", dict(assignments=self.assignments))
         self.fx.approve_multi(self.assignments)
         self.temp=tempfile.TemporaryDirectory(dir=fixture.ROOT / "artifacts")
@@ -147,16 +147,12 @@ class WorkerInferenceTests(unittest.TestCase):
             self.execute(self.payload())
         self.assertEqual(self.ledger_count(), 0)
 
-    def test_wrong_worker_and_blocked_c_then_durable_dependency_release(self):
+    def test_wrong_worker_denied_and_all_independent_workers_can_run(self):
         with self.assertRaises(ValueError):
             self.reserve(self.payload("B"))
         self.policy["actor_id"] = "worker-c"
         with self.assertRaises(ValueError):
-            self.reserve(self.payload("C", "worker-c"), "worker-c")
-        self.fx.submit_assignment("A", "worker-a")
-        with self.assertRaises(ValueError):
-            self.reserve(self.payload("C", "worker-c"), "worker-c")
-        self.fx.submit_assignment("B", "worker-b")
+            self.reserve(self.payload("B", "worker-c"), "worker-c")
         data = self.payload("C", "worker-c")
         self.reserve(data, "worker-c")
         self.execute(data, "worker-c")
@@ -540,7 +536,7 @@ class WorkerInferenceTests(unittest.TestCase):
         seq, prior, raw = db.execute(
             "SELECT sequence,previous_hash,event FROM audit ORDER BY sequence DESC LIMIT 1").fetchone()
         event = json.loads(raw)
-        event["snapshot"]["decomposition"]["states"]["C"] = "READY"
+        event["snapshot"]["decomposition"]["states"]["C"] = "COMPLETE"
         forged = canonical(event)
         db.execute("UPDATE audit SET event=?,event_hash=? WHERE sequence=?",
                    (forged, digest(canonical([seq, prior, forged]).encode()), seq))

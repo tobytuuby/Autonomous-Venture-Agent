@@ -25,7 +25,7 @@ MULTI_FIXTURES = {
 MULTI_TASKS = [
     "Draft internal tenant-isolation denial acceptance cases; no execution.",
     "Draft internal recovery and rollback acceptance cases independently; no execution.",
-    "Consolidate A and B into an internal acceptance specification with dependency evidence; no execution.",
+    "Draft internal validation and remaining-evidence acceptance cases independently; no execution.",
 ]
 
 

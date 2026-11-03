@@ -45,16 +45,17 @@ def allowed_config(base, flow, snapshot):
             or (role == "worker" and base["actor_id"] not in RESEARCH_WORKERS.values())):
         raise ValueError("research actor denied")
     configured_workers = base.get("decomposition_workers")
-    if configured_workers is not None and configured_workers != RESEARCH_WORKERS:
-        raise ValueError("research worker configuration denied")
+    if configured_workers is not None and (
+            type(configured_workers) is not dict or set(configured_workers) != {"A", "B", "C"}
+            or set(configured_workers.values()) != set(RESEARCH_WORKERS.values())):
+        raise ValueError("three-Worker research registry denied")
     plan = snapshot.get("decomposition")
     if plan:
         assignments = plan["assignments"]
-        if (len(assignments) != 3 or any(
-                a["id"] != name or a["worker_id"] != RESEARCH_WORKERS[name]
-                or a["depends_on"] != ([] if name != "C" else ["A", "B"])
-                for a, name in zip(assignments, ("A", "B", "C")))):
-            raise ValueError("research decomposition denied")
+        if (len(assignments) != 3 or {a["id"] for a in assignments} != {"A", "B", "C"}
+                or any(a["worker_id"] != RESEARCH_WORKERS[a["id"]] for a in assignments)
+                or any(a["depends_on"] != [] for a in assignments)):
+            raise ValueError("independent A/B/C decomposition denied")
     if role == "worker":
         from agents.ceo.hierarchy_runner import ready_assignment
         if ready_assignment(snapshot, base["actor_id"]) is None:

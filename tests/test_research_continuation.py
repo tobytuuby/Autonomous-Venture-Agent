@@ -93,7 +93,7 @@ class ResearchContinuationTests(unittest.TestCase):
 
     def delegate(self):
         tasks=research_tasks(self.state())
-        assignments=[dict(id=name,worker_id=actor,task=task,depends_on=[] if name!="C" else ["A","B"])
+        assignments=[dict(id=name,worker_id=actor,task=task,depends_on=[])
             for name,actor,task in zip(("A","B","C"),("worker-a","worker-b","worker-c"),tasks)]
         self.act("propose_decomposition","service-manager",dict(assignments=assignments))
         self.act("approve_decomposition",payload=dict(proposal_hash=hashed(assignments)))

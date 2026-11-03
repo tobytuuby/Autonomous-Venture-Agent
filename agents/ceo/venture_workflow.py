@@ -80,13 +80,16 @@ def research_session(item):
     return item["id"] + ("-r" + str(len(rounds)) if len(rounds) > 1 else "")
 
 
+RESEARCH_WORKERS = dict(A="worker-a", B="worker-b", C="worker-c")
+
+
 def research_tasks(item):
     """Three bounded specialties under one CEO research objective."""
     if research_identity(item) and len(item["scope"]["tasks"]) == 1:
         objective = item["scope"]["tasks"][0]
         return [prefix + objective[:500] for prefix in (
             "Assess evidence and assumptions: ", "Assess alternatives and limitations: ",
-            "Synthesize A and B and unanswered questions: ")]
+            "Assess validation approach and remaining questions: ")]
     return item["scope"]["tasks"]
 
 
@@ -225,23 +228,28 @@ class VentureWorkflow(EscalationInbox):
             exact(payload, ("assignments",))
             assignments = payload["assignments"]
             if type(assignments) is not list or len(assignments) != 3:
-                raise ValueError("three assignments required")
-            workers = set()
-            for assignment, name, dependencies in zip(assignments, ("A", "B", "C"), ([], [], ["A", "B"])):
+                raise ValueError("A, B, and C assignments required")
+            ids, workers, covered = set(), set(), []
+            for assignment in assignments:
                 exact(assignment, ("id", "worker_id", "task", "depends_on"))
-                if assignment["id"] != name or assignment["depends_on"] != dependencies:
-                    raise ValueError("assignment dependencies denied")
-                worker = assignment["worker_id"]
+                name, worker = assignment["id"], assignment["worker_id"]
+                identifier(name)
                 identifier(worker)
+                if name not in {"A", "B", "C"} or name in ids:
+                    raise ValueError("A, B, and C assignment ids required")
                 if self.actors.get(worker, (None,))[0] != "worker" or worker in workers:
-                    raise ValueError("distinct assigned workers required")
-                workers.add(worker)
+                    raise ValueError("three distinct registered Workers required")
+                if assignment["depends_on"] != []:
+                    raise ValueError("Worker assignments must be independent")
                 if assignment["task"] not in research_tasks(prior):
                     raise ValueError("assignment scope denied")
-            if {a["task"] for a in assignments} != set(research_tasks(prior)):
-                raise ValueError("assignment scope coverage required")
-            return dict(assignments=assignments, approval=None,
-                        states=dict(A="PENDING", B="PENDING", C="BLOCKED")), "DECOMPOSITION_REVIEW", prior["used_units"]
+                ids.add(name)
+                workers.add(worker)
+                covered.append(assignment["task"])
+            if ids != {"A", "B", "C"} or len(set(covered)) != 3 or set(covered) != set(research_tasks(prior)):
+                raise ValueError("A/B/C task coverage required")
+            states = {a["id"]: "READY" for a in assignments}
+            return dict(assignments=assignments, approval=None, states=states), "DECOMPOSITION_REVIEW", prior["used_units"]
         if action == "approve_decomposition":
             if prior["state"] != "DECOMPOSITION_REVIEW" or role != "ceo" or plan is None:
                 raise ValueError("CEO decomposition approval required")
@@ -249,7 +257,8 @@ class VentureWorkflow(EscalationInbox):
             if payload["proposal_hash"] != hashed(plan["assignments"]):
                 raise ValueError("proposal binding denied")
             plan["approval"] = dict(command=command, signature=signature)
-            plan["states"].update(A="READY", B="READY")
+            for assignment in plan["assignments"]:
+                plan["states"][assignment["id"]] = "READY"
             target = ("BUDGET_EXHAUSTED" if prior["used_units"] >= prior["scope"]["budget_units"]
                       else "WORKER_PENDING")
             return plan, target, prior["used_units"]
@@ -268,9 +277,6 @@ class VentureWorkflow(EscalationInbox):
             if prior["used_units"] + units > prior["scope"]["budget_units"]:
                 return plan, "BUDGET_EXHAUSTED", prior["used_units"]
             plan["states"][assignment["id"]] = "COMPLETE"
-            if (all(plan["states"][dep] == "COMPLETE" for dep in ("A", "B"))
-                    and plan["states"]["C"] == "BLOCKED"):
-                plan["states"]["C"] = "READY"
             target = "MANAGER_REVIEW" if all(s == "COMPLETE" for s in plan["states"].values()) else "WORKER_PENDING"
             return plan, target, prior["used_units"] + units
         if action == "improve" and plan is not None:

@@ -255,10 +255,13 @@ class WorkerProvisionTests(unittest.TestCase):
             action = dict(MANAGER_PENDING="propose_decomposition",
                 DECOMPOSITION_REVIEW="approve_decomposition", WORKER_PENDING="submit",
                 MANAGER_REVIEW="manager_approve", CEO_REVIEW="ceo_approve")[state]
-            return dict(tool_call=None, decision=dict(content=json.dumps(dict(action=action,
-                explanation="Bounded internal technical fixture assessment",
+            decision=dict(action=action, explanation="Bounded internal technical fixture assessment",
                 deliverable="Internal tenant isolation and recovery specification; all live validation and operational authority remain pending.",
-                units=1 if action=="submit" else 0))))
+                units=1 if action=="submit" else 0)
+            if action == "propose_decomposition":
+                decision["assignments"]=[dict(id=name,worker_id=kickoff.MULTI_WORKERS[name],task=task,depends_on=[])
+                    for name,task in zip(("A","B","C"),kickoff.MULTI_TASKS)]
+            return dict(tool_call=None, decision=dict(content=json.dumps(decision)))
         def tick(role, actor):
             callback = ModelRoleCallback(role=role, actor_id=actor, provider=provider,
                 artifact_store=store.store, artifact_load=store.load,
@@ -269,13 +272,10 @@ class WorkerProvisionTests(unittest.TestCase):
                 signers={actor: keys[actor].sign}).tick(p.FLOW)
         tick("manager", "service-manager")
         approved = tick("ceo", "service-ceo")
-        count = len(calls)
-        self.assertEqual(tick("worker", "worker-c"), approved)
-        self.assertEqual(len(calls), count)
+        c = tick("worker", "worker-c")
+        self.assertEqual(c["decomposition"]["states"]["C"], "COMPLETE")
         tick("worker", "worker-b")
         a = tick("worker", "worker-a")
-        self.assertEqual(a["decomposition"]["states"]["C"], "READY")
-        tick("worker", "worker-c")
         tick("manager", "service-manager")
         final = tick("ceo", "service-ceo")
         self.assertEqual(final["state"], "OWNER_REVIEW")

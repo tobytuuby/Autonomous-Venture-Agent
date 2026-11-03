@@ -38,10 +38,13 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
             "WORKER_PENDING": "submit", "MANAGER_REVIEW": "manager_approve",
             "CEO_REVIEW": "ceo_approve",
         }[opportunity["state"]]
-        return dict(tool_call=None, decision=dict(content=json.dumps(dict(
-            action=action, explanation="Bounded internal research assessment",
+        decision = dict(action=action, explanation="Bounded internal research assessment",
             deliverable="Demand, competition and feasibility hypotheses; independent validation remains pending.",
-            units=1 if action == "submit" else 0))))
+            units=1 if action == "submit" else 0)
+        if action == "propose_decomposition":
+            decision["assignments"] = [dict(id=name, worker_id=self.workers[name],
+                task=task, depends_on=[]) for name, task in zip(("A", "B", "C"), opportunity["tasks"])]
+        return dict(tool_call=None, decision=dict(content=json.dumps(decision)))
 
     def callback(self, role, actor):
         return ModelRoleCallback(role=role, actor_id=actor, provider=self.provider,
@@ -69,7 +72,7 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
         self.tick("worker", "worker")
         return self.tick("worker", "worker-c")
 
-    def test_signed_decomposition_dependencies_restart_and_consolidation(self):
+    def test_manager_assigns_three_independent_workers_then_consolidates(self):
         proposed = self.tick("manager")
         self.assertEqual(proposed["state"], "DECOMPOSITION_REVIEW")
         self.assertEqual([a["task"] for a in proposed["decomposition"]["assignments"]],
@@ -81,17 +84,13 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
         approved = self.tick("ceo")
         self.assertEqual(approved["last_command"]["payload"]["proposal_hash"],
                          hashed(proposed["decomposition"]["assignments"]))
-        self.assertEqual(self.tick("worker", "worker-c"), approved)
+        self.assertEqual(self.tick("worker", "worker-c")["decomposition"]["states"]["C"], "COMPLETE")
         b = self.tick("worker", "worker-b")
-        self.assertEqual(b["decomposition"]["states"]["C"], "BLOCKED")
-        self.assertEqual(self.tick("worker", "worker-c"), b)
         self.restart()
         a = self.tick("worker", "worker")
-        self.assertEqual(a["decomposition"]["states"]["C"], "READY")
-        self.assertEqual(self.tick("worker", "worker-b"), a)
-        done = self.tick("worker", "worker-c")
+        done = a
         self.assertEqual(done["state"], "MANAGER_REVIEW")
-        self.assertEqual({h["assignment_id"] for h in self.calls[-1]["existing_evidence"]}, {"A", "B"})
+        self.assertEqual(self.calls[-1]["state"], "WORKER_PENDING")
         before = {ref: self.store.load(ref) for ref in done["evidence"] if ref.startswith("preparation-")}
         self.restart()
         reviewed = self.tick("manager")
@@ -149,11 +148,12 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
         def adapter(actor):
             return HierarchyProvider(role="worker", actor=actor, workflow_id="studio-flow",
                 client=client, policy={}, state_path=Path(self.fx.temp.name) / (actor + ".sqlite"))
-        blocked = ModelRoleCallback(role="worker", actor_id="worker-c", provider=adapter("worker-c"),
+        worker_c = ModelRoleCallback(role="worker", actor_id="worker-c", provider=adapter("worker-c"),
             artifact_store=self.store.store, artifact_load=self.store.load)
-        with self.assertRaisesRegex(ValueError, "ready assignment"):
-            blocked(state)
-        client.worker_reserve.assert_not_called()
+        worker_c(state)
+        client.worker_reserve.assert_called_once()
+        client.worker_reserve.reset_mock()
+        client.worker_execute.reset_mock()
         worker = ModelRoleCallback(role="worker", actor_id="worker-b", provider=adapter("worker-b"),
             artifact_store=self.store.store, artifact_load=self.store.load)
         worker(state)
@@ -220,7 +220,8 @@ class MultiWorkerHierarchyTests(unittest.TestCase):
                 daemon, "allowed_config", return_value=config), patch.object(
                 daemon, "worker_submission_count", return_value=0), patch.object(daemon, "role_tick") as tick:
             daemon.poll(config, once=True)
-            tick.assert_not_called()
+            tick.assert_called_once_with(config, once=True)
+            tick.reset_mock()
             config["actor_id"] = "worker-b"
             daemon.poll(config, once=True)
             tick.assert_called_once_with(config, once=True)

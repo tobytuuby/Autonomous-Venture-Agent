@@ -44,10 +44,9 @@ class ResearchRoutingTests(unittest.TestCase):
     def plan(self):
         self.snapshot["state"] = "WORKER_PENDING"
         self.snapshot["decomposition"] = dict(
-            assignments=[dict(id=name, worker_id=actor, task=name,
-                              depends_on=[] if name != "C" else ["A", "B"])
+            assignments=[dict(id=name, worker_id=actor, task=name, depends_on=[])
                          for name, actor in daemon.RESEARCH_WORKERS.items()],
-            approval=dict(signature="fixture"), states=dict(A="READY", B="READY", C="BLOCKED"))
+            approval=dict(signature="fixture"), states=dict(A="READY", B="READY", C="READY"))
 
     def test_manager_gets_fixed_decomposition_without_changing_existing_binding(self):
         before = copy.deepcopy(self.base)
@@ -187,7 +186,11 @@ class ResearchRoutingTests(unittest.TestCase):
             action="propose_decomposition", explanation="Assess the approved internal research objective",
             deliverable="Internal research specialties assess assumptions and alternatives before synthesis. "
                         "No independent market evidence has been verified and no external activity is authorized.",
-            units=0)))))
+            units=0, assignments=[dict(id=name, worker_id=actor, task=task, depends_on=[])
+                for name, actor, task in zip(("A", "B", "C"), daemon.RESEARCH_WORKERS.values(),
+                    ["Assess evidence and assumptions: Approved objective",
+                     "Assess alternatives and limitations: Approved objective",
+                     "Assess validation approach and remaining questions: Approved objective"])])))))
         callback = ModelRoleCallback(role="manager", actor_id="service-manager",
             provider=provider, artifact_store=Mock(), artifact_load=Mock(),
             decomposition_workers=cfg["decomposition_workers"])
@@ -196,22 +199,17 @@ class ResearchRoutingTests(unittest.TestCase):
         assignments = decision["payload"]["assignments"]
         self.assertEqual([a["worker_id"] for a in assignments],
                          ["worker-a", "worker-b", "worker-c"])
-        self.assertEqual([a["depends_on"] for a in assignments], [[], [], ["A", "B"]])
+        self.assertEqual([a["depends_on"] for a in assignments], [[], [], []])
 
-    def test_worker_requires_signed_plan_and_both_dependencies(self):
+    def test_all_three_workers_are_ready_after_signed_plan_approval(self):
         with self.assertRaisesRegex(ValueError, "not ready"):
             self.config("worker")
         self.plan()
         for actor in ("worker-a", "worker-b"):
             self.config("worker", actor)
-        for states in (dict(A="READY", B="READY", C="BLOCKED"),
-                       dict(A="COMPLETE", B="READY", C="READY"),
-                       dict(A="READY", B="COMPLETE", C="READY")):
-            self.snapshot["decomposition"]["states"] = states
-            with self.assertRaisesRegex(ValueError, "not ready"):
-                self.config("worker", "worker-c")
-        self.snapshot["decomposition"]["states"] = dict(A="COMPLETE", B="COMPLETE", C="READY")
-        self.config("worker", "worker-c")
+        self.snapshot["decomposition"]["states"] = dict(A="READY", B="READY", C="READY")
+        for actor in daemon.RESEARCH_WORKERS.values():
+            self.config("worker", actor)
         self.snapshot["decomposition"]["approval"] = None
         with self.assertRaisesRegex(ValueError, "not ready"):
             self.config("worker", "worker-c")
@@ -221,10 +219,10 @@ class ResearchRoutingTests(unittest.TestCase):
                             ("manager", "other-manager"), ("ceo", "other-ceo")):
             with self.assertRaisesRegex(ValueError, "actor denied"):
                 self.config(role, actor)
-        with self.assertRaisesRegex(ValueError, "configuration denied"):
+        with self.assertRaisesRegex(ValueError, "research registry denied"):
             daemon.allowed_config(dict(self.base, decomposition_workers=dict(A="service-worker")),
                                   self.flow, self.snapshot)
-        for change in (dict(worker_id="service-worker"), dict(depends_on=[])):
+        for change in (dict(worker_id="service-worker"), dict(depends_on=["A"])):
             self.plan()
             self.snapshot["decomposition"]["assignments"][2].update(change)
             with self.assertRaisesRegex(ValueError, "decomposition denied"):
