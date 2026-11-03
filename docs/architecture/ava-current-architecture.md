@@ -2,7 +2,9 @@
 
 **Diagram type:** current logical and deployment architecture
 
-**Current source baseline:** `main` at `3775a62774ec61e4274550ac891403345087f6a9`
+**Repository baseline:** `main` at `da81918eb0f7e6f5b6c7b98353d665adb9812c0e`
+
+**Latest code baseline:** `main` at `1f30440`; later commits `3775a62` and `da81918` changed documentation only.
 
 **Deployment report:** The owner reported deployment of `7bf015dd7045c9bd4d955244f06c5bc2d829dec6` to Control and Agents on November 3, 2026. This update did not independently verify VM state or installed revisions.
 
@@ -97,7 +99,7 @@ This file is a logical architecture diagram, not a network exposure inventory. I
 
 ## Source and deployment reconciliation — November 3, 2026
 
-The current pushed repository is at `3775a62774ec61e4274550ac891403345087f6a9`. The reported deployed revision is `7bf015dd7045c9bd4d955244f06c5bc2d829dec6`. Commit `1f30440` contains source changes after `7bf015d`; no deployment of `1f30440` or later was established in this update. Therefore, this diagram describes current source topology and an owner-reported earlier deployment separately.
+The current pushed repository is at `da81918eb0f7e6f5b6c7b98353d665adb9812c0e`; the latest code change is `1f30440`. The reported deployed revision is `7bf015dd7045c9bd4d955244f06c5bc2d829dec6`. Commit `1f30440` contains source changes after `7bf015d`; commits `3775a62` and `da81918` update the architecture documentation. No deployment of `1f30440` or later was established in this update. Therefore, this diagram describes current source topology and an owner-reported earlier deployment separately.
 
 The A/B/C behavior is:
 
