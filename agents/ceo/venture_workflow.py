@@ -267,7 +267,10 @@ class VentureWorkflow(EscalationInbox):
                 valid_coverage.add(frozenset(legacy_tasks))
             if ids != {"A", "B", "C"} or len(coverage) != 3 or frozenset(coverage) not in valid_coverage:
                 raise ValueError("A/B/C task coverage required")
-            states = {a["id"]: "READY" for a in assignments}
+            legacy_dependent = (not enforce_independent and
+                                next(a for a in assignments if a["id"] == "C")["depends_on"] == ["A", "B"])
+            states = ({"A": "PENDING", "B": "PENDING", "C": "BLOCKED"}
+                      if legacy_dependent else {a["id"]: "READY" for a in assignments})
             return dict(assignments=assignments, approval=None, states=states), "DECOMPOSITION_REVIEW", prior["used_units"]
         if action == "approve_decomposition":
             if prior["state"] != "DECOMPOSITION_REVIEW" or role != "ceo" or plan is None:
@@ -276,8 +279,11 @@ class VentureWorkflow(EscalationInbox):
             if payload["proposal_hash"] != hashed(plan["assignments"]):
                 raise ValueError("proposal binding denied")
             plan["approval"] = dict(command=command, signature=signature)
+            legacy_dependent = (not enforce_independent and
+                                next(a for a in plan["assignments"] if a["id"] == "C")["depends_on"] == ["A", "B"])
             for assignment in plan["assignments"]:
-                plan["states"][assignment["id"]] = "READY"
+                if not legacy_dependent or assignment["depends_on"] == []:
+                    plan["states"][assignment["id"]] = "READY"
             target = ("BUDGET_EXHAUSTED" if prior["used_units"] >= prior["scope"]["budget_units"]
                       else "WORKER_PENDING")
             return plan, target, prior["used_units"]
@@ -296,6 +302,9 @@ class VentureWorkflow(EscalationInbox):
             if prior["used_units"] + units > prior["scope"]["budget_units"]:
                 return plan, "BUDGET_EXHAUSTED", prior["used_units"]
             plan["states"][assignment["id"]] = "COMPLETE"
+            if (not enforce_independent and plan["states"].get("C") == "BLOCKED"
+                    and all(plan["states"][dep] == "COMPLETE" for dep in ("A", "B"))):
+                plan["states"]["C"] = "READY"
             target = "MANAGER_REVIEW" if all(s == "COMPLETE" for s in plan["states"].values()) else "WORKER_PENDING"
             return plan, target, prior["used_units"] + units
         if action == "improve" and plan is not None:
