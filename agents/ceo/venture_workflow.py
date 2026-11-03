@@ -230,6 +230,13 @@ class VentureWorkflow(EscalationInbox):
             if type(assignments) is not list or len(assignments) != 3:
                 raise ValueError("A, B, and C assignments required")
             ids, workers, covered = set(), set(), []
+            valid_tasks = set(research_tasks(prior))
+            legacy_tasks = None
+            if not enforce_independent and research_identity(prior) and len(prior["scope"]["tasks"]) == 1:
+                objective = prior["scope"]["tasks"][0]
+                legacy_tasks = [prefix + objective[:500] for prefix in (
+                    "Assess evidence and assumptions: ", "Assess alternatives and limitations: ",
+                    "Synthesize A and B and unanswered questions: ")]
             for assignment in assignments:
                 exact(assignment, ("id", "worker_id", "task", "depends_on"))
                 name, worker = assignment["id"], assignment["worker_id"]
@@ -248,12 +255,17 @@ class VentureWorkflow(EscalationInbox):
                     raise ValueError("historical C dependencies denied")
                 if not enforce_independent and name in {"A", "B"} and dependencies:
                     raise ValueError("historical A/B dependencies denied")
-                if assignment["task"] not in research_tasks(prior):
+                allowed_tasks = valid_tasks | (set(legacy_tasks) if legacy_tasks and not enforce_independent else set())
+                if assignment["task"] not in allowed_tasks:
                     raise ValueError("assignment scope denied")
                 ids.add(name)
                 workers.add(worker)
                 covered.append(assignment["task"])
-            if ids != {"A", "B", "C"} or len(set(covered)) != 3 or set(covered) != set(research_tasks(prior)):
+            coverage = set(covered)
+            valid_coverage = {frozenset(valid_tasks)}
+            if legacy_tasks and not enforce_independent:
+                valid_coverage.add(frozenset(legacy_tasks))
+            if ids != {"A", "B", "C"} or len(coverage) != 3 or frozenset(coverage) not in valid_coverage:
                 raise ValueError("A/B/C task coverage required")
             states = {a["id"]: "READY" for a in assignments}
             return dict(assignments=assignments, approval=None, states=states), "DECOMPOSITION_REVIEW", prior["used_units"]
