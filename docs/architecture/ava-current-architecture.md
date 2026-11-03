@@ -2,9 +2,9 @@
 
 **Diagram type:** current logical and deployment architecture
 
-**Repository baseline:** `main` at `da81918eb0f7e6f5b6c7b98353d665adb9812c0e`
+**History audit baseline:** `main` at `f4297c203104b7c8cb0834c7b7d65d804cba1f73` (November 3, 2026).
 
-**Latest code baseline:** `main` at `1f30440`; later commits `3775a62` and `da81918` changed documentation only.
+**Latest code baseline:** `main` at `1f30440`; commits `3775a62`, `da81918`, and `f4297c2` changed documentation only. This diagram update is also documentation-only.
 
 **Deployment report:** The owner reported deployment of `7bf015dd7045c9bd4d955244f06c5bc2d829dec6` to Control and Agents on November 3, 2026. This update did not independently verify VM state or installed revisions.
 
@@ -99,7 +99,7 @@ This file is a logical architecture diagram, not a network exposure inventory. I
 
 ## Source and deployment reconciliation — November 3, 2026
 
-The current pushed repository is at `da81918eb0f7e6f5b6c7b98353d665adb9812c0e`; the latest code change is `1f30440`. The reported deployed revision is `7bf015dd7045c9bd4d955244f06c5bc2d829dec6`. Commit `1f30440` contains source changes after `7bf015d`; commits `3775a62` and `da81918` update the architecture documentation. No deployment of `1f30440` or later was established in this update. Therefore, this diagram describes current source topology and an owner-reported earlier deployment separately.
+The history audit inspected `main` at `f4297c203104b7c8cb0834c7b7d65d804cba1f73`; the latest source change remains `1f30440`. The reported deployed revision is `7bf015dd7045c9bd4d955244f06c5bc2d829dec6`. Commit `1f30440` contains source changes after `7bf015d`; subsequent commits update documentation only. No deployment of `1f30440` or later was established in this update. Therefore, this diagram describes current source topology and an owner-reported earlier deployment separately.
 
 The A/B/C behavior is:
 
@@ -108,3 +108,12 @@ The A/B/C behavior is:
 - **Not a new-plan rule:** replay compatibility does not authorize dependencies in new proposals.
 
 The owner also reported 110 focused tests passed, all listed services active after deployment, and broker 503s recovered. These remain owner-reported because no test output, current VM service query, or Manager log was examined for this update.
+
+
+## Full Git history and subsystem coverage — November 3, 2026
+
+The review covered 488 commits reachable from local Git refs between September 14 and November 3, 2026. 487 are reachable from `main`; every fetched `phase7`–`phase11` branch tip is ancestral to `main`. The sole named branch tip outside main is `master` at the original P0.0 skeleton (`4a32ca4`). Object inspection also found two unreachable commits: `4accf5d` (Worker A admission implementation and evidence) and `b6992b3` (Venture 001 Studio Restock Kit product/validation changes; its product HTML matches main). These are historical objects, not active branches or deployment proof. Deleted remote refs or commits absent from this clone are outside the audit's evidence.
+
+The history-derived architecture inventory includes: (1) P0 policy and capability governance, venture isolation/RLS, provenance/taint, durable jobs, compute/finance/compliance governors, OpenBao credentials, kill-switch, shadow CEO and certification; (2) P1–P2 opportunity intake, evidence normalization, thesis/scoring/lifecycle, replay and adversarial checks; (3) P3–P6 Scout, synthetic venture lifecycle, shared services, human review, integration and certification; (4) P7–P11 worker/provider boundaries, topology/deployment, backup/restore, observability, credential-provider controls, synthetic recovery, governance and readiness gates; and (5) owner/research APIs, signed admission, CEO–Manager–Worker orchestration, mTLS identity, quota/recovery, provider dispatch and status publication. `ventures/venture-001` is a separate product/runtime and validation area; its artifacts do not establish that it is an active AVA platform service.
+
+History presence establishes that code or artifacts were committed, not that a subsystem is currently deployed, connected, authorized, or production-ready. The diagram and connection labels continue to distinguish repository-defined edges from owner-reported and independently verified runtime observations. Historical SBOM, coverage, tests, branch analysis, and runtime records remain tied to their recorded snapshots. This review did not rerun every historical test suite or recalculate live state, coverage, or deployment provenance.
