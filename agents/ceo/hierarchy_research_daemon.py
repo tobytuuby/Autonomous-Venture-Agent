@@ -54,8 +54,9 @@ def allowed_config(base, flow, snapshot):
         assignments = plan["assignments"]
         if (len(assignments) != 3 or {a["id"] for a in assignments} != {"A", "B", "C"}
                 or any(a["worker_id"] != RESEARCH_WORKERS[a["id"]] for a in assignments)
-                or any(a["depends_on"] != [] for a in assignments)):
-            raise ValueError("independent A/B/C decomposition denied")
+                or any(a["depends_on"] not in ([], ["A", "B"] if a["id"] == "C" else [])
+                       for a in assignments)):
+            raise ValueError("A/B/C decomposition denied")
     if role == "worker":
         from agents.ceo.hierarchy_runner import ready_assignment
         if ready_assignment(snapshot, base["actor_id"]) is None:

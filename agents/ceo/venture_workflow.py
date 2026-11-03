@@ -218,7 +218,7 @@ class VentureWorkflow(EscalationInbox):
             raise ValueError("active research Workers required")
         return dict(state="MANAGER_PENDING")
 
-    def _decomposition_transition(self, prior, command, signature):
+    def _decomposition_transition(self, prior, command, signature, enforce_independent=False):
         """Reconstruct assignment state from signed commands, including on restart."""
         action, role, payload = command["action"], command["role"], command["payload"]
         plan = json.loads(canonical(prior.get("decomposition")))
@@ -239,8 +239,15 @@ class VentureWorkflow(EscalationInbox):
                     raise ValueError("A, B, and C assignment ids required")
                 if self.actors.get(worker, (None,))[0] != "worker" or worker in workers:
                     raise ValueError("three distinct registered Workers required")
-                if assignment["depends_on"] != []:
+                dependencies = assignment["depends_on"]
+                if type(dependencies) is not list or any(dep not in {"A", "B", "C"} for dep in dependencies):
+                    raise ValueError("assignment dependencies denied")
+                if enforce_independent and dependencies:
                     raise ValueError("Worker assignments must be independent")
+                if not enforce_independent and name == "C" and dependencies not in ([], ["A", "B"]):
+                    raise ValueError("historical C dependencies denied")
+                if not enforce_independent and name in {"A", "B"} and dependencies:
+                    raise ValueError("historical A/B dependencies denied")
                 if assignment["task"] not in research_tasks(prior):
                     raise ValueError("assignment scope denied")
                 ids.add(name)
@@ -601,7 +608,7 @@ class VentureWorkflow(EscalationInbox):
             if (item["used_units"] >= item["scope"]["budget_units"]
                     and action in {"improve", "delegate", "propose_decomposition", "revise"}):
                 raise ValueError("budget exhausted: Worker cycle restart denied")
-            multi = self._decomposition_transition(item, command, signature)
+            multi = self._decomposition_transition(item, command, signature, enforce_independent=True)
             research = (self._legacy_worker_recovery(item, command)
                         or self._research_transition(item, command))
             if research is not None:
