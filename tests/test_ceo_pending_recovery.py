@@ -232,6 +232,9 @@ class CEOPendingRecoveryTests(unittest.TestCase):
         self.state = dict(self.state, id=self.flow, venture_id=self.flow)
         self.context = dict(self.context, session_id=self.flow, venture_id=self.flow)
         self.config = dict(self.config, context=self.context, state_dir=str(self.root / "future"))
+        bootstrap = dict(self.reservation, context=self.context, identity="future-session")
+        del bootstrap["execution_mode"]
+        self.reserve(bootstrap)
         self.client._request.side_effect = lambda method, path, data: (
             self.reserve(data), (_ for _ in ()).throw(OSError("crash after reserve")))[1]
         with patch("agents.ceo.venture_exercise.configured_provider", return_value=self.model):
@@ -243,7 +246,56 @@ class CEOPendingRecoveryTests(unittest.TestCase):
         self.assertEqual(self.recover(), result)
         self.assertEqual(result["state"], "COMPLETE")
         self.assertEqual(self.model.calls, 1)
-        self.assertEqual(self.charges(), (2, 1024))
+        self.assertEqual(self.charges(), (3, 1536))
+
+    def test_split_local_and_broker_authority_blocks_before_remote_charge(self):
+        # A new synthetic venture, never a legacy pending outcome. Its broker
+        # session exists, but the CEO cannot access that ledger locally.
+        original_checkpoint = self.path.read_bytes()
+        original_inference = self.dbpath.read_bytes()
+        self.flow = "research-" + "d" * 24
+        self.state = dict(self.state, id=self.flow, venture_id=self.flow)
+        self.context = dict(self.context, session_id=self.flow, venture_id=self.flow)
+        self.config = dict(self.config, context=self.context,
+                           state_dir=str(self.root / "split-future"))
+        broker = self.root / "broker-authority"
+        broker.mkdir(mode=0o700)
+        for name in ("authority.json", "exchange-usage-policy.json"):
+            self.write(broker / name, json.loads((self.authority / name).read_text()))
+        with patch.object(service_identity, "AUTHORITY_DIRECTORY", broker):
+            bootstrap = dict(self.reservation, context=self.context, identity="split-session")
+            del bootstrap["execution_mode"]
+            self.reserve(bootstrap)
+        def remote(method, path, data):
+            with patch.object(service_identity, "AUTHORITY_DIRECTORY", broker):
+                return self.reserve(data)
+        self.client._request.side_effect = remote
+        local_ledger = (self.authority / "resources.sqlite").read_bytes()
+        self.client._request.reset_mock()
+        with self.assertRaisesRegex(RecoveryImpossible, "CEO_LOCAL_LEDGER_BINDING_REQUIRED"):
+            self.recover()
+        self.client._request.assert_not_called()
+        self.assertEqual(self.model.calls, 0)
+        self.assertEqual((self.authority / "resources.sqlite").read_bytes(), local_ledger)
+        self.assertEqual(self.path.read_bytes(), original_checkpoint)
+        self.assertEqual(self.dbpath.read_bytes(), original_inference)
+        with sqlite3.connect(broker / "resources.sqlite") as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM reservations").fetchone()[0], 1)
+
+    def test_local_session_preflight_is_readonly_and_rejects_changed_binding(self):
+        from agents.ceo.provider_reservation import require_ceo_session
+        path = self.authority / "resources.sqlite"
+        original = path.read_bytes()
+        require_ceo_session(self.context, self.policy)
+        for context, policy in (
+                (dict(self.context, session_id="missing-synthetic-session"), self.policy),
+                (dict(self.context, objective="Changed synthetic scope"), self.policy),
+                (self.context, dict(self.policy, maximum_requests=5))):
+            with self.subTest(context=context), self.assertRaisesRegex(
+                    RecoveryImpossible, "CEO_LOCAL_LEDGER_BINDING_REQUIRED"):
+                require_ceo_session(context, policy)
+        self.assertEqual(path.read_bytes(), original)
+        self.assertEqual(self.model.calls, 0)
 
     def test_pending_checkpoint_hash_and_prompt_change_still_refused(self):
         self.reserve()

@@ -1,0 +1,21 @@
+test_split_local_and_broker_authority_blocks_before_remote_charge (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_split_local_and_broker_authority_blocks_before_remote_charge) ... FAIL
+
+======================================================================
+FAIL: test_split_local_and_broker_authority_blocks_before_remote_charge (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_split_local_and_broker_authority_blocks_before_remote_charge)
+----------------------------------------------------------------------
+agents.ceo.hierarchy_providers.RecoveryImpossible: CEO_RESERVATION_PROOF_REQUIRED
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_pending_recovery.py", line 275, in test_split_local_and_broker_authority_blocks_before_remote_charge
+    with self.assertRaisesRegex(RecoveryImpossible, "CEO_LOCAL_LEDGER_BINDING_REQUIRED"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "CEO_LOCAL_LEDGER_BINDING_REQUIRED" does not match "CEO_RESERVATION_PROOF_REQUIRED"
+
+----------------------------------------------------------------------
+Ran 1 test in 0.071s
+
+FAILED (failures=1)
+
+BASELINE_PREFLIGHT_BUG_REPRODUCED=True

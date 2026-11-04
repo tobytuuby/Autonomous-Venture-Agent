@@ -1,0 +1,101 @@
+test_three_round_process_exit_recovery_preserves_signed_trace_and_quota (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_three_round_process_exit_recovery_preserves_signed_trace_and_quota) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+ERROR:root:research workflow blocked role=worker workflow=research-10f7c9bf90f064107a4ac51f snapshot=b1dba36ae30c8b43d3d840a1a9fedfd30c047c04791a9c36fdeda7e9f4ae1244 reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role worker error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 286, in poll
+    role_tick(allowed_config(config,flow,snapshot),once=True)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 161, in run
+    if state is not None and state["state"] in allowed:
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_runner.py", line 158, in tick
+    return self.workflow.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 30, in apply
+    return self.client.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 92, in crash_before_apply
+    raise OSError("synthetic crash after response before apply")
+OSError: synthetic crash after response before apply
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+{"before":{"remote_executions":2,"remote_reservations":4,"reservations":8,"worker_executions":4,"worker_reservations":4},"checkpoint":"RESERVED","child_pid":2086783,"committed":{"remote_executions":2,"remote_reservations":5,"reservations":9,"worker_executions":4,"worker_reservations":4},"recovered":{"remote_executions":3,"remote_reservations":5,"reservations":9,"worker_executions":4,"worker_reservations":4},"reservation_reused":true,"round":1,"scenario":"CEO_PROCESS_EXIT_RECOVERY","snapshot_sha256":"ef16a4e13c27e7f2afe70b6e5a5b2aff0071d71f8cef1b65e5b6619ddc005335"}
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 9, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 10, "operational_authority": false}
+ERROR:root:research workflow blocked role=worker workflow=research-10f7c9bf90f064107a4ac51f snapshot=4ffbe3bafaf1501d4b2ba2b7619269408db9a6d82ce63e2fbc59be57ae9ac039 reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role worker error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 286, in poll
+    role_tick(allowed_config(config,flow,snapshot),once=True)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 161, in run
+    if state is not None and state["state"] in allowed:
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_runner.py", line 158, in tick
+    return self.workflow.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 30, in apply
+    return self.client.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 92, in crash_before_apply
+    raise OSError("synthetic crash after response before apply")
+OSError: synthetic crash after response before apply
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 11, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 12, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 13, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 14, "operational_authority": false}
+{"before":{"remote_executions":5,"remote_reservations":9,"reservations":17,"worker_executions":8,"worker_reservations":8},"checkpoint":"RESPONSE","child_pid":2087522,"committed":{"remote_executions":6,"remote_reservations":10,"reservations":18,"worker_executions":8,"worker_reservations":8},"recovered":{"remote_executions":6,"remote_reservations":10,"reservations":18,"worker_executions":8,"worker_reservations":8},"reservation_reused":true,"round":2,"scenario":"CEO_PROCESS_EXIT_RECOVERY","snapshot_sha256":"1a3b25a46d8745ff773390746b561692535b9dc314c81a926ffce19b4027aed2"}
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 16, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 17, "operational_authority": false}
+ERROR:root:research workflow blocked role=worker workflow=research-10f7c9bf90f064107a4ac51f snapshot=615b0a746f6c96a54543de76c49583f66f68c46ca4acd46d8398f120f7406365 reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role worker error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 286, in poll
+    role_tick(allowed_config(config,flow,snapshot),once=True)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 161, in run
+    if state is not None and state["state"] in allowed:
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_runner.py", line 158, in tick
+    return self.workflow.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 30, in apply
+    return self.client.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 92, in crash_before_apply
+    raise OSError("synthetic crash after response before apply")
+OSError: synthetic crash after response before apply
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 18, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 19, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 20, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 21, "operational_authority": false}
+ok
+test_two_created_synthetic_ventures_reject_cross_bound_reservation (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_two_created_synthetic_ventures_reject_cross_bound_reservation) ... {"before":{"remote_executions":8,"remote_reservations":14,"reservations":26,"worker_executions":12,"worker_reservations":12},"checkpoint":"SIGNED","child_pid":2088601,"committed":{"remote_executions":9,"remote_reservations":15,"reservations":27,"worker_executions":12,"worker_reservations":12},"recovered":{"remote_executions":9,"remote_reservations":15,"reservations":27,"worker_executions":12,"worker_reservations":12},"reservation_reused":true,"round":3,"scenario":"CEO_PROCESS_EXIT_RECOVERY","snapshot_sha256":"dcbc8177fd1e61b2ec47478c430a9642c2e94b0c431e6ddc59b7546837621533"}
+{"audit_records":22,"external_authority":false,"round_charges":[4,4,4],"scenario":"THREE_ROUND_TRACE","signed_commands":"VERIFIED","terminal_decisions":1,"worker_executions":12,"worker_submissions":9}
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+ok
+test_ambiguous_execution_explicitly_blocks_without_retry (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_ambiguous_execution_explicitly_blocks_without_retry) ... ok
+test_changed_attempt_identity_context_or_policy_cannot_reconcile (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_changed_attempt_identity_context_or_policy_cannot_reconcile) ... ok
+test_executed_response_retrieved_without_configuring_or_calling_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_executed_response_retrieved_without_configuring_or_calling_provider) ... ok
+test_future_venture_restart_after_reservation_and_after_execution (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_future_venture_restart_after_reservation_and_after_execution) ... ok
+test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof) ... ok
+test_local_session_preflight_is_readonly_and_rejects_changed_binding (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_local_session_preflight_is_readonly_and_rejects_changed_binding) ... ok
+test_manager_execution_entrypoint_cannot_select_ceo_role_from_body (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_manager_execution_entrypoint_cannot_select_ceo_role_from_body) ... ok
+test_missing_ledger_or_session_is_not_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_missing_ledger_or_session_is_not_nonexecution_proof) ... ok
+test_no_original_reservation_proves_original_was_never_executed (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_no_original_reservation_proves_original_was_never_executed) ... ok
+test_pending_checkpoint_hash_and_prompt_change_still_refused (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_pending_checkpoint_hash_and_prompt_change_still_refused) ... ok
+test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot) ... ok
+test_quota_exhaustion_blocks_unreserved_intent_without_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_blocks_unreserved_intent_without_provider) ... ok
+test_reserved_unexecuted_same_identity_attempt_authorization_only (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_reserved_unexecuted_same_identity_attempt_authorization_only) ... ok
+test_revoked_authority_blocks_unstarted_and_completed_replay (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_revoked_authority_blocks_unstarted_and_completed_replay) ... ok
+test_split_local_and_broker_authority_blocks_before_remote_charge (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_split_local_and_broker_authority_blocks_before_remote_charge) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 13.392s
+
+OK
+{"cross_bound_reservation":"DENIED","original":"research-10f7c9bf90f064107a4ac51f","other":"research-88a655504f2cfefce531ba23","quota":"UNCHANGED","scenario":"TWO_CREATED_SYNTHETIC_VENTURES","snapshots":"UNCHANGED"}

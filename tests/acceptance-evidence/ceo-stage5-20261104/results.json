@@ -1,0 +1,28 @@
+{
+  "baseline": "cbe02523864a8d99463255634d757d9c705eb7ef",
+  "classification": "SYNTHETIC_AND_RECORDED_DEPENDENCY_EMULATION",
+  "results": {
+    "resume-focused": {
+      "tests": 17,
+      "seconds": 12.668,
+      "exit": 0,
+      "result": "OK"
+    },
+    "resume-candidate": {
+      "tests": 17,
+      "seconds": 13.392,
+      "exit": 0,
+      "result": "OK"
+    },
+    "resume-regression": {
+      "tests": 335,
+      "seconds": 126.034,
+      "exit": 0,
+      "result": "OK"
+    }
+  },
+  "deployed": false,
+  "external_provider_calls": false,
+  "production_restarts": false,
+  "review": "NOT_REVIEWED"
+}

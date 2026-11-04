@@ -159,6 +159,11 @@ class HierarchyProvider:
                 policy=self.policy,endpoint=binding["endpoint"],model=binding["model"])
             if tracked_ceo:
                 reservation["execution_mode"] = "CONTROL_LEDGER_V1"
+                if not recovering:
+                    # The local executor must observe the existing broker session.
+                    # Detect split/inaccessible authority before charging remotely.
+                    from agents.ceo.provider_reservation import require_ceo_session
+                    require_ceo_session(self.context, self.policy)
             if tracked_ceo and recovering:
                 # The original CEO path could execute only AFTER a committed
                 # reservation. Under the existing atomic unique-call gate, an

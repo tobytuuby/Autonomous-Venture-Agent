@@ -111,3 +111,31 @@ def reserve_exchange(payload, *, actor, role="manager", existing_session_only=Fa
     return dict(reserved=True, request_sha256=digest(wire.encode()),
                 maximum_output_tokens=policy["maximum_output_tokens"],
                 scope="PREPARATION_ONLY")
+
+
+def require_ceo_session(context, policy):
+    """Read-only preflight for Control-local CEO execution; never bootstrap state.
+
+    This is a dependency check, not a reservation or authority grant. Execution
+    still verifies the exact centrally committed reservation and live policy.
+    """
+    from agents.ceo.hierarchy_providers import RecoveryImpossible
+    authority = service_identity.ProviderQuota(service_identity.AUTHORITY_DIRECTORY)
+    authority.authority()
+    path = inside_root(authority.directory / "resources.sqlite")
+    try:
+        info = path.stat()
+        if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                or info.st_uid != os.geteuid() or info.st_mode & 0o077):
+            raise RecoveryImpossible("CEO_LOCAL_LEDGER_BINDING_REQUIRED")
+        db = sqlite3.connect(path.resolve().as_uri() + "?mode=ro", uri=True, timeout=5)
+        try:
+            row = db.execute("SELECT binding FROM exchange_sessions WHERE session=?",
+                             (context["session_id"],)).fetchone()
+        finally:
+            db.close()
+    except (OSError, sqlite3.Error) as exc:
+        raise RecoveryImpossible("CEO_LOCAL_LEDGER_BINDING_REQUIRED") from exc
+    binding = digest(canonical(dict(context=context, policy=policy)).encode())
+    if row is None or row[0] != binding:
+        raise RecoveryImpossible("CEO_LOCAL_LEDGER_BINDING_REQUIRED")
