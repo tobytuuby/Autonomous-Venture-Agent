@@ -1,0 +1,10 @@
+{
+  "validation": {
+    "id": "proc_mw2o5435_tcpnq9",
+    "pid": 2187041,
+    "status": "exited",
+    "log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2o5435_tcpnq9.log",
+    "command": "sh tests/acceptance-evidence/ceo-stage6-20261104/validate.sh",
+    "completed_project_log": "tests/acceptance-evidence/ceo-stage6-20261104/validation.log"
+  }
+}
