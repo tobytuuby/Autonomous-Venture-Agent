@@ -1,0 +1,2 @@
+{"command": ["sudo", "-n", "systemctl", "disable", "venture-level2c-ceo.service"], "exit_code": 0, "stdout": "", "stderr": "Removed '/etc/systemd/system/multi-user.target.wants/venture-level2c-ceo.service'.\n"}
+{"command": ["sudo", "-n", "systemctl", "disable", "--now", "venture-ceo-exercise.timer"], "exit_code": 0, "stdout": "", "stderr": "Removed '/etc/systemd/system/venture-ceo-exercise.timer'.\nRemoved '/etc/systemd/system/timers.target.wants/venture-ceo-exercise.timer'.\n"}

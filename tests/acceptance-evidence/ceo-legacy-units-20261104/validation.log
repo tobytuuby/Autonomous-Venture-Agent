@@ -1,0 +1,11 @@
+{
+  "venture-owner-research-ceo.service": "unchanged active identity/start/restarts/entrypoint",
+  "venture-control-broker-mtls.service": "unchanged active identity/start/restarts/entrypoint",
+  "all_271_source_unit_advisory_file_hashes_identical": true,
+  "legacy_disabled": true,
+  "timer_stopped_not_enabled_definition_retained": true,
+  "advisory_failed_state_preserved": true,
+  "authenticated_get_and_signed_records_verified": true,
+  "accounting_and_pending_intent_unchanged": true,
+  "consumer_readers_unchanged": true
+}

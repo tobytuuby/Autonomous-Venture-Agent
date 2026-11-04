@@ -1,0 +1,102 @@
+{
+  "processes": [
+    {
+      "id": "proc_mw2n8d2w_hpsxuw",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/legacy_inventory.py > tests/acceptance-evidence/ceo-legacy-units-20261104/before.json 2> tests/acceptance-evidence/ceo-legacy-units-20261104/before.err; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/before.exit; exit \"$rc\"",
+      "pid": 1881833,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2n8d2w_hpsxuw.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:43:18.583Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2n968b_cfi7hf",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/verify_readonly.py > tests/acceptance-evidence/ceo-legacy-units-20261104/health-before.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/health-before.exit; exit \"$rc\"",
+      "pid": 1886261,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2n968b_cfi7hf.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:43:56.363Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2n9kdj_zhlkfn",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/consumer_probe.py > tests/acceptance-evidence/ceo-legacy-units-20261104/consumers-before.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/consumers-before.exit; exit \"$rc\"",
+      "pid": 1890536,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2n9kdj_zhlkfn.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:44:14.695Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2na0rb_ggb3j2",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/disable_legacy.py > tests/acceptance-evidence/ceo-legacy-units-20261104/disable.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/disable.exit; exit \"$rc\"",
+      "pid": 1892729,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2na0rb_ggb3j2.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:44:35.927Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2nafmt_paekdy",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/legacy_inventory.py > tests/acceptance-evidence/ceo-legacy-units-20261104/after.json 2> tests/acceptance-evidence/ceo-legacy-units-20261104/after.err; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/after.exit; exit \"$rc\"",
+      "pid": 1895095,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2nafmt_paekdy.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:44:55.205Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2nag0u_e210id",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/verify_readonly.py > tests/acceptance-evidence/ceo-legacy-units-20261104/health-after.log 2>&1 && sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/consumer_probe.py > tests/acceptance-evidence/ceo-legacy-units-20261104/consumers-after.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/health-after.exit; exit \"$rc\"",
+      "pid": 1895113,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2nag0u_e210id.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:44:55.710Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2nb1nq_63agu3",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n systemctl link /home/epsilon/venture-control-workspace/infrastructure/systemd/venture-ceo-exercise.timer > tests/acceptance-evidence/ceo-legacy-units-20261104/retain-timer.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/retain-timer.exit; exit \"$rc\"",
+      "pid": 1901508,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2nb1nq_63agu3.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:45:23.750Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2nbial_jog3kg",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-legacy-units-20261104/legacy_inventory.py > tests/acceptance-evidence/ceo-legacy-units-20261104/final.json 2> tests/acceptance-evidence/ceo-legacy-units-20261104/final.err; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/final.exit; exit \"$rc\"",
+      "pid": 1905956,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2nbial_jog3kg.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:45:45.309Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    },
+    {
+      "id": "proc_mw2nbip0_04l7i4",
+      "workspace": "ceo-legacy-units",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "mkdir -p artifacts/ceo-legacy-units-tmp; TMPDIR=\"$PWD/artifacts/ceo-legacy-units-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\" timeout 120s python3 -B -m unittest tests.test_scheduled_ceo_exercise tests.test_preparation_service tests.test_preparation_broker tests.test_authenticated_handoff tests.test_research_poll_isolation -v > tests/acceptance-evidence/ceo-legacy-units-20261104/tests.log 2>&1; rc=$?; echo \"$rc\" > tests/acceptance-evidence/ceo-legacy-units-20261104/tests.exit; exit \"$rc\"",
+      "pid": 1905976,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2nbip0_04l7i4.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:45:45.828Z",
+      "updatedAt": "2026-11-04T21:48:00.493Z"
+    }
+  ]
+}

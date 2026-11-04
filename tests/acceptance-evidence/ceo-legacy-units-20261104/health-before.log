@@ -1,0 +1,74 @@
+{
+  "counts_before": {
+    "reservations": 157,
+    "remote_reservations": 105,
+    "remote_executions": 51,
+    "worker_reservations": 52,
+    "worker_executions": 52,
+    "worker_research_charges": 39
+  },
+  "pending_intents": [
+    {
+      "local_path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "identity": "ceo-89ea3a74cf4d4b40aa2c80c94f0c068deffd648a49690ce2ea",
+      "request_sha256": "98a06ea21e1c2a44739f0585f7afffdacd16b0797e5a45bce9289ee716d5b96f",
+      "attempt_sha256": "85da22c9df5888aacd8f0cb3419b9362230bbfc917b7b34c18cc8720db3a1c33",
+      "central_reservation": false,
+      "execution_mode": null,
+      "central_execution_status": "ABSENT"
+    }
+  ],
+  "signed_journal": {
+    "verified": true,
+    "audit_records": 134,
+    "workflows": 13
+  },
+  "service_uid_get": {
+    "ok": true,
+    "uid": 993,
+    "user": "venture-ceo",
+    "actor": "service-ceo",
+    "research_count": 6,
+    "snapshot_joins": [
+      {
+        "workflow_id": "research-206691adb1574f2c166f57e3",
+        "revision": 28,
+        "matches_verified_journal": true
+      },
+      {
+        "workflow_id": "research-4e6018e70bf43a549e289b3f",
+        "revision": 11,
+        "matches_verified_journal": true
+      },
+      {
+        "workflow_id": "research-5900c3db9bb5bd74601e3f9d",
+        "revision": 9,
+        "matches_verified_journal": true
+      },
+      {
+        "workflow_id": "research-59bc909391fc057b288d856f",
+        "revision": 22,
+        "matches_verified_journal": true
+      },
+      {
+        "workflow_id": "research-6f1d60be2ee2611fa1080895",
+        "revision": 8,
+        "matches_verified_journal": true
+      },
+      {
+        "workflow_id": "research-c477fcaa9ad6bdbeda36aef7",
+        "revision": 21,
+        "matches_verified_journal": true
+      }
+    ]
+  },
+  "counts_after": {
+    "reservations": 157,
+    "remote_reservations": 105,
+    "remote_executions": 51,
+    "worker_reservations": 52,
+    "worker_executions": 52,
+    "worker_research_charges": 39
+  },
+  "counts_unchanged": true
+}
