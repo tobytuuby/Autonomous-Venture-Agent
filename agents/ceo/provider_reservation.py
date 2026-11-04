@@ -17,42 +17,8 @@ def reserve_exchange(payload, *, actor, role="manager", existing_session_only=Fa
     A CEO-established session is mandatory. Exact retry of one durable intent is
     idempotent; a fresh intent for the same logical call is a replay and denied.
     """
-    from agents.ceo.preparation_exchange import StandingModel
-    tracked = payload.get("execution_mode") == "CONTROL_LEDGER_V1"
-    if "execution_mode" in payload and (not tracked or role != "ceo"):
-        raise ValueError("execution mode denied")
-    exact(payload, (("execution_mode",) if tracked else ()) + ("context", "actor", "role", "identity", "request_sha256",
-                    "attempt", "policy", "endpoint", "model"))
-    if role not in ("ceo", "manager") or payload["role"] != role or payload["actor"] != actor:
-        raise ValueError("reservation role denied")
-    identifier(payload["identity"])
-    for field in ("request_sha256", "attempt"):
-        value = payload[field]
-        if (type(value) is not str or len(value) != 64
-                or any(c not in "0123456789abcdef" for c in value)):
-            raise ValueError("reservation digest denied")
+    authority, policy, binding, call, wire = validate_exchange(payload, actor=actor, role=role)
     context = payload["context"]
-    exact(context, ("session_id", "venture_id", "ceo_id", "manager_id", "objective", "rounds"))
-    identifier(context["session_id"])
-    if context[role + "_id"] != actor:
-        raise ValueError("reservation context recipient denied")
-    authority = service_identity.ProviderQuota(service_identity.AUTHORITY_DIRECTORY)
-    live_policy = authority.authority()
-    if any(name in live_policy["revoked"] for name in
-           (actor, "service-ceo", "service-manager", "service-worker")):
-        raise ValueError("standing authority revoked")
-    # Reuse the standing policy validator with authoritative Control files.
-    checker = StandingModel.__new__(StandingModel)
-    checker.authority, checker.epoch = authority, authority.authority()["epoch"]
-    checker.context, checker.actor, checker.role = context, actor, role
-    checker.provider = SimpleNamespace(endpoint=payload["endpoint"], model=payload["model"])
-    policy = checker._policy()
-    if policy != payload["policy"]:
-        raise ValueError("standing policy changed")
-    binding = digest(canonical(dict(context=context, policy=policy)).encode())
-    call = digest(canonical(dict(domain="preparation-exchange-call-v1",
-        session=context["session_id"], actor=actor, identity=payload["identity"])).encode())
-    wire = canonical(payload)
     path = inside_root(authority.directory / "resources.sqlite")
     if existing_session_only and not path.is_file():
         from agents.ceo.hierarchy_providers import RecoveryImpossible
@@ -139,3 +105,44 @@ def require_ceo_session(context, policy):
     binding = digest(canonical(dict(context=context, policy=policy)).encode())
     if row is None or row[0] != binding:
         raise RecoveryImpossible("CEO_LOCAL_LEDGER_BINDING_REQUIRED")
+
+
+def validate_exchange(payload, *, actor, role):
+    """Validate the existing quota binding without opening or changing a ledger."""
+    from agents.ceo.preparation_exchange import StandingModel
+    tracked = payload.get("execution_mode") == "CONTROL_LEDGER_V1"
+    if "execution_mode" in payload and (not tracked or role != "ceo"):
+        raise ValueError("execution mode denied")
+    exact(payload, (("execution_mode",) if tracked else ()) + ("context", "actor", "role", "identity", "request_sha256",
+                    "attempt", "policy", "endpoint", "model"))
+    if role not in ("ceo", "manager") or payload["role"] != role or payload["actor"] != actor:
+        raise ValueError("reservation role denied")
+    identifier(payload["identity"])
+    for field in ("request_sha256", "attempt"):
+        value = payload[field]
+        if (type(value) is not str or len(value) != 64
+                or any(c not in "0123456789abcdef" for c in value)):
+            raise ValueError("reservation digest denied")
+    context = payload["context"]
+    exact(context, ("session_id", "venture_id", "ceo_id", "manager_id", "objective", "rounds"))
+    identifier(context["session_id"])
+    if context[role + "_id"] != actor:
+        raise ValueError("reservation context recipient denied")
+    authority = service_identity.ProviderQuota(service_identity.AUTHORITY_DIRECTORY)
+    live_policy = authority.authority()
+    if any(name in live_policy["revoked"] for name in
+           (actor, "service-ceo", "service-manager", "service-worker")):
+        raise ValueError("standing authority revoked")
+    # Reuse the standing policy validator with authoritative Control files.
+    checker = StandingModel.__new__(StandingModel)
+    checker.authority, checker.epoch = authority, authority.authority()["epoch"]
+    checker.context, checker.actor, checker.role = context, actor, role
+    checker.provider = SimpleNamespace(endpoint=payload["endpoint"], model=payload["model"])
+    policy = checker._policy()
+    if policy != payload["policy"]:
+        raise ValueError("standing policy changed")
+    binding = digest(canonical(dict(context=context, policy=policy)).encode())
+    call = digest(canonical(dict(domain="preparation-exchange-call-v1",
+        session=context["session_id"], actor=actor, identity=payload["identity"])).encode())
+    wire = canonical(payload)
+    return authority, policy, binding, call, wire

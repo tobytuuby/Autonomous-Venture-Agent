@@ -373,7 +373,9 @@ def metered_review(config, state, client, model, request):
     policy=json.loads(pathlib.Path(config['policy']).read_text())
     # allowed_config owns the original session binding, including legacy rounds.
     metered=HierarchyProvider(role='ceo',actor='service-ceo',workflow_id=state['id'],
-        client=client,policy=policy,context=config['context'],local_provider=model,
+        client=client,policy=policy,context=config['context'],
+        local_provider=None if config.get('ceo_broker') is True else model,
+        ceo_broker=config.get('ceo_broker', False),
         state_path=pathlib.Path(config['state_dir'])/'research-review-inference.sqlite')
     return metered(request,())
 
@@ -383,6 +385,12 @@ def request_response(config,state,client,provider,path,current,request):
     from agents.ceo.venture_workflow import research_session, research_rounds
     flow=state['id']
     number=len(research_rounds(state)) if 'handoff' in state else 1
+    if config.get('ceo_broker') is True:
+        if provider is not None:
+            raise ValueError('CEO broker forbids local provider')
+        write_atomic(path,dict(state='PENDING',snapshot_hash=current,
+            request_hash=hashed(request),created_utc=datetime.now(timezone.utc).isoformat()))
+        return metered_review(config,state,client,None,request), "gpt-6-sol"
     model=provider or configured_provider(os.environ,required=True)
     if model.model!='gpt-6-sol':
         raise ValueError('CEO model identity denied')

@@ -1,0 +1,5 @@
+Initial pytest attempts: unavailable (No module named pytest), both exit 1.
+Focused: python3 -m unittest -v tests.test_ceo_broker tests.test_ceo_research_mtls_acceptance; exit 0, 15 tests.
+Initial broad unittest: 82 entries, exit 1, one import setup error (test_authenticated_handoff missing from PYTHONPATH).
+Final broad: TMPDIR="$PWD/artifacts/ceo-stage7-tmp" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$PWD:$PWD/tests" timeout 120s python3 -B tests/acceptance-evidence/ceo-stage5-20261104/verify_synthetic.py tests.test_ceo_broker tests.test_ceo_pending_recovery tests.test_broker_mtls_entrypoint tests.test_broker_isolated_mtls tests.test_hierarchy_providers tests.test_level2c_central_roles tests.test_research_recovery tests.test_research_reservation_counts tests.test_worker_inference tests.test_provider_dispatch tests.test_provider_dispatch_transport; exit 0, 149 tests.
+git diff --check: exit 0.

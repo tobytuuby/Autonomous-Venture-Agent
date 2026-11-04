@@ -27,7 +27,7 @@ def tls_context(*, server_cert, server_key, client_ca):
     ctx.load_verify_locations(cafile=client_ca)
     return ctx
 
-def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None):
+def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None, ceo_execute=None):
     """Pin DER certificate SHA256 per authorized role, never trust HTTP headers."""
     if not capability_pins or not polling_pins:
         raise ValueError("both identity pinsets required")
@@ -180,6 +180,35 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
             return self._deny() if role is None or self.path == "/health" else self._send(404, {"error": "not_found"})
 
         def do_POST(self):
+            from agents.ceo.ceo_broker import PROOF_PATH, EXECUTE_PATH as CEO_EXECUTE_PATH, ceo_proof
+            if self.path in (PROOF_PATH, CEO_EXECUTE_PATH):
+                if self._role() != "quota-ceo":
+                    return self._deny()
+                if hierarchy is None or (self.path == CEO_EXECUTE_PATH and ceo_execute is None):
+                    return self._send(503, {"error": "ceo_inference_unavailable"})
+                try:
+                    lengths = self.headers.get_all("Content-Length", [])
+                    if len(lengths) != 1 or self.headers.get("Transfer-Encoding") is not None:
+                        raise ValueError("bounded CEO length required")
+                    length = int(lengths[0])
+                    if not 0 < length <= 16000:
+                        raise ValueError("CEO request bound")
+                    self.connection.settimeout(5)
+                    raw = self.rfile.read(length)
+                    if len(raw) != length:
+                        raise ValueError("incomplete CEO request")
+                    payload = json.loads(raw, object_pairs_hook=_object)
+                    if self.path == PROOF_PATH:
+                        result = ceo_proof(payload, actor=ceo_reservation_actor, hierarchy=hierarchy)
+                    else:
+                        result = {"result": ceo_execute(payload, actor=ceo_reservation_actor)}
+                    if len(json.dumps(result, separators=(",", ":")).encode()) > 16300:
+                        raise ValueError("CEO response bound")
+                    return self._send(200, result)
+                except (ValueError, TypeError, KeyError, UnicodeError, RecursionError):
+                    return self._send(400, {"error": "ceo_inference_denied"})
+                except Exception:
+                    return self._send(503, {"error": "ceo_inference_unavailable"})
             from agents.ceo.hierarchy_gateway import COMMAND_PATH, ARTIFACT_PATH, MAX_COMMAND
             from agents.ceo.worker_inference import RESERVE_PATH as WORKER_RESERVE_PATH, EXECUTE_PATH as WORKER_EXECUTE_PATH
             if self.path in (WORKER_RESERVE_PATH, WORKER_EXECUTE_PATH):
@@ -409,7 +438,7 @@ def handler_for(*, capability_pins, polling_pins, pending=None, acknowledge=None
     return GuardedHandler
 
 def isolated_server(*, host, port, server_cert, server_key, client_ca,
-                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None):
+                    capability_pins, polling_pins, pending=None, acknowledge=None, reservation_actor=None, ceo_reservation_pins=(), ceo_reservation_actor=None, submit=None, status=None, execute=None, cert_mailbox=None, worker_cert_mailbox=None, worker_pins=(), worker_actors=None, hierarchy=None, worker_reserve=None, worker_execute=None, ceo_execute=None):
     if host not in ("127.0.0.1", "::1") or port == 8443:
         raise ValueError("isolated test binding only")
     srv = ThreadingHTTPServer((host, port), handler_for(
@@ -417,7 +446,7 @@ def isolated_server(*, host, port, server_cert, server_key, client_ca,
         pending=pending, acknowledge=acknowledge, reservation_actor=reservation_actor,
         ceo_reservation_pins=ceo_reservation_pins, ceo_reservation_actor=ceo_reservation_actor,
         submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, worker_actors=worker_actors, hierarchy=hierarchy,
-        worker_reserve=worker_reserve, worker_execute=worker_execute))
+        worker_reserve=worker_reserve, worker_execute=worker_execute, ceo_execute=ceo_execute))
     try:
         srv.socket = tls_context(server_cert=server_cert, server_key=server_key,
                                  client_ca=client_ca).wrap_socket(srv.socket, server_side=True)

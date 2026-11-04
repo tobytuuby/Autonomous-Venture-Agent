@@ -114,3 +114,28 @@ class HierarchyClient:
 
     def worker_execute(self, payload):
         return self._request("POST", "/v1/inference/worker-execute", payload)
+
+    def ceo_proof(self, payload):
+        from agents.ceo.ceo_broker import PROOF_PATH, DOMAIN
+        from agents.ceo.escalation_inbox import digest, exact
+        r = self._request("POST", PROOF_PATH, payload)
+        exact(r, ("domain", "session_sha256", "reservation_sha256",
+                  "request_sha256", "reservation_status", "execution_status"))
+        reservation = payload["reservation"]
+        if (r["domain"] != DOMAIN
+                or r["session_sha256"] != digest(canonical(dict(
+                    context=reservation["context"], policy=reservation["policy"])).encode())
+                or r["reservation_sha256"] != digest(canonical(reservation).encode())
+                or r["request_sha256"] != reservation["request_sha256"]
+                or r["reservation_status"] not in ("ABSENT", "EXACT")
+                or r["execution_status"] not in ("NOT_STARTED", "PENDING", "COMPLETE")
+                or (r["reservation_status"] == "ABSENT" and r["execution_status"] != "NOT_STARTED")):
+            raise ValueError("uncorrelated CEO proof")
+        return r
+
+    def ceo_execute(self, payload):
+        from agents.ceo.ceo_broker import EXECUTE_PATH
+        from agents.ceo.escalation_inbox import exact
+        r = self._request("POST", EXECUTE_PATH, payload)
+        exact(r, ("result",))
+        return r["result"]

@@ -129,13 +129,24 @@ def main():
             actor=actor, hierarchy=hierarchy)
         worker_execute = lambda payload, *, actor: execute_worker(payload,
             actor=actor, hierarchy=hierarchy, provider=worker_provider)
+    # Source support is inert unless explicitly enabled using the existing
+    # provider, hierarchy, CEO certificate pins and fixed actor configuration.
+    ceo_execute = None
+    if os.environ.get("VENTURE_BROKER_CEO_INFERENCE_ENABLED") == "1":
+        if (execute is None or hierarchy is None
+                or required("VENTURE_BROKER_CEO_RESERVATION_ACTOR") != "service-ceo"
+                or not required("VENTURE_BROKER_CEO_RESERVATION_PINS")):
+            raise ValueError("existing CEO broker dependencies required")
+        from agents.ceo.ceo_broker import execute_ceo
+        def ceo_execute(payload, *, actor):
+            return execute_ceo(payload, actor=actor, hierarchy=hierarchy, provider=provider)
     handler = handler_for(capability_pins=cap, polling_pins=poll,
                           pending=pending_assignments, acknowledge=acknowledge,
                           reservation_actor=os.environ.get("VENTURE_BROKER_RESERVATION_ACTOR") or None,
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
                           submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, worker_actors=worker_actors, hierarchy=hierarchy,
-                          worker_reserve=worker_reserve, worker_execute=worker_execute)
+                          worker_reserve=worker_reserve, worker_execute=worker_execute, ceo_execute=ceo_execute)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
     try:

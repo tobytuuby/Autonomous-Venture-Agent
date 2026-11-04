@@ -1,0 +1,12 @@
+{
+  "focused_and_initial_broad": {
+    "id": "proc_mw2ovn26_cx9l73",
+    "pid": 2483484
+  },
+  "guarded_broad": {
+    "id": "proc_mw2ownm5_lxkwjg",
+    "pid": 2495530,
+    "status": "exited",
+    "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2ownm5_lxkwjg.log"
+  }
+}

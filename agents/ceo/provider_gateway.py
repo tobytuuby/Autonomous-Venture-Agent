@@ -186,7 +186,7 @@ class RemoteInferenceProvider:
 
 
 def validate_ceo_review(request, reservation, actor, hierarchy):
-    """Control-local only; the HTTP gateway continues to select Manager role."""
+    """Validate signed preparation-only CEO review, independently of transport."""
     import hashlib
     from agents.ceo.ceo_research_review import SYSTEM, HISTORICAL_SYSTEM_SHA256
     from agents.ceo.venture_workflow import hashed, research_session

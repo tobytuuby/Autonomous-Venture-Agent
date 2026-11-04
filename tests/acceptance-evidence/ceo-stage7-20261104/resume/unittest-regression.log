@@ -1,0 +1,108 @@
+test_provider_dispatch (unittest.loader._FailedTest.test_provider_dispatch) ... ERROR
+test_bad_pin_configuration (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_bad_pin_configuration) ... ok
+test_capability_health_unchanged (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_capability_health_unchanged) ... ok
+test_capability_malformed_request (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_capability_malformed_request) ... ok
+test_certificate_rollover_and_revocation_pinset (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_certificate_rollover_and_revocation_pinset) ... ok
+test_expired_real_certificate_and_live_pin_rollover (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_expired_real_certificate_and_live_pin_rollover) ... ok
+test_five_pin_cutover_tls_actor_and_renewal_isolation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_five_pin_cutover_tls_actor_and_renewal_isolation) ... ok
+test_hostname_mismatch (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_hostname_mismatch) ... ok
+test_missing_certificate_denied (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_missing_certificate_denied) ... ok
+test_non_executing_poll_no_fallback (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_non_executing_poll_no_fallback) ... ok
+test_plaintext_rejected (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_plaintext_rejected) ... ok
+test_polling_isolation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_polling_isolation) ... ok
+test_recovery_after_tls_rejection (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_recovery_after_tls_rejection) ... ok
+test_secure_recovery_rehearsal (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_secure_recovery_rehearsal) ... ok
+test_tls_worker_actor_mapping_inference_and_impersonation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_tls_worker_actor_mapping_inference_and_impersonation) ... ok
+test_wire_capability_decision_states (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wire_capability_decision_states) ... ok
+test_worker_and_manager_csr_mailboxes_are_key_bound_and_role_isolated (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_and_manager_csr_mailboxes_are_key_bound_and_role_isolated) ... ok
+test_worker_registration_limits_and_only_legacy_may_roll_over (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_registration_limits_and_only_legacy_may_roll_over) ... ok
+test_worker_registry_rejects_duplicate_tls_keys_and_unregistered_actors (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_registry_rejects_duplicate_tls_keys_and_unregistered_actors) ... ok
+test_wrong_ca_denied (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wrong_ca_denied) ... ok
+test_wrong_methods_and_query (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wrong_methods_and_query) ... ok
+test_ceo_entrypoint_uses_https_and_never_opens_local_authority (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_entrypoint_uses_https_and_never_opens_local_authority) ... {"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+ok
+test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role) ... ok
+test_ceo_remote_model_ambiguity_never_falls_back (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_model_ambiguity_never_falls_back) ... ok
+test_ceo_remote_quota_accepts_local_provider_without_broker_binding (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_quota_accepts_local_provider_without_broker_binding) ... ok
+test_ceo_retry_changes_and_corrupt_quota_fail_closed (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_retry_changes_and_corrupt_quota_fail_closed) ... ok
+test_concurrent_fresh_ceo_bootstrap_is_one_charge (tests.test_level2c_central_roles.CentralRolesTests.test_concurrent_fresh_ceo_bootstrap_is_one_charge) ... ok
+test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling (tests.test_level2c_central_roles.CentralRolesTests.test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling) ... ok
+test_gateway_execution_requires_prior_reservation_and_caches_exact_result (tests.test_level2c_central_roles.CentralRolesTests.test_gateway_execution_requires_prior_reservation_and_caches_exact_result) ... ok
+test_hierarchy_manager_system_allowed_only_for_signed_matching_state (tests.test_level2c_central_roles.CentralRolesTests.test_hierarchy_manager_system_allowed_only_for_signed_matching_state) ... ok
+test_manager_adapter_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_adapter_restart_recovers_broker_complete_without_duplicate) ... ok
+test_manager_reconciliation_all_states_and_tampering_without_paid_retry (tests.test_level2c_central_roles.CentralRolesTests.test_manager_reconciliation_all_states_and_tampering_without_paid_retry) ... ok
+test_manager_review_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_review_restart_recovers_broker_complete_without_duplicate) ... ok
+test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial) ... ok
+test_provider_backed_local_model_is_forbidden (tests.test_level2c_central_roles.CentralRolesTests.test_provider_backed_local_model_is_forbidden) ... ok
+test_recovered_legacy_context_reuses_binding_without_quota_reset (tests.test_level2c_central_roles.CentralRolesTests.test_recovered_legacy_context_reuses_binding_without_quota_reset) ... ok
+test_research_round_session_binds_to_venture_workflow (tests.test_level2c_central_roles.CentralRolesTests.test_research_round_session_binds_to_venture_workflow) ... ok
+test_absent_and_partial_configuration_fail_before_files_or_transport (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_absent_and_partial_configuration_fail_before_files_or_transport) ... ok
+test_endpoint_cannot_embed_credentials_or_use_cleartext (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_endpoint_cannot_embed_credentials_or_use_cleartext) ... ok
+test_gate_missing_failed_or_wrong_denominator_blocks_transport (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_gate_missing_failed_or_wrong_denominator_blocks_transport) ... ok
+test_json_object_mode_is_explicit_and_disallowed_with_tools (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_json_object_mode_is_explicit_and_disallowed_with_tools) ... ok
+test_missing_gate_configuration_denied (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_missing_gate_configuration_denied) ... ok
+test_model_authority_and_malformed_json_fail_closed (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_model_authority_and_malformed_json_fail_closed) ... ok
+test_preflight_checks_gate_but_creates_no_files_or_calls (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_preflight_checks_gate_but_creates_no_files_or_calls) ... ok
+test_redirect_handler_blocks_cross_origin_and_same_origin_redirects (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_redirect_handler_blocks_cross_origin_and_same_origin_redirects) ... /usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 302: 'redirect'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_required_mode_refuses_non_durable_entry (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_mode_refuses_non_durable_entry) ... ok
+test_required_provider_uses_actual_adapter_three_stages_and_replays (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_required_provider_uses_actual_adapter_three_stages_and_replays) ... ok
+test_transport_failure_is_sanitized_terminal_and_never_allocates (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_transport_failure_is_sanitized_terminal_and_never_allocates) ... ok
+test_unsolicited_modern_and_legacy_tools_rejected_before_workers (tests.test_ceo_provider_entrypoint.CEOProviderEntrypointTests.test_unsolicited_modern_and_legacy_tools_rejected_before_workers) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "97c1791371559703a5b886ffab7568fd2a58eb980aa96164c8cdf0af5a270bac", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ManagerReviewRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ManagerReviewRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ManagerReviewRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ManagerReviewRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ManagerReviewRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ManagerReviewRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ProviderRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "6a0a56cf9d97140d2a53d15539d00766fcc6c8c3ce8bff50afdb5a0cbd859c89", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ProviderRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ProviderRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ProviderRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ProviderRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ProviderRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ProviderRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ProviderRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_gpt6_sol_uses_completion_token_limit (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_gpt6_sol_uses_completion_token_limit) ... ok
+test_invalid_output_token_bound_never_opens_network (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_invalid_output_token_bound_never_opens_network) ... ok
+test_luna_uses_bounded_none_reasoning_effort (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_luna_uses_bounded_none_reasoning_effort) ... ok
+test_output_tokens_are_sent_and_large_wire_response_is_terminal (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_output_tokens_are_sent_and_large_wire_response_is_terminal) ... ok
+test_dispatch_routes_by_validated_task_identity (tests.test_provider_dispatch_transport.RoleModelRoutingTests.test_dispatch_routes_by_validated_task_identity) ... ok
+test_operator_model_mapping (tests.test_provider_dispatch_transport.RoleModelRoutingTests.test_operator_model_mapping) ... ok
+test_ceo_schema_names_are_mapped_to_api_safe_function_names (tests.test_ceo_provider.CEOProviderTests.test_ceo_schema_names_are_mapped_to_api_safe_function_names) ... ok
+test_provider_has_no_generic_model_tools (tests.test_ceo_provider.CEOProviderTests.test_provider_has_no_generic_model_tools) ... ok
+test_provider_requires_explicit_configuration (tests.test_ceo_provider.CEOProviderTests.test_provider_requires_explicit_configuration) ... ok
+test_trace_fail_records_invalid_response_envelope (tests.test_ceo_provider.CEOProviderTests.test_trace_fail_records_invalid_response_envelope) ... ok
+test_trace_pass_requires_valid_response_envelope (tests.test_ceo_provider.CEOProviderTests.test_trace_pass_requires_valid_response_envelope) ... ok
+test_invalid_workflow_id_denied (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_invalid_workflow_id_denied) ... ok
+test_validated_workflow_id_is_not_discarded (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_validated_workflow_id_is_not_discarded) ... ok
+
+======================================================================
+ERROR: test_provider_dispatch (unittest.loader._FailedTest.test_provider_dispatch)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_provider_dispatch
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+  File "/home/epsilon/venture-control-workspace/tests/test_provider_dispatch.py", line 15, in <module>
+    import test_authenticated_handoff as fixtures
+ModuleNotFoundError: No module named 'test_authenticated_handoff'
+
+
+----------------------------------------------------------------------
+Ran 82 tests in 24.696s
+
+FAILED (errors=1)

@@ -1,0 +1,782 @@
+test_broker_listener_restart_retains_original_complete_result (tests.test_ceo_broker.CEOBrokerTests.test_broker_listener_restart_retains_original_complete_result) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_concurrent_exact_retries_execute_once_and_charge_once (tests.test_ceo_broker.CEOBrokerTests.test_concurrent_exact_retries_execute_once_and_charge_once) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_exact_binding_tampering_and_live_revocation_fail_closed (tests.test_ceo_broker.CEOBrokerTests.test_exact_binding_tampering_and_live_revocation_fail_closed) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_missing_or_inconsistent_evidence_never_bootstraps_or_mutates (tests.test_ceo_broker.CEOBrokerTests.test_missing_or_inconsistent_evidence_never_bootstraps_or_mutates) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_pending_provider_outcome_survives_restart_and_never_reexecutes (tests.test_ceo_broker.CEOBrokerTests.test_pending_provider_outcome_survives_restart_and_never_reexecutes) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_pinned_certificates_and_manager_worker_routes_remain_isolated (tests.test_ceo_broker.CEOBrokerTests.test_pinned_certificates_and_manager_worker_routes_remain_isolated) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_proof_schema_rejects_uncorrelated_broker_reply (tests.test_ceo_broker.CEOBrokerTests.test_proof_schema_rejects_uncorrelated_broker_reply) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_readonly_absent_exact_complete_proof_and_response_replay (tests.test_ceo_broker.CEOBrokerTests.test_readonly_absent_exact_complete_proof_and_response_replay) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_readonly_orphan_charge_and_changed_signed_snapshot_are_denied (tests.test_ceo_broker.CEOBrokerTests.test_readonly_orphan_charge_and_changed_signed_snapshot_are_denied) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_real_synthetic_client_exit_after_charge_and_response (tests.test_ceo_broker.CEOBrokerTests.test_real_synthetic_client_exit_after_charge_and_response) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+/home/epsilon/venture-control-workspace/tests/test_ceo_broker.py:246: DeprecationWarning: This process (pid=2495533) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+ok
+test_two_created_signed_ventures_cannot_borrow_ceo_reservation (tests.test_ceo_broker.CEOBrokerTests.test_two_created_signed_ventures_cannot_borrow_ceo_reservation) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_unpinned_or_malformed_proof_has_no_provider_or_ledger_effect (tests.test_ceo_broker.CEOBrokerTests.test_unpinned_or_malformed_proof_has_no_provider_or_ledger_effect) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_ambiguous_execution_explicitly_blocks_without_retry (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_ambiguous_execution_explicitly_blocks_without_retry) ... ok
+test_changed_attempt_identity_context_or_policy_cannot_reconcile (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_changed_attempt_identity_context_or_policy_cannot_reconcile) ... ok
+test_executed_response_retrieved_without_configuring_or_calling_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_executed_response_retrieved_without_configuring_or_calling_provider) ... ok
+test_future_venture_restart_after_reservation_and_after_execution (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_future_venture_restart_after_reservation_and_after_execution) ... ok
+test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof) ... ok
+test_local_session_preflight_is_readonly_and_rejects_changed_binding (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_local_session_preflight_is_readonly_and_rejects_changed_binding) ... ok
+test_manager_execution_entrypoint_cannot_select_ceo_role_from_body (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_manager_execution_entrypoint_cannot_select_ceo_role_from_body) ... ok
+test_missing_ledger_or_session_is_not_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_missing_ledger_or_session_is_not_nonexecution_proof) ... ok
+test_no_original_reservation_proves_original_was_never_executed (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_no_original_reservation_proves_original_was_never_executed) ... ok
+test_pending_checkpoint_hash_and_prompt_change_still_refused (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_pending_checkpoint_hash_and_prompt_change_still_refused) ... /home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925b70>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925f30>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f2980>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689264d0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926200>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b62f0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6f20>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926110>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926980>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6200>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6a70>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689274c0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689275b0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927a60>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927c40>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926f20>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927970>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927100>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689276a0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689271f0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926020>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927880>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927b50>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927f10>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927d30>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668130>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668220>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668400>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676686d0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676687c0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/agents/ceo/provider_reservation.py:70: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676689a0>
+  db.execute("COMMIT")
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot) ... ok
+test_quota_exhaustion_blocks_unreserved_intent_without_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_blocks_unreserved_intent_without_provider) ... ok
+test_reserved_unexecuted_same_identity_attempt_authorization_only (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_reserved_unexecuted_same_identity_attempt_authorization_only) ... ok
+test_revoked_authority_blocks_unstarted_and_completed_replay (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_revoked_authority_blocks_unstarted_and_completed_replay) ... ok
+test_split_local_and_broker_authority_blocks_before_remote_charge (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_split_local_and_broker_authority_blocks_before_remote_charge) ... ok
+test_all_required_configuration_is_explicit (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_all_required_configuration_is_explicit) ... ok
+test_cutover_rejects_overlap_duplicate_pins_and_missing_worker_trust (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_cutover_rejects_overlap_duplicate_pins_and_missing_worker_trust) ... ok
+test_import_never_starts_listener (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_import_never_starts_listener) ... ok
+test_invalid_pins_rejected (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_invalid_pins_rejected) ... ok
+test_registry_absent_retains_legacy_current_and_rollover_mode (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_registry_absent_retains_legacy_current_and_rollover_mode) ... ok
+test_two_legacy_pins_coexist_with_three_workers_and_bind_all_mailboxes (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_two_legacy_pins_coexist_with_three_workers_and_bind_all_mailboxes) ... ok
+test_worker_callbacks_preserve_tls_authenticated_actor (tests.test_broker_mtls_entrypoint.MTLSServerEntrypointTests.test_worker_callbacks_preserve_tls_authenticated_actor) ... ok
+test_bad_pin_configuration (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_bad_pin_configuration) ... ok
+test_capability_health_unchanged (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_capability_health_unchanged) ... ok
+test_capability_malformed_request (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_capability_malformed_request) ... ok
+test_certificate_rollover_and_revocation_pinset (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_certificate_rollover_and_revocation_pinset) ... ok
+test_expired_real_certificate_and_live_pin_rollover (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_expired_real_certificate_and_live_pin_rollover) ... ok
+test_five_pin_cutover_tls_actor_and_renewal_isolation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_five_pin_cutover_tls_actor_and_renewal_isolation) ... ok
+test_hostname_mismatch (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_hostname_mismatch) ... ok
+test_missing_certificate_denied (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_missing_certificate_denied) ... ok
+test_non_executing_poll_no_fallback (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_non_executing_poll_no_fallback) ... ok
+test_plaintext_rejected (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_plaintext_rejected) ... ok
+test_polling_isolation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_polling_isolation) ... ok
+test_recovery_after_tls_rejection (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_recovery_after_tls_rejection) ... ok
+test_secure_recovery_rehearsal (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_secure_recovery_rehearsal) ... ok
+test_tls_worker_actor_mapping_inference_and_impersonation (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_tls_worker_actor_mapping_inference_and_impersonation) ... ok
+test_wire_capability_decision_states (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wire_capability_decision_states) ... ok
+test_worker_and_manager_csr_mailboxes_are_key_bound_and_role_isolated (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_and_manager_csr_mailboxes_are_key_bound_and_role_isolated) ... ok
+test_worker_registration_limits_and_only_legacy_may_roll_over (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_registration_limits_and_only_legacy_may_roll_over) ... ok
+test_worker_registry_rejects_duplicate_tls_keys_and_unregistered_actors (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_worker_registry_rejects_duplicate_tls_keys_and_unregistered_actors) ... ok
+test_wrong_ca_denied (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wrong_ca_denied) ... ok
+test_wrong_methods_and_query (tests.test_broker_isolated_mtls.BrokerMtlsTests.test_wrong_methods_and_query) ... ok
+test_invalid_workflow_id_denied (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_invalid_workflow_id_denied) ... ok
+test_validated_workflow_id_is_not_discarded (tests.test_hierarchy_providers.HierarchyProviderConfigTests.test_validated_workflow_id_is_not_discarded) ... ok
+test_ceo_entrypoint_uses_https_and_never_opens_local_authority (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_entrypoint_uses_https_and_never_opens_local_authority) ... {"operational_authority":false,"scope":"PREPARATION_ONLY","status":"WAITING_ACK","worker_execution":false}
+ok
+test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_pin_has_reservation_scope_only_and_body_cannot_select_role) ... ok
+test_ceo_remote_model_ambiguity_never_falls_back (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_model_ambiguity_never_falls_back) ... ok
+test_ceo_remote_quota_accepts_local_provider_without_broker_binding (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_remote_quota_accepts_local_provider_without_broker_binding) ... ok
+test_ceo_retry_changes_and_corrupt_quota_fail_closed (tests.test_level2c_central_roles.CentralRolesTests.test_ceo_retry_changes_and_corrupt_quota_fail_closed) ... ok
+test_concurrent_fresh_ceo_bootstrap_is_one_charge (tests.test_level2c_central_roles.CentralRolesTests.test_concurrent_fresh_ceo_bootstrap_is_one_charge) ... ok
+test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling (tests.test_level2c_central_roles.CentralRolesTests.test_fresh_ceo_bootstrap_manager_dependency_retry_and_shared_ceiling) ... ok
+test_gateway_execution_requires_prior_reservation_and_caches_exact_result (tests.test_level2c_central_roles.CentralRolesTests.test_gateway_execution_requires_prior_reservation_and_caches_exact_result) ... ok
+test_hierarchy_manager_system_allowed_only_for_signed_matching_state (tests.test_level2c_central_roles.CentralRolesTests.test_hierarchy_manager_system_allowed_only_for_signed_matching_state) ... ok
+test_manager_adapter_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_adapter_restart_recovers_broker_complete_without_duplicate) ... ok
+test_manager_reconciliation_all_states_and_tampering_without_paid_retry (tests.test_level2c_central_roles.CentralRolesTests.test_manager_reconciliation_all_states_and_tampering_without_paid_retry) ... ok
+test_manager_review_restart_recovers_broker_complete_without_duplicate (tests.test_level2c_central_roles.CentralRolesTests.test_manager_review_restart_recovers_broker_complete_without_duplicate) ... ok
+test_mtls_manager_execution_endpoint_and_ceo_denial (tests.test_level2c_central_roles.CentralRolesTests.test_mtls_manager_execution_endpoint_and_ceo_denial) ... ok
+test_provider_backed_local_model_is_forbidden (tests.test_level2c_central_roles.CentralRolesTests.test_provider_backed_local_model_is_forbidden) ... ok
+test_recovered_legacy_context_reuses_binding_without_quota_reset (tests.test_level2c_central_roles.CentralRolesTests.test_recovered_legacy_context_reuses_binding_without_quota_reset) ... ok
+test_research_round_session_binds_to_venture_workflow (tests.test_level2c_central_roles.CentralRolesTests.test_research_round_session_binds_to_venture_workflow) ... /home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968b762f0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f26b0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6b60>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6890>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b62f0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6a70>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6200>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b67a0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b63e0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b65c0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927d30>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689271f0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689275b0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925990>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968924f40>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689266b0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668a90>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668130>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676698a0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669d50>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a980>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ab60>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b2e0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b1f0>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b970>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766bb50>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752cb80>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752cc70>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/home/epsilon/venture-control-workspace/kernel/broker/isolated_mtls.py:69: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752cd60>
+  class GuardedHandler(ExistingBrokerHandler):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "97c1791371559703a5b886ffab7568fd2a58eb980aa96164c8cdf0af5a270bac", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_REVIEW", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ManagerReviewRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ManagerReviewRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ManagerReviewRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ManagerReviewRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ManagerReviewRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ManagerReviewRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ManagerReviewRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ManagerReviewRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_lost_response_poll_and_restart_use_same_intent_without_another_call (tests.test_research_recovery.ProviderRecoveryTests.test_lost_response_poll_and_restart_use_same_intent_without_another_call) ... {"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "status": "RESEARCH_TASK_BLOCKED", "error_type": "OSError", "reason": "RECONCILIATION_REQUIRED", "snapshot_sha256": "6a0a56cf9d97140d2a53d15539d00766fcc6c8c3ce8bff50afdb5a0cbd859c89", "next_action": "Next poll reconciles the original intent through the broker ledger.", "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "workflow_id": "research-aaaaaaaaaaaaaaaaaaaaaaaa", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_malformed_durable_intents_refuse_before_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_malformed_durable_intents_refuse_before_remote_io) ... ok
+test_multiple_original_intents_fail_closed_without_remote_io (tests.test_research_recovery.ProviderRecoveryTests.test_multiple_original_intents_fail_closed_without_remote_io) ... ok
+test_non_research_intent_remains_ambiguous (tests.test_research_recovery.ProviderRecoveryTests.test_non_research_intent_remains_ambiguous) ... ok
+test_pending_is_terminal_and_never_retried (tests.test_research_recovery.ProviderRecoveryTests.test_pending_is_terminal_and_never_retried) ... ok
+test_prompt_change_cannot_mint_another_paid_identity (tests.test_research_recovery.ProviderRecoveryTests.test_prompt_change_cannot_mint_another_paid_identity) ... ok
+test_remote_complete_response_loss_recovers_without_paid_call (tests.test_research_recovery.ProviderRecoveryTests.test_remote_complete_response_loss_recovers_without_paid_call) ... ok
+test_restart_never_started_uses_original_identity_attempt_and_one_execution (tests.test_research_recovery.ProviderRecoveryTests.test_restart_never_started_uses_original_identity_attempt_and_one_execution) ... ok
+test_stale_snapshot_and_role_denied_before_reconciliation (tests.test_research_recovery.ProviderRecoveryTests.test_stale_snapshot_and_role_denied_before_reconciliation) ... ok
+test_tampered_status_hash_and_unknown_state_fail_closed (tests.test_research_recovery.ProviderRecoveryTests.test_tampered_status_hash_and_unknown_state_fail_closed) ... ok
+test_client_rejects_invalid_counts_and_query_errors (tests.test_research_reservation_counts.ResearchCountTests.test_client_rejects_invalid_counts_and_query_errors) ... ok
+test_missing_corrupt_ledger_and_unsigned_state_fail_closed (tests.test_research_reservation_counts.ResearchCountTests.test_missing_corrupt_ledger_and_unsigned_state_fail_closed) ... /usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 503: 'Service Unavailable'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 400: 'Bad Request'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_retained_counts_read_only_modes_and_stale_snapshot (tests.test_research_reservation_counts.ResearchCountTests.test_retained_counts_read_only_modes_and_stale_snapshot) ... ok
+test_round_four_and_cumulative_twelve_trigger_existing_hold_path (tests.test_research_reservation_counts.ResearchCountTests.test_round_four_and_cumulative_twelve_trigger_existing_hold_path) ... ok
+test_tls_roles_exact_workflow_and_missing_state_denied (tests.test_research_reservation_counts.ResearchCountTests.test_tls_roles_exact_workflow_and_missing_state_denied) ... ok
+test_assignments_share_existing_workflow_ceiling_and_daily_ledger (tests.test_worker_inference.WorkerInferenceTests.test_assignments_share_existing_workflow_ceiling_and_daily_ledger) ... ok
+test_caller_cannot_supply_venture_accounting_scope (tests.test_worker_inference.WorkerInferenceTests.test_caller_cannot_supply_venture_accounting_scope) ... ok
+test_central_ceiling_failure_rolls_back_worker_reservation (tests.test_worker_inference.WorkerInferenceTests.test_central_ceiling_failure_rolls_back_worker_reservation) ... ok
+test_concurrent_reservations_cannot_exceed_shared_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_concurrent_reservations_cannot_exceed_shared_ceiling) ... ok
+test_current_downgrade_denies_before_charging (tests.test_worker_inference.WorkerInferenceTests.test_current_downgrade_denies_before_charging) ... ok
+test_distinct_signed_workflows_each_have_four_calls_for_same_venture (tests.test_worker_inference.WorkerInferenceTests.test_distinct_signed_workflows_each_have_four_calls_for_same_venture) ... ok
+test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow (tests.test_worker_inference.WorkerInferenceTests.test_downgrade_then_raise_and_new_epoch_do_not_replenish_workflow) ... ok
+test_exact_reservation_duplicate_at_limit_and_changed_replay (tests.test_worker_inference.WorkerInferenceTests.test_exact_reservation_duplicate_at_limit_and_changed_replay) ... ok
+test_execution_rechecks_hold_and_request_assignment_binding (tests.test_worker_inference.WorkerInferenceTests.test_execution_rechecks_hold_and_request_assignment_binding) ... ok
+test_failed_provider_attempt_is_never_refunded_or_reexecuted (tests.test_worker_inference.WorkerInferenceTests.test_failed_provider_attempt_is_never_refunded_or_reexecuted) ... ok
+test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart (tests.test_worker_inference.WorkerInferenceTests.test_four_call_limit_survives_new_identity_attempt_policy_epoch_and_restart) ... ok
+test_legacy_signed_audit_remains_verifiable_after_inference_retirement (tests.test_worker_inference.WorkerInferenceTests.test_legacy_signed_audit_remains_verifiable_after_inference_retirement) ... ok
+test_multiworker_policy_shares_one_budget_under_concurrency (tests.test_worker_inference.WorkerInferenceTests.test_multiworker_policy_shares_one_budget_under_concurrency) ... ok
+test_only_enrolled_worker_policies_are_valid (tests.test_worker_inference.WorkerInferenceTests.test_only_enrolled_worker_policies_are_valid) ... ok
+test_policy_change_cannot_expand_existing_workflow_ceiling (tests.test_worker_inference.WorkerInferenceTests.test_policy_change_cannot_expand_existing_workflow_ceiling) ... ok
+test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider (tests.test_worker_inference.WorkerInferenceTests.test_preapproval_and_legacy_delegation_fail_before_reservation_or_provider) ... ok
+test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal (tests.test_worker_inference.WorkerInferenceTests.test_rehashed_dependency_snapshot_tamper_denied_by_durable_journal) ... ok
+test_requires_signed_worker_delegate_and_central_reservation (tests.test_worker_inference.WorkerInferenceTests.test_requires_signed_worker_delegate_and_central_reservation) ... ok
+test_reservation_precedes_real_execution_and_exact_retry_is_cached (tests.test_worker_inference.WorkerInferenceTests.test_reservation_precedes_real_execution_and_exact_retry_is_cached) ... ok
+test_retired_worker_rows_remain_charged_and_new_calls_are_denied (tests.test_worker_inference.WorkerInferenceTests.test_retired_worker_rows_remain_charged_and_new_calls_are_denied) ... ok
+test_simultaneous_execution_cannot_call_provider_twice (tests.test_worker_inference.WorkerInferenceTests.test_simultaneous_execution_cannot_call_provider_twice) ... ok
+test_stale_snapshot_denied_after_sibling_completion (tests.test_worker_inference.WorkerInferenceTests.test_stale_snapshot_denied_after_sibling_completion) ... ok
+test_two_full_workflows_share_central_daily_request_and_token_limits (tests.test_worker_inference.WorkerInferenceTests.test_two_full_workflows_share_central_daily_request_and_token_limits) ... ok
+test_unapproved_proposal_denied (tests.test_worker_inference.WorkerInferenceTests.test_unapproved_proposal_denied) ... ok
+test_unattributable_history_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unattributable_history_fails_closed) ... ok
+test_unknown_old_workflow_does_not_require_its_current_journal (tests.test_worker_inference.WorkerInferenceTests.test_unknown_old_workflow_does_not_require_its_current_journal) ... ok
+test_unverifiable_relevant_historical_ceiling_fails_closed (tests.test_worker_inference.WorkerInferenceTests.test_unverifiable_relevant_historical_ceiling_fails_closed) ... ok
+test_workflow_approves_fixture_actor_only (tests.test_worker_inference.WorkerInferenceTests.test_workflow_approves_fixture_actor_only) ... ok
+test_wrong_worker_denied_and_all_independent_workers_can_run (tests.test_worker_inference.WorkerInferenceTests.test_wrong_worker_denied_and_all_independent_workers_can_run) ... ok
+test_call_reserved_before_transport_and_failed_call_cannot_retry (tests.test_provider_dispatch.ProviderDispatchTests.test_call_reserved_before_transport_and_failed_call_cannot_retry) ... ok
+test_completed_history_replays_after_receipt_expiry_without_renewal (tests.test_provider_dispatch.ProviderDispatchTests.test_completed_history_replays_after_receipt_expiry_without_renewal) ... ok
+test_completed_packet_tamper_denies_replay_without_inference (tests.test_provider_dispatch.ProviderDispatchTests.test_completed_packet_tamper_denies_replay_without_inference) ... /usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766bc40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766be20>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766bf10>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766bd30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766bb50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b970>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b790>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b880>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ba60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b5b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b6a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b010>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b4c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b100>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b3d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b1f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766b2e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ae30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766af20>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a7a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ad40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ac50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766ab60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766aa70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a5c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a6b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a200>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a980>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a3e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669e40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669b70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96766a020>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669f30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669c60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669a80>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669d50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669990>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967669300>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676689a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668400>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676687c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676693f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676698a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668130>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668310>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668220>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676688b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676686d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc967668a90>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9676685e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925c60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927010>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926d40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926a70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925e40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925210>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925030>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689249a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968924d60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968924b80>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689272e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926b60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689258a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925a80>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925120>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689265c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689256c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927b50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927d30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925f30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926e30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926890>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926f20>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689264d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968924e50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968b771f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f26b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f04f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f1b70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968b762f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689266b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968926200>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968925d50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689276a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b63e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b65c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6200>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6a70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b62f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6b60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc968927c40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689275b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689274c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752cd60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752cc70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c400>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c4f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c6d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c5e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c040>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9689f08b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752c220>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc9688b6890>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d210>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d3f0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d300>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d4e0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d6c0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d5d0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d7b0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d990>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752d8a0>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752da80>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752dc60>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752db70>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752dd50>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752df30>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752de40>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752e020>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752e200>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/usr/lib/python3.14/unittest/mock.py:2259: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7bc96752e110>
+  def __init__(self, name, parent):
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_correct_blocks_owner_submission (tests.test_provider_dispatch.ProviderDispatchTests.test_correct_blocks_owner_submission) ... ok
+test_crash_after_reservation_is_terminal_across_new_grant (tests.test_provider_dispatch.ProviderDispatchTests.test_crash_after_reservation_is_terminal_across_new_grant) ... ok
+test_existing_runtime_delegation_correction_checks_and_final_review (tests.test_provider_dispatch.ProviderDispatchTests.test_existing_runtime_delegation_correction_checks_and_final_review) ... ok
+test_fixture_advisory_never_dispatches (tests.test_provider_dispatch.ProviderDispatchTests.test_fixture_advisory_never_dispatches) ... ok
+test_hold_blocks_owner_submission (tests.test_provider_dispatch.ProviderDispatchTests.test_hold_blocks_owner_submission) ... ok
+test_hold_or_revision_prevents_dispatch (tests.test_provider_dispatch.ProviderDispatchTests.test_hold_or_revision_prevents_dispatch) ... ok
+test_missing_task_grant_uses_standing_authority (tests.test_provider_dispatch.ProviderDispatchTests.test_missing_task_grant_uses_standing_authority) ... ok
+test_per_call_expiry_changed_assignment_tools_input_and_count (tests.test_provider_dispatch.ProviderDispatchTests.test_per_call_expiry_changed_assignment_tools_input_and_count) ... ok
+test_runtime_change_between_calls_denies_transport (tests.test_provider_dispatch.ProviderDispatchTests.test_runtime_change_between_calls_denies_transport) ... ok
+test_runtime_dependency_missing_fails_before_reservation (tests.test_provider_dispatch.ProviderDispatchTests.test_runtime_dependency_missing_fails_before_reservation) ... ok
+test_runtime_source_tamper_denies_replay (tests.test_provider_dispatch.ProviderDispatchTests.test_runtime_source_tamper_denies_replay) ... ok
+test_scheduler_cli_routes_assignment_without_manual_worker_handoff (tests.test_provider_dispatch.ProviderDispatchTests.test_scheduler_cli_routes_assignment_without_manual_worker_handoff) ... ok
+test_signature_scope_runtime_configuration_and_budget_denials (tests.test_provider_dispatch.ProviderDispatchTests.test_signature_scope_runtime_configuration_and_budget_denials) ... ok
+test_wrong_final_evidence_binding_cannot_create_owner_packet_or_retry (tests.test_provider_dispatch.ProviderDispatchTests.test_wrong_final_evidence_binding_cannot_create_owner_packet_or_retry) ... ok
+test_gpt6_sol_uses_completion_token_limit (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_gpt6_sol_uses_completion_token_limit) ... ok
+test_invalid_output_token_bound_never_opens_network (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_invalid_output_token_bound_never_opens_network) ... ok
+test_luna_uses_bounded_none_reasoning_effort (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_luna_uses_bounded_none_reasoning_effort) ... ok
+test_output_tokens_are_sent_and_large_wire_response_is_terminal (tests.test_provider_dispatch_transport.ProviderDispatchTransportTests.test_output_tokens_are_sent_and_large_wire_response_is_terminal) ... ok
+test_dispatch_routes_by_validated_task_identity (tests.test_provider_dispatch_transport.RoleModelRoutingTests.test_dispatch_routes_by_validated_task_identity) ... ok
+test_operator_model_mapping (tests.test_provider_dispatch_transport.RoleModelRoutingTests.test_operator_model_mapping) ... ok
+
+----------------------------------------------------------------------
+Ran 149 tests in 70.437s
+
+OK
