@@ -1,0 +1,624 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "a0c615e707f13c981160c40a9e79023397a84e7c\n",
+    "stderr": ""
+  },
+  "date": {
+    "argv": [
+      "date",
+      "-u",
+      "--iso-8601=seconds"
+    ],
+    "exit": 0,
+    "stdout": "2026-11-04T21:34:49+00:00\n",
+    "stderr": ""
+  },
+  "tracked_status": {
+    "argv": [
+      "git",
+      "status",
+      "--short",
+      "--untracked-files=no"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "services": {
+    "argv": [
+      "systemctl",
+      "show",
+      "venture-owner-research-ceo.service",
+      "venture-control-broker-mtls.service",
+      "--property=Id,ActiveState,SubState,MainPID,NRestarts,ExecMainStartTimestamp,WorkingDirectory,Requires,After,KillMode,TimeoutStopUSec"
+    ],
+    "exit": 0,
+    "stdout": "Id=venture-owner-research-ceo.service\nRequires=venture-control-broker-mtls.service -.mount system.slice sysinit.target\nAfter=network-online.target -.mount basic.target tmp.mount venture-control-broker-mtls.service systemd-tmpfiles-setup.service sysinit.target system.slice systemd-journald.socket\nActiveState=active\nSubState=running\nTimeoutStopUSec=1min 30s\nMainPID=288443\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\nKillMode=control-group\n\nId=venture-control-broker-mtls.service\nRequires=-.mount opa.service sysinit.target system.slice\nAfter=systemd-journald.socket system.slice basic.target -.mount opa.service network-online.target sysinit.target tmp.mount systemd-tmpfiles-setup.service\nActiveState=active\nSubState=running\nTimeoutStopUSec=1min 30s\nMainPID=288442\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nWorkingDirectory=/usr/local/lib/venture-control-broker-level2c\nKillMode=control-group\n",
+    "stderr": ""
+  },
+  "modules": [
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_service.py",
+      "sha256": "9d381a28bab4287bac6a440704862c69543a4f251f78e98dc4d0ec988d01ff02",
+      "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+      "matches_head": false,
+      "historical_matches": [
+        "8e999120254d2e8ad859ce9ae0bfc5dfb1b9fc9d"
+      ],
+      "imports": [
+        {
+          "module": [
+            "argparse"
+          ]
+        },
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "os"
+          ]
+        },
+        {
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "level": 0
+        },
+        {
+          "module": [
+            "time"
+          ]
+        },
+        {
+          "module": "cryptography.hazmat.primitives.asymmetric.ed25519",
+          "names": [
+            "Ed25519PrivateKey"
+          ],
+          "level": 0
+        },
+        {
+          "module": "cryptography.hazmat.primitives.serialization",
+          "names": [
+            "Encoding",
+            "PublicFormat"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.control_plane",
+          "names": [
+            "load_trust"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_client",
+          "names": [
+            "HierarchyClient"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "HierarchyRunner"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_model_callbacks",
+          "names": [
+            "ModelRoleCallback"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_providers",
+          "names": [
+            "HierarchyProvider",
+            "RecoveryImpossible"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_research_daemon",
+          "names": [
+            "STATES",
+            "allowed_config"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "hashed"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_exercise",
+          "names": [
+            "configured_provider"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "ready_assignment"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-ceo-level2c-hierarchy_service.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_providers.py",
+      "sha256": "c5ea998e86824c9e189ab6983d2ec0d08b44b9a809f346b67e29ef5165255e04",
+      "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+      "matches_head": false,
+      "historical_matches": [
+        "dd1dff63387cb7a1494a2da87c793de8f699d908"
+      ],
+      "imports": [
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "sqlite3"
+          ]
+        },
+        {
+          "module": [
+            "uuid"
+          ]
+        },
+        {
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.escalation_inbox",
+          "names": [
+            "canonical",
+            "digest",
+            "exact",
+            "identifier"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "hashed"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "automatic_revision_allowed"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "research_session"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "ready_assignment"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-ceo-level2c-hierarchy_providers.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/provider_gateway.py",
+      "sha256": "a584280fc4795efff1695f9af7bf4ea8268ceaafae3bf95cb275a76b46ac60ab",
+      "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+      "matches_head": false,
+      "historical_matches": [
+        "2c66b35d668b5c7f69a204327cabf339d8e933ff"
+      ],
+      "imports": [
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "sqlite3"
+          ]
+        },
+        {
+          "module": [
+            "stat"
+          ]
+        },
+        {
+          "module": "agents.ceo.escalation_inbox",
+          "names": [
+            "canonical",
+            "digest",
+            "exact",
+            "inside_root"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo",
+          "names": [
+            "service_identity"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.provider_reservation",
+          "names": [
+            "reserve_exchange"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.preparation_exchange",
+          "names": [
+            "SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_model_callbacks",
+          "names": [
+            "SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.preparation_exchange",
+          "names": [
+            "SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_exercise",
+          "names": [
+            "strict_json"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "hashed"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-ceo-level2c-provider_gateway.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_service.py",
+      "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+      "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+      "matches_head": false,
+      "historical_matches": [
+        "44ccadd8919669eca54c04d2a91e6a85f6dfd880"
+      ],
+      "imports": [
+        {
+          "module": [
+            "argparse"
+          ]
+        },
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "os"
+          ]
+        },
+        {
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "level": 0
+        },
+        {
+          "module": [
+            "time"
+          ]
+        },
+        {
+          "module": "cryptography.hazmat.primitives.asymmetric.ed25519",
+          "names": [
+            "Ed25519PrivateKey"
+          ],
+          "level": 0
+        },
+        {
+          "module": "cryptography.hazmat.primitives.serialization",
+          "names": [
+            "Encoding",
+            "PublicFormat"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.control_plane",
+          "names": [
+            "load_trust"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_client",
+          "names": [
+            "HierarchyClient"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "HierarchyRunner"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_model_callbacks",
+          "names": [
+            "ModelRoleCallback"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_providers",
+          "names": [
+            "HierarchyProvider"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_exercise",
+          "names": [
+            "configured_provider"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-control-broker-level2c-hierarchy_service.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_providers.py",
+      "sha256": "f8563851eb3625032e01c8077b0757972a1348506a51ef5144c0cb0839a73f91",
+      "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+      "matches_head": false,
+      "historical_matches": [
+        "cb2b56741ce368815d66d7fee2b027d4c14f1287"
+      ],
+      "imports": [
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "sqlite3"
+          ]
+        },
+        {
+          "module": [
+            "uuid"
+          ]
+        },
+        {
+          "module": "pathlib",
+          "names": [
+            "Path"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.escalation_inbox",
+          "names": [
+            "canonical",
+            "digest",
+            "exact",
+            "identifier"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "hashed"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "automatic_revision_allowed"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "research_session"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_runner",
+          "names": [
+            "ready_assignment"
+          ],
+          "level": 0
+        },
+        {
+          "module": [
+            "os"
+          ]
+        }
+      ],
+      "diff": "venture-control-broker-level2c-hierarchy_providers.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/provider_gateway.py",
+      "sha256": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813",
+      "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+      "matches_head": false,
+      "historical_matches": [
+        "2ee5848c3ee5ef762b8a49589f97c634b7f38240"
+      ],
+      "imports": [
+        {
+          "module": [
+            "json"
+          ]
+        },
+        {
+          "module": [
+            "sqlite3"
+          ]
+        },
+        {
+          "module": [
+            "stat"
+          ]
+        },
+        {
+          "module": "agents.ceo.escalation_inbox",
+          "names": [
+            "canonical",
+            "digest",
+            "exact",
+            "inside_root"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo",
+          "names": [
+            "service_identity"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.provider_reservation",
+          "names": [
+            "reserve_exchange"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.preparation_exchange",
+          "names": [
+            "SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.hierarchy_model_callbacks",
+          "names": [
+            "SYSTEM",
+            "RESEARCH_SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.preparation_exchange",
+          "names": [
+            "SYSTEM"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_exercise",
+          "names": [
+            "strict_json"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "hashed"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-control-broker-level2c-provider_gateway.diff"
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_runner.py",
+      "sha256": "8d61c24dd45cc4783e86c04b729a5aa218c68a0df839a84e465fbcdc6575c86c",
+      "head_sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+      "matches_head": false,
+      "historical_matches": [
+        "44b0140b870c1cddcc5307b9bb302847105a56a0"
+      ],
+      "imports": [
+        {
+          "module": "copy",
+          "names": [
+            "deepcopy"
+          ],
+          "level": 0
+        },
+        {
+          "module": "datetime",
+          "names": [
+            "datetime",
+            "timedelta",
+            "timezone"
+          ],
+          "level": 0
+        },
+        {
+          "module": "agents.ceo.venture_workflow",
+          "names": [
+            "TRANSITIONS",
+            "VentureWorkflow",
+            "canonical",
+            "evidence_check",
+            "exact",
+            "hashed"
+          ],
+          "level": 0
+        }
+      ],
+      "diff": "venture-control-broker-level2c-hierarchy_runner.diff"
+    }
+  ]
+}

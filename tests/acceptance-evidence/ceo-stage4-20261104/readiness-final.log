@@ -1,0 +1,362 @@
+{
+  "ledgers_before": [
+    {
+      "exists": false,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite"
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "counts": {
+        "exchange_calls": 105,
+        "exchange_sessions": 23,
+        "remote_executions": 51,
+        "remote_reservations": 105,
+        "reservations": 157,
+        "worker_executions": 52,
+        "worker_research_charges": 39,
+        "worker_reservations": 52,
+        "remote_execution_status": {
+          "COMPLETE": 50,
+          "PENDING": 1
+        }
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "counts": {
+        "calls": 6,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "counts": {
+        "calls": 2,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 1
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    }
+  ],
+  "identity": {
+    "configured_role": "ceo",
+    "configured_actor": "service-ceo",
+    "certificate_subject": "CN=venture-level2c-ceo",
+    "certificate_sha256": "779a51031675c0f667522e8a680b11fd64e93fc7624382396176dd4c81701063",
+    "os_user_probe": "root"
+  },
+  "live_read": {
+    "authenticated_get": true,
+    "research_count": 6,
+    "states": [
+      {
+        "workflow_id": "research-206691adb1574f2c166f57e3",
+        "state": "TERMINATED",
+        "revision": 28,
+        "snapshot_sha256": "a5dd05d73cd5dab54c8f32f263d17b117e5368cf566ad8cec022188159259329",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-4e6018e70bf43a549e289b3f",
+        "state": "OWNER_REVIEW",
+        "revision": 11,
+        "snapshot_sha256": "936aa9acaab6a64dc6a74e628b7ae22541c968a1fec79b2e03d26890ac35fdd2",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-5900c3db9bb5bd74601e3f9d",
+        "state": "CEO_REVIEW",
+        "revision": 9,
+        "snapshot_sha256": "89ea3a74cf4d4b40aa2c80c94f0c068deffd648a49690ce2ea8a6c46bcd69b5e",
+        "disposed": false
+      },
+      {
+        "workflow_id": "research-59bc909391fc057b288d856f",
+        "state": "TERMINATED",
+        "revision": 22,
+        "snapshot_sha256": "719fb0d18b0b8e7f3de414017424d625380d80372f0aaa2aaa45c070634de5c2",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-6f1d60be2ee2611fa1080895",
+        "state": "OWNER_REVIEW",
+        "revision": 8,
+        "snapshot_sha256": "bab0c1298c8b1e1f6ebf09db26527673a82dc91b9782ded6a1a50d3acb50665a",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-c477fcaa9ad6bdbeda36aef7",
+        "state": "TERMINATED",
+        "revision": 21,
+        "snapshot_sha256": "7dc5b1bd2e6b59087525ff97a49d5c1cb446e8c2177c0357d1472db7f9bee397",
+        "disposed": true
+      }
+    ]
+  },
+  "ledgers_after": [
+    {
+      "exists": false,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite"
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "counts": {
+        "exchange_calls": 105,
+        "exchange_sessions": 23,
+        "remote_executions": 51,
+        "remote_reservations": 105,
+        "reservations": 157,
+        "worker_executions": 52,
+        "worker_research_charges": 39,
+        "worker_reservations": 52,
+        "remote_execution_status": {
+          "COMPLETE": 50,
+          "PENDING": 1
+        }
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "counts": {
+        "calls": 6,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "counts": {
+        "calls": 2,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 1
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    }
+  ],
+  "ledger_counts_unchanged": true
+}

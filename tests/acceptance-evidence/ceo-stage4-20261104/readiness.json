@@ -1,0 +1,936 @@
+{
+  "dependencies": [
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_gateway",
+      "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+      "head_sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_runner",
+      "sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+      "head_sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.venture_workflow",
+      "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+      "head_sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.synthetic_orchestration",
+      "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+      "head_sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.p6.registry",
+      "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+      "head_sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.escalation_inbox",
+      "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+      "head_sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.preparation_broker",
+      "sha256": "a1658699caaaca4d048db33ad2ce22d479534f8ad29b2b4bb2dbd2bc72247249",
+      "head_sha256": "a1658699caaaca4d048db33ad2ce22d479534f8ad29b2b4bb2dbd2bc72247249",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.service_identity",
+      "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd",
+      "head_sha256": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.scheduled_exercise",
+      "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+      "head_sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.advisory_queue",
+      "sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+      "head_sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.queue_recovery",
+      "sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+      "head_sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.venture_exercise",
+      "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+      "head_sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.synthetic_venture_store",
+      "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78",
+      "head_sha256": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.venture_admission",
+      "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f",
+      "head_sha256": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.provider",
+      "sha256": "5223f016aa4fe66cf4bfc6db9983fc46d76ab034f48436fb481a9e8b8d5d6aac",
+      "head_sha256": "4797d99071bdf428b30ed338e8af224acc3936dd565052fd1a36f238fc526c22",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.gates",
+      "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+      "head_sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.durable_state",
+      "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+      "head_sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.agent",
+      "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+      "head_sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.scheduled_escalation",
+      "sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+      "head_sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.scheduled_intake",
+      "sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+      "head_sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.control_plane",
+      "sha256": "602cbc3da45ce826c8b0525d5c51dd25a25f191ddc44d3cd89c0b10462000044",
+      "head_sha256": "d251c41096749970c941e15c2921d48fbc1361a2629241b527ff6aea0f4e091d",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.worker_inference",
+      "sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+      "head_sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_model_callbacks",
+      "sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+      "head_sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.owner_idea_inbox",
+      "sha256": "545f76b3550bac061fb095ad9c8381df3d22f8e7460998b1112e79731383fbef",
+      "head_sha256": "56b8440cf84ffcf3d6469812ecada3ce5161234ebc5262d8eb2a904277547a3d",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_artifact_store",
+      "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+      "head_sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.provider_reservation",
+      "sha256": "54a326f7921cf945f4cef96dc33ddd14385d1b7d4f3557d35050b25aa581f5d6",
+      "head_sha256": "b45e4713d26b2a6738bf4f899fa7709dd135e01b50dbcfc5941c50d3251e2301",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.preparation_exchange",
+      "sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+      "head_sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.provider_gateway",
+      "sha256": "a584280fc4795efff1695f9af7bf4ea8268ceaafae3bf95cb275a76b46ac60ab",
+      "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo",
+      "missing": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.cross_vm_poll_client",
+      "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+      "head_sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.broker.isolated_mtls",
+      "sha256": "aba73b7dd104d36f65cc914623d5ef86ef71013bbe32ff4b00380ca4dceddf62",
+      "head_sha256": "509aae4196eb4c79f5e6445f776a5db2ac1aa80fe734e3a8ec4c2bbeb07fc28a",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.broker.server",
+      "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+      "head_sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.broker.Broker",
+      "missing": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "kernel.broker",
+      "missing": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.cross_vm_transport",
+      "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+      "head_sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.cross_vm_poll_server",
+      "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+      "head_sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.cross_vm_outbox",
+      "sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+      "head_sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.ceo_research_review",
+      "sha256": "7b3020d4d14d9c89bb78e3f9b4ee2fb45bb231fef36b9fa9a5226b7c5028695a",
+      "head_sha256": "8b62c61ed1b00be61ec66aa5c119793471fa4a19a10da2b1c70f1bbc3c798f66",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_providers",
+      "sha256": "c5ea998e86824c9e189ab6983d2ec0d08b44b9a809f346b67e29ef5165255e04",
+      "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_research_daemon",
+      "sha256": "ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8",
+      "head_sha256": "ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_service",
+      "sha256": "9d381a28bab4287bac6a440704862c69543a4f251f78e98dc4d0ec988d01ff02",
+      "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-ceo-level2c",
+      "module": "agents.ceo.hierarchy_client",
+      "sha256": "d8b970d6e9aff474194510995285fbd7c764e631a98b1a98f50e07306f14999e",
+      "head_sha256": "d8b970d6e9aff474194510995285fbd7c764e631a98b1a98f50e07306f14999e",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_gateway",
+      "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+      "head_sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_runner",
+      "sha256": "8d61c24dd45cc4783e86c04b729a5aa218c68a0df839a84e465fbcdc6575c86c",
+      "head_sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.venture_workflow",
+      "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+      "head_sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.synthetic_orchestration",
+      "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+      "head_sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.p6.registry",
+      "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+      "head_sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.escalation_inbox",
+      "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+      "head_sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.preparation_broker",
+      "sha256": "6e49653cc39721bcd17d82e2474fee3b6f116794e6503c1a778d8a264aeb322c",
+      "head_sha256": "a1658699caaaca4d048db33ad2ce22d479534f8ad29b2b4bb2dbd2bc72247249",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.service_identity",
+      "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd",
+      "head_sha256": "0eacb61d8d4b85ddf909f70e3c7b901ff231af432c616b0c34a048ff63fbb89a",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.scheduled_exercise",
+      "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+      "head_sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.advisory_queue",
+      "sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+      "head_sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.queue_recovery",
+      "sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+      "head_sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.venture_exercise",
+      "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+      "head_sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.synthetic_venture_store",
+      "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78",
+      "head_sha256": "3f4298a412c7c3a8fe0c43c2dfbf254d8398e026ea409e74251f69bfc4c3fc96",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.venture_admission",
+      "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f",
+      "head_sha256": "af473d8938f6fc17b8a09d20e1273969291329c03e0ef6bb4c05cedc56558f1d",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.provider",
+      "sha256": "4797d99071bdf428b30ed338e8af224acc3936dd565052fd1a36f238fc526c22",
+      "head_sha256": "4797d99071bdf428b30ed338e8af224acc3936dd565052fd1a36f238fc526c22",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.gates",
+      "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+      "head_sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.durable_state",
+      "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+      "head_sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.agent",
+      "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+      "head_sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.scheduled_escalation",
+      "sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+      "head_sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.scheduled_intake",
+      "sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+      "head_sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.control_plane",
+      "sha256": "d251c41096749970c941e15c2921d48fbc1361a2629241b527ff6aea0f4e091d",
+      "head_sha256": "d251c41096749970c941e15c2921d48fbc1361a2629241b527ff6aea0f4e091d",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.worker_inference",
+      "sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+      "head_sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_model_callbacks",
+      "sha256": "f85953818641d67b60f412869e1821f84b20468e912056437307765d5a156e4b",
+      "head_sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.owner_idea_inbox",
+      "sha256": "c5bc9aba68b4ae0203da1df672b6449fe6da207c3e6e1d4baa9bb000498c635b",
+      "head_sha256": "56b8440cf84ffcf3d6469812ecada3ce5161234ebc5262d8eb2a904277547a3d",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_artifact_store",
+      "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+      "head_sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.provider_reservation",
+      "sha256": "54a326f7921cf945f4cef96dc33ddd14385d1b7d4f3557d35050b25aa581f5d6",
+      "head_sha256": "b45e4713d26b2a6738bf4f899fa7709dd135e01b50dbcfc5941c50d3251e2301",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.preparation_exchange",
+      "sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+      "head_sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.provider_gateway",
+      "sha256": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813",
+      "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo",
+      "missing": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.cross_vm_poll_client",
+      "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+      "head_sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.broker.isolated_mtls",
+      "sha256": "509aae4196eb4c79f5e6445f776a5db2ac1aa80fe734e3a8ec4c2bbeb07fc28a",
+      "head_sha256": "509aae4196eb4c79f5e6445f776a5db2ac1aa80fe734e3a8ec4c2bbeb07fc28a",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.broker.server",
+      "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+      "head_sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.broker.Broker",
+      "missing": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "kernel.broker",
+      "missing": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.cross_vm_transport",
+      "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+      "head_sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.cross_vm_poll_server",
+      "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+      "head_sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.cross_vm_outbox",
+      "sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+      "head_sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+      "matches_head": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.ceo_research_review",
+      "missing": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_research_daemon",
+      "missing": true
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_providers",
+      "sha256": "f8563851eb3625032e01c8077b0757972a1348506a51ef5144c0cb0839a73f91",
+      "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_service",
+      "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+      "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+      "matches_head": false
+    },
+    {
+      "tree": "venture-control-broker-level2c",
+      "module": "agents.ceo.hierarchy_client",
+      "sha256": "9f5cc00d120de174fd2278c80f05aa2c700a375ca3523c558981490e02340de8",
+      "head_sha256": "d8b970d6e9aff474194510995285fbd7c764e631a98b1a98f50e07306f14999e",
+      "matches_head": false
+    }
+  ],
+  "ledgers_before": [
+    {
+      "exists": false,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite"
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "counts": {
+        "exchange_calls": 105,
+        "exchange_sessions": 23,
+        "remote_executions": 51,
+        "remote_reservations": 105,
+        "reservations": 157,
+        "worker_executions": 52,
+        "worker_research_charges": 39,
+        "worker_reservations": 52,
+        "remote_execution_status": {
+          "COMPLETE": 50,
+          "PENDING": 1
+        }
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "counts": {
+        "calls": 6,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "counts": {
+        "calls": 2,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 1
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    }
+  ],
+  "identity": {
+    "configured_role": "ceo",
+    "configured_actor": "service-ceo",
+    "certificate_subject": "CN=venture-level2c-ceo",
+    "certificate_sha256": "779a51031675c0f667522e8a680b11fd64e93fc7624382396176dd4c81701063",
+    "os_user_probe": "root"
+  },
+  "live_read": {
+    "authenticated_get": true,
+    "research_count": 6,
+    "states": [
+      {
+        "workflow_id": "research-206691adb1574f2c166f57e3",
+        "state": "TERMINATED",
+        "revision": 28,
+        "snapshot_sha256": "a5dd05d73cd5dab54c8f32f263d17b117e5368cf566ad8cec022188159259329",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-4e6018e70bf43a549e289b3f",
+        "state": "OWNER_REVIEW",
+        "revision": 11,
+        "snapshot_sha256": "936aa9acaab6a64dc6a74e628b7ae22541c968a1fec79b2e03d26890ac35fdd2",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-5900c3db9bb5bd74601e3f9d",
+        "state": "CEO_REVIEW",
+        "revision": 9,
+        "snapshot_sha256": "89ea3a74cf4d4b40aa2c80c94f0c068deffd648a49690ce2ea8a6c46bcd69b5e",
+        "disposed": false
+      },
+      {
+        "workflow_id": "research-59bc909391fc057b288d856f",
+        "state": "TERMINATED",
+        "revision": 22,
+        "snapshot_sha256": "719fb0d18b0b8e7f3de414017424d625380d80372f0aaa2aaa45c070634de5c2",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-6f1d60be2ee2611fa1080895",
+        "state": "OWNER_REVIEW",
+        "revision": 8,
+        "snapshot_sha256": "bab0c1298c8b1e1f6ebf09db26527673a82dc91b9782ded6a1a50d3acb50665a",
+        "disposed": true
+      },
+      {
+        "workflow_id": "research-c477fcaa9ad6bdbeda36aef7",
+        "state": "TERMINATED",
+        "revision": 21,
+        "snapshot_sha256": "7dc5b1bd2e6b59087525ff97a49d5c1cb446e8c2177c0357d1472db7f9bee397",
+        "disposed": true
+      }
+    ]
+  },
+  "ledgers_after": [
+    {
+      "exists": false,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/preparation-authority/resources.sqlite"
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "resolved": "/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority/resources.sqlite",
+      "counts": {
+        "exchange_calls": 105,
+        "exchange_sessions": 23,
+        "remote_executions": 51,
+        "remote_reservations": 105,
+        "reservations": 157,
+        "worker_executions": 52,
+        "worker_research_charges": 39,
+        "worker_reservations": 52,
+        "remote_execution_status": {
+          "COMPLETE": 50,
+          "PENDING": 1
+        }
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/inference.sqlite",
+      "counts": {
+        "calls": 6,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-206691adb1574f2c166f57e3-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/inference.sqlite",
+      "counts": {
+        "calls": 2,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-4e6018e70bf43a549e289b3f/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-6f1d60be2ee2611fa1080895/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-5900c3db9bb5bd74601e3f9d/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 1
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r3/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-c477fcaa9ad6bdbeda36aef7-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    },
+    {
+      "exists": true,
+      "path": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "resolved": "/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4/run5/research/research-59bc909391fc057b288d856f-r2/research-review-inference.sqlite",
+      "counts": {
+        "calls": 1,
+        "calls_without_response": 0
+      }
+    }
+  ],
+  "ledger_counts_unchanged": true
+}

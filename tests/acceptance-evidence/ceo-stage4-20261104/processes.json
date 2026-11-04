@@ -1,0 +1,78 @@
+{
+  "classification": "Bridge process records; completed root-contained logs were read.",
+  "initial_provenance": {
+    "id": "proc_mw2mvaih_elhnef",
+    "pid": 1762153,
+    "status": "exited",
+    "log": "inspect.log",
+    "exit_file": "inspect.exit"
+  },
+  "processes": [
+    {
+      "id": "proc_mw2mw9bz_91ivyq",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "mkdir -p artifacts/ceo-stage4-tmp; TMPDIR=\"$PWD/artifacts/ceo-stage4-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\" timeout 120s python3 -B -m unittest tests.test_ceo_pending_recovery tests.test_research_recovery tests.test_ceo_research_mtls_acceptance tests.test_ceo_three_round_mtls tests.test_research_poll_isolation tests.test_hierarchy_providers -v > tests/acceptance-evidence/ceo-stage4-20261104/focused.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/focused.exit; exit \"$result\"",
+      "pid": 1772828,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2mw9bz_91ivyq.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:33:53.855Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    },
+    {
+      "id": "proc_mw2mxfzm_mtt3xb",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-stage4-20261104/readiness.py > tests/acceptance-evidence/ceo-stage4-20261104/readiness.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/readiness.exit; exit \"$result\"",
+      "pid": 1786718,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2mxfzm_mtt3xb.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:34:49.138Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    },
+    {
+      "id": "proc_mw2my35w_d1gbku",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-stage4-20261104/readiness.py > tests/acceptance-evidence/ceo-stage4-20261104/readiness-final.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/readiness-final.exit; exit \"$result\"",
+      "pid": 1793144,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2my35w_d1gbku.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:35:19.172Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    },
+    {
+      "id": "proc_mw2mzqzn_vq25bv",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-stage4-20261104/verify_readonly.py > tests/acceptance-evidence/ceo-stage4-20261104/verify.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/verify.exit; exit \"$result\"",
+      "pid": 1808031,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2mzqzn_vq25bv.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:36:36.707Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    },
+    {
+      "id": "proc_mw2n0rwg_11udnk",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "sudo -n python3 -B tests/acceptance-evidence/ceo-stage4-20261104/verify_readonly.py > tests/acceptance-evidence/ceo-stage4-20261104/verify-final.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/verify-final.exit; exit \"$result\"",
+      "pid": 1816571,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2n0rwg_11udnk.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:37:24.544Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    },
+    {
+      "id": "proc_mw2n1a36_k5s7e4",
+      "workspace": "ceo-stage4",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "TMPDIR=\"$PWD/artifacts/ceo-stage4-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\" timeout 120s python3 -B -m unittest tests.test_ceo_pending_recovery tests.test_research_recovery tests.test_ceo_research_mtls_acceptance tests.test_ceo_three_round_mtls tests.test_research_poll_isolation tests.test_hierarchy_providers -v > tests/acceptance-evidence/ceo-stage4-20261104/focused-after.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage4-20261104/focused-after.exit; exit \"$result\"",
+      "pid": 1820836,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2n1a36_k5s7e4.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:37:48.114Z",
+      "updatedAt": "2026-11-04T21:39:16.548Z"
+    }
+  ]
+}

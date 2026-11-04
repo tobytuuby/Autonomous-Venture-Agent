@@ -1,0 +1,40 @@
+{
+  "installed_sources": [
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_service.py",
+      "sha256": "9d381a28bab4287bac6a440704862c69543a4f251f78e98dc4d0ec988d01ff02",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_providers.py",
+      "sha256": "c5ea998e86824c9e189ab6983d2ec0d08b44b9a809f346b67e29ef5165255e04",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/provider_gateway.py",
+      "sha256": "a584280fc4795efff1695f9af7bf4ea8268ceaafae3bf95cb275a76b46ac60ab",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_service.py",
+      "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_providers.py",
+      "sha256": "f8563851eb3625032e01c8077b0757972a1348506a51ef5144c0cb0839a73f91",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/provider_gateway.py",
+      "sha256": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813",
+      "unchanged": true
+    },
+    {
+      "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_runner.py",
+      "sha256": "8d61c24dd45cc4783e86c04b729a5aa218c68a0df839a84e465fbcdc6575c86c",
+      "unchanged": true
+    }
+  ],
+  "services": "Id=venture-owner-research-ceo.service\nActiveState=active\nMainPID=288443\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\n\nId=venture-control-broker-mtls.service\nActiveState=active\nMainPID=288442\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\n"
+}
