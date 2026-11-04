@@ -132,3 +132,72 @@ class MTLSServerEntrypointTests(unittest.TestCase):
 
     def test_import_never_starts_listener(self):
         self.assertTrue(callable(mtls_server.main))
+
+    def ceo_entrypoint(self, *, enabled=None, overrides=None):
+        """Exercise startup wiring with every I/O boundary replaced."""
+        from contextlib import ExitStack
+        env = dict(VENTURE_BROKER_CERT="test.crt", VENTURE_BROKER_KEY="test.key",
+            VENTURE_BROKER_CLIENT_CA="test-ca.crt",
+            VENTURE_BROKER_CAPABILITY_PINS="a"*64, VENTURE_BROKER_POLLING_PINS="b"*64,
+            VENTURE_BROKER_OUTBOX_DB="unused-test.sqlite",
+            VENTURE_BROKER_PROVIDER_ENABLED="1", VENTURE_BROKER_RESERVATION_ACTOR="service-manager",
+            VENTURE_BROKER_HIERARCHY_ENABLED="1", VENTURE_BROKER_HIERARCHY_TRUST="trust.json",
+            VENTURE_BROKER_CEO_RESERVATION_PINS="c"*64,
+            VENTURE_BROKER_CEO_RESERVATION_ACTOR="service-ceo")
+        if enabled is not None:
+            env["VENTURE_BROKER_CEO_INFERENCE_ENABLED"] = enabled
+        env.update(overrides or {})
+        with ExitStack() as stack:
+            stack.enter_context(patch.dict(os.environ, env, clear=True))
+            for name in ("agents.ceo.control_plane.load_trust",
+                         "agents.ceo.cert_renewal.ManagerRenewalMailbox",
+                         "agents.ceo.cert_renewal.WorkerRenewalMailbox",
+                         "kernel.broker.mtls_server.tls_context"):
+                stack.enter_context(patch(name))
+            server = stack.enter_context(patch.object(mtls_server, "ThreadingHTTPServer"))
+            provider = stack.enter_context(patch("agents.ceo.venture_exercise.configured_provider"))
+            hierarchy = stack.enter_context(patch("agents.ceo.hierarchy_gateway.HierarchyGateway"))
+            ceo = stack.enter_context(patch("agents.ceo.ceo_broker.execute_ceo"))
+            manager = stack.enter_context(patch("agents.ceo.provider_gateway.execute_reserved"))
+            captured = {}
+            def checked_handler(**kwargs):
+                captured.update(kwargs)
+                return handler_for(**kwargs)
+            stack.enter_context(patch.object(mtls_server, "handler_for", side_effect=checked_handler))
+            try:
+                mtls_server.main()
+            except (ValueError, RuntimeError):
+                server.assert_not_called()
+                ceo.assert_not_called()
+                manager.assert_not_called()
+                raise
+            self.assertFalse(ceo.called)
+            self.assertFalse(manager.called)
+            if captured["ceo_execute"] is not None:
+                payload = {"synthetic": True}
+                captured["ceo_execute"](payload, actor="service-ceo")
+                ceo.assert_called_once_with(payload, actor="service-ceo",
+                    hierarchy=hierarchy.return_value, provider=provider.return_value)
+                captured["execute"](payload)
+                manager.assert_called_once_with(payload, actor="service-manager",
+                    hierarchy=hierarchy.return_value, provider=provider.return_value)
+            return captured
+
+    def test_ceo_execution_defaults_disabled_and_requires_exact_enable_value(self):
+        for enabled in (None, "", "0", "true", "yes", " 1", "1 "):
+            with self.subTest(enabled=enabled):
+                self.assertIsNone(self.ceo_entrypoint(enabled=enabled)["ceo_execute"])
+
+    def test_ceo_execution_opt_in_preserves_separate_authenticated_actor(self):
+        self.assertTrue(callable(self.ceo_entrypoint(enabled="1")["ceo_execute"]))
+
+    def test_ceo_execution_missing_dependencies_fails_before_listener(self):
+        for overrides in (
+                {"VENTURE_BROKER_PROVIDER_ENABLED": "0"},
+                {"VENTURE_BROKER_HIERARCHY_ENABLED": "0"},
+                {"VENTURE_BROKER_CEO_RESERVATION_ACTOR": "service-manager"},
+                {"VENTURE_BROKER_CEO_RESERVATION_PINS": ""},
+                {"VENTURE_BROKER_CEO_RESERVATION_PINS": "b"*64}):
+            with self.subTest(overrides=overrides):
+                with self.assertRaises((ValueError, RuntimeError)):
+                    self.ceo_entrypoint(enabled="1", overrides=overrides)

@@ -1,0 +1,82 @@
+{
+  "head": "c0d14c1ae84475c866437e0331d3acfcbe4f6702",
+  "classification": "PROJECT_SOURCE_VS_HISTORICAL_INSTALLED_HASH_RECORD_ONLY",
+  "current_installed_hashes_verified": false,
+  "loaded_bytes_verified": false,
+  "record": "tests/acceptance-evidence/ceo-legacy-units-20261104/final.json",
+  "record_sha256": "9941cfed8645f5004e4265f80a7f53f40eee2029265a5ec30f196fdb43c98045",
+  "files": [
+    {
+      "path": "agents/ceo/ceo_broker.py",
+      "candidate_sha256": "0e74914b0f88ce17cc8247faa3494e5f68c3341237661ebbedb84f311981bf63",
+      "historical_installed_sha256": {
+        "ceo": null,
+        "broker": null
+      }
+    },
+    {
+      "path": "agents/ceo/ceo_research_review.py",
+      "candidate_sha256": "5799e8ec9a29f671d209612b5d05b067b15a0dd81234d7a0b9e90b8a8ef58fa0",
+      "historical_installed_sha256": {
+        "ceo": "7b3020d4d14d9c89bb78e3f9b4ee2fb45bb231fef36b9fa9a5226b7c5028695a",
+        "broker": null
+      }
+    },
+    {
+      "path": "agents/ceo/hierarchy_client.py",
+      "candidate_sha256": "ef0c596130eb3bbb16ba79ba0c7b861ae32bf802c79e0b266faea323de08d95a",
+      "historical_installed_sha256": {
+        "ceo": "d8b970d6e9aff474194510995285fbd7c764e631a98b1a98f50e07306f14999e",
+        "broker": "9f5cc00d120de174fd2278c80f05aa2c700a375ca3523c558981490e02340de8"
+      }
+    },
+    {
+      "path": "agents/ceo/hierarchy_providers.py",
+      "candidate_sha256": "40860723360027423e77c5d8c78afefb76936f47563ea46f60e955702c1f58f5",
+      "historical_installed_sha256": {
+        "ceo": "c5ea998e86824c9e189ab6983d2ec0d08b44b9a809f346b67e29ef5165255e04",
+        "broker": "f8563851eb3625032e01c8077b0757972a1348506a51ef5144c0cb0839a73f91"
+      }
+    },
+    {
+      "path": "agents/ceo/provider_gateway.py",
+      "candidate_sha256": "54f98969ca593aec35abfd8364c4fe74621a4f9f716a227fdede8f5982c61f1d",
+      "historical_installed_sha256": {
+        "ceo": "a584280fc4795efff1695f9af7bf4ea8268ceaafae3bf95cb275a76b46ac60ab",
+        "broker": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813"
+      }
+    },
+    {
+      "path": "agents/ceo/provider_reservation.py",
+      "candidate_sha256": "49f16c01de03f87e60acbd2bf5b222f605bad45f1037835e9ab35effe0978a7d",
+      "historical_installed_sha256": {
+        "ceo": "54a326f7921cf945f4cef96dc33ddd14385d1b7d4f3557d35050b25aa581f5d6",
+        "broker": "54a326f7921cf945f4cef96dc33ddd14385d1b7d4f3557d35050b25aa581f5d6"
+      }
+    },
+    {
+      "path": "kernel/broker/isolated_mtls.py",
+      "candidate_sha256": "b6f4ce84ff3801cf2d7e2234d3989a4959f83db149b35b52ef7018abf94f36b1",
+      "historical_installed_sha256": {
+        "ceo": "aba73b7dd104d36f65cc914623d5ef86ef71013bbe32ff4b00380ca4dceddf62",
+        "broker": "509aae4196eb4c79f5e6445f776a5db2ac1aa80fe734e3a8ec4c2bbeb07fc28a"
+      }
+    },
+    {
+      "path": "kernel/broker/mtls_server.py",
+      "candidate_sha256": "09862f229bb879a80e84d1cb25a6713acfec935738e344d46d9db0dc6d41c14a",
+      "historical_installed_sha256": {
+        "ceo": "7a33fffb563cfe13db05b372e8d93b874a5d34ab15d32764f9f2fc8db69e3c6d",
+        "broker": "48ed446999ca3048862b48921685d5eea64b996dbc587ef1e9cfa156ec842a37"
+      }
+    },
+    {
+      "path": "tests/test_ceo_broker.py",
+      "candidate_sha256": "4b1c3c27457c950a40d1711489d46207486645275c78cdb4dce55c842d621834",
+      "historical_installed_sha256": {
+        "ceo": null,
+        "broker": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "id": "proc_mw2p2lax_d0y7ce",
+  "projectPath": "/home/epsilon/venture-control-workspace",
+  "command": "mkdir -p artifacts/ceo-stage7-review-tmp\nexport TMPDIR=\"$PWD/artifacts/ceo-stage7-review-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\"\nout=tests/acceptance-evidence/ceo-stage7-review-20261104\ntimeout 180s python3 -B tests/acceptance-evidence/ceo-stage5-20261104/verify_synthetic.py tests.test_ceo_broker tests.test_ceo_pending_recovery tests.test_ceo_legacy_dependent_replay tests.test_ceo_research_mtls_acceptance tests.test_ceo_three_round_mtls tests.test_broker_mtls_entrypoint tests.test_broker_isolated_mtls tests.test_hierarchy_service_research tests.test_research_poll_isolation tests.test_ceo_venture_flow tests.test_ceo_gates tests.test_ceo_stage6_gate > \"$out/tests.log\" 2>&1\nresult=$?\nprintf \"%s\\n\" \"$result\" > \"$out/tests.exit\"\ngit diff --check > \"$out/diff-check.log\" 2>&1\nexit \"$result\"",
+  "pid": 2558932,
+  "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2p2lax_d0y7ce.log",
+  "status": "exited",
+  "startedAt": "2026-11-04T22:34:48.537Z",
+  "updatedAt": "2026-11-04T22:36:03.078Z"
+}

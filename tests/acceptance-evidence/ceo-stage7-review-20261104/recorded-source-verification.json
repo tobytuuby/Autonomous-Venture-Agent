@@ -1,0 +1,67 @@
+[
+  {
+    "tree": "ceo",
+    "path": "agents/ceo/ceo_research_review.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "agents/ceo/hierarchy_client.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "agents/ceo/hierarchy_client.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "agents/ceo/hierarchy_providers.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "agents/ceo/hierarchy_providers.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "agents/ceo/provider_gateway.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "agents/ceo/provider_gateway.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "agents/ceo/provider_reservation.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "agents/ceo/provider_reservation.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "kernel/broker/isolated_mtls.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "kernel/broker/isolated_mtls.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "ceo",
+    "path": "kernel/broker/mtls_server.py",
+    "reconstructed_source_verified": true
+  },
+  {
+    "tree": "broker",
+    "path": "kernel/broker/mtls_server.py",
+    "reconstructed_source_verified": true
+  }
+]
