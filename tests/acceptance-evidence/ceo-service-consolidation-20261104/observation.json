@@ -1,0 +1,410 @@
+{
+  "before": {
+    "head": {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "stdout": "0328cda6252aa924f869c5cb82cfc65c7d00b2d6\n",
+      "stderr": ""
+    },
+    "date": {
+      "command": [
+        "date",
+        "-u",
+        "--iso-8601=seconds"
+      ],
+      "exit_code": 0,
+      "stdout": "2026-11-04T13:43:15+00:00\n",
+      "stderr": ""
+    },
+    "units": {
+      "command": [
+        "systemctl",
+        "show",
+        "venture-owner-research-ceo.service",
+        "venture-level2d-ceo.service",
+        "venture-control-broker-mtls.service",
+        "venture-level2c-ceo.service",
+        "venture-ceo-exercise.service",
+        "venture-ceo-exercise.timer",
+        "--property=Id,LoadState,ActiveState,SubState,UnitFileState,MainPID,ExecMainStartTimestamp,NRestarts,WorkingDirectory,FragmentPath,DropInPaths,ExecStart,Requires,Wants,RequiredBy,WantedBy,BoundBy,PartOf,ConsistsOf,TriggeredBy,UpheldBy"
+      ],
+      "exit_code": 0,
+      "stdout": "Id=venture-owner-research-ceo.service\nRequires=venture-control-broker-mtls.service -.mount sysinit.target system.slice\nWants=-.mount tmp.mount\nPartOf=\nRequiredBy=\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/venture-owner-research-ceo.service\nDropInPaths=\nUnitFileState=enabled\nMainPID=288443\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --worker-limit 4 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-level2d-ceo.service\nRequires=-.mount venture-control-broker-mtls.service system.slice sysinit.target\nWants=network-online.target tmp.mount -.mount\nPartOf=\nRequiredBy=\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/etc/systemd/system/venture-level2d-ceo.service\nDropInPaths=\nUnitFileState=enabled\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=Sat 2026-10-31 21:02:07 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.hierarchy_service --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-control-broker-mtls.service\nRequires=opa.service system.slice sysinit.target -.mount\nWants=-.mount tmp.mount\nPartOf=\nRequiredBy=venture-level2d-ceo.service venture-owner-research-kickoff.service venture-owner-research-ceo.service venture-level2c-ceo.service\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/venture-control-broker-mtls.service\nDropInPaths=/etc/systemd/system/venture-control-broker-mtls.service.d/level2c-stage.conf\nUnitFileState=enabled\nMainPID=288442\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m kernel.broker.mtls_server ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-control-broker-level2c\n\nId=venture-level2c-ceo.service\nRequires=venture-control-broker-mtls.service system.slice sysinit.target -.mount\nWants=-.mount network-online.target tmp.mount\nPartOf=\nRequiredBy=\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/etc/systemd/system/venture-level2c-ceo.service\nDropInPaths=\nUnitFileState=enabled\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=Thu 2026-10-29 06:15:33 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.preparation_exchange --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/config.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-ceo-exercise.service\nRequires=system.slice sysinit.target -.mount\nWants=-.mount tmp.mount network-online.target\nPartOf=\nRequiredBy=\nWantedBy=\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=venture-ceo-exercise.timer\nLoadState=loaded\nActiveState=failed\nSubState=failed\nFragmentPath=/etc/systemd/system/venture-ceo-exercise.service\nDropInPaths=\nUnitFileState=linked\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-04 13:00:42 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --gate-file infrastructure/venture-ceo-kernel-gate.runtime.json ; ignore_errors=no ; start_time=[Wed 2026-11-04 13:00:42 UTC] ; stop_time=[Wed 2026-11-04 13:00:42 UTC] ; pid=1182208 ; code=exited ; status=4 }\nWorkingDirectory=/home/epsilon/venture-control-workspace\n\nId=venture-ceo-exercise.timer\nRequires=-.mount sysinit.target\nWants=\nPartOf=\nRequiredBy=\nWantedBy=timers.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=waiting\nFragmentPath=/etc/systemd/system/venture-ceo-exercise.timer\nDropInPaths=\nUnitFileState=enabled\n",
+      "stderr": ""
+    },
+    "ceo_inventory": {
+      "command": [
+        "systemctl",
+        "list-unit-files",
+        "*ceo*",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "UNIT FILE                          STATE    PRESET\nventure-ceo-exercise.service       linked   enabled\nventure-ceo-shadow.service         disabled enabled\nventure-level2c-ceo.service        enabled  enabled\nventure-level2d-ceo.service        enabled  enabled\nventure-owner-research-ceo.service enabled  enabled\nventure-ceo-exercise.timer         enabled  enabled\n\n6 unit files listed.\n",
+      "stderr": ""
+    },
+    "reverse_dependencies": {
+      "command": [
+        "systemctl",
+        "list-dependencies",
+        "--reverse",
+        "--all",
+        "venture-level2d-ceo.service",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "venture-level2d-ceo.service\n\u25cf \u2514\u2500multi-user.target\n\u25cf   \u2514\u2500graphical.target\n",
+      "stderr": ""
+    },
+    "unit_references": {
+      "command": [
+        "grep",
+        "-RIl",
+        "--include=*.service",
+        "--include=*.timer",
+        "--include=*.target",
+        "--include=*.socket",
+        "--include=*.path",
+        "venture-level2d-ceo",
+        "/etc/systemd/system",
+        "/run/systemd/system",
+        "/usr/lib/systemd/system",
+        "/lib/systemd/system"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "scheduled_references": {
+      "command": [
+        "grep",
+        "-RIl",
+        "venture-level2d-ceo",
+        "/etc/cron.d",
+        "/etc/cron.daily",
+        "/etc/cron.hourly",
+        "/var/spool/cron/crontabs",
+        "/usr/local/bin",
+        "/usr/local/sbin"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "installed_units": {
+      "command": [
+        "systemctl",
+        "cat",
+        "venture-owner-research-ceo.service",
+        "venture-level2d-ceo.service",
+        "venture-control-broker-mtls.service",
+        "venture-level2c-ceo.service",
+        "venture-ceo-exercise.service",
+        "venture-ceo-exercise.timer"
+      ],
+      "exit_code": 0,
+      "stdout": "# /etc/systemd/system/venture-owner-research-ceo.service\n[Unit]\nDescription=Autonomous research CEO review (preparation-only)\nAfter=network-online.target venture-control-broker-mtls.service\nRequires=venture-control-broker-mtls.service\n\n[Service]\nType=simple\nUser=venture-ceo\nGroup=venture-ceo\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\nEnvironment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c\nEnvironmentFile=/etc/venture-ceo-level2c.env\nExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --worker-limit 4\nRestart=on-failure\nRestartSec=10\nNoNewPrivileges=true\nPrivateTmp=true\nPrivateDevices=true\nProtectSystem=strict\nProtectHome=true\nCapabilityBoundingSet=\nReadWritePaths=/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4\nRestrictAddressFamilies=AF_UNIX AF_INET AF_INET6\n\n[Install]\nWantedBy=multi-user.target\n\n# /etc/systemd/system/venture-level2d-ceo.service\n[Unit]\nDescription=Level 2D autonomous hierarchy CEO final review (preparation only)\nWants=network-online.target\nAfter=network-online.target venture-control-broker-mtls.service\nRequires=venture-control-broker-mtls.service\n\n[Service]\nType=simple\nUser=venture-ceo\nGroup=venture-ceo\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\nEnvironment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c\nEnvironmentFile=/etc/venture-ceo-level2c.env\nExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_service --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json\nRestart=on-failure\nRestartSec=5\nNoNewPrivileges=yes\nProtectSystem=strict\nProtectHome=true\nPrivateTmp=true\nCapabilityBoundingSet=\nRestrictAddressFamilies=AF_UNIX AF_INET AF_INET6\nReadWritePaths=/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4\n\n[Install]\nWantedBy=multi-user.target\n\n# /etc/systemd/system/venture-control-broker-mtls.service\n[Unit]\nDescription=Venture capability broker mTLS\nAfter=network-online.target opa.service\nRequires=opa.service\n\n[Service]\nType=simple\nUser=venture-broker\nGroup=venture-broker\nWorkingDirectory=/usr/local/lib/venture-control-broker\nEnvironment=PYTHONPATH=/usr/local/lib/venture-control-broker\nEnvironmentFile=/etc/venture-control/broker-mtls.env\nExecStart=/usr/bin/python3 -m kernel.broker.mtls_server\nRestart=on-failure\nRestartSec=2\nNoNewPrivileges=true\nPrivateTmp=true\nProtectSystem=strict\nProtectHome=true\nRestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX\nCapabilityBoundingSet=\nReadWritePaths=/var/lib/venture-control-broker\n\n[Install]\nWantedBy=multi-user.target\n\n# /etc/systemd/system/venture-control-broker-mtls.service.d/level2c-stage.conf\n[Service]\nEnvironment=PYTHONPATH=/usr/local/lib/venture-control-broker-level2c\nWorkingDirectory=/usr/local/lib/venture-control-broker-level2c\n\nReadWritePaths=/usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority\n\nEnvironmentFile=/etc/venture-control/broker-provider-level2c.env\n\n# /etc/systemd/system/venture-level2c-ceo.service\n[Unit]\nDescription=Level 2C Autonomous Preparation CEO (bounded, no live authority)\nWants=network-online.target\nAfter=network-online.target venture-control-broker-mtls.service\nRequires=venture-control-broker-mtls.service\n\n[Service]\nType=simple\nUser=venture-ceo\nGroup=venture-ceo\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\nEnvironment=PYTHONPATH=/usr/local/lib/venture-ceo-level2c\nEnvironmentFile=/etc/venture-ceo-level2c.env\nExecStart=/usr/bin/python3 -B -m agents.ceo.preparation_exchange --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/config.json\nRestart=on-failure\nRestartSec=5\nNoNewPrivileges=true\nProtectSystem=strict\nProtectHome=true\nPrivateTmp=true\nRestrictAddressFamilies=AF_UNIX AF_INET AF_INET6\nCapabilityBoundingSet=\nReadWritePaths=/usr/local/lib/venture-ceo-level2c/artifacts\n\n[Install]\nWantedBy=multi-user.target\n\n# /etc/systemd/system/venture-ceo-exercise.service -> /home/epsilon/venture-control-workspace/infrastructure/systemd/venture-ceo-exercise.service\n[Unit]\nDescription=Bounded provider-backed advisory CEO workflow and durable replay\nAfter=network-online.target\nWants=network-online.target\n\n[Service]\nType=oneshot\nUser=venture-ceo\nGroup=venture-ceo\nWorkingDirectory=/home/epsilon/venture-control-workspace\nEnvironmentFile=/etc/venture-ceo.env\nEnvironmentFile=/etc/venture-ceo-shadow.env\nEnvironment=PYTHONDONTWRITEBYTECODE=1\nExecStart=/usr/bin/python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --gate-file infrastructure/venture-ceo-kernel-gate.runtime.json\nTimeoutStartSec=180\nRestart=no\nUMask=0077\nNoNewPrivileges=true\nPrivateTmp=true\nPrivateDevices=true\nProtectSystem=strict\nProtectHome=read-only\nReadWritePaths=/home/epsilon/venture-control-workspace/artifacts/scheduled-ceo\nCapabilityBoundingSet=\nRestrictSUIDSGID=true\nProtectKernelTunables=true\nProtectKernelModules=true\nProtectControlGroups=true\nRestrictAddressFamilies=AF_UNIX AF_INET AF_INET6\nStandardOutput=journal\nStandardError=null\n\n# /etc/systemd/system/venture-ceo-exercise.timer -> /home/epsilon/venture-control-workspace/infrastructure/systemd/venture-ceo-exercise.timer\n[Unit]\nDescription=Hourly check and replay of one bounded advisory CEO workflow\n\n[Timer]\nOnCalendar=hourly\nPersistent=true\nRandomizedDelaySec=60\nUnit=venture-ceo-exercise.service\n\n[Install]\nWantedBy=timers.target\n",
+      "stderr": ""
+    },
+    "repo_references": {
+      "command": [
+        "git",
+        "grep",
+        "-n",
+        "venture-level2d-ceo",
+        "--",
+        "scripts",
+        "infrastructure",
+        "agents",
+        "tests/test*"
+      ],
+      "exit_code": 0,
+      "stdout": "scripts/level2d_acceptance_deploy_control.py:29: assert run(\"systemctl\",\"show\",\"venture-level2d-ceo.service\",\"--property=ActiveState\",\"--value\")==\"inactive\"\nscripts/level2d_acceptance_observe.py:41:ceo=unit(\"venture-level2d-ceo.service\")\nscripts/level2d_retire_legacy_control.py:22:CEO = \"venture-level2d-ceo.service\"\n",
+      "stderr": ""
+    },
+    "modules": [
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_service.py",
+        "sha256": "9d381a28bab4287bac6a440704862c69543a4f251f78e98dc4d0ec988d01ff02",
+        "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_research_daemon.py",
+        "sha256": "ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8",
+        "head_sha256": "ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_gateway.py",
+        "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+        "head_sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_providers.py",
+        "sha256": "c5ea998e86824c9e189ab6983d2ec0d08b44b9a809f346b67e29ef5165255e04",
+        "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/provider_gateway.py",
+        "sha256": "a584280fc4795efff1695f9af7bf4ea8268ceaafae3bf95cb275a76b46ac60ab",
+        "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/venture_workflow.py",
+        "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+        "head_sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-ceo-level2c/agents/ceo/hierarchy_runner.py",
+        "sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+        "head_sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_service.py",
+        "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+        "head_sha256": "1b25c201ec204f7fae916a39a831fbe941b3868a165a3364bb8064cf17e0dd82",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_gateway.py",
+        "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+        "head_sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_providers.py",
+        "sha256": "f8563851eb3625032e01c8077b0757972a1348506a51ef5144c0cb0839a73f91",
+        "head_sha256": "9210c8dd5c239330911b238b086048a7d0f16a5a6bfa135579fa2a303f3c42e8",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/provider_gateway.py",
+        "sha256": "d1c74685602cfa6cfa157396454cf65768457eeae1466ba28a9c88ea77a28813",
+        "head_sha256": "083a50212517f5f7026292a156484c8c59dfb84fb3fb730c9fe48d2abb085f02",
+        "matches_head": false
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/venture_workflow.py",
+        "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+        "head_sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+        "matches_head": true
+      },
+      {
+        "path": "/usr/local/lib/venture-control-broker-level2c/agents/ceo/hierarchy_runner.py",
+        "sha256": "8d61c24dd45cc4783e86c04b729a5aa218c68a0df839a84e465fbcdc6575c86c",
+        "head_sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+        "matches_head": false
+      }
+    ],
+    "python_binary": {
+      "path": "/usr/bin/python3",
+      "resolved": "/usr/bin/python3.14",
+      "sha256": "52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41",
+      "version": {
+        "command": [
+          "/usr/bin/python3",
+          "--version"
+        ],
+        "exit_code": 0,
+        "stdout": "Python 3.14.4\n",
+        "stderr": ""
+      }
+    },
+    "research_unit_matches_repo": true,
+    "recent_research_errors": {
+      "command": [
+        "journalctl",
+        "-u",
+        "venture-owner-research-ceo.service",
+        "--since=-10min",
+        "--priority=err",
+        "--no-pager",
+        "--quiet",
+        "--output=cat"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "line_count": 0
+    }
+  },
+  "disable": {
+    "command": [
+      "sudo",
+      "-n",
+      "systemctl",
+      "disable",
+      "venture-level2d-ceo.service"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Removed '/etc/systemd/system/multi-user.target.wants/venture-level2d-ceo.service'.\n",
+    "before": {
+      "venture-level2d-ceo.service": {
+        "RequiredBy": "",
+        "WantedBy": "multi-user.target",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "UnitFileState": "enabled",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Sat 2026-10-31 21:02:07 UTC"
+      },
+      "venture-owner-research-ceo.service": {
+        "RequiredBy": "",
+        "WantedBy": "multi-user.target",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "MainPID": "288443",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-11-03 01:12:09 UTC"
+      },
+      "venture-control-broker-mtls.service": {
+        "RequiredBy": "venture-level2d-ceo.service venture-owner-research-kickoff.service venture-owner-research-ceo.service venture-level2c-ceo.service",
+        "WantedBy": "multi-user.target",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "MainPID": "288442",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-11-03 01:12:09 UTC"
+      }
+    },
+    "after": {
+      "venture-level2d-ceo.service": {
+        "RequiredBy": "",
+        "WantedBy": "",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "inactive",
+        "SubState": "dead",
+        "UnitFileState": "disabled",
+        "MainPID": "0",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": ""
+      },
+      "venture-owner-research-ceo.service": {
+        "RequiredBy": "",
+        "WantedBy": "multi-user.target",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "MainPID": "288443",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-11-03 01:12:09 UTC"
+      },
+      "venture-control-broker-mtls.service": {
+        "RequiredBy": "venture-owner-research-ceo.service venture-owner-research-kickoff.service venture-level2c-ceo.service",
+        "WantedBy": "multi-user.target",
+        "BoundBy": "",
+        "UpheldBy": "",
+        "TriggeredBy": "",
+        "ActiveState": "active",
+        "SubState": "running",
+        "UnitFileState": "enabled",
+        "MainPID": "288442",
+        "NRestarts": "0",
+        "ExecMainStartTimestamp": "Tue 2026-11-03 01:12:09 UTC"
+      }
+    }
+  },
+  "after": {
+    "date": {
+      "command": [
+        "date",
+        "-u",
+        "--iso-8601=seconds"
+      ],
+      "exit_code": 0,
+      "stdout": "2026-11-04T13:44:47+00:00\n",
+      "stderr": ""
+    },
+    "units": {
+      "command": [
+        "systemctl",
+        "show",
+        "venture-owner-research-ceo.service",
+        "venture-level2d-ceo.service",
+        "venture-control-broker-mtls.service",
+        "venture-level2c-ceo.service",
+        "venture-ceo-exercise.service",
+        "venture-ceo-exercise.timer",
+        "--property=Id,LoadState,ActiveState,SubState,UnitFileState,MainPID,ExecMainStartTimestamp,NRestarts,WorkingDirectory,FragmentPath,DropInPaths,ExecStart,Requires,Wants,RequiredBy,WantedBy,BoundBy,PartOf,ConsistsOf,TriggeredBy,UpheldBy"
+      ],
+      "exit_code": 0,
+      "stdout": "Id=venture-owner-research-ceo.service\nRequires=venture-control-broker-mtls.service -.mount system.slice sysinit.target\nWants=tmp.mount -.mount\nPartOf=\nRequiredBy=\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/venture-owner-research-ceo.service\nDropInPaths=\nUnitFileState=enabled\nMainPID=288443\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --worker-limit 4 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-level2d-ceo.service\nRequires=venture-control-broker-mtls.service system.slice sysinit.target -.mount\nWants=tmp.mount network-online.target -.mount\nPartOf=\nRequiredBy=\nWantedBy=\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/etc/systemd/system/venture-level2d-ceo.service\nDropInPaths=\nUnitFileState=disabled\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.hierarchy_service --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-control-broker-mtls.service\nRequires=-.mount opa.service sysinit.target system.slice\nWants=tmp.mount -.mount\nPartOf=\nRequiredBy=venture-owner-research-ceo.service venture-owner-research-kickoff.service venture-level2c-ceo.service\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=running\nFragmentPath=/etc/systemd/system/venture-control-broker-mtls.service\nDropInPaths=/etc/systemd/system/venture-control-broker-mtls.service.d/level2c-stage.conf\nUnitFileState=enabled\nMainPID=288442\nNRestarts=0\nExecMainStartTimestamp=Tue 2026-11-03 01:12:09 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m kernel.broker.mtls_server ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-control-broker-level2c\n\nId=venture-level2c-ceo.service\nRequires=system.slice -.mount venture-control-broker-mtls.service sysinit.target\nWants=network-online.target tmp.mount -.mount\nPartOf=\nRequiredBy=\nWantedBy=multi-user.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=inactive\nSubState=dead\nFragmentPath=/etc/systemd/system/venture-level2c-ceo.service\nDropInPaths=\nUnitFileState=enabled\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=Thu 2026-10-29 06:15:33 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.preparation_exchange --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/config.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/usr/local/lib/venture-ceo-level2c\n\nId=venture-ceo-exercise.service\nRequires=-.mount system.slice sysinit.target\nWants=tmp.mount network-online.target -.mount\nPartOf=\nRequiredBy=\nWantedBy=\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=venture-ceo-exercise.timer\nLoadState=loaded\nActiveState=failed\nSubState=failed\nFragmentPath=/etc/systemd/system/venture-ceo-exercise.service\nDropInPaths=\nUnitFileState=linked\nMainPID=0\nNRestarts=0\nExecMainStartTimestamp=Wed 2026-11-04 13:00:42 UTC\nExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m agents.ceo.scheduled_exercise --state-dir artifacts/scheduled-ceo --gate-file infrastructure/venture-ceo-kernel-gate.runtime.json ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }\nWorkingDirectory=/home/epsilon/venture-control-workspace\n\nId=venture-ceo-exercise.timer\nRequires=-.mount sysinit.target\nWants=\nPartOf=\nRequiredBy=\nWantedBy=timers.target\nBoundBy=\nUpheldBy=\nConsistsOf=\nTriggeredBy=\nLoadState=loaded\nActiveState=active\nSubState=waiting\nFragmentPath=/etc/systemd/system/venture-ceo-exercise.timer\nDropInPaths=\nUnitFileState=enabled\n",
+      "stderr": ""
+    },
+    "ceo_inventory": {
+      "command": [
+        "systemctl",
+        "list-unit-files",
+        "*ceo*",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "UNIT FILE                          STATE    PRESET\nventure-ceo-exercise.service       linked   enabled\nventure-ceo-shadow.service         disabled enabled\nventure-level2c-ceo.service        enabled  enabled\nventure-level2d-ceo.service        disabled enabled\nventure-owner-research-ceo.service enabled  enabled\nventure-ceo-exercise.timer         enabled  enabled\n\n6 unit files listed.\n",
+      "stderr": ""
+    },
+    "reverse_dependencies": {
+      "command": [
+        "systemctl",
+        "list-dependencies",
+        "--reverse",
+        "--all",
+        "venture-level2d-ceo.service",
+        "--no-pager"
+      ],
+      "exit_code": 0,
+      "stdout": "venture-level2d-ceo.service\n",
+      "stderr": ""
+    },
+    "recent_research_errors": {
+      "command": [
+        "journalctl",
+        "-u",
+        "venture-owner-research-ceo.service",
+        "--since=-10min",
+        "--priority=err",
+        "--no-pager",
+        "--quiet",
+        "--output=cat"
+      ],
+      "exit_code": 0,
+      "stderr": "",
+      "line_count": 0
+    }
+  },
+  "checks": {
+    "sampled_modules_unchanged": true,
+    "python_binary_unchanged": true,
+    "unit_contents_and_dropins_unchanged": true,
+    "research_unit_matches_repo": true,
+    "tests_exit_code": 0,
+    "tests_run": 94,
+    "tests_seconds": 21.209
+  }
+}
