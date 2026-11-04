@@ -1,0 +1,63 @@
+test_new_signed_dependent_proposal_is_rejected_atomically (tests.test_ceo_legacy_dependent_replay.LegacyDependentReplayTests.test_new_signed_dependent_proposal_is_rejected_atomically) ... ok
+test_signed_legacy_proposal_approval_ab_completion_c_ready_replays (tests.test_ceo_legacy_dependent_replay.LegacyDependentReplayTests.test_signed_legacy_proposal_approval_ab_completion_c_ready_replays) ... ok
+test_negative_tls_role_signature_stale_identity_and_denied_operations (tests.test_ceo_research_mtls_acceptance.ResearchMtlsAcceptanceTests.test_negative_tls_role_signature_stale_identity_and_denied_operations) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 403: 'Forbidden'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 400: 'Bad Request'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 503: 'Service Unavailable'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+ok
+test_r1_signed_roles_synthesis_disposition_and_checkpoint_retries (tests.test_ceo_research_mtls_acceptance.ResearchMtlsAcceptanceTests.test_r1_signed_roles_synthesis_disposition_and_checkpoint_retries) ... ERROR:root:research workflow blocked role=manager workflow=research-f2b72a9c3b3f58d48152e43e snapshot=10536f68314216c853975958642ed5b7770cac50fcaf5214e9b443f7c957e73e reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role manager error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 286, in poll
+    role_tick(allowed_config(config,flow,snapshot),once=True)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 162, in run
+    after=runner.tick(config["workflow_id"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_runner.py", line 134, in tick
+    decision = deepcopy(self.callbacks[role](deepcopy(item)))
+                        ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_model_callbacks.py", line 191, in __call__
+    response = self.provider(request, ())
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 204, in __call__
+    wrapper=self.client._request("POST","/v1/inference/execute", payload)
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 267, in lose_manager_response
+    raise OSError("synthetic response lost after broker commit")
+OSError: synthetic response lost after broker commit
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+ERROR:root:research workflow blocked role=worker workflow=research-f2b72a9c3b3f58d48152e43e snapshot=7a69aac338effdb6dfbb570d7f390ca66617f634c2f4b315f9c70409b53c13ea reason=READ_OR_TRANSPORT_UNAVAILABLE next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role worker error: OSError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 286, in poll
+    role_tick(allowed_config(config,flow,snapshot),once=True)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 162, in run
+    after=runner.tick(config["workflow_id"])
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_runner.py", line 158, in tick
+    return self.workflow.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_service.py", line 30, in apply
+    return self.client.apply(command, signature)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 292, in defer_apply
+    raise OSError("synthetic restart before signed apply")
+OSError: synthetic restart before signed apply
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_reservation_checkpoint_worker_identity_quota_hold_is_durable (tests.test_ceo_research_mtls_acceptance.ResearchMtlsAcceptanceTests.test_reservation_checkpoint_worker_identity_quota_hold_is_durable) ... {"audit_records":8,"counts":{"remote_executions":3,"remote_reservations":5,"reservations":8,"worker_executions":3,"worker_reservations":3},"execution_snapshot_artifact_joins":"VERIFIED_IN_TEST","external_authority":false,"restart_charges":"UNCHANGED","scenario":"R1_SYNTHETIC_SIGNED_MTLS","snapshot_sha256":"b22bbc46932fc4b0de1ea28972a415fe41bba9152ee82fc2874deefcc8877da1","state":"TERMINATED","terminal_decisions":1,"used_units":3}
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+WARNING:root:CEO research workflow placed on signed quota hold: research-f2b72a9c3b3f58d48152e43e
+ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 6.359s
+
+OK
