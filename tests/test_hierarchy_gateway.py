@@ -51,12 +51,12 @@ class HierarchyGatewayTests(unittest.TestCase):
         from agents.ceo.venture_workflow import hashed
         fx = self.fixture
         fx.act("reject_premise", "manager")
-        fx.scope["tasks"] = ["Prepare A", "Prepare B", "Combine A and B"]
+        fx.scope["tasks"] = ["Prepare A", "Prepare B", "Independently assess C"]
         fx.act("revise", "ceo", dict(scope=fx.scope, version=2, reason="test"))
         assignments = [dict(id=name, worker_id=worker, task=task, depends_on=deps)
             for name, worker, task, deps in zip(("A", "B", "C"),
                 ("worker", "worker-b", "worker-c"), fx.scope["tasks"],
-                ([], [], ["A", "B"]))]
+                ([], [], []))]
         def apply(action, actor, payload, role):
             cmd = fx.command(action, actor, payload)
             return self.gateway.apply(dict(command=cmd, signature=fx.sign(cmd, actor)), role=role)
@@ -70,7 +70,9 @@ class HierarchyGatewayTests(unittest.TestCase):
         apply("approve_decomposition", "ceo", dict(proposal_hash=hashed(assignments)), "quota-ceo")
         self.assertEqual(self.gateway.inference_state("studio-flow", "A", "worker")["state"],
                          "WORKER_PENDING")
-        for assignment, worker in (("A", "worker-b"), ("C", "worker-c")):
+        self.assertEqual(self.gateway.inference_state("studio-flow", "C", "worker-c")
+                         ["decomposition"]["states"]["C"], "READY")
+        for assignment, worker in (("A", "worker-b"), ("C", "worker")):
             with self.assertRaises(ValueError):
                 self.gateway.inference_state("studio-flow", assignment, worker)
         for assignment, worker in (("A", "worker"), ("B", "worker-b")):

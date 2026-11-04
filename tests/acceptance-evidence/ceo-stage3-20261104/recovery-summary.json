@@ -1,0 +1,179 @@
+{
+  "baseline": "9d756b82aaab7f4c33b230d159f9c8d9876fab1b",
+  "classification": "Locally executed synthetic software tests; no independent review or production acceptance.",
+  "scope": "Three test files, acceptance document, and this minimal evidence summary only. Raw evidence remains local and untracked by owner request.",
+  "processes": [
+    {
+      "id": "proc_mw2mnttv_kvjrrw",
+      "workspace": "ceo-stage3-recovery",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "TMPDIR=\"$PWD/artifacts/ceo-stage3-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\" timeout 180s python3 -B -m unittest tests.test_ceo_legacy_dependent_replay tests.test_ceo_research_mtls_acceptance tests.test_ceo_three_round_mtls -v > tests/acceptance-evidence/ceo-stage3-20261104/recovery-focused.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage3-20261104/recovery-focused.exit; exit \"$result\"",
+      "pid": 1688690,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2mnttv_kvjrrw.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:27:20.515Z",
+      "updatedAt": "2026-11-04T21:30:10.069Z"
+    },
+    {
+      "id": "proc_mw2mooyy_8y50cl",
+      "workspace": "ceo-stage3-recovery",
+      "projectPath": "/home/epsilon/venture-control-workspace",
+      "command": "TMPDIR=\"$PWD/artifacts/ceo-stage3-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=\"$PWD:$PWD/tests\" timeout 180s python3 -B -m unittest tests.test_broker_isolated_mtls tests.test_broker_mtls_entrypoint tests.test_hierarchy_artifact_store tests.test_hierarchy_runner tests.test_owner_research_admission tests.test_research_continuation tests.test_mvp_handoff tests.test_ceo_pending_recovery tests.test_ceo_research_review tests.test_research_poll_isolation tests.test_research_abc_routing tests.test_research_broker_admission tests.test_hierarchy_service_research tests.test_ceo_durable tests.test_hierarchy_bootstrap tests.test_hierarchy_gateway tests.test_hierarchy_model_callbacks tests.test_hierarchy_multi_worker tests.test_hierarchy_providers tests.test_hierarchy_redirection tests.test_legacy_worker_recovery tests.test_level2c_central_roles tests.test_owner_research_feedback tests.test_owner_research_progress tests.test_owner_research_quota_hold tests.test_preparation_broker tests.test_preparation_exchange tests.test_preparation_service tests.test_provider_dispatch tests.test_provider_dispatch_transport tests.test_research_recovery tests.test_research_reservation_counts tests.test_worker_inference tests.test_ceo_legacy_dependent_replay tests.test_ceo_research_mtls_acceptance tests.test_ceo_three_round_mtls -v > tests/acceptance-evidence/ceo-stage3-20261104/recovery-regression.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/ceo-stage3-20261104/recovery-regression.exit; exit \"$result\"",
+      "pid": 1698018,
+      "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw2mooyy_8y50cl.log",
+      "status": "exited",
+      "startedAt": "2026-11-04T21:28:00.874Z",
+      "updatedAt": "2026-11-04T21:30:10.069Z"
+    }
+  ],
+  "runs": [
+    {
+      "name": "recovery-focused",
+      "exit_code": 0,
+      "tests": 8,
+      "seconds": 24.847,
+      "result": "OK",
+      "raw_log": "tests/acceptance-evidence/ceo-stage3-20261104/recovery-focused.log",
+      "sha256": "b2117987df9583d833ae106ec919934bc2884b3c0dc2314822ccf6fc9821b026",
+      "scenario_decisions": [
+        "{\"counts\":{\"remote_executions\":3,\"remote_reservations\":5,\"reservations\":9,\"worker_executions\":4,\"worker_reservations\":4},\"response_restart\":\"EXACT_REPLAY\",\"round\":1,\"scenario\":\"SIGNED_WIRE_ROUND\",\"signed_review\":\"VERIFIED\",\"snapshot_sha256\":\"10af13db73cb12ce1b5737ad5efe3453de9eff17984f09547b4944d72096235f\",\"state\":\"MANAGER_PENDING\"}",
+        "{\"counts\":{\"remote_executions\":6,\"remote_reservations\":10,\"reservations\":18,\"worker_executions\":8,\"worker_reservations\":8},\"response_restart\":\"EXACT_REPLAY\",\"round\":2,\"scenario\":\"SIGNED_WIRE_ROUND\",\"signed_review\":\"VERIFIED\",\"snapshot_sha256\":\"25bc7a0a45b9ef245caf3eb7e7d2b0a7659440d0047efba17853f4757062c2df\",\"state\":\"MANAGER_PENDING\"}",
+        "{\"audit_records\":22,\"external_authority\":false,\"round_charges\":[4,4,4],\"scenario\":\"THREE_ROUND_TRACE\",\"signed_commands\":\"VERIFIED\",\"terminal_decisions\":1,\"worker_executions\":12,\"worker_submissions\":9}",
+        "{\"cross_venture\":\"DENIED\",\"round\":3,\"round_charges\":4,\"scenario\":\"WIRE_CUMULATIVE_LIMIT\",\"spoofed_worker\":\"DENIED\",\"state\":\"HOLD\",\"thirteenth\":\"DENIED\",\"venture_charges\":12}"
+      ]
+    },
+    {
+      "name": "recovery-regression",
+      "exit_code": 0,
+      "tests": 331,
+      "seconds": 115.123,
+      "result": "OK",
+      "raw_log": "tests/acceptance-evidence/ceo-stage3-20261104/recovery-regression.log",
+      "sha256": "d733c2f3de47d1a39321d2f43432f9881805a2d9abc9f91161e959682e51295e",
+      "scenario_decisions": [
+        "{\"counts\":{\"remote_executions\":3,\"remote_reservations\":5,\"reservations\":9,\"worker_executions\":4,\"worker_reservations\":4},\"response_restart\":\"EXACT_REPLAY\",\"round\":1,\"scenario\":\"SIGNED_WIRE_ROUND\",\"signed_review\":\"VERIFIED\",\"snapshot_sha256\":\"9fa69912e404f9d301099da1248ee6b6f88b4647b391d0af66c7ff6611a255eb\",\"state\":\"MANAGER_PENDING\"}",
+        "{\"counts\":{\"remote_executions\":6,\"remote_reservations\":10,\"reservations\":18,\"worker_executions\":8,\"worker_reservations\":8},\"response_restart\":\"EXACT_REPLAY\",\"round\":2,\"scenario\":\"SIGNED_WIRE_ROUND\",\"signed_review\":\"VERIFIED\",\"snapshot_sha256\":\"59d897ee9f2fffc6bd72188add4969875de201804516dd6111a974a927d8f890\",\"state\":\"MANAGER_PENDING\"}",
+        "{\"audit_records\":22,\"external_authority\":false,\"round_charges\":[4,4,4],\"scenario\":\"THREE_ROUND_TRACE\",\"signed_commands\":\"VERIFIED\",\"terminal_decisions\":1,\"worker_executions\":12,\"worker_submissions\":9}",
+        "{\"cross_venture\":\"DENIED\",\"round\":3,\"round_charges\":4,\"scenario\":\"WIRE_CUMULATIVE_LIMIT\",\"spoofed_worker\":\"DENIED\",\"state\":\"HOLD\",\"thirteenth\":\"DENIED\",\"venture_charges\":12}"
+      ]
+    }
+  ],
+  "reviewed_prior_evidence": [
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/development1.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "exit_code": 1
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/development1.log",
+      "sha256": "8be90f661ccef8c4a6b457af4586e018bea06ba87e1f7360623b2f891767049a",
+      "results": [
+        "Ran 2 tests in 4.546s",
+        "FAILED (failures=1, errors=1)"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/development2.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "exit_code": 0
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/development2.log",
+      "sha256": "2ceee384c12cc79f0550bbc5885f22577f8f14a979eed81dd10893290be96722",
+      "results": [
+        "Ran 2 tests in 15.572s",
+        "OK"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/fixture-initial.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "exit_code": 1
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/fixture-initial.log",
+      "sha256": "b3ae2d10ebf4b7c9525da15f54c2060e07c90eb99cec7f5ebf3818763dfc72cf",
+      "results": [
+        "Ran 29 tests in 13.794s",
+        "FAILED (errors=1)"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/focused-before-r4-strengthening.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "exit_code": 0
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/focused-before-r4-strengthening.log",
+      "sha256": "6fdbe7af52f769a1b3b5f1cf4de452ce7312f4cdb91f181580982fcaec569413",
+      "results": [
+        "Ran 8 tests in 25.823s",
+        "OK"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/focused.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "exit_code": 0
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/focused.log",
+      "sha256": "da4d2d0938c8def6046b024394e46a69f5e6d70f80555bf975491cf888a67980",
+      "results": [
+        "Ran 8 tests in 25.602s",
+        "OK"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression-before-r4-strengthening.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "exit_code": 0
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression-before-r4-strengthening.log",
+      "sha256": "7d2a6a87c19f14ebf5b01734138433733fcf6be856b7295c9a376eaccfad43d2",
+      "results": [
+        "Ran 331 tests in 114.299s",
+        "OK"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression-initial.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "exit_code": 1
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression-initial.log",
+      "sha256": "d985be265e46b9760e5b3a05ab705cd3987eeed25982b1ddb1d767d5d3fb623b",
+      "results": [
+        "Ran 307 tests in 76.691s",
+        "FAILED (failures=1, errors=2)"
+      ]
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+      "exit_code": 0
+    },
+    {
+      "path": "tests/acceptance-evidence/ceo-stage3-20261104/regression.log",
+      "sha256": "74d4fbc98f707d235d0d7c6c39bbca2b9bcf9c1d4b7e6762585f90ce86dcf686",
+      "results": [
+        "Ran 331 tests in 113.825s",
+        "OK"
+      ]
+    }
+  ],
+  "test_sha256": {
+    "tests/test_ceo_three_round_mtls.py": "c71672746ae4453452d82f9db10a1d27f40e96786b49279503b608ec8f2a75f1",
+    "tests/test_hierarchy_gateway.py": "262535c42e94fa5af87e823214a4cdaa4f04c64622d23e44589977a6c549a78c",
+    "tests/test_hierarchy_redirection.py": "adccccbd3b081eef18cd2784f0ba78541e3f03eda9b3ff3a1212f3c8fc44568e"
+  },
+  "limitations": [
+    "No runtime changes or live provider execution.",
+    "Raw per-scenario logs and development failures retained locally, not published in this minimal commit.",
+    "Summary is not a certification report or independent review.",
+    "ADV-001 through ADV-049 and /49 unchanged.",
+    "Production gates remain open: installed provenance, service topology, owner production approval, provider evidence, MVP/build scope, GitHub/Claude review."
+  ]
+}

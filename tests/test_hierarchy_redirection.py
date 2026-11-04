@@ -73,8 +73,8 @@ class RedirectionTests(unittest.TestCase):
         self.assertEqual(self.fx.workflow.read("studio-flow"), proposed)
         self.assertEqual(self.h.calls[-1]["existing_evidence"][0]["action"], "revise")
         self.assertEqual([a["depends_on"] for a in proposed["decomposition"]["assignments"]],
-                         [[], [], ["A", "B"]])
-        self.assertNotIn("demand;", self.h.calls[-1]["decomposition_contract"])
+                         [[], [], []])
+        self.assertNotIn("demand;", self.h.calls[-1]["assignment_contract"])
         # Reapproval and every subsequent review remain mandatory.
         self.assertEqual(self.h.tick("worker", "worker"), proposed)
         for action, actor, payload in (
