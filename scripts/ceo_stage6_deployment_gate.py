@@ -69,10 +69,12 @@ def blockers(broker_reservation, broker_http, broker_entrypoint):
 
 
 # C2A is an observation, never a maintained exclusion lease or joined proof.
+PROC_ROOT = Path("/proc")
+LIVE_C1_ROOT = Path("/usr/local/lib/venture-control-broker-level2c/artifacts")
 IDENTITY_FIELDS = ("Id", "User", "FragmentPath", "ExecStart", "ControlGroup")
 
 
-def broker_closed_observation(config):
+def broker_closed_observation(config, synthetic=False):
     """Probe C1 without drain/release/write or waiting. Locks die on return."""
     import fcntl
     import os
@@ -80,8 +82,54 @@ def broker_closed_observation(config):
     control = active = None
     try:
         path = Path(config["path"])
-        path.resolve().relative_to(ROOT)
-        gate = MaintenanceAdmission(str(path), config["identity"])
+        if synthetic:
+            path.resolve().relative_to(ROOT)
+        else:
+            path.relative_to(LIVE_C1_ROOT)
+        if not path.is_absolute() or str(path) != config["path"] or ".." in path.parts:
+            return False
+        # Reuse C1's inode/owner/mode checks, but open read-only, including
+        # _check's pathname revalidation. Never call its mutating operations.
+        class ReadOnlyAdmission(MaintenanceAdmission):
+            def _open(self, active=False):
+                import stat
+                if not synthetic:
+                    self.uid = config["uid"]
+                    if type(self.uid) is not int or self.uid < 0:
+                        raise ValueError("owner UID pin")
+                directory = os.open("/", os.O_RDONLY | os.O_DIRECTORY)
+                fd = None
+                try:
+                    for part in self.path.parent.parts[1:]:
+                        child = os.open(part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+                                        dir_fd=directory)
+                        os.close(directory)
+                        directory = child
+                        if os.fstat(directory).st_uid not in (0, self.uid):
+                            raise ValueError("ancestor owner")
+                    info = os.fstat(directory)
+                    if (info.st_uid != self.uid or stat.S_IMODE(info.st_mode) != 0o700
+                            or (info.st_dev, info.st_ino) != self.identity[4:]):
+                        raise ValueError("directory pin")
+                    fd = os.open(self.path.name + (".active" if active else ""),
+                                 os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK,
+                                 dir_fd=directory)
+                    info = os.fstat(fd)
+                    offset = 2 if active else 0
+                    if (not stat.S_ISREG(info.st_mode) or info.st_uid != self.uid
+                            or stat.S_IMODE(info.st_mode) != 0o600 or info.st_nlink != 1
+                            or (info.st_dev, info.st_ino) != self.identity[offset:offset+2]
+                            or (active and info.st_size != 0)):
+                        raise ValueError("file pin")
+                    result, fd = fd, None
+                    return result
+                finally:
+                    if fd is not None:
+                        os.close(fd)
+                    os.close(directory)
+        gate = ReadOnlyAdmission(str(path), config["identity"])
+        if not synthetic and config["uid"] != gate.uid:
+            return False
         control = gate._open()
         gate._lock(control, fcntl.LOCK_EX, gate._deadline(0))
         active = gate._open(True)
@@ -95,8 +143,8 @@ def broker_closed_observation(config):
                 os.close(fd)
 
 
-def observe_local_writers():
-    """Read systemd metadata and /proc only; incomplete/racing reads deny."""
+def observe_local_writers(config=None):
+    """Read selected systemd identities and all /proc writer metadata only."""
     import os
     result = dict(units=[], processes=[], jobs=[], errors=[])
     def systemctl(*args):
@@ -109,7 +157,7 @@ def observe_local_writers():
             names.add(row["unit"])
         for row in systemctl("list-unit-files", "--type=service,timer"):
             names.add(row["unit_file"])
-        for name in sorted(names):
+        for name in sorted(names if config is None else names & set(config["units"])):
             # Templates without instances cannot run; installed instances and
             # loaded/transient units are still independently enumerated.
             if "@." in name:
@@ -125,26 +173,102 @@ def observe_local_writers():
     except Exception:
         result["errors"].append("SYSTEMD_OBSERVATION_INCOMPLETE")
     try:
-        for entry in Path("/proc").iterdir():
+        for entry in PROC_ROOT.iterdir():
             if not entry.name.isdecimal():
                 continue
             try:
-                # No environment, arguments, credentials or ledger reads.
+                # No environment, arguments, secret credentials or ledger reads.
+                start = (entry / "stat").read_text().rsplit(")", 1)[1].split()[19]
+                status = dict(line.split(":", 1) for line in
+                              (entry / "status").read_text().splitlines() if ":" in line)
+                writable = []
+                for fd in (entry / "fd").iterdir():
+                    target = os.readlink(fd)
+                    flags = next(line.split()[1] for line in
+                                 (entry / "fdinfo" / fd.name).read_text().splitlines()
+                                 if line.startswith("flags:"))
+                    if int(flags, 8) & os.O_ACCMODE in (os.O_WRONLY, os.O_RDWR):
+                        writable.append(target)
                 result["processes"].append(dict(
                     pid=int(entry.name), exe=os.readlink(entry / "exe"),
+                    uids=[int(n) for n in status["Uid"].split()],
+                    cap_eff=int(status["CapEff"], 16),
+                    start=start,
+                    writable_fds=sorted(writable),
                     cgroups=(entry / "cgroup").read_text().splitlines()))
-            except OSError:
+                if (entry / "stat").read_text().rsplit(")", 1)[1].split()[19] != start:
+                    result["errors"].append("PROCESS_IDENTITY_CHANGED")
+            except (OSError, ValueError, KeyError, IndexError, StopIteration):
                 result["errors"].append("PROCESS_OBSERVATION_INCOMPLETE")
     except OSError:
         result["errors"].append("PROC_UNAVAILABLE")
     return result
 
 
-def writer_exclusion_preflight(config=None, snapshot=None):
-    """Conservative local evidence: no process is implicitly a non-writer.
+def validate_protected_roots(config):
+    """Private roots: DAC confines access to pinned owners and privileged PIDs."""
+    import stat
+    identities = []
+    for pin in config["protected_roots"]:
+        path = Path(pin["path"])
+        approved = (ROOT, *(Path(tree) / "artifacts" for tree in TREES.values()))
+        if not any(path.is_relative_to(root) for root in approved):
+            raise ValueError("unapproved protected root")
+        if not path.is_absolute() or str(path.resolve()) != pin["path"]:
+            raise ValueError("canonical protected root required")
+        info = path.stat()
+        if (not stat.S_ISDIR(info.st_mode) or stat.S_IMODE(info.st_mode) != 0o700
+                or (info.st_uid, info.st_dev, info.st_ino) !=
+                (pin["uid"], pin["dev"], pin["ino"])):
+            raise ValueError("protected root identity")
+        identities.append((info.st_dev, info.st_ino, info.st_uid, info.st_mode,
+                           info.st_mtime_ns, info.st_ctime_ns))
+    return identities
 
-    Config pins every observed unit and the single optional broker process.
-    Snapshot is an explicitly synthetic test input, never live attestation.
+
+def process_metadata_known(process):
+    uids = process.get("uids")
+    groups = process.get("cgroups")
+    fds = process.get("writable_fds")
+    caps = process.get("cap_eff")
+    return (isinstance(uids, list) and len(uids) == 4
+            and all(type(uid) is int and uid >= 0 for uid in uids)
+            and isinstance(fds, list) and all(isinstance(fd, str) for fd in fds)
+            and type(caps) is int and caps >= 0 and bool(process.get("start"))
+            and isinstance(groups, list) and bool(groups)
+            and all(isinstance(g, str) and len(g.split(":", 2)) == 3
+                    and g.split(":", 2)[2].startswith("/") for g in groups)
+            and isinstance(process.get("exe"), str) and process["exe"].startswith("/"))
+
+
+def protected_writer(process, config):
+    """Unknown metadata denies; unrelated UIDs without write FDs can pass."""
+    if not process_metadata_known(process):
+        return True
+    uids, groups = process["uids"], process["cgroups"]
+    fds, caps = process["writable_fds"], process["cap_eff"]
+    owners = {p["uid"] for p in config["protected_roots"]}
+    owners.update(p["uid"] for p in config["units"].values())
+    if 0 in uids or owners.intersection(uids) or caps & sum(1 << bit for bit in (0, 1, 2, 3, 6, 7, 8, 16, 17, 18, 19, 21, 32)):
+        return True
+    for group in groups:
+        actual = group.split(":", 2)[2]
+        if any(actual == p["writer_cgroup"] or actual.startswith(p["writer_cgroup"] + "/")
+               for p in config["units"].values()):
+            return True
+    for fd in fds:
+        target = fd.removesuffix(" (deleted)")
+        if any(target == p["path"] or target.startswith(p["path"] + "/")
+               for p in config["protected_roots"]):
+            return True
+    return False
+
+
+def writer_exclusion_preflight(config=None, snapshot=None):
+    """Pinned local observation only; never a maintained exclusion lease.
+
+    Legacy snapshots retain C2A semantics. Live observations require private
+    protected-root and writer UID/cgroup pins and stable repeated samples.
     """
     synthetic = snapshot is not None
     reasons = []
@@ -172,13 +296,22 @@ def writer_exclusion_preflight(config=None, snapshot=None):
         broker_names = [n for n, p in pins.items() if p["role"] == "broker"]
         if len(broker_names) > 1:
             raise ValueError("broker identity")
-        observed = snapshot if synthetic else observe_local_writers()
+        bounded = bool(config.get("protected_roots"))
+        if not synthetic and not bounded:
+            raise ValueError("protected roots required")
+        if bounded:
+            roots_before = validate_protected_roots(config)
+            if any(type(p.get("uid")) is not int or p["uid"] <= 0
+                   or not p.get("writer_cgroup", "").startswith("/") for p in pins.values()):
+                raise ValueError("writer UID/cgroup pins required")
+        observed = snapshot if synthetic else observe_local_writers(config)
         if any(not isinstance(observed[k], list)
                for k in ("units", "processes", "jobs", "errors")):
             raise ValueError("observation shape")
         if observed["errors"]:
             reasons.append("INCOMPLETE_LOCAL_OBSERVATION")
-        if observed["jobs"]:
+        if any(not bounded or not isinstance(job.get("unit"), str)
+               or job["unit"] in pins for job in observed["jobs"]):
             reasons.append("ACTIVE_SYSTEMD_TASKS")
         seen = set()
         allowed_pid = None
@@ -187,7 +320,7 @@ def writer_exclusion_preflight(config=None, snapshot=None):
             raise ValueError("broker configuration identity")
         # Synthetic snapshots cannot supply a broker-ready boolean. Tests
         # exercise the same real C1 files and locks in project-local fixtures.
-        broker_closed = broker_closed_observation(broker) if broker else False
+        broker_closed = broker_closed_observation(broker, synthetic=synthetic) if broker else False
         report["broker_closed_no_leases_observed"] = broker_closed
         if broker_names and not broker:
             reasons.append("BROKER_C1_UNCONFIGURED")
@@ -234,9 +367,15 @@ def writer_exclusion_preflight(config=None, snapshot=None):
             process_ids.add(pid)
             report["processes"].append(dict(pid=pid, exe=process.get("exe"),
                                             cgroups=process.get("cgroups")))
-            if pid != allowed_pid:
-                reasons.append("UNKNOWN_OR_EXTRA_PROCESS_WRITER")
+            if bounded and not process_metadata_known(process):
+                reasons.append("UNKNOWN_PROCESS_METADATA")
                 continue
+            if pid != allowed_pid:
+                if not bounded or protected_writer(process, config):
+                    reasons.append("UNKNOWN_OR_EXTRA_PROCESS_WRITER")
+                continue
+            if bounded and process.get("uids") != [pins[broker["unit"]]["uid"]] * 4:
+                reasons.append("BROKER_PROCESS_IDENTITY_MISMATCH")
             group = pins[broker["unit"]]["ControlGroup"]
             groups = process["cgroups"]
             if (process["exe"] != broker["exe"] or not groups
@@ -244,6 +383,14 @@ def writer_exclusion_preflight(config=None, snapshot=None):
                 reasons.append("BROKER_PROCESS_IDENTITY_MISMATCH")
         if allowed_pid is not None and allowed_pid not in process_ids:
             reasons.append("BROKER_MAINPID_NOT_OBSERVED")
+        if not synthetic:
+            after = observe_local_writers(config)
+            if after != observed:
+                reasons.append("LOCAL_OBSERVATION_CHANGED")
+            if broker and not broker_closed_observation(broker, synthetic=False):
+                reasons.append("BROKER_C1_CHANGED")
+        if bounded and validate_protected_roots(config) != roots_before:
+            reasons.append("PROTECTED_ROOTS_CHANGED")
     except Exception:
         reasons.append("UNCONFIGURED_OR_INVALID_LOCAL_EVIDENCE")
     report["local_exclusion_ready"] = not reasons
