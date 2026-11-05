@@ -1,0 +1,9 @@
+[
+  "/usr/bin/python3",
+  "-B",
+  "/home/epsilon/venture-control-workspace/scripts/ceo_strict_installed_dry_run.py",
+  "/home/epsilon/venture-control-workspace/artifacts/p1-03-fresh-reconciliation-20261105/installed",
+  "broker",
+  "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-03-fresh-reconciliation-20261105/installed-broker",
+  "tests.test_broker_isolated_mtls"
+]

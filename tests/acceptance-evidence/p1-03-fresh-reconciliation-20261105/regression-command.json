@@ -1,0 +1,3 @@
+{
+  "command": "TMPDIR=\"$PWD/artifacts/p1-03-regression-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:tests python3 -B tests/acceptance-evidence/ceo-stage5-20261104/verify_synthetic.py tests.test_ceo_installed_compatibility tests.test_ceo_stage6_gate tests.test_ceo_pending_recovery tests.test_ceo_candidate_acceptance"
+}

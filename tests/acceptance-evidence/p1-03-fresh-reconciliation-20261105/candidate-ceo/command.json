@@ -1,0 +1,10 @@
+[
+  "/usr/bin/python3",
+  "-B",
+  "/home/epsilon/venture-control-workspace/scripts/ceo_strict_installed_dry_run.py",
+  "/home/epsilon/venture-control-workspace/artifacts/p1-03-fresh-reconciliation-20261105/candidate",
+  "ceo",
+  "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-03-fresh-reconciliation-20261105/candidate-ceo",
+  "tests.test_ceo_pending_recovery",
+  "tests.test_ceo_candidate_acceptance"
+]

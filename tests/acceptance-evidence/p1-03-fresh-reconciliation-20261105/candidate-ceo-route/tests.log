@@ -1,0 +1,89 @@
+test_broker_listener_restart_retains_original_complete_result (tests.test_ceo_broker.CEOBrokerTests.test_broker_listener_restart_retains_original_complete_result) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_concurrent_exact_retries_execute_once_and_charge_once (tests.test_ceo_broker.CEOBrokerTests.test_concurrent_exact_retries_execute_once_and_charge_once) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_exact_binding_tampering_and_live_revocation_fail_closed (tests.test_ceo_broker.CEOBrokerTests.test_exact_binding_tampering_and_live_revocation_fail_closed) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_missing_or_inconsistent_evidence_never_bootstraps_or_mutates (tests.test_ceo_broker.CEOBrokerTests.test_missing_or_inconsistent_evidence_never_bootstraps_or_mutates) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_pending_provider_outcome_survives_restart_and_never_reexecutes (tests.test_ceo_broker.CEOBrokerTests.test_pending_provider_outcome_survives_restart_and_never_reexecutes) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_pinned_certificates_and_manager_worker_routes_remain_isolated (tests.test_ceo_broker.CEOBrokerTests.test_pinned_certificates_and_manager_worker_routes_remain_isolated) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_proof_schema_rejects_uncorrelated_broker_reply (tests.test_ceo_broker.CEOBrokerTests.test_proof_schema_rejects_uncorrelated_broker_reply) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_readonly_absent_exact_complete_proof_and_response_replay (tests.test_ceo_broker.CEOBrokerTests.test_readonly_absent_exact_complete_proof_and_response_replay) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_readonly_orphan_charge_and_changed_signed_snapshot_are_denied (tests.test_ceo_broker.CEOBrokerTests.test_readonly_orphan_charge_and_changed_signed_snapshot_are_denied) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_real_synthetic_client_exit_after_charge_and_response (tests.test_ceo_broker.CEOBrokerTests.test_real_synthetic_client_exit_after_charge_and_response) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_two_created_signed_ventures_cannot_borrow_ceo_reservation (tests.test_ceo_broker.CEOBrokerTests.test_two_created_signed_ventures_cannot_borrow_ceo_reservation) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+test_unpinned_or_malformed_proof_has_no_provider_or_ledger_effect (tests.test_ceo_broker.CEOBrokerTests.test_unpinned_or_malformed_proof_has_no_provider_or_ledger_effect) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 24.214s
+
+OK

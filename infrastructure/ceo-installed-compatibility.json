@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "scope": "P1-03",
+  "deployment_authorized": false,
+  "protected_packages": [
+    "agents",
+    "kernel",
+    "integrations"
+  ],
+  "installed_trees": {
+    "ceo": "/usr/local/lib/venture-ceo-level2c",
+    "broker": "/usr/local/lib/venture-control-broker-level2c"
+  },
+  "candidate_source_overlays": [
+    "agents/ceo/ceo_broker.py",
+    "agents/ceo/ceo_research_review.py",
+    "agents/ceo/hierarchy_client.py",
+    "agents/ceo/hierarchy_providers.py",
+    "agents/ceo/provider_gateway.py",
+    "agents/ceo/provider_reservation.py",
+    "kernel/broker/isolated_mtls.py",
+    "kernel/broker/mtls_server.py"
+  ],
+  "fixture_only_dependencies": [
+    "integrations/payment_adapter/__init__.py",
+    "integrations/payment_adapter/real.py",
+    "integrations/payment_adapter/simulated.py"
+  ],
+  "profiles": {
+    "candidate-ceo": {
+      "tree": "candidate",
+      "package": "ceo",
+      "tests": [
+        "tests.test_ceo_pending_recovery",
+        "tests.test_ceo_candidate_acceptance"
+      ]
+    },
+    "installed-broker": {
+      "tree": "installed",
+      "package": "broker",
+      "tests": [
+        "tests.test_broker_isolated_mtls"
+      ]
+    },
+    "candidate-ceo-route": {
+      "tree": "candidate",
+      "package": "ceo",
+      "tests": [
+        "tests.test_ceo_broker"
+      ]
+    },
+    "candidate-broker": {
+      "tree": "candidate",
+      "package": "broker",
+      "tests": [
+        "tests.test_broker_isolated_mtls",
+        "tests.test_broker_mtls_entrypoint"
+      ]
+    }
+  }
+}

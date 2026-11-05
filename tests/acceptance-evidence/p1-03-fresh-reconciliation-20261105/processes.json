@@ -1,0 +1,14 @@
+[
+  {
+    "id": "proc_mw34jdkq_09r3kh",
+    "pid": 3723326,
+    "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw34jdkq_09r3kh.log",
+    "status": "exited"
+  },
+  {
+    "id": "proc_mw34kx8m_he92a2",
+    "pid": 3752036,
+    "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw34kx8m_he92a2.log",
+    "status": "exited"
+  }
+]

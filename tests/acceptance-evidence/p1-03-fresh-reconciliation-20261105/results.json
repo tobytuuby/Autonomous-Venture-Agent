@@ -1,0 +1,20 @@
+{
+  "head": "ef154cdf1f5ea0abedf63520fa8f934f37fa2511",
+  "timestamp_utc": "2026-11-05T05:48:43.476600+00:00",
+  "manifest_sha256": "e0cc879a7ac9f0067ea19424ffd16216cb808585678813274305813649495363",
+  "broker_active_state": "active",
+  "classification": "FRESH_DISK_SNAPSHOT_SYNTHETIC_EXECUTION_WITH_EXPLICIT_OVERLAYS",
+  "installed_disk_unchanged_during_run": true,
+  "test_exits": {
+    "before-fixture": 1,
+    "candidate-ceo": 0,
+    "installed-broker": 0,
+    "candidate-ceo-route": 0,
+    "candidate-broker": 0
+  },
+  "loaded_production_bytes_verified": false,
+  "deployment_allowed": false,
+  "production_provider_calls": 0,
+  "production_ledger_accessed": false,
+  "adv_denominator": 49
+}

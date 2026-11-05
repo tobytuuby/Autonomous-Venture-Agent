@@ -1,0 +1,70 @@
+test_ambiguous_execution_explicitly_blocks_without_retry (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_ambiguous_execution_explicitly_blocks_without_retry) ... ok
+test_changed_attempt_identity_context_or_policy_cannot_reconcile (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_changed_attempt_identity_context_or_policy_cannot_reconcile) ... ok
+test_executed_response_retrieved_without_configuring_or_calling_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_executed_response_retrieved_without_configuring_or_calling_provider) ... ok
+test_future_venture_restart_after_reservation_and_after_execution (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_future_venture_restart_after_reservation_and_after_execution) ... ok
+test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_legacy_reservation_cannot_be_upgraded_into_nonexecution_proof) ... ok
+test_local_session_preflight_is_readonly_and_rejects_changed_binding (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_local_session_preflight_is_readonly_and_rejects_changed_binding) ... ok
+test_manager_execution_entrypoint_cannot_select_ceo_role_from_body (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_manager_execution_entrypoint_cannot_select_ceo_role_from_body) ... ok
+test_missing_ledger_or_session_is_not_nonexecution_proof (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_missing_ledger_or_session_is_not_nonexecution_proof) ... ok
+test_no_original_reservation_proves_original_was_never_executed (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_no_original_reservation_proves_original_was_never_executed) ... ok
+test_pending_checkpoint_hash_and_prompt_change_still_refused (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_pending_checkpoint_hash_and_prompt_change_still_refused) ... ok
+test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_allows_exact_reserved_call_but_no_new_slot) ... ok
+test_quota_exhaustion_blocks_unreserved_intent_without_provider (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_quota_exhaustion_blocks_unreserved_intent_without_provider) ... ok
+test_reserved_unexecuted_same_identity_attempt_authorization_only (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_reserved_unexecuted_same_identity_attempt_authorization_only) ... ok
+test_revoked_authority_blocks_unstarted_and_completed_replay (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_revoked_authority_blocks_unstarted_and_completed_replay) ... ok
+test_split_local_and_broker_authority_blocks_before_remote_charge (tests.test_ceo_pending_recovery.CEOPendingRecoveryTests.test_split_local_and_broker_authority_blocks_before_remote_charge) ... ok
+test_three_round_process_exit_recovery_preserves_signed_trace_and_quota (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_three_round_process_exit_recovery_preserves_signed_trace_and_quota) ... ERROR
+test_two_created_synthetic_ventures_reject_cross_bound_reservation (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_two_created_synthetic_ventures_reject_cross_bound_reservation) ... ERROR
+
+======================================================================
+ERROR: test_three_round_process_exit_recovery_preserves_signed_trace_and_quota (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_three_round_process_exit_recovery_preserves_signed_trace_and_quota)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_candidate_acceptance.py", line 33, in setUp
+    super().setUp()
+    ~~~~~~~~~~~~~^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 21, in setUp
+    super().setUp()
+    ~~~~~~~~~~~~~^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 179, in setUp
+    self.start_patch(patch(target, side_effect=AssertionError("external operation denied")))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 183, in start_patch
+    value = context.start()
+  File "/usr/lib/python3.14/unittest/mock.py", line 1667, in start
+    result = self.__enter__()
+  File "/usr/lib/python3.14/unittest/mock.py", line 1494, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/pkgutil.py", line 473, in resolve_name
+    result = getattr(result, p)
+AttributeError: module 'kernel' has no attribute 'finance'
+
+======================================================================
+ERROR: test_two_created_synthetic_ventures_reject_cross_bound_reservation (tests.test_ceo_candidate_acceptance.CEOCandidateAcceptanceTests.test_two_created_synthetic_ventures_reject_cross_bound_reservation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_candidate_acceptance.py", line 33, in setUp
+    super().setUp()
+    ~~~~~~~~~~~~~^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 21, in setUp
+    super().setUp()
+    ~~~~~~~~~~~~~^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 179, in setUp
+    self.start_patch(patch(target, side_effect=AssertionError("external operation denied")))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 183, in start_patch
+    value = context.start()
+  File "/usr/lib/python3.14/unittest/mock.py", line 1667, in start
+    result = self.__enter__()
+  File "/usr/lib/python3.14/unittest/mock.py", line 1494, in __enter__
+    self.target = self.getter()
+                  ~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/pkgutil.py", line 473, in resolve_name
+    result = getattr(result, p)
+AttributeError: module 'kernel' has no attribute 'finance'
+
+----------------------------------------------------------------------
+Ran 17 tests in 3.685s
+
+FAILED (errors=2)

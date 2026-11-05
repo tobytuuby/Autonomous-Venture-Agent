@@ -14,20 +14,23 @@ class InstalledCompatibilityTests(unittest.TestCase):
             tree = Path(temporary)
             # Package paths intentionally point at the checkout, as in the
             # acceptance harness. The finder must still deny missing children.
-            for package in ("agents", "kernel"):
-                destination = tree / "ceo" / package
-                destination.mkdir(parents=True)
-                (destination / "__init__.py").write_text("")
-            (tree / "ceo/integrations").mkdir()
-            for module in ("agents.ceo.ceo_broker", "kernel.finance.finance",
-                           "integrations.payment_adapter"):
-                with self.subTest(module=module):
+            for profile in ("ceo", "broker"):
+                for package in ("agents", "kernel"):
+                    destination = tree / profile / package
+                    destination.mkdir(parents=True)
+                    (destination / "__init__.py").write_text("")
+                (tree / profile / "integrations").mkdir()
+            for profile, module in ((profile, module)
+                    for profile in ("ceo", "broker")
+                    for module in ("agents.ceo.ceo_broker", "kernel.finance.finance",
+                                   "integrations.payment_adapter")):
+                with self.subTest(profile=profile, module=module):
                     code = """
 import importlib
 import sys
 from pathlib import Path
 from scripts.ceo_strict_installed_dry_run import Finder
-finder = Finder(Path(sys.argv[1]), "ceo")
+finder = Finder(Path(sys.argv[1]), sys.argv[3])
 sys.meta_path.insert(0, finder)
 try:
     importlib.import_module(sys.argv[2])
@@ -39,7 +42,7 @@ else:
     raise AssertionError("silent repository fallback")
 """
                     result = subprocess.run([sys.executable, "-B", "-c", code,
-                        str(tree), module], cwd=ROOT, capture_output=True, text=True,
+                        str(tree), module, profile], cwd=ROOT, capture_output=True, text=True,
                         timeout=10)
                     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
                     self.assertIn("Recorded installed dependency absent:", result.stdout)

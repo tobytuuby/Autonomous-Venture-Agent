@@ -1,0 +1,237 @@
+{
+  "profile": "broker",
+  "classification": "STRICT_RECORDED_INSTALLED_TREE_DRY_RUN",
+  "current_installation_verified": false,
+  "loaded": [
+    {
+      "module": "kernel.broker",
+      "tree": "broker",
+      "path": "kernel/broker/__init__.py",
+      "sha256": "595e428cde050fd2f99de8b45e80d74868b5d4d5ab315a046b23343859d1212c"
+    },
+    {
+      "module": "kernel.broker.broker",
+      "tree": "broker",
+      "path": "kernel/broker/broker.py",
+      "sha256": "2ad8ca71177ca8dc884ed97289136b7facb117a49c4bd0c4d2006fea50901922"
+    },
+    {
+      "module": "kernel.broker.isolated_mtls",
+      "tree": "broker",
+      "path": "kernel/broker/isolated_mtls.py",
+      "sha256": "509aae4196eb4c79f5e6445f776a5db2ac1aa80fe734e3a8ec4c2bbeb07fc28a"
+    },
+    {
+      "module": "agents",
+      "tree": "broker",
+      "path": "agents/__init__.py",
+      "sha256": "78c248b61b8d79ad7d0844d0740fb9bbad67803d2de79e01b4f3abee43c82a22"
+    },
+    {
+      "module": "agents.ceo",
+      "tree": "broker",
+      "path": "agents/ceo/__init__.py",
+      "sha256": "f2d2341e2dae8b2b58680f5b52e69d7504fb7c7dad377669be8bebeb04ca1b8b"
+    },
+    {
+      "module": "agents.ceo.agent",
+      "tree": "broker",
+      "path": "agents/ceo/agent.py",
+      "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def"
+    },
+    {
+      "module": "agents.ceo.durable_state",
+      "tree": "broker",
+      "path": "agents/ceo/durable_state.py",
+      "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd"
+    },
+    {
+      "module": "agents.ceo.cross_vm_transport",
+      "tree": "broker",
+      "path": "agents/ceo/cross_vm_transport.py",
+      "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184"
+    },
+    {
+      "module": "agents.ceo.escalation_inbox",
+      "tree": "broker",
+      "path": "agents/ceo/escalation_inbox.py",
+      "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898"
+    },
+    {
+      "module": "agents.ceo.cross_vm_poll_client",
+      "tree": "broker",
+      "path": "agents/ceo/cross_vm_poll_client.py",
+      "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94"
+    },
+    {
+      "module": "agents.ceo.cross_vm_poll_server",
+      "tree": "broker",
+      "path": "agents/ceo/cross_vm_poll_server.py",
+      "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8"
+    },
+    {
+      "module": "agents.ceo.provider_reservation",
+      "tree": "broker",
+      "path": "agents/ceo/provider_reservation.py",
+      "sha256": "54a326f7921cf945f4cef96dc33ddd14385d1b7d4f3557d35050b25aa581f5d6"
+    },
+    {
+      "module": "agents.ceo.service_identity",
+      "tree": "broker",
+      "path": "agents/ceo/service_identity.py",
+      "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd"
+    },
+    {
+      "module": "agents.ceo.control_plane",
+      "tree": "broker",
+      "path": "agents/ceo/control_plane.py",
+      "sha256": "d251c41096749970c941e15c2921d48fbc1361a2629241b527ff6aea0f4e091d"
+    },
+    {
+      "module": "agents.ceo.venture_workflow",
+      "tree": "broker",
+      "path": "agents/ceo/venture_workflow.py",
+      "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d"
+    },
+    {
+      "module": "agents.ceo.scheduled_exercise",
+      "tree": "broker",
+      "path": "agents/ceo/scheduled_exercise.py",
+      "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb"
+    },
+    {
+      "module": "agents.ceo.gates",
+      "tree": "broker",
+      "path": "agents/ceo/gates.py",
+      "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc"
+    },
+    {
+      "module": "agents.ceo.provider",
+      "tree": "broker",
+      "path": "agents/ceo/provider.py",
+      "sha256": "4797d99071bdf428b30ed338e8af224acc3936dd565052fd1a36f238fc526c22"
+    },
+    {
+      "module": "agents.ceo.venture_exercise",
+      "tree": "broker",
+      "path": "agents/ceo/venture_exercise.py",
+      "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf"
+    },
+    {
+      "module": "kernel.p6",
+      "tree": "broker",
+      "path": "kernel/p6/__init__.py",
+      "sha256": "c89cd584bfa9e73501363971b8cdecc6454ae4bfe38944525930da384ed6ffb7"
+    },
+    {
+      "module": "kernel.p6.anomaly",
+      "tree": "broker",
+      "path": "kernel/p6/anomaly.py",
+      "sha256": "c4d71e120329f6bf4c2712bcf135f03c4e73eac6839f1c3603bfdde84253ed46"
+    },
+    {
+      "module": "kernel.p6.coordination",
+      "tree": "broker",
+      "path": "kernel/p6/coordination.py",
+      "sha256": "eadac570dd1ed4a0afa79dbbc9c9c059d052a0f77ebb04dd8764e4879d0a024f"
+    },
+    {
+      "module": "kernel.p6.registry",
+      "tree": "broker",
+      "path": "kernel/p6/registry.py",
+      "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7"
+    },
+    {
+      "module": "kernel.p6.shared_service",
+      "tree": "broker",
+      "path": "kernel/p6/shared_service.py",
+      "sha256": "778de46f34f51b308ca0dac7e77ef0294462de32ed9e18c2bc956af04855dad4"
+    },
+    {
+      "module": "kernel.p6.operations",
+      "tree": "broker",
+      "path": "kernel/p6/operations.py",
+      "sha256": "9604c01e824dcdd4df1362a1d1459187fab46012bd09933ed2ae3cf357991462"
+    },
+    {
+      "module": "kernel.p6.certification",
+      "tree": "broker",
+      "path": "kernel/p6/certification.py",
+      "sha256": "dfbc5251d8a1672bedd108e4f300c9caf27f6cab6d30d356f5ae4b69aeaca4a5"
+    },
+    {
+      "module": "kernel.synthetic_orchestration",
+      "tree": "broker",
+      "path": "kernel/synthetic_orchestration.py",
+      "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561"
+    },
+    {
+      "module": "kernel.synthetic_venture_store",
+      "tree": "broker",
+      "path": "kernel/synthetic_venture_store.py",
+      "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78"
+    },
+    {
+      "module": "kernel.venture_admission",
+      "tree": "broker",
+      "path": "kernel/venture_admission.py",
+      "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f"
+    },
+    {
+      "module": "kernel.broker.server",
+      "tree": "broker",
+      "path": "kernel/broker/server.py",
+      "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab"
+    },
+    {
+      "module": "agents.ceo.hierarchy_gateway",
+      "tree": "broker",
+      "path": "agents/ceo/hierarchy_gateway.py",
+      "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f"
+    },
+    {
+      "module": "agents.ceo.hierarchy_artifact_store",
+      "tree": "broker",
+      "path": "agents/ceo/hierarchy_artifact_store.py",
+      "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77"
+    },
+    {
+      "module": "agents.ceo.worker_inference",
+      "tree": "broker",
+      "path": "agents/ceo/worker_inference.py",
+      "sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef"
+    },
+    {
+      "module": "agents.ceo.hierarchy_model_callbacks",
+      "tree": "broker",
+      "path": "agents/ceo/hierarchy_model_callbacks.py",
+      "sha256": "f85953818641d67b60f412869e1821f84b20468e912056437307765d5a156e4b"
+    },
+    {
+      "module": "agents.ceo.cert_renewal",
+      "tree": "broker",
+      "path": "agents/ceo/cert_renewal.py",
+      "sha256": "5b591dd612ea0afbec2f7f9987ea9e4d9c72d88d6d22744d683c7851b34dbb7d"
+    },
+    {
+      "module": "agents.ceo.preparation_broker",
+      "tree": "broker",
+      "path": "agents/ceo/preparation_broker.py",
+      "sha256": "6e49653cc39721bcd17d82e2474fee3b6f116794e6503c1a778d8a264aeb322c"
+    },
+    {
+      "module": "agents.ceo.queue_recovery",
+      "tree": "broker",
+      "path": "agents/ceo/queue_recovery.py",
+      "sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0"
+    },
+    {
+      "module": "agents.ceo.scheduled_intake",
+      "tree": "broker",
+      "path": "agents/ceo/scheduled_intake.py",
+      "sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5"
+    }
+  ],
+  "missing_installed_dependencies": [],
+  "repository_production_fallback": false
+}
