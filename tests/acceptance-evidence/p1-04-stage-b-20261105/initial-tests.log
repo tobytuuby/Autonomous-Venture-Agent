@@ -1,0 +1,186 @@
+test_active_daemon_cycle_denies_exclusive_preflight (tests.test_deployment_resume.DeploymentPauseTests.test_active_daemon_cycle_denies_exclusive_preflight) ... ERROR
+test_cross_process_pause_and_release_without_state_mutation (tests.test_deployment_resume.DeploymentPauseTests.test_cross_process_pause_and_release_without_state_mutation) ... ERROR
+test_exception_releases_lock_and_legacy_deployer_denies_before_io (tests.test_deployment_resume.DeploymentPauseTests.test_exception_releases_lock_and_legacy_deployer_denies_before_io) ... ERROR
+test_missing_alias_permissions_and_other_roles_fail_closed (tests.test_deployment_resume.DeploymentPauseTests.test_missing_alias_permissions_and_other_roles_fail_closed) ... ok
+test_preflight_cli_denies_even_when_exclusion_available (tests.test_deployment_resume.DeploymentPauseTests.test_preflight_cli_denies_even_when_exclusion_available) ... FAIL
+test_completed_response_process_restart_and_daemon_code_rollback_no_inference (tests.test_deployment_resume.DeploymentResumeTests.test_completed_response_process_restart_and_daemon_code_rollback_no_inference) ... ERROR
+test_invalid_signed_review_not_reauthorized_on_restart (tests.test_deployment_resume.DeploymentResumeTests.test_invalid_signed_review_not_reauthorized_on_restart) ... ERROR
+test_pause_leaves_shared_manager_worker_traffic_running (tests.test_deployment_resume.DeploymentResumeTests.test_pause_leaves_shared_manager_worker_traffic_running) ... ERROR
+test_pending_execution_survives_process_death_and_repeated_restart_held (tests.test_deployment_resume.DeploymentResumeTests.test_pending_execution_survives_process_death_and_repeated_restart_held) ... ERROR
+
+======================================================================
+ERROR: test_active_daemon_cycle_denies_exclusive_preflight (tests.test_deployment_resume.DeploymentPauseTests.test_active_daemon_cycle_denies_exclusive_preflight)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 84, in test_active_daemon_cycle_denies_exclusive_preflight
+    daemon.poll(config, once=True, worker_limit_override=4)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 240, in poll
+    with cycle(config) as admitted:
+         ~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 64, in cycle
+    with lease(config["deployment_lock"]) as admitted:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_cross_process_pause_and_release_without_state_mutation (tests.test_deployment_resume.DeploymentPauseTests.test_cross_process_pause_and_release_without_state_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 59, in test_cross_process_pause_and_release_without_state_mutation
+    with lease(self.lock, exclusive=True) as held:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_exception_releases_lock_and_legacy_deployer_denies_before_io (tests.test_deployment_resume.DeploymentPauseTests.test_exception_releases_lock_and_legacy_deployer_denies_before_io)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 110, in test_exception_releases_lock_and_legacy_deployer_denies_before_io
+    with lease(self.lock, exclusive=True):
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_completed_response_process_restart_and_daemon_code_rollback_no_inference (tests.test_deployment_resume.DeploymentResumeTests.test_completed_response_process_restart_and_daemon_code_rollback_no_inference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 173, in test_completed_response_process_restart_and_daemon_code_rollback_no_inference
+    reviewed = self.round_review(1)
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 82, in round_review
+    item = self.ready()
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 250, in ready
+    self.poll("service-ceo")  # Existing centrally bounded session establishment.
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 223, in poll
+    daemon.poll(self.configs[actor], once=True,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                worker_limit_override=4 if actor == "service-ceo" else None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 240, in poll
+    with cycle(config) as admitted:
+         ~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 64, in cycle
+    with lease(config["deployment_lock"]) as admitted:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_invalid_signed_review_not_reauthorized_on_restart (tests.test_deployment_resume.DeploymentResumeTests.test_invalid_signed_review_not_reauthorized_on_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 238, in test_invalid_signed_review_not_reauthorized_on_restart
+    reviewed = self.round_review(1)
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 82, in round_review
+    item = self.ready()
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 250, in ready
+    self.poll("service-ceo")  # Existing centrally bounded session establishment.
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 223, in poll
+    daemon.poll(self.configs[actor], once=True,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                worker_limit_override=4 if actor == "service-ceo" else None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 240, in poll
+    with cycle(config) as admitted:
+         ~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 64, in cycle
+    with lease(config["deployment_lock"]) as admitted:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_pause_leaves_shared_manager_worker_traffic_running (tests.test_deployment_resume.DeploymentResumeTests.test_pause_leaves_shared_manager_worker_traffic_running)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 151, in test_pause_leaves_shared_manager_worker_traffic_running
+    self.poll("service-ceo")  # Establish original centrally charged session.
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 223, in poll
+    daemon.poll(self.configs[actor], once=True,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                worker_limit_override=4 if actor == "service-ceo" else None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 240, in poll
+    with cycle(config) as admitted:
+         ~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 64, in cycle
+    with lease(config["deployment_lock"]) as admitted:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+ERROR: test_pending_execution_survives_process_death_and_repeated_restart_held (tests.test_deployment_resume.DeploymentResumeTests.test_pending_execution_survives_process_death_and_repeated_restart_held)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 206, in test_pending_execution_survives_process_death_and_repeated_restart_held
+    reviewed = self.round_review(1)
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_three_round_mtls.py", line 82, in round_review
+    item = self.ready()
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 250, in ready
+    self.poll("service-ceo")  # Existing centrally bounded session establishment.
+    ~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_research_mtls_acceptance.py", line 223, in poll
+    daemon.poll(self.configs[actor], once=True,
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                worker_limit_override=4 if actor == "service-ceo" else None)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 240, in poll
+    with cycle(config) as admitted:
+         ~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 64, in cycle
+    with lease(config["deployment_lock"]) as admitted:
+         ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/contextlib.py", line 141, in __enter__
+    return next(self.gen)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/deployment_pause.py", line 29, in lease
+    raise ValueError("deployment lock parent is writable by another user")
+ValueError: deployment lock parent is writable by another user
+
+======================================================================
+FAIL: test_preflight_cli_denies_even_when_exclusion_available (tests.test_deployment_resume.DeploymentPauseTests.test_preflight_cli_denies_even_when_exclusion_available)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 128, in test_preflight_cli_denies_even_when_exclusion_available
+    self.assertTrue(report["ceo_exclusion_observed"])
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 9 tests in 3.505s
+
+FAILED (failures=1, errors=7)

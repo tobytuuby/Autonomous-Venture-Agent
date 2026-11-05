@@ -1,0 +1,166 @@
+test_active_daemon_cycle_denies_exclusive_preflight (tests.test_deployment_resume.DeploymentPauseTests.test_active_daemon_cycle_denies_exclusive_preflight) ... ok
+test_cross_process_pause_and_release_without_state_mutation (tests.test_deployment_resume.DeploymentPauseTests.test_cross_process_pause_and_release_without_state_mutation) ... ok
+test_exception_releases_lock_and_legacy_deployer_denies_before_io (tests.test_deployment_resume.DeploymentPauseTests.test_exception_releases_lock_and_legacy_deployer_denies_before_io) ... ok
+test_missing_alias_permissions_and_other_roles_fail_closed (tests.test_deployment_resume.DeploymentPauseTests.test_missing_alias_permissions_and_other_roles_fail_closed) ... ok
+test_preflight_cli_denies_even_when_exclusion_available (tests.test_deployment_resume.DeploymentPauseTests.test_preflight_cli_denies_even_when_exclusion_available) ... ok
+test_completed_response_process_restart_and_daemon_code_rollback_no_inference (tests.test_deployment_resume.DeploymentResumeTests.test_completed_response_process_restart_and_daemon_code_rollback_no_inference) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+/home/epsilon/venture-control-workspace/tests/test_ceo_candidate_acceptance.py:61: DeprecationWarning: This process (pid=3497630) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py:25: DeprecationWarning: This process (pid=3497630) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+{"daemon_sha256":"ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8","quota":"EXACT_ROWS_UNCHANGED","result":"SIGNED_CONTINUATION_NO_PROVIDER","scenario":"COMPLETED_RESPONSE_CODE_ROLLBACK","scope":"DAEMON_ONLY_SAME_CURRENT_LEDGER"}
+ok
+test_invalid_signed_review_not_reauthorized_on_restart (tests.test_deployment_resume.DeploymentResumeTests.test_invalid_signed_review_not_reauthorized_on_restart) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ERROR:root:research workflow blocked role=ceo workflow=research-10f7c9bf90f064107a4ac51f snapshot=ffb35fa571d7baea5941aa3f0b91abba80550c0b49e6e9a1361dd4c1ec478849 reason=VALIDATION_OR_AUTHORITY_DENIED next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role ceo error: ValueError
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 36, in _request
+    with self.opener.open(req, timeout=48 if "inference" in path else 12) as response:
+         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 503: Service Unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 271, in poll
+    direct_research(config,snapshot,client,signed)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 195, in direct_research
+    return client.apply(command, key.sign(canonical(command).encode()).hex())
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 59, in apply
+    r = self._request("POST", COMMAND_PATH,
+                      dict(command=command, signature=signature))
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 41, in _request
+    raise ValueError("broker hierarchy request failed with HTTP " + str(exc.code)) from exc
+ValueError: broker hierarchy request failed with HTTP 503
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 36, in _request
+    with self.opener.open(req, timeout=48 if "inference" in path else 12) as response:
+         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 503: Service Unavailable
+
+The above exception was the direct cause of the following exception:
+
+ValueError: broker hierarchy request failed with HTTP 503
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 28, in child_call
+    action()
+    ~~~~~~^^
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 249, in restart
+    with self.assertRaisesRegex(ValueError, "HTTP 400"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/case.py", line 285, in __exit__
+    self._raiseFailure('"{}" does not match "{}"'.format(
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+             expected_regex.pattern, str(exc_value)))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/case.py", line 209, in _raiseFailure
+    raise self.test_case.failureException(msg)
+AssertionError: "HTTP 400" does not match "broker hierarchy request failed with HTTP 503"
+FAIL
+test_pause_leaves_shared_manager_worker_traffic_running (tests.test_deployment_resume.DeploymentResumeTests.test_pause_leaves_shared_manager_worker_traffic_running) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+{"ceo":"EXCLUDED","manager":"ADVANCED","scenario":"CEO_PAUSE_SHARED_BROKER","signed_lineage":"VERIFIED","worker":"ADVANCED"}
+ok
+test_pending_execution_survives_process_death_and_repeated_restart_held (tests.test_deployment_resume.DeploymentResumeTests.test_pending_execution_survives_process_death_and_repeated_restart_held) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ERROR:root:research workflow blocked role=ceo workflow=research-10f7c9bf90f064107a4ac51f snapshot=636890c15ef2b06a754e35b8936be88db6b875dc5f0c44b913c46e67cdb547f8 reason=PROVIDER_EXECUTION_AMBIGUOUS next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role ceo error: RecoveryImpossible
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 270, in poll
+    signed=review(allowed_config(config,flow,snapshot),snapshot,client)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 282, in review
+    response,request=recover_response(config,state,client,prior,request)
+                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 368, in recover_response
+    return metered_review(config, state, client, DeferredModel(), saved_request), saved_request
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 380, in metered_review
+    return metered(request,())
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 204, in __call__
+    result = reconciled_result(status, request_sha)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 274, in reconciled_result
+    raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")
+agents.ceo.hierarchy_providers.RecoveryImpossible: PROVIDER_EXECUTION_AMBIGUOUS
+ERROR:root:research workflow blocked role=ceo workflow=research-10f7c9bf90f064107a4ac51f snapshot=636890c15ef2b06a754e35b8936be88db6b875dc5f0c44b913c46e67cdb547f8 reason=PROVIDER_EXECUTION_AMBIGUOUS next_action=Inspect signed lineage, original session and reservation/execution proof; preserve identities and charges
+ERROR:root:research role ceo error: RecoveryImpossible
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_research_daemon.py", line 270, in poll
+    signed=review(allowed_config(config,flow,snapshot),snapshot,client)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 282, in review
+    response,request=recover_response(config,state,client,prior,request)
+                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 368, in recover_response
+    return metered_review(config, state, client, DeferredModel(), saved_request), saved_request
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 380, in metered_review
+    return metered(request,())
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 204, in __call__
+    result = reconciled_result(status, request_sha)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 274, in reconciled_result
+    raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")
+agents.ceo.hierarchy_providers.RecoveryImpossible: PROVIDER_EXECUTION_AMBIGUOUS
+{"outcome":"HELD","quota":"EXACT_ROWS_UNCHANGED","restarts":2,"scenario":"PENDING_PROCESS_DEATH","synthetic_invocations":1}
+ok
+
+======================================================================
+FAIL: test_invalid_signed_review_not_reauthorized_on_restart (tests.test_deployment_resume.DeploymentResumeTests.test_invalid_signed_review_not_reauthorized_on_restart)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 251, in test_invalid_signed_review_not_reauthorized_on_restart
+    child_call(restart)
+    ~~~~~~~~~~^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_resume.py", line 45, in child_call
+    raise AssertionError("unexpected synthetic child exit: " + str(status))
+AssertionError: unexpected synthetic child exit: 25344
+
+----------------------------------------------------------------------
+Ran 9 tests in 10.218s
+
+FAILED (failures=1)

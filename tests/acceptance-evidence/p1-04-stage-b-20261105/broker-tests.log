@@ -1,0 +1,103 @@
+test_completed_wire_loss_fresh_broker_and_ceo_response_reuse (tests.test_deployment_broker_restart.DeploymentBrokerRestartTests.test_completed_wire_loss_fresh_broker_and_ceo_response_reuse) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ERROR
+/usr/lib/python3.14/tempfile.py:484: ResourceWarning: Implicitly cleaning up <HTTPError 503: 'Service Unavailable'>
+  _warnings.warn(self.warn_message, ResourceWarning)
+test_pending_wire_loss_fresh_broker_keeps_quota_and_holds (tests.test_deployment_broker_restart.DeploymentBrokerRestartTests.test_pending_wire_loss_fresh_broker_keeps_quota_and_holds) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "ceo", "from_state": "DECOMPOSITION_REVIEW", "to_state": "WORKER_PENDING", "revision": 3, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 4, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "WORKER_PENDING", "revision": 5, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "MANAGER_REVIEW", "revision": 6, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_REVIEW", "to_state": "CEO_REVIEW", "revision": 7, "operational_authority": false}
+ERROR
+
+======================================================================
+ERROR: test_completed_wire_loss_fresh_broker_and_ceo_response_reuse (tests.test_deployment_broker_restart.DeploymentBrokerRestartTests.test_completed_wire_loss_fresh_broker_and_ceo_response_reuse)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 36, in _request
+    with self.opener.open(req, timeout=48 if "inference" in path else 12) as response:
+         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 503: Service Unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_broker_restart.py", line 107, in test_completed_wire_loss_fresh_broker_and_ceo_response_reuse
+    packet = self.fx.resume()  # Existing review recovery against new broker PID.
+  File "/home/epsilon/venture-control-workspace/tests/test_ceo_broker.py", line 60, in resume
+    return review(self.config, self.original_state, self.client())
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 282, in review
+    response,request=recover_response(config,state,client,prior,request)
+                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 368, in recover_response
+    return metered_review(config, state, client, DeferredModel(), saved_request), saved_request
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/ceo_research_review.py", line 380, in metered_review
+    return metered(request,())
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 168, in __call__
+    result = self._broker_ceo(reservation, request)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_providers.py", line 260, in _broker_ceo
+    return self.client.ceo_execute(payload)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 139, in ceo_execute
+    r = self._request("POST", EXECUTE_PATH, payload)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 41, in _request
+    raise ValueError("broker hierarchy request failed with HTTP " + str(exc.code)) from exc
+ValueError: broker hierarchy request failed with HTTP 503
+
+======================================================================
+ERROR: test_pending_wire_loss_fresh_broker_keeps_quota_and_holds (tests.test_deployment_broker_restart.DeploymentBrokerRestartTests.test_pending_wire_loss_fresh_broker_keeps_quota_and_holds)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 36, in _request
+    with self.opener.open(req, timeout=48 if "inference" in path else 12) as response:
+         ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 493, in open
+    response = meth(req, response)
+  File "/usr/lib/python3.14/urllib/request.py", line 602, in http_response
+    response = self.parent.error(
+        'http', request, response, code, msg, hdrs)
+  File "/usr/lib/python3.14/urllib/request.py", line 531, in error
+    return self._call_chain(*args)
+           ~~~~~~~~~~~~~~~~^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 611, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 503: Service Unavailable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_broker_restart.py", line 118, in test_pending_wire_loss_fresh_broker_keeps_quota_and_holds
+    first = self.crash_request("PENDING")
+  File "/home/epsilon/venture-control-workspace/tests/test_deployment_broker_restart.py", line 93, in crash_request
+    self.fx.client().ceo_execute(self.fx.payload)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 139, in ceo_execute
+    r = self._request("POST", EXECUTE_PATH, payload)
+  File "/home/epsilon/venture-control-workspace/agents/ceo/hierarchy_client.py", line 41, in _request
+    raise ValueError("broker hierarchy request failed with HTTP " + str(exc.code)) from exc
+ValueError: broker hierarchy request failed with HTTP 503
+
+----------------------------------------------------------------------
+Ran 2 tests in 5.316s
+
+FAILED (errors=2)

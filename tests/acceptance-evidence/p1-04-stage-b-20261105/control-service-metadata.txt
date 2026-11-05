@@ -1,0 +1,31 @@
+Id=venture-owner-research-ceo.service
+Requires=-.mount system.slice sysinit.target venture-control-broker-mtls.service
+After=system.slice systemd-journald.socket sysinit.target network-online.target -.mount basic.target systemd-tmpfiles-setup.service venture-control-broker-mtls.service tmp.mount
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/venture-owner-research-ceo.service
+DropInPaths=
+TimeoutStopUSec=1min 30s
+MainPID=288443
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -B -m agents.ceo.hierarchy_research_daemon --config /usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo/hierarchy-config.json --worker-limit 4 ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+WorkingDirectory=/usr/local/lib/venture-ceo-level2c
+User=venture-ceo
+Group=venture-ceo
+ReadWritePaths=/usr/local/lib/venture-ceo-level2c/artifacts/level2c-ceo-r4
+KillMode=control-group
+
+Id=venture-control-broker-mtls.service
+Requires=-.mount system.slice sysinit.target opa.service
+After=basic.target systemd-tmpfiles-setup.service sysinit.target network-online.target systemd-journald.socket system.slice tmp.mount -.mount opa.service
+ActiveState=active
+SubState=running
+FragmentPath=/etc/systemd/system/venture-control-broker-mtls.service
+DropInPaths=/etc/systemd/system/venture-control-broker-mtls.service.d/level2c-stage.conf
+TimeoutStopUSec=1min 30s
+MainPID=288442
+ExecStart={ path=/usr/bin/python3 ; argv[]=/usr/bin/python3 -m kernel.broker.mtls_server ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+WorkingDirectory=/usr/local/lib/venture-control-broker-level2c
+User=venture-broker
+Group=venture-broker
+ReadWritePaths=/var/lib/venture-control-broker /usr/local/lib/venture-control-broker-level2c/artifacts/preparation-authority
+KillMode=control-group

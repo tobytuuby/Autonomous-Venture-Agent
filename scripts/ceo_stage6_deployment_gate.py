@@ -70,13 +70,26 @@ def blockers(broker_reservation, broker_http, broker_entrypoint):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reconstruct", action="store_true",
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--reconstruct", action="store_true",
                         help="write public recorded Python sources under artifacts")
-    parser.add_argument("--assess-boundary", action="store_true",
+    modes.add_argument("--assess-boundary", action="store_true",
                         help="read-only detection only; always denies deployment/resume")
+    modes.add_argument("--preflight-resume", action="store_true",
+                       help="probe CEO cooperative exclusion; deployment remains DENY")
+    parser.add_argument("--deployment-lock")
     for name in ("workflow", "resources", "ceo-calls", "public-trust"):
         parser.add_argument("--" + name)
     args = parser.parse_args()
+    if args.preflight_resume:
+        if any((args.workflow, args.resources, args.ceo_calls, args.public_trust)):
+            parser.error("preflight does not accept partial state coverage")
+        sys.path.insert(0, str(ROOT))
+        from agents.ceo.deployment_pause import preflight
+        print(json.dumps(preflight(args.deployment_lock), sort_keys=True))
+        return 2
+    if args.deployment_lock:
+        parser.error("--deployment-lock requires --preflight-resume")
     if args.assess_boundary:
         sys.path.insert(0, str(ROOT))
         from agents.ceo.resume_boundary import assess, fingerprint

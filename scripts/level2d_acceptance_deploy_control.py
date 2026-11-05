@@ -24,7 +24,16 @@ def atomic(path,raw,info):
 def observation():
  raw=run("python3","-B","scripts/level2d_acceptance_observe.py")
  return json.loads(raw)
+def require_research_ceo_inactive():
+ # The historical gate checks only the legacy CEO. Unknown state also denies.
+ try:
+  state=run("systemctl","show","venture-owner-research-ceo.service","--property=ActiveState","--value")
+ except (OSError,subprocess.SubprocessError):
+  state="unknown"
+ if state!="inactive":
+  raise SystemExit("DENY: P1-04 research CEO must be verifiably inactive before legacy deployment")
 def main():
+ require_research_ceo_inactive()
  assert Path.cwd().resolve()==P and os.geteuid()==0
  assert run("systemctl","show","venture-level2d-ceo.service","--property=ActiveState","--value")=="inactive"
  assert active("venture-control-broker-mtls.service")=="active"
