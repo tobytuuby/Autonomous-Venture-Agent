@@ -1,0 +1,56 @@
+{
+  "head": "be2feea928b360d60cffe57f98a067b837e0f9ec",
+  "attestation_head": "be2feea928b360d60cffe57f98a067b837e0f9ec",
+  "test_exits": {
+    "before-fixture": 1,
+    "candidate-ceo": 0,
+    "candidate-ceo-route": 0,
+    "candidate-broker": 0,
+    "installed-broker": 0,
+    "regression": 0
+  },
+  "classification": "OFFLINE_HASH_VERIFIED_RECORDED_BYTES_WITH_EXPLICIT_CANDIDATE_OVERLAYS",
+  "expected_attribute_resolution_probes": {
+    "candidate-ceo": [
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter"
+    ],
+    "candidate-ceo-route": [
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter",
+      "integrations.payment_adapter.RealPaymentAdapter"
+    ],
+    "candidate-broker": [],
+    "installed-broker": []
+  },
+  "unhandled_missing_package_dependencies": [],
+  "live_installation_verified": false,
+  "loaded_production_bytes_verified": false,
+  "deployment_allowed": false,
+  "production_ledger_accessed": false,
+  "production_provider_calls": 0,
+  "adv_denominator": 49
+}

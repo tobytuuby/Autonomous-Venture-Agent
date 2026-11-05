@@ -1,0 +1,10 @@
+{
+  "scripts/ceo_readonly_attestation.py": "3898e35220973278ffaee4a9b9448771553215a93e641fd84c19d122d9990db5",
+  "tests/acceptance-evidence/ceo-attestation-20261105/attestation.json": "ca915a97e7480941e501e8f0852e4adc8faee10933a38f5f3961084d0ee3fbcb",
+  "tests/acceptance-evidence/ceo-attestation-20261105/strict_fresh_dry_run.py": "f23ef18f51954d76ffc7c0d7edf150ff784790c307d428b88665884bf0697f66",
+  "tests/acceptance-evidence/ceo-attestation-20261105/candidate-ceo.log": "d958a930ec9485c9a1037f5b18c93ca0970edcd6b33058a9c426d7033f7b6b5f",
+  "tests/acceptance-evidence/ceo-attestation-20261105/ceo-imports.json": "8d697a29afae7162bb2475c2f889537c3bfb2862756df9546bbdc7b39870796b",
+  "tests/acceptance-evidence/ceo-attestation-20261105/candidate-overlays.json": "baee3475ab95761ddf602810a72ba13fdad86665e5f43d9d56a6534c1dcbd188",
+  "tests/acceptance-evidence/ceo-stage6-20261104/deployment-gate.json": "554ac65067fed9026adde5be76677d4e1e1d101f5f6894a41bc039e1f485b0a7",
+  "tests/acceptance-evidence/ceo-stage7-review-20261104/SHA256SUMS": "a81ebcccb44a9e44faa1b434fa9a006b9a35e530149874f0e946e84a565c2d8c"
+}

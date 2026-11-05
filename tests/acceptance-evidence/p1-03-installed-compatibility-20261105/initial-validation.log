@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-03-installed-compatibility-20261105/validate.py", line 44, in <module>
+    manifest[label, rel].update(candidate_sha256=sha(raw), origin="EXPLICIT_STAGE7_OVERLAY")
+    ~~~~~~~~^^^^^^^^^^^^
+KeyError: ('ceo', 'agents/ceo/ceo_broker.py')

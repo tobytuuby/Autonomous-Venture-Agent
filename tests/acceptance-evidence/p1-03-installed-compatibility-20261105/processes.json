@@ -1,0 +1,46 @@
+{
+  "classification": "BRIDGE_ASYNC_PROCESS_RECORDS",
+  "processes": [
+    {
+      "id": "proc_mw331vvs_aa1ssy",
+      "pid": 3028229,
+      "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw331vvs_aa1ssy.log",
+      "status": "exited",
+      "completed_project_log": "initial-validation.log",
+      "result": "reconstruction bookkeeping error: new overlay absent from installed inventory; corrected explicit manifest entry"
+    },
+    {
+      "id": "proc_mw332g47_98hv01",
+      "pid": 3036876,
+      "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw332g47_98hv01.log",
+      "status": "exited",
+      "completed_project_log": "attempts/expanded-broker-scope/validation.log",
+      "result": "CEO 17/17 and installed broker 20/20 passed; CEO daemon fixture incorrectly included in broker-only test suite; retained failure and moved suite to CEO profile"
+    },
+    {
+      "id": "proc_mw33444l_u1pqli",
+      "pid": 3063658,
+      "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw33444l_u1pqli.log",
+      "completed_project_log": "completed-tests-finalization-error.log",
+      "status": "exited",
+      "result": "all five final test suites exit 0; final evidence assertion corrected to distinguish exported-class probes"
+    },
+    {
+      "id": "proc_mw336zkc_sj4doi",
+      "pid": 3106852,
+      "status": "exited",
+      "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw336zkc_sj4doi.log",
+      "completed_project_log": "validation.log",
+      "result": "hash and outcome verification complete; all scoped suites exit 0"
+    },
+    {
+      "id": "proc_mw3395xg_zluh8m",
+      "pid": 3138624,
+      "status": "exited",
+      "bridge_log": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw3395xg_zluh8m.log",
+      "completed_project_log": "validation.log",
+      "exit_file": "validation.exit",
+      "result": "final evidence verification exit 0"
+    }
+  ]
+}

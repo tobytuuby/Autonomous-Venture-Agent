@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-03-installed-compatibility-20261105/validate.py", line 88, in <module>
+    assert run("candidate-broker", "candidate", "broker",
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               ["tests.test_broker_isolated_mtls", "tests.test_broker_mtls_entrypoint",
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                "tests.test_ceo_broker"]) == 0
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
