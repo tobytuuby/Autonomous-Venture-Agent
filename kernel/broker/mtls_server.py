@@ -1,9 +1,10 @@
 """mTLS capability broker, preparation polling and opt-in signed receipt ingestion."""
 import os
+from contextlib import nullcontext
 from http.server import ThreadingHTTPServer
 
 from agents.ceo.cross_vm_outbox import PreparationOutbox
-from kernel.broker.isolated_mtls import handler_for, tls_context
+from kernel.broker.isolated_mtls import handler_for, tls_context, MaintenanceAdmission
 
 
 def required(key):
@@ -13,7 +14,28 @@ def required(key):
     return value
 
 
+def maintenance_from_environment():
+    # Presence of either key configures maintenance; blank/partial is an error.
+    names = ("VENTURE_BROKER_MAINTENANCE_CONTROL", "VENTURE_BROKER_MAINTENANCE_IDENTITY")
+    if not any(name in os.environ for name in names):
+        return None
+    return MaintenanceAdmission(required(names[0]), required(names[1]))
+
+
 def main():
+    maintenance = maintenance_from_environment()
+    # CLOSED/unsafe startup denies before constructor writes.
+    with maintenance.request() if maintenance is not None else nullcontext():
+        server, context = _configured_server(maintenance)
+    try:
+        server.socket = context.wrap_socket(server.socket, server_side=True)
+        server.serve_forever()
+    finally:
+        server.server_close()
+
+
+def _configured_server(maintenance):
+    """Build under the startup admission lease held by main."""
     cert = required("VENTURE_BROKER_CERT")
     key = required("VENTURE_BROKER_KEY")
     ca = required("VENTURE_BROKER_CLIENT_CA")
@@ -146,14 +168,10 @@ def main():
                           ceo_reservation_pins=tuple(filter(None, os.environ.get("VENTURE_BROKER_CEO_RESERVATION_PINS", "").split(","))),
                           ceo_reservation_actor=os.environ.get("VENTURE_BROKER_CEO_RESERVATION_ACTOR") or None,
                           submit=submit, status=status, execute=execute, cert_mailbox=cert_mailbox, worker_cert_mailbox=worker_cert_mailbox, worker_pins=worker_pins, worker_actors=worker_actors, hierarchy=hierarchy,
-                          worker_reserve=worker_reserve, worker_execute=worker_execute, ceo_execute=ceo_execute)
+                          worker_reserve=worker_reserve, worker_execute=worker_execute, ceo_execute=ceo_execute, maintenance=maintenance)
     context = tls_context(server_cert=cert, server_key=key, client_ca=ca)
     server = ThreadingHTTPServer(("0.0.0.0", 8443), handler)
-    try:
-        server.socket = context.wrap_socket(server.socket, server_side=True)
-        server.serve_forever()
-    finally:
-        server.server_close()
+    return server, context
 
 
 if __name__ == "__main__":
