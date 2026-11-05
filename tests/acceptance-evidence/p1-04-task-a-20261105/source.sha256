@@ -1,0 +1,5 @@
+18461e910dc253168731d10b46c39e1b4cd45dcd76e608d1c5e68a1a375855a1  agents/ceo/resume_boundary.py
+4d2a9bb6f2e6955b34f8c940152c44151e51dd6c8d279c0f1b3e47c5f40b34a9  tests/test_resume_boundary.py
+dd2a4cd8887b15bba3ec0422b14b8f9bfd2474f10ac3a640ba2ad1fc19d965e1  scripts/ceo_stage6_deployment_gate.py
+96dd535ef3c0762f9a2f23c97018c6e92d208c9435ad6b460dd0f088a2fad385  docs/p1-04-resume-boundary-v1.0.md
+39a01484e70d5e4e502615afdb45036660babdb14b65ddff4bc6fbbce9d6e0ba  docs/acceptance/p1-04-task-a-20261105.md

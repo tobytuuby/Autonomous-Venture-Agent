@@ -9,6 +9,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 RECORD = ROOT / "tests/acceptance-evidence/ceo-legacy-units-20261104/final.json"
@@ -71,7 +72,35 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reconstruct", action="store_true",
                         help="write public recorded Python sources under artifacts")
+    parser.add_argument("--assess-boundary", action="store_true",
+                        help="read-only detection only; always denies deployment/resume")
+    for name in ("workflow", "resources", "ceo-calls", "public-trust"):
+        parser.add_argument("--" + name)
     args = parser.parse_args()
+    if args.assess_boundary:
+        sys.path.insert(0, str(ROOT))
+        from agents.ceo.resume_boundary import assess, fingerprint
+        from agents.ceo.escalation_inbox import inside_root
+        try:
+            trust = inside_root(args.public_trust)
+            before = fingerprint(trust)
+            if trust.stat().st_size > 65536:
+                raise ValueError("public trust bound")
+            pins = json.loads(trust.read_bytes())["actors"]
+            actors = {actor: (pin["role"], bytes.fromhex(pin["public_key"]))
+                      for actor, pin in pins.items()}
+            result = assess(workflow=args.workflow, resources=args.resources,
+                            ceo_calls=args.ceo_calls, actors=actors)
+            if fingerprint(trust) != before:
+                result.update(observation="UNKNOWN", reasons=["PUBLIC_PINS_CHANGED"])
+        except Exception:
+            result = dict(decision="HOLD", deployment_allowed=False,
+                          resume_verified=False, dry_run=True,
+                          reasons=["INVALID_OR_UNREADABLE_INPUT"])
+        print(json.dumps(result, sort_keys=True))
+        return 2
+    if any((args.workflow, args.resources, args.ceo_calls, args.public_trust)):
+        parser.error("state paths require --assess-boundary")
     assert Path.cwd().resolve() == ROOT
     hashes = json.loads(RECORD.read_text())["hashes"]
     manifest, sources = [], {}
