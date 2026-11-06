@@ -19,6 +19,7 @@ import uuid
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
+from agents.ceo.role_maintenance import admission, admitted
 from agents.ceo.control_plane import load_trust, read_json
 from agents.ceo.cross_vm_outbox import PreparationOutbox
 from agents.ceo.cross_vm_poll_client import PreparationPollClient
@@ -86,16 +87,20 @@ class ExchangeState:
     def __init__(self, directory):
         self.directory = private_directory(directory)
         self.db = sqlite3.connect(str(self.directory / "exchange.sqlite"), isolation_level=None, timeout=5)
-        self.db.execute("PRAGMA journal_mode=WAL")
-        self.db.execute("PRAGMA synchronous=FULL")
-        self.db.execute("""CREATE TABLE IF NOT EXISTS calls(
-            id TEXT PRIMARY KEY, request TEXT, response TEXT, grant_id TEXT)""")
-        self.db.execute("""CREATE TABLE IF NOT EXISTS received(
-            task_id TEXT PRIMARY KEY, assignment TEXT, ack TEXT, sent INTEGER DEFAULT 0)""")
-        self.db.execute("CREATE TABLE IF NOT EXISTS nonces(actor TEXT, nonce TEXT, PRIMARY KEY(actor,nonce))")
-        self.db.execute("CREATE TABLE IF NOT EXISTS issued(task_id TEXT PRIMARY KEY, assignment TEXT)")
-        self.db.execute("CREATE TABLE IF NOT EXISTS binding(context TEXT)")
-        self.db.execute("CREATE TABLE IF NOT EXISTS reservation_intents(id TEXT PRIMARY KEY, attempt TEXT)")
+        try:
+            self.db.execute("PRAGMA journal_mode=WAL")
+            self.db.execute("PRAGMA synchronous=FULL")
+            self.db.execute("""CREATE TABLE IF NOT EXISTS calls(
+                id TEXT PRIMARY KEY, request TEXT, response TEXT, grant_id TEXT)""")
+            self.db.execute("""CREATE TABLE IF NOT EXISTS received(
+                task_id TEXT PRIMARY KEY, assignment TEXT, ack TEXT, sent INTEGER DEFAULT 0)""")
+            self.db.execute("CREATE TABLE IF NOT EXISTS nonces(actor TEXT, nonce TEXT, PRIMARY KEY(actor,nonce))")
+            self.db.execute("CREATE TABLE IF NOT EXISTS issued(task_id TEXT PRIMARY KEY, assignment TEXT)")
+            self.db.execute("CREATE TABLE IF NOT EXISTS binding(context TEXT)")
+            self.db.execute("CREATE TABLE IF NOT EXISTS reservation_intents(id TEXT PRIMARY KEY, attempt TEXT)")
+        except BaseException:
+            self.db.close()
+            raise
 
     def close(self):
         self.db.close()
@@ -421,11 +426,16 @@ def main(argv=None):
     if config_path.stat().st_uid != os.geteuid() or config_path.stat().st_mode & 0o022:
         raise ValueError("operator configuration required")
     config = read_json(config_path)
+    return run(config, once=args.once)
+
+
+@admitted
+def _tick(config, runtime):
+    """One complete legacy exchange operation, including writable teardown."""
     state = ExchangeState(inside_root(config["state_directory"]))
     outbox = None
     try:
-        with (state.directory / "exchange.lock").open("a") as lock:
-            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        if not runtime:
             actors = load_trust(config["trust"])
             role = config["role"]
             signer = RoleSigner(config["signing_key"], config["context"][role + "_id"], role, actors)
@@ -451,27 +461,52 @@ def main(argv=None):
                 context=config["context"], actor=signer.actor, role=role,
                 client=client, policy_path=config["usage_policy"])
             exchange = PreparationExchange(state, signer, actors, model, config["context"])
-            if role == "ceo":
-                outbox = RemotePreparationOutbox(client)
-                tick = lambda: exchange.ceo_tick(outbox)
-            else:
-                tick = lambda: exchange.manager_tick(client)
-            while True:
-                try:
-                    status = tick()
-                except (OSError, http.client.HTTPException):
-                    # Network failures retry exact durable delivery; model ambiguity
-                    # raises ValueError and stops for operator reconciliation.
-                    status = "TRANSPORT_RETRY_PENDING"
-                print(canonical(dict(status=status, scope="PREPARATION_ONLY",
-                    worker_execution=False, operational_authority=False)), flush=True)
-                if args.once or status in ("HELD", "COMPLETE_RECEIPTS_ONLY"):
-                    return 0
-                time.sleep(5)
+            outbox = RemotePreparationOutbox(client) if role == "ceo" else None
+            runtime.update(exchange=exchange, client=client, outbox=outbox)
+        else:
+            # Preserve the original signer, trust and model policy pins across
+            # ticks; only the writable SQLite connection is reopened.
+            exchange, client, outbox = (runtime[k] for k in ("exchange", "client", "outbox"))
+            exchange.state = exchange.model.state = state
+            state.bind(exchange.context)
+        try:
+            if exchange.signer.role == "ceo":
+                return exchange.ceo_tick(outbox)
+            return exchange.manager_tick(client)
+        except (OSError, http.client.HTTPException):
+            # Preserve exact durable delivery handling; model ambiguity stops.
+            return "TRANSPORT_RETRY_PENDING"
     finally:
-        if outbox is not None:
-            outbox.close()
-        state.close()
+        try:
+            if outbox is not None:
+                outbox.close()
+        finally:
+            state.close()
+
+
+def run(config, *, once=False):
+    # Keep the duplicate-process lock across sleeps, but never a writable DB or
+    # admission lease. Reopen state within each lease so SQLite WAL close/drain
+    # finishes before maintenance can report quiescence.
+    lock = None
+    runtime = {}
+    try:
+        while True:
+            with admission(config):
+                if lock is None:
+                    directory = private_directory(inside_root(config["state_directory"]))
+                    lock = (directory / "exchange.lock").open("a")
+                    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                status = _tick(config, runtime)
+            print(canonical(dict(status=status, scope="PREPARATION_ONLY",
+                worker_execution=False, operational_authority=False)), flush=True)
+            if once or status in ("HELD", "COMPLETE_RECEIPTS_ONLY"):
+                return 0
+            time.sleep(5)
+    finally:
+        # Only release the legacy lock here; all DB/outbox closure is admitted.
+        if lock is not None:
+            lock.close()
 
 
 if __name__ == "__main__":
