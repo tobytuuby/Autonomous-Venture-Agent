@@ -44,6 +44,12 @@ def recorded_blob(rel, expected):
     raise ValueError("Unreconstructable recorded Python source: " + rel)
 
 
+def deployment_decision():
+    """Existing Stage6 denial shared by deployment entrypoints; no override."""
+    return dict(decision="DENY", deployment_allowed=False, resume_verified=False,
+                reasons=["STAGE6_INDEPENDENT_OPERATIONAL_ACCEPTANCE_NOT_VERIFIED"])
+
+
 def blockers(broker_reservation, broker_http, broker_entrypoint):
     # These are necessary source capabilities, never sufficient runtime proof.
     reasons = []
