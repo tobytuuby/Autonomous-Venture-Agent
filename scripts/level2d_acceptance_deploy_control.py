@@ -3,7 +3,7 @@
 Run from the approved checkout after commit/push. Keeps the technical CEO inactive.
 Only installed source files change; no service config, key, policy or ledger changes.
 """
-import hashlib,json,os,stat,subprocess,sys
+import argparse,hashlib,json,os,stat,subprocess,sys
 from pathlib import Path
 P=Path("/home/epsilon/venture-control-workspace")
 B=Path("/usr/local/lib/venture-control-broker-level2c")
@@ -35,11 +35,19 @@ def require_research_ceo_inactive():
   state="unknown"
  if state!="inactive":
   raise SystemExit("DENY: P1-04 research CEO must be verifiably inactive before legacy deployment")
-def main():
+def main(argv=()):
+ parser=argparse.ArgumentParser(description=__doc__)
+ parser.add_argument("--preflight-only",action="store_true",
+                     help="print existing Stage6 decision; no live observation or mutation")
+ args=parser.parse_args(argv)
  # Consult the existing Stage6 authority before even observing live services.
  sys.path.insert(0,str(P))
  from scripts.ceo_stage6_deployment_gate import deployment_decision
- if not deployment_decision()["deployment_allowed"]:
+ decision=deployment_decision()
+ if args.preflight_only:
+  print(json.dumps(decision,sort_keys=True))
+  raise SystemExit(2)
+ if decision.get("deployment_allowed") is not True:
   raise SystemExit("DENY: existing Stage6 blocks deployment; synthetic C4 is not authority")
  require_research_ceo_inactive()
  assert Path.cwd().resolve()==P and os.geteuid()==0
@@ -330,4 +338,4 @@ def release_synthetic_after_attestation(root, plan, reviewed_plan_sha256,
   raise
  return dict(classification="SYNTHETIC_RELEASE_ONLY",deployment_allowed=False)
 
-if __name__=="__main__": main()
+if __name__=="__main__": main(sys.argv[1:])

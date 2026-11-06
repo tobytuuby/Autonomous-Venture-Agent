@@ -417,6 +417,8 @@ def project_json(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--decision", action="store_true",
+                        help="print exact Stage6 authority without reconstruction or live access")
     modes.add_argument("--reconstruct", action="store_true",
                         help="write public recorded Python sources under artifacts")
     modes.add_argument("--assess-boundary", action="store_true",
@@ -431,6 +433,12 @@ def main():
     for name in ("workflow", "resources", "ceo-calls", "public-trust"):
         parser.add_argument("--" + name)
     args = parser.parse_args()
+    if args.decision:
+        if any((args.writer_config, args.writer_snapshot, args.deployment_lock,
+                args.workflow, args.resources, args.ceo_calls, args.public_trust)):
+            parser.error("--decision accepts no evidence or state paths")
+        print(json.dumps(deployment_decision(), sort_keys=True))
+        return 2
     if args.preflight_writers:
         if any((args.deployment_lock, args.workflow, args.resources,
                 args.ceo_calls, args.public_trust)):
