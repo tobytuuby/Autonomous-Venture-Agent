@@ -1,0 +1,267 @@
+{
+  "profile": "ceo",
+  "classification": "STRICT_RECORDED_INSTALLED_TREE_DRY_RUN",
+  "current_installation_verified": false,
+  "loaded": [
+    {
+      "module": "agents",
+      "tree": "ceo",
+      "path": "agents/__init__.py",
+      "sha256": "78c248b61b8d79ad7d0844d0740fb9bbad67803d2de79e01b4f3abee43c82a22"
+    },
+    {
+      "module": "agents.ceo",
+      "tree": "ceo",
+      "path": "agents/ceo/__init__.py",
+      "sha256": "f2d2341e2dae8b2b58680f5b52e69d7504fb7c7dad377669be8bebeb04ca1b8b"
+    },
+    {
+      "module": "agents.ceo.agent",
+      "tree": "ceo",
+      "path": "agents/ceo/agent.py",
+      "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def"
+    },
+    {
+      "module": "agents.ceo.durable_state",
+      "tree": "ceo",
+      "path": "agents/ceo/durable_state.py",
+      "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd"
+    },
+    {
+      "module": "agents.ceo.hierarchy_service",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_service.py",
+      "sha256": "e84096c5e0155aff94a863a09bd360735bb05227210e533e8068f8413551b110"
+    },
+    {
+      "module": "agents.ceo.control_plane",
+      "tree": "ceo",
+      "path": "agents/ceo/control_plane.py",
+      "sha256": "602cbc3da45ce826c8b0525d5c51dd25a25f191ddc44d3cd89c0b10462000044"
+    },
+    {
+      "module": "agents.ceo.escalation_inbox",
+      "tree": "ceo",
+      "path": "agents/ceo/escalation_inbox.py",
+      "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898"
+    },
+    {
+      "module": "agents.ceo.venture_workflow",
+      "tree": "ceo",
+      "path": "agents/ceo/venture_workflow.py",
+      "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d"
+    },
+    {
+      "module": "agents.ceo.scheduled_exercise",
+      "tree": "ceo",
+      "path": "agents/ceo/scheduled_exercise.py",
+      "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb"
+    },
+    {
+      "module": "agents.ceo.gates",
+      "tree": "ceo",
+      "path": "agents/ceo/gates.py",
+      "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc"
+    },
+    {
+      "module": "agents.ceo.provider",
+      "tree": "ceo",
+      "path": "agents/ceo/provider.py",
+      "sha256": "5223f016aa4fe66cf4bfc6db9983fc46d76ab034f48436fb481a9e8b8d5d6aac"
+    },
+    {
+      "module": "agents.ceo.venture_exercise",
+      "tree": "ceo",
+      "path": "agents/ceo/venture_exercise.py",
+      "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf"
+    },
+    {
+      "module": "kernel.p6",
+      "tree": "ceo",
+      "path": "kernel/p6/__init__.py",
+      "sha256": "c89cd584bfa9e73501363971b8cdecc6454ae4bfe38944525930da384ed6ffb7"
+    },
+    {
+      "module": "kernel.p6.anomaly",
+      "tree": "ceo",
+      "path": "kernel/p6/anomaly.py",
+      "sha256": "c4d71e120329f6bf4c2712bcf135f03c4e73eac6839f1c3603bfdde84253ed46"
+    },
+    {
+      "module": "kernel.p6.coordination",
+      "tree": "ceo",
+      "path": "kernel/p6/coordination.py",
+      "sha256": "eadac570dd1ed4a0afa79dbbc9c9c059d052a0f77ebb04dd8764e4879d0a024f"
+    },
+    {
+      "module": "kernel.p6.registry",
+      "tree": "ceo",
+      "path": "kernel/p6/registry.py",
+      "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7"
+    },
+    {
+      "module": "kernel.p6.shared_service",
+      "tree": "ceo",
+      "path": "kernel/p6/shared_service.py",
+      "sha256": "778de46f34f51b308ca0dac7e77ef0294462de32ed9e18c2bc956af04855dad4"
+    },
+    {
+      "module": "kernel.p6.operations",
+      "tree": "ceo",
+      "path": "kernel/p6/operations.py",
+      "sha256": "9604c01e824dcdd4df1362a1d1459187fab46012bd09933ed2ae3cf357991462"
+    },
+    {
+      "module": "kernel.p6.certification",
+      "tree": "ceo",
+      "path": "kernel/p6/certification.py",
+      "sha256": "dfbc5251d8a1672bedd108e4f300c9caf27f6cab6d30d356f5ae4b69aeaca4a5"
+    },
+    {
+      "module": "kernel.synthetic_orchestration",
+      "tree": "ceo",
+      "path": "kernel/synthetic_orchestration.py",
+      "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561"
+    },
+    {
+      "module": "kernel.synthetic_venture_store",
+      "tree": "ceo",
+      "path": "kernel/synthetic_venture_store.py",
+      "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78"
+    },
+    {
+      "module": "kernel.venture_admission",
+      "tree": "ceo",
+      "path": "kernel/venture_admission.py",
+      "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f"
+    },
+    {
+      "module": "agents.ceo.hierarchy_client",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_client.py",
+      "sha256": "ef0c596130eb3bbb16ba79ba0c7b861ae32bf802c79e0b266faea323de08d95a"
+    },
+    {
+      "module": "agents.ceo.hierarchy_gateway",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_gateway.py",
+      "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f"
+    },
+    {
+      "module": "agents.ceo.hierarchy_artifact_store",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_artifact_store.py",
+      "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77"
+    },
+    {
+      "module": "agents.ceo.hierarchy_runner",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_runner.py",
+      "sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762"
+    },
+    {
+      "module": "agents.ceo.hierarchy_model_callbacks",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_model_callbacks.py",
+      "sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e"
+    },
+    {
+      "module": "agents.ceo.hierarchy_providers",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_providers.py",
+      "sha256": "40860723360027423e77c5d8c78afefb76936f47563ea46f60e955702c1f58f5"
+    },
+    {
+      "module": "agents.ceo.role_maintenance",
+      "tree": "ceo",
+      "path": "agents/ceo/role_maintenance.py",
+      "sha256": "bbedb6e526455da90f1157b533a41ba8a6ff98c135c63ce020e7213d15e4d167"
+    },
+    {
+      "module": "agents.ceo.hierarchy_research_daemon",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_research_daemon.py",
+      "sha256": "fdfc09e8f42c440fe7f73d1fcc033f804d187ae0134c6b5bc6569106ef714e77"
+    },
+    {
+      "module": "agents.ceo.hierarchy_worker_service",
+      "tree": "ceo",
+      "path": "agents/ceo/hierarchy_worker_service.py",
+      "sha256": "e1d23a4f6f3c49d35b09865483711838f98eb7daaa332d76ba2bae9ac5f0cbc6"
+    },
+    {
+      "module": "agents.ceo.ceo_research_review",
+      "tree": "ceo",
+      "path": "agents/ceo/ceo_research_review.py",
+      "sha256": "e3c749ff4f43af6743cdc26d074876d06eb0ce6f117f536cfc12ce17cb88d1d5"
+    },
+    {
+      "module": "kernel.broker",
+      "tree": "ceo",
+      "path": "kernel/broker/__init__.py",
+      "sha256": "595e428cde050fd2f99de8b45e80d74868b5d4d5ab315a046b23343859d1212c"
+    },
+    {
+      "module": "kernel.broker.broker",
+      "tree": "ceo",
+      "path": "kernel/broker/broker.py",
+      "sha256": "2ad8ca71177ca8dc884ed97289136b7facb117a49c4bd0c4d2006fea50901922"
+    },
+    {
+      "module": "kernel.broker.isolated_mtls",
+      "tree": "ceo",
+      "path": "kernel/broker/isolated_mtls.py",
+      "sha256": "2bbf6d3c27586cad89d585ba1bca2c10e9dadccc4b4817f2d1abaafe07d84bde"
+    },
+    {
+      "module": "agents.ceo.cross_vm_transport",
+      "tree": "ceo",
+      "path": "agents/ceo/cross_vm_transport.py",
+      "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184"
+    },
+    {
+      "module": "agents.ceo.cross_vm_poll_client",
+      "tree": "ceo",
+      "path": "agents/ceo/cross_vm_poll_client.py",
+      "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94"
+    },
+    {
+      "module": "agents.ceo.cross_vm_poll_server",
+      "tree": "ceo",
+      "path": "agents/ceo/cross_vm_poll_server.py",
+      "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8"
+    },
+    {
+      "module": "agents.ceo.provider_reservation",
+      "tree": "ceo",
+      "path": "agents/ceo/provider_reservation.py",
+      "sha256": "49f16c01de03f87e60acbd2bf5b222f605bad45f1037835e9ab35effe0978a7d"
+    },
+    {
+      "module": "agents.ceo.service_identity",
+      "tree": "ceo",
+      "path": "agents/ceo/service_identity.py",
+      "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd"
+    },
+    {
+      "module": "kernel.broker.server",
+      "tree": "ceo",
+      "path": "kernel/broker/server.py",
+      "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab"
+    },
+    {
+      "module": "agents.ceo.owner_idea_inbox",
+      "tree": "ceo",
+      "path": "agents/ceo/owner_idea_inbox.py",
+      "sha256": "545f76b3550bac061fb095ad9c8381df3d22f8e7460998b1112e79731383fbef"
+    },
+    {
+      "module": "agents.ceo.deployment_pause",
+      "tree": "ceo",
+      "path": "agents/ceo/deployment_pause.py",
+      "sha256": "d603d5529971b55d9a5204278076c78f1967dabcf8fd6036fa6383de06f151c2"
+    }
+  ],
+  "missing_installed_dependencies": [],
+  "repository_production_fallback": false
+}

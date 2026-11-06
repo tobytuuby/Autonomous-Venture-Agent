@@ -1,0 +1,72 @@
+test_actual_entrypoint_exception_leaves_intent_and_no_retry (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_actual_entrypoint_exception_leaves_intent_and_no_retry) ... ok
+test_ceo_pause_composes_and_closed_review_has_no_writes (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_ceo_pause_composes_and_closed_review_has_no_writes) ... ok
+test_ceo_signed_review_final_writes_remain_inside_lease (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_ceo_signed_review_final_writes_remain_inside_lease) ... ok
+test_closed_all_entrypoints_before_constructor_or_directory_write (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_closed_all_entrypoints_before_constructor_or_directory_write) ... ok
+test_concurrent_manager_abc_legacy_local_writes_drain (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_concurrent_manager_abc_legacy_local_writes_drain) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+{"role": "worker", "from_state": "WORKER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_constructor_and_poll_idle_boundary_are_both_admitted (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_constructor_and_poll_idle_boundary_are_both_admitted) ... {"role": "manager", "status": "WAITING", "workflow_state": null, "operational_authority": false}
+ok
+test_direct_service_holds_constructor_and_final_tick_writes (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_direct_service_holds_constructor_and_final_tick_writes) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_exceptions_release_all_leases_and_keep_closed (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_exceptions_release_all_leases_and_keep_closed) ... ok
+test_gate_is_thread_local_and_control_agents_are_independent (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_gate_is_thread_local_and_control_agents_are_independent) ... ok
+test_operator_death_and_fresh_role_process_stays_closed (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_operator_death_and_fresh_role_process_stays_closed) ... ok
+test_poll_scope_and_nested_tick_finish_before_drain (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_poll_scope_and_nested_tick_finish_before_drain) ... {"role": "worker", "from_state": "WORKER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_strict_config_absence_and_malformed_never_fall_back (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_strict_config_absence_and_malformed_never_fall_back) ... ok
+test_worker_config_legacy_exact_fields_and_opt_in (tests.test_role_maintenance_c3a.RoleMaintenanceTests.test_worker_config_legacy_exact_fields_and_opt_in) ... ok
+test_existing_manager_service_routes_approved_research_workflow (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_existing_manager_service_routes_approved_research_workflow) ... ok
+test_research_queue_is_bounded_before_role_execution (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_research_queue_is_bounded_before_role_execution) ... ok
+test_worker_service_ignores_non_worker_states (tests.test_hierarchy_service_research.HierarchyServiceResearchTests.test_worker_service_ignores_non_worker_states) ... ok
+test_all_three_workers_are_ready_after_signed_plan_approval (tests.test_research_abc_routing.ResearchRoutingTests.test_all_three_workers_are_ready_after_signed_plan_approval) ... ok
+test_existing_ambiguous_intent_requires_exact_remote_reconciliation (tests.test_research_abc_routing.ResearchRoutingTests.test_existing_ambiguous_intent_requires_exact_remote_reconciliation) ... ok
+test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_kickoff_signs_worker_a_scope_and_does_not_replace_existing_workflow) ... ok
+test_legacy_binding_survives_later_signed_abc_states (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_binding_survives_later_signed_abc_states) ... ok
+test_legacy_exception_requires_provenance_and_original_session (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_exception_requires_provenance_and_original_session) ... ok
+test_legacy_original_binding_is_shared_by_ceo_and_manager (tests.test_research_abc_routing.ResearchRoutingTests.test_legacy_original_binding_is_shared_by_ceo_and_manager) ... ok
+test_manager_callback_proposes_abc_under_existing_research_objective (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_callback_proposes_abc_under_existing_research_objective) ... ok
+test_manager_gets_fixed_decomposition_without_changing_existing_binding (tests.test_research_abc_routing.ResearchRoutingTests.test_manager_gets_fixed_decomposition_without_changing_existing_binding) ... ok
+test_scoped_service_ticks_only_selected_workflow (tests.test_research_abc_routing.ResearchRoutingTests.test_scoped_service_ticks_only_selected_workflow) ... {"role": "manager", "from_state": "MANAGER_PENDING", "to_state": "DECOMPOSITION_REVIEW", "revision": 2, "operational_authority": false}
+ok
+test_scoping_is_idempotent_and_does_not_create_nested_ledgers (tests.test_research_abc_routing.ResearchRoutingTests.test_scoping_is_idempotent_and_does_not_create_nested_ledgers) ... ok
+test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied (tests.test_research_abc_routing.ResearchRoutingTests.test_wrong_actor_mapping_dependencies_and_nonresearch_are_denied) ... ok
+test_denies_financial_authority (tests.test_ceo_research_review.CEOResearchTests.test_denies_financial_authority) ... ok
+test_invalid_new_review_stays_pending_and_never_retries_provider (tests.test_ceo_research_review.CEOResearchTests.test_invalid_new_review_stays_pending_and_never_retries_provider) ... ok
+test_reuses_signed_evidence_from_prior_round_scope (tests.test_ceo_research_review.CEOResearchTests.test_reuses_signed_evidence_from_prior_round_scope) ... ok
+test_signed_internal_ceo_review_idempotent_and_no_launch (tests.test_ceo_research_review.CEOResearchTests.test_signed_internal_ceo_review_idempotent_and_no_launch) ... ok
+test_disposition_needs_evidence_based_reason_not_just_exhaustion (tests.test_ceo_research_review.DecisionCriteriaTests.test_disposition_needs_evidence_based_reason_not_just_exhaustion) ... ok
+test_external_next_tasks_and_unstructured_provider_response_denied (tests.test_ceo_research_review.DecisionCriteriaTests.test_external_next_tasks_and_unstructured_provider_response_denied) ... ok
+test_field_specific_text_bounds (tests.test_ceo_research_review.DecisionCriteriaTests.test_field_specific_text_bounds) ... ok
+test_invented_evidence_and_prompt_injection_do_not_supply_attribution (tests.test_ceo_research_review.DecisionCriteriaTests.test_invented_evidence_and_prompt_injection_do_not_supply_attribution) ... ok
+test_missing_question_answerability_and_distinct_task_fail_closed (tests.test_ceo_research_review.DecisionCriteriaTests.test_missing_question_answerability_and_distinct_task_fail_closed) ... ok
+test_mvp_needs_customer_problem_and_bounded_validation (tests.test_ceo_research_review.DecisionCriteriaTests.test_mvp_needs_customer_problem_and_bounded_validation) ... ok
+test_proceed_internal_label_cannot_request_external_work (tests.test_ceo_research_review.DecisionCriteriaTests.test_proceed_internal_label_cannot_request_external_work) ... ok
+test_proceed_is_ceo_disposition_without_new_owner_checkpoint (tests.test_ceo_research_review.DecisionCriteriaTests.test_proceed_is_ceo_disposition_without_new_owner_checkpoint) ... ok
+test_rounds_and_mvp_despite_unknown_demand_and_competitors (tests.test_ceo_research_review.DecisionCriteriaTests.test_rounds_and_mvp_despite_unknown_demand_and_competitors) ... ok
+test_absent_incomplete_or_other_identity_never_retries (tests.test_ceo_research_review.DurableRecoveryTests.test_absent_incomplete_or_other_identity_never_retries) ... ok
+test_changed_system_request_policy_or_alias_denied (tests.test_ceo_research_review.DurableRecoveryTests.test_changed_system_request_policy_or_alias_denied) ... ok
+test_colon_does_not_repair_missing_evidence_or_change_pending (tests.test_ceo_research_review.DurableRecoveryTests.test_colon_does_not_repair_missing_evidence_or_change_pending) ... ok
+test_colon_response_preserves_content_checkpoint_ledger_and_signature (tests.test_ceo_research_review.DurableRecoveryTests.test_colon_response_preserves_content_checkpoint_ledger_and_signature) ... ok
+test_completed_durable_response_signed_without_provider_or_ledger_write (tests.test_ceo_research_review.DurableRecoveryTests.test_completed_durable_response_signed_without_provider_or_ledger_write) ... ok
+test_crash_after_capture_replays_without_mutating_intent (tests.test_ceo_research_review.DurableRecoveryTests.test_crash_after_capture_replays_without_mutating_intent) ... ok
+test_historical_checkpoint_hash_and_snapshot_remain_exact (tests.test_ceo_research_review.DurableRecoveryTests.test_historical_checkpoint_hash_and_snapshot_remain_exact) ... ok
+test_historical_prompt_recovers_exact_original_intent (tests.test_ceo_research_review.DurableRecoveryTests.test_historical_prompt_recovers_exact_original_intent) ... ok
+test_historical_recovery_does_not_repair_invalid_other_fields (tests.test_ceo_research_review.DurableRecoveryTests.test_historical_recovery_does_not_repair_invalid_other_fields) ... ok
+test_historical_semantics_and_arbitrary_prompt_drift_denied (tests.test_ceo_research_review.DurableRecoveryTests.test_historical_semantics_and_arbitrary_prompt_drift_denied) ... ok
+test_immutable_intent_refuses_replacement_or_symlink (tests.test_ceo_research_review.DurableRecoveryTests.test_immutable_intent_refuses_replacement_or_symlink) ... ok
+test_invalid_response_reports_exact_validator_error_and_stays_pending (tests.test_ceo_research_review.DurableRecoveryTests.test_invalid_response_reports_exact_validator_error_and_stays_pending) ... ok
+test_malformed_response_and_attempt_denied (tests.test_ceo_research_review.DurableRecoveryTests.test_malformed_response_and_attempt_denied) ... ok
+test_request_and_pending_hash_must_match (tests.test_ceo_research_review.DurableRecoveryTests.test_request_and_pending_hash_must_match) ... ok
+test_stale_snapshot_and_changed_artifacts_denied (tests.test_ceo_research_review.DurableRecoveryTests.test_stale_snapshot_and_changed_artifacts_denied) ... ok
+test_encoding_does_not_change_round_semantics_or_criteria (tests.test_ceo_research_review.RecommendationEncodingTests.test_encoding_does_not_change_round_semantics_or_criteria) ... ok
+test_only_exact_enum_or_unique_colon_explanation (tests.test_ceo_research_review.RecommendationEncodingTests.test_only_exact_enum_or_unique_colon_explanation) ... ok
+
+----------------------------------------------------------------------
+Ran 57 tests in 1.488s
+
+OK

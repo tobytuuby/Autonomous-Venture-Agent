@@ -1,0 +1,22 @@
+[
+  {
+    "id": "proc_mw4h5hc9_4zl2pc",
+    "projectPath": "/home/epsilon/venture-control-workspace",
+    "command": "python3 -B tests/p1_04_c3a_strict_compatibility.py tests/acceptance-evidence/p1-04-c3a-20261106/strict-final > tests/acceptance-evidence/p1-04-c3a-20261106/strict-final.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/p1-04-c3a-20261106/strict-final.exit; exit \"$result\"",
+    "pid": 1049886,
+    "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw4h5hc9_4zl2pc.log",
+    "status": "exited",
+    "startedAt": "2026-11-06T04:28:38.793Z",
+    "updatedAt": "2026-11-06T04:31:06.799Z"
+  },
+  {
+    "id": "proc_mw4h5yk0_ukyhrd",
+    "projectPath": "/home/epsilon/venture-control-workspace",
+    "command": "mkdir -p tests/acceptance-evidence/p1-04-c3a-20261106/final-tmp; TMPDIR=\"$PWD/tests/acceptance-evidence/p1-04-c3a-20261106/final-tmp\" PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=.:integrations/payment_adapter timeout 120 python3 -B tests/acceptance-evidence/ceo-stage5-20261104/verify_synthetic.py tests.test_role_maintenance_c3a tests.test_broker_maintenance_c1 tests.test_ceo_pending_recovery tests.test_ceo_queue_recovery tests.test_ceo_research_review tests.test_ceo_stage6_gate tests.test_deployment_broker_restart tests.test_hierarchy_multi_worker tests.test_hierarchy_providers tests.test_hierarchy_service_research tests.test_legacy_worker_recovery tests.test_level2d_worker_provision tests.test_p1_04_production_no_go tests.test_research_abc_routing tests.test_research_poll_isolation tests.test_research_recovery tests.test_stage6_protected_writers tests.test_stage6_writer_exclusion > tests/acceptance-evidence/p1-04-c3a-20261106/regression-final.log 2>&1; result=$?; echo \"$result\" > tests/acceptance-evidence/p1-04-c3a-20261106/regression-final.exit; exit \"$result\"",
+    "pid": 1054901,
+    "logFile": "/home/epsilon/.chatgpt2localbridge/process-logs/proc_mw4h5yk0_ukyhrd.log",
+    "status": "exited",
+    "startedAt": "2026-11-06T04:29:01.104Z",
+    "updatedAt": "2026-11-06T04:31:06.799Z"
+  }
+]

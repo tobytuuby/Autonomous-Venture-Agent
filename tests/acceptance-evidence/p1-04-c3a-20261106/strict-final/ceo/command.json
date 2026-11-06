@@ -1,0 +1,12 @@
+[
+  "/usr/bin/python3",
+  "-B",
+  "/home/epsilon/venture-control-workspace/scripts/ceo_strict_installed_dry_run.py",
+  "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-04-c3a-20261106/strict-final/candidate",
+  "ceo",
+  "/home/epsilon/venture-control-workspace/tests/acceptance-evidence/p1-04-c3a-20261106/strict-final/ceo",
+  "tests.test_role_maintenance_c3a",
+  "tests.test_hierarchy_service_research",
+  "tests.test_research_abc_routing",
+  "tests.test_ceo_research_review"
+]

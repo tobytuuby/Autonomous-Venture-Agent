@@ -17,6 +17,7 @@ from agents.ceo.venture_workflow import hashed, research_rounds, research_sessio
 
 from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_service import run as role_tick, recovery_reason
+from agents.ceo.role_maintenance import admission, admitted
 
 STATES = {"ceo":{"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION","HOLD","OWNER_REVIEW","MANAGER_PENDING"},
           "manager":{"MANAGER_PENDING","MANAGER_REVIEW"},
@@ -25,6 +26,7 @@ RESEARCH_WORKERS = dict(A="worker-a", B="worker-b", C="worker-c")
 RESEARCH_ID = re.compile(r"research-[0-9a-f]{24}\Z")
 
 
+@admitted
 def allowed_config(base, flow, snapshot):
     role = base["role"]
     if role not in STATES or not RESEARCH_ID.fullmatch(flow):
@@ -221,23 +223,24 @@ def recover_legacy_worker(client, config, snapshot):
 
 
 def poll(config, *, once=False, interval=12,worker_limit_override=None):
-    if config["role"] not in STATES:
-        raise ValueError("unsupported research role")
-    client=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
-        client_cert=config["client_cert"],client_key=config["client_key"])
-    worker_limit=None
-    if config['role']=='worker':
-        policy=json.loads(Path(config['policy']).read_text())
-        if policy.get('domain')!='worker-preparation-inference-v1':
-            raise ValueError('pinned worker policy required')
-        worker_limit=policy['maximum_requests']
-    if config['role']=='ceo':
-        if type(worker_limit_override) is not int or not 1<=worker_limit_override<=16:
-            raise ValueError('bounded CEO worker-limit policy required')
+    with admission(config):
+        if config["role"] not in STATES:
+            raise ValueError("unsupported research role")
+        client=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
+            client_cert=config["client_cert"],client_key=config["client_key"])
+        worker_limit=None
+        if config['role']=='worker':
+            policy=json.loads(Path(config['policy']).read_text())
+            if policy.get('domain')!='worker-preparation-inference-v1':
+                raise ValueError('pinned worker policy required')
+            worker_limit=policy['maximum_requests']
+        if config['role']=='ceo':
+            if type(worker_limit_override) is not int or not 1<=worker_limit_override<=16:
+                raise ValueError('bounded CEO worker-limit policy required')
     blocked=set()
     while True:
         from agents.ceo.deployment_pause import cycle
-        with cycle(config) as admitted:
+        with admission(config), cycle(config) as admitted:
             try:
                 tasks=client.research_list() if admitted else []
                 if len(tasks)>30:

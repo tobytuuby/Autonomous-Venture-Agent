@@ -5,6 +5,7 @@ import os
 import stat
 from agents.ceo.escalation_inbox import inside_root
 from agents.ceo.hierarchy_service import run
+from agents.ceo.role_maintenance import configured_gate
 
 FIELDS = {"role", "actor_id", "workflow_id", "endpoint", "trust", "signing_key",
           "client_cert", "client_key", "ca_file", "state_dir", "policy"}
@@ -15,8 +16,9 @@ def load_config(path):
     if path.stat().st_size > 16000:
         raise ValueError("bounded config required")
     config = json.loads(path.read_text())
-    if set(config) != FIELDS or config["role"] != "worker":
+    if set(config) not in (FIELDS, FIELDS | {"maintenance_admission"}) or config["role"] != "worker":
         raise ValueError("Worker-only config required")
+    configured_gate(config)
     if config["actor_id"] != "service-worker" or config["workflow_id"] != "level2d-acceptance-1":
         raise ValueError("technical fixture identity required")
     if "REPLACE-" in config["endpoint"]:

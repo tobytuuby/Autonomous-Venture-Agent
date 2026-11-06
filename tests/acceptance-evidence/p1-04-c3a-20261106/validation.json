@@ -1,0 +1,71 @@
+{
+  "baseline": "bcfcb4aeabafba2d6725ec4116d0bce4e472086d",
+  "classification": [
+    "LOCAL_SYNTHETIC_EXECUTION",
+    "STRICT_RECORDED_INSTALLED_TREE_DRY_RUN"
+  ],
+  "stage6": "DENY",
+  "deployment_allowed": false,
+  "current_installation_verified": false,
+  "github_claude_review_verified": false,
+  "review_decision": "SCOPED_SOURCE_VALIDATED_OPERATIONAL_ACCEPTANCE_DENIED",
+  "validation": {
+    "regression": {
+      "tests": 181,
+      "seconds": 22.646,
+      "exit": 0
+    },
+    "strict_ceo": {
+      "tests": 57,
+      "seconds": 1.512,
+      "exit": 0
+    },
+    "strict_broker": {
+      "tests": 57,
+      "seconds": 1.488,
+      "exit": 0
+    },
+    "ast": "PASS",
+    "diff_check": "PASS"
+  },
+  "source_sha256": {
+    "agents/ceo/ceo_research_review.py": "e3c749ff4f43af6743cdc26d074876d06eb0ce6f117f536cfc12ce17cb88d1d5",
+    "agents/ceo/hierarchy_research_daemon.py": "fdfc09e8f42c440fe7f73d1fcc033f804d187ae0134c6b5bc6569106ef714e77",
+    "agents/ceo/hierarchy_service.py": "e84096c5e0155aff94a863a09bd360735bb05227210e533e8068f8413551b110",
+    "agents/ceo/hierarchy_worker_service.py": "e1d23a4f6f3c49d35b09865483711838f98eb7daaa332d76ba2bae9ac5f0cbc6",
+    "agents/ceo/role_maintenance.py": "bbedb6e526455da90f1157b533a41ba8a6ff98c135c63ce020e7213d15e4d167",
+    "tests/test_role_maintenance_c3a.py": "cda0dff587d86d6277166b08330041b056a5fa5ba97136d233fe8dcda32edbba",
+    "tests/p1_04_c3a_strict_compatibility.py": "c636494dd4cbfa1802bd694b00a24f6020004e11ae31afb563f29b6473ca7b5f",
+    "tests/fixtures/p1_04_c3a_source_profiles.json": "8cfdfc3dd49edef521f40633918a8ef2360e2bfbb707b4ebba740a26127014a4",
+    "docs/p1-04-role-maintenance-c3a-v1.0.md": "24e045eb85c5fdde79ed81b9356084901c3deb9398522b95476a85bb2a5cd42d"
+  },
+  "raw_evidence_sha256": {
+    "strict/broker/tests.log": "14d74cf4776a2426afbb41d30e4da477a7f27e522450b7d03e22d0464043a317",
+    "strict/broker/command.json": "3391522ab7a982f6f6eda1181533734bed56d68d853f6143a83ef3370468222a",
+    "strict/broker/exit.txt": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+    "strict/results.json": "5e5d7f09f82db94aeb90b1c3d29121b7cc6a0bc040aa17b0246cda0d8baeca61",
+    "strict-final.log": "1cf94c36315c593b20b1629f527e575582ce98c250cb794c937a70318b24df6b",
+    "strict-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "strict-final/tree-manifest.json": "6a55eafb01f8de215c435269258924e966b2d04f6e5a6d7fc705b3033fa0a261",
+    "strict-final/results.json": "f658e41280887364179f79403f7ffaf3ffe3ee4c72799905469c9d0b88ef87c5",
+    "strict-final/ceo/command.json": "8e5bfb3b60a24e1474203005ff3ea130a80df1a47ee548a5c45ddb245781d194",
+    "strict-final/ceo/tests.log": "79edf880fe27eca8f34e58e1adf093ce8c5d8af1bef70dce3edd2d4c2fa4dba0",
+    "strict-final/ceo/exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "strict-final/ceo/ceo-imports.json": "90ef879196da7a46ac99d08b0206b1aad6b475c7ca532b325bb4a9f00d69bfdf",
+    "strict-final/broker/command.json": "379367dcb0967f3e3ebf115264ba07267d1867e29792ad0b4c6ebcb88e647136",
+    "strict-final/broker/tests.log": "0335d94ea508bb8184f9f94aebca98c6e71ab8accb901c0a013227a66318b0a4",
+    "strict-final/broker/exit.txt": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "strict-final/broker/broker-imports.json": "1cfe5821da5936354b71b32f10256b72ffba5a0f501f29e6c60c82882342d69d",
+    "regression-final.log": "589bba6ea74269ed83d6285663b3a076046defbfe19683e43a8a53d490a6d032",
+    "regression-final.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "validation-processes.json": "5988d8750968190f69c840bf5ca53fd32861433140d9f07a0b5e965a8b9653a5",
+    "callback-overlay.diff": "f5ca2abbfdb422a9b6f0cd96edf76006e7988d598bf41eeb5e1a2e92017b4f36"
+  },
+  "preserved_unstaged_pause_sha256": "4aa2fa78cba1d59df098d3127d7ef2c4bc0f2bf713855246bebd2823447128e9",
+  "limitations": [
+    "Broad regression uses existing dirty worktree",
+    "Strict candidates use recorded packages and explicit overlays; no current installation verification",
+    "Cooperative same-host same-UID admission requires complete explicit participant adoption",
+    "No live provider, service, ledger or deployment validation"
+  ]
+}

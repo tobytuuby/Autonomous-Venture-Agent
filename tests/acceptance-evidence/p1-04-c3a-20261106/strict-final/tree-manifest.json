@@ -1,0 +1,1646 @@
+[
+  {
+    "profile": "ceo",
+    "path": "agents/__init__.py",
+    "sha256": "78c248b61b8d79ad7d0844d0740fb9bbad67803d2de79e01b4f3abee43c82a22",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/__init__.py",
+    "sha256": "f2d2341e2dae8b2b58680f5b52e69d7504fb7c7dad377669be8bebeb04ca1b8b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/advisory_queue.py",
+    "sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/agent.py",
+    "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/authenticated_handoff.py",
+    "sha256": "2d2a88f463a06aa6f283fb3a0085d975ab5649fecef9ed0cc1884e6363068808",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/ceo_research_review.py",
+    "sha256": "5799e8ec9a29f671d209612b5d05b067b15a0dd81234d7a0b9e90b8a8ef58fa0",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cert_renewal.py",
+    "sha256": "0d48960ec3609e3f04530f84900dba0e6ce42f1e0de97085ebf804f2d2c9822b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/control_plane.py",
+    "sha256": "602cbc3da45ce826c8b0525d5c51dd25a25f191ddc44d3cd89c0b10462000044",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cross_vm_outbox.py",
+    "sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cross_vm_poll_client.py",
+    "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cross_vm_poll_server.py",
+    "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cross_vm_state.py",
+    "sha256": "e7e7c871f6b930f734e22db3c2ac65bd0520f4f7733087a36ca35375aa812d81",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/cross_vm_transport.py",
+    "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/durable_state.py",
+    "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/escalation_inbox.py",
+    "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/gates.py",
+    "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_artifact_store.py",
+    "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_client.py",
+    "sha256": "ef0c596130eb3bbb16ba79ba0c7b861ae32bf802c79e0b266faea323de08d95a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_gateway.py",
+    "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_model_callbacks.py",
+    "sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_providers.py",
+    "sha256": "40860723360027423e77c5d8c78afefb76936f47563ea46f60e955702c1f58f5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_research_daemon.py",
+    "sha256": "ddf4a77b27b3832e883a2d61f60936d89eff520fec1adf6e4f2ef158f1c6afc8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_runner.py",
+    "sha256": "ab72ba82936fc54cfb24d86e83f3540d36cd72f291daefda85a59bb24b64a762",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_service.py",
+    "sha256": "9d381a28bab4287bac6a440704862c69543a4f251f78e98dc4d0ec988d01ff02",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/owner_idea_inbox.py",
+    "sha256": "545f76b3550bac061fb095ad9c8381df3d22f8e7460998b1112e79731383fbef",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/preparation_broker.py",
+    "sha256": "a1658699caaaca4d048db33ad2ce22d479534f8ad29b2b4bb2dbd2bc72247249",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/preparation_exchange.py",
+    "sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/provider.py",
+    "sha256": "5223f016aa4fe66cf4bfc6db9983fc46d76ab034f48436fb481a9e8b8d5d6aac",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/provider_dispatch.py",
+    "sha256": "9ddc8401cbf681f20c5958eeecf3ac862cf1e7baa400dca3c068c2e8c3620115",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/provider_gateway.py",
+    "sha256": "54f98969ca593aec35abfd8364c4fe74621a4f9f716a227fdede8f5982c61f1d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/provider_reservation.py",
+    "sha256": "49f16c01de03f87e60acbd2bf5b222f605bad45f1037835e9ab35effe0978a7d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/queue_recovery.py",
+    "sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/runner.py",
+    "sha256": "57b18cfe6389c2d3429dbf563229d1f77c5b140b36d4c446fc1e7a76b9863a9a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/scheduled_escalation.py",
+    "sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/scheduled_exercise.py",
+    "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/scheduled_intake.py",
+    "sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/service_identity.py",
+    "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/synthetic_model.py",
+    "sha256": "cb5c018061174d66e619f2b4c72d9cfe5441b5e7651b435fd17dc709fe5a2c1b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/venture_discovery.py",
+    "sha256": "716cee3e4398e0fd2535cd85e722b9d1f57d3eb43e72a15780901d9292ebfb65",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/venture_exercise.py",
+    "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/venture_workflow.py",
+    "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/worker_inference.py",
+    "sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/synthetic_orchestration.py",
+    "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/synthetic_venture_store.py",
+    "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/venture_admission.py",
+    "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/__init__.py",
+    "sha256": "595e428cde050fd2f99de8b45e80d74868b5d4d5ab315a046b23343859d1212c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/broker.py",
+    "sha256": "2ad8ca71177ca8dc884ed97289136b7facb117a49c4bd0c4d2006fea50901922",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/isolated_mtls.py",
+    "sha256": "b6f4ce84ff3801cf2d7e2234d3989a4959f83db149b35b52ef7018abf94f36b1",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/mtls_server.py",
+    "sha256": "09862f229bb879a80e84d1cb25a6713acfec935738e344d46d9db0dc6d41c14a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/server.py",
+    "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/compliance/__init__.py",
+    "sha256": "adf0569f7159062696c0cc4365dfa693a8a350258fd82f56e2f78aceccfdc99b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/compliance/compliance.py",
+    "sha256": "3c4fe943eaaf2768731944ff7af7a506bc3e36f4c726033db67cd2c72e9c7bf2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/compute/__init__.py",
+    "sha256": "e2db1772e632e45802322fb91d60edb33cdd69a710bc9cdedb745b51d836f108",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/compute/compute.py",
+    "sha256": "b63266d634e5de2896d14229fcf8ac53f24c919394cd39b853db7bca905ab09c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/constitution/__init__.py",
+    "sha256": "acdd44d6a788cf77ed49db694edea82a18ce887fa4805f3cd765a08356b07912",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/constitution/constitution.py",
+    "sha256": "76788631bc029f6327ae3688b2c98e053b90f2bb4ca1c2c2a4e9036ccc0dc09d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/evaluation/__init__.py",
+    "sha256": "711bf23570418bf03e1dabf7cfc769d31825d24e48315c9c13f6894899d55e86",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/evaluation/evaluation.py",
+    "sha256": "256656c002e675a0691f7f7843d06f9d8d5b73441290ba12a80592921c97246f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/execution/__init__.py",
+    "sha256": "98946e448ef0c6fe45f89cd4c97534f0a7d49d84faac068250da623540680c38",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/execution/execution_service.py",
+    "sha256": "78779e864b71d3f26cbd5f2fab841a55d8b5c1053afa06374fbda567cd2f6dd2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/execution/openbao.py",
+    "sha256": "bc8017a11c3308d9bcda1e2a75110243a96f7e7c63cfde60b9d6e7d00347080b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/finance/__init__.py",
+    "sha256": "d9c40469c1f9c1768f3c9f72ec554215e14e21de795738e212c62954f9744611",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/finance/bootstrap.py",
+    "sha256": "69b1ca98c1436e2995c54dc4d3ebfbea4d34ce6c4291d95232a4dc74bfb1f64f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/finance/finance.py",
+    "sha256": "797347fc611b4c089d2335f89a6558b839dc64824997648f5e7a2eba44fb7ba5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/finance/payment_path.py",
+    "sha256": "511317175778d30dcd2c5a9dafbb1bb027a9f16d20f61c792d2300c7ff8a4227",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/kill_switch/__init__.py",
+    "sha256": "82f2cd5d930ebf26d1079bf4a57fdf46bd022b966775630620073ffd6c1cb23a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/kill_switch/kill_switch.py",
+    "sha256": "bca8e9aa6e0c1aac55b9e28efd926d62ba7186c980d6b81a2b4e3ae19c70b6b2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/ledger/__init__.py",
+    "sha256": "0bd5a05f8011d93a67717b23a06e3f7fad15e6a947b4157fbd1ebc00c8f4780b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/ledger/ledger.py",
+    "sha256": "786d493bdc2b622119cc7854f946fbe6107e1f729681331423a1350d68999f88",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/lifecycle/__init__.py",
+    "sha256": "44103a2d059fb1b3d8df159b1e19000575d7da2177701e7b4d68ffb55b37d390",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/lifecycle/lifecycle.py",
+    "sha256": "1e1f77e0cfe2b782ae87033c9cfeb4c36a1f33cf4992879d0e74c570288aa2c5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/__init__.py",
+    "sha256": "735d5f268f7de19e635dc27fc3ec855110ec6892f5acb21e021342fdddfa0b33",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/intake.py",
+    "sha256": "103779dd52f42d596cb3897aecc46d42cdf80f7ca78bd375636766e957f4678b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/lifecycle.py",
+    "sha256": "bb86d7982bc5e02877970e113180653c0fe9c08144eaecdd44c44639ec72e6cf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/normalization.py",
+    "sha256": "206991e6372ca4b41a33cacb9c3ab500d013600f557a75e8aa0e4934d36bd9f9",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/replay.py",
+    "sha256": "2cf21e688ad34102f72746bf7e5f014a7473cb3049ce4504c6224f4e255b0eae",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/scoring.py",
+    "sha256": "a2fc6d95d530a96dfd79a5ef67c0ea4ee26e5d63cc21d977a3e59ad9817272a8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/opportunity/thesis.py",
+    "sha256": "87b9a25e000b2e6c3d097d8e1b92bd44f1896e6c478d0695af218797c2aa9b84",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p10/__init__.py",
+    "sha256": "691253bda32e763999ce2c015fcf15276b0cac62f632e5b2d97bd541bd920855",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p10/synthetic_governance.py",
+    "sha256": "53ab35103be087967f85b3a48a336f1b9e092a36c2cc82eea58a99b782f86115",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p11/__init__.py",
+    "sha256": "60aaf8b02e42d9602072f5f10072f083a8da8a9671aee6c5dd7d37b10d1f36be",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p11/readiness_gate.py",
+    "sha256": "2c7dcbdc8f4b4abea2e7bb80e6420f15a22f0ec22662e1971058a84091c97512",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p4/__init__.py",
+    "sha256": "0ca8e2ed9ec384d660abb64efbb07578480cff4bf92dfc54d48d59ddb70e8b73",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p4/recording.py",
+    "sha256": "bc2c634ee135693316566f2e1c6c178dc4ec2430b21e5caedce3540c4c6c87f4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p5/__init__.py",
+    "sha256": "88f2298240ecdd07fc081c8d2c8980be89f7e61228bc6c4d2d1e8e56423337a9",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p5/reconciliation.py",
+    "sha256": "d5a41d4369651e84d1280526cc551a333816791165447440904ec5d699c7701f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p5/revenue.py",
+    "sha256": "39ab627a16b8dde7ae6efa52e5d2f67a6a9ba2f806767cc8a1352d4d05e47652",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p5/review.py",
+    "sha256": "7b55adabeb67ad6b40efa7c0a17d1f4ba88bce802d9329fafd24c2f557ddf156",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p5/treasury.py",
+    "sha256": "7e00c052e5e44a950ccea1d9dc17b922833e5f3274eb614da33062c10f168bec",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/__init__.py",
+    "sha256": "c89cd584bfa9e73501363971b8cdecc6454ae4bfe38944525930da384ed6ffb7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/anomaly.py",
+    "sha256": "c4d71e120329f6bf4c2712bcf135f03c4e73eac6839f1c3603bfdde84253ed46",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/certification.py",
+    "sha256": "dfbc5251d8a1672bedd108e4f300c9caf27f6cab6d30d356f5ae4b69aeaca4a5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/coordination.py",
+    "sha256": "eadac570dd1ed4a0afa79dbbc9c9c059d052a0f77ebb04dd8764e4879d0a024f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/operations.py",
+    "sha256": "9604c01e824dcdd4df1362a1d1459187fab46012bd09933ed2ae3cf357991462",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/registry.py",
+    "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p6/shared_service.py",
+    "sha256": "778de46f34f51b308ca0dac7e77ef0294462de32ed9e18c2bc956af04855dad4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/__init__.py",
+    "sha256": "a7d1bd28dea8fe70a11079c2ac9530d60cd2d5009cff448829ae5f9f01a81932",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/cases.py",
+    "sha256": "578ea0cd911d87c726fd5a49111256af2a3601b075cfc0f9e193299f63f5e649",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/drift.py",
+    "sha256": "dd6e7feffc3a9c283dd28c8852b8311922fd6bf68a007262ca367c95410a1b88",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/observability.py",
+    "sha256": "388dece523ef9b5c514ca860396ab878dbc18d32c439862a1d0e974e6734cdd7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/provider_boundary.py",
+    "sha256": "f138133a4ee26b4caa98fbc550697a450f69758d149db77092c0df09caf76cef",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/recovery.py",
+    "sha256": "0ac825ff322740d5752e399101989a5b5eeaa05e2c6be9bf0abcdb66438af8f5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/topology.py",
+    "sha256": "d160de6f78296b72635c405998fde453f58a503428554cf82dc0b376bfe83090",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p7/worker_boundary.py",
+    "sha256": "0801767ecc6fb6890c9a9c4959f41bd6a38376b144ec6ea09745fd8b45431e28",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/__init__.py",
+    "sha256": "a28a81535e1a80e61cb5d0fe05e6638e8687e5413eb535027dfb6b97a67af941",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/charter_registry.py",
+    "sha256": "50a13f0dcc43ce178cfa2a33e689e037472f0ce223ef906d4be62688df166830",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/p81_action_gate.py",
+    "sha256": "e9878fba8e050a08613863280a3edff85164797469b6558e71e506778a210a68",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/p82_monitor.py",
+    "sha256": "e58fbb5f1eb2763d2b3661d73e8f04df4f1c29835acf64d09c4d2b943865fd24",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/p83_recovery.py",
+    "sha256": "2569df2906fc5cbd452cf6a8dce5dee8d94d403df5ca0c206b7292fac25382a7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/p84_certification.py",
+    "sha256": "7ebbf7a176af4e4be05b7ceb10742f530ac5b73d189ad4b7c100ed8accc6977a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p8/pilot_gate.py",
+    "sha256": "247424a05373d2664956598029f75d02dfa9ab254220d6c94abb0cff320f6569",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p9/__init__.py",
+    "sha256": "b6c2ff8f645a24ffedec9c0169d422999d072c2130a5819b605a1b4d6a677012",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/p9/synthetic_boundary.py",
+    "sha256": "d56299b7dfce0ab69563b15688bffdc2536848c2f6c4cf19efc273c6181af741",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/policy/__init__.py",
+    "sha256": "974bd86d017cbb8303a5782cc1b9d3f8dd99b9ec2f546742027aa8eb9dd8ed66",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/policy/policy.py",
+    "sha256": "53d8d400db619713ff6898ec5dd3665c883ce5129c2399b80a5b9a4a161cc32e",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/provenance/__init__.py",
+    "sha256": "838cc7c9a150cfba37748dd9b93d9946996e2e51efdb6102df5f1ac5c71f19c8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/provenance/provenance.py",
+    "sha256": "44074638345eae9986df9a29bf1620b4d65ca1269aae6d9f37e45008106ab199",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/scout/__init__.py",
+    "sha256": "23735f665fdafe58ad33eedeb5713ed1ffe181ce1463f5edb9a9abec7639dc66",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/scout/intake.py",
+    "sha256": "f4fb81717f4832b8c5aac318b733bb5612a5b9995bfc9466ae6dce2b03842a55",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/scout/scoring.py",
+    "sha256": "153c793e0dcf7260a2c6e136af658a6719fc4995715d8b88a47df6d214fcac05",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/shared_services/__init__.py",
+    "sha256": "77e3bda51c79e6a8ea8228d970efd0e459f395b6fad32d3d913d709b6f78afeb",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/supervisor/__init__.py",
+    "sha256": "bad8f248652abe00de8b13d1e949fa81b84fdc410d19214666be70f5530efcf5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/supervisor/postgres_queue.py",
+    "sha256": "96d3b1150598b9f87889ed86eab488f2e625a6e05d23b8d657b022bdc780b40c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/supervisor/supervisor.py",
+    "sha256": "32819c268fd78e16873742f76d47fcfb478e2ddb5f62e0a6c6886cb3df90c0f6",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/workers/__init__.py",
+    "sha256": "a4b10dd6cbdb8824f091a8ce8eda14912b5a733419cd1e7ffd6441c93bfc0093",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/workers/evidence.py",
+    "sha256": "4c70347adb6a31c6c02a6dddce6a61d956173266aa7bce61394781cc6ba68ff4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/__init__.py",
+    "sha256": "78c248b61b8d79ad7d0844d0740fb9bbad67803d2de79e01b4f3abee43c82a22",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/__init__.py",
+    "sha256": "f2d2341e2dae8b2b58680f5b52e69d7504fb7c7dad377669be8bebeb04ca1b8b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/advisory_queue.py",
+    "sha256": "a928fd87bd6f02b8c9425d2a1e4a9fed6bf591f0d0cdc528a526028e082c7d46",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/agent.py",
+    "sha256": "b983a6f77ac81a063275eb889b0f48b4b1e58eb1d902f4459f8d9e14d4084def",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/authenticated_handoff.py",
+    "sha256": "2d2a88f463a06aa6f283fb3a0085d975ab5649fecef9ed0cc1884e6363068808",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cert_renewal.py",
+    "sha256": "5b591dd612ea0afbec2f7f9987ea9e4d9c72d88d6d22744d683c7851b34dbb7d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/control_plane.py",
+    "sha256": "d251c41096749970c941e15c2921d48fbc1361a2629241b527ff6aea0f4e091d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cross_vm_outbox.py",
+    "sha256": "edadd4c5acb91d6a93a39569847b1651fd35ca520f082a5b796c110e26cf2bcf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cross_vm_poll_client.py",
+    "sha256": "bfe9fdc177243f6a5f0baba2791c5e8fe6ff0c5ce2371b21c8a216b9f9cb2c94",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cross_vm_poll_server.py",
+    "sha256": "94a85a42f1186e0e1b635651d966b04535aca723777d31afdab36367275d62a8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cross_vm_state.py",
+    "sha256": "e7e7c871f6b930f734e22db3c2ac65bd0520f4f7733087a36ca35375aa812d81",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/cross_vm_transport.py",
+    "sha256": "ce2c25106c47bd643f57561d0dfda85528fc5317226fe230bc7227780691c184",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/durable_state.py",
+    "sha256": "aee9ecafa1502aa2b5671aaf0bb887422218b1eb3d639c90124cc6e853a9d4fd",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/escalation_inbox.py",
+    "sha256": "c7846e5d42d346d0645482cbbe88da8ac6b5b3399de08cbe42e0871b759dd898",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/gates.py",
+    "sha256": "8d79e12d0434e205d7dc0e9f995c602280a84e54e61497c029d90cb347d0c8fc",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_artifact_store.py",
+    "sha256": "96481de81712535a2c78521ba0c08d6825a66985bc04721f14cd68710ff08e77",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_client.py",
+    "sha256": "ef0c596130eb3bbb16ba79ba0c7b861ae32bf802c79e0b266faea323de08d95a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_gateway.py",
+    "sha256": "e120122ed529b0cb87754a997c8048bfa244818e6da1f6d517703068a565831f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_model_callbacks.py",
+    "sha256": "f85953818641d67b60f412869e1821f84b20468e912056437307765d5a156e4b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_providers.py",
+    "sha256": "40860723360027423e77c5d8c78afefb76936f47563ea46f60e955702c1f58f5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_runner.py",
+    "sha256": "8d61c24dd45cc4783e86c04b729a5aa218c68a0df839a84e465fbcdc6575c86c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_service.py",
+    "sha256": "2d545c49701564abb17d401722f80aec8ff7d7c9a6f221aab96f207990bd77e5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/owner_idea_inbox.py",
+    "sha256": "c5bc9aba68b4ae0203da1df672b6449fe6da207c3e6e1d4baa9bb000498c635b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/preparation_broker.py",
+    "sha256": "6e49653cc39721bcd17d82e2474fee3b6f116794e6503c1a778d8a264aeb322c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/preparation_exchange.py",
+    "sha256": "cdde2c982eb69eb90dca8f140c8f8616705d507dc8bf60dbf61a49a4dc7e61b6",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/provider.py",
+    "sha256": "4797d99071bdf428b30ed338e8af224acc3936dd565052fd1a36f238fc526c22",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/provider_dispatch.py",
+    "sha256": "9ddc8401cbf681f20c5958eeecf3ac862cf1e7baa400dca3c068c2e8c3620115",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/provider_gateway.py",
+    "sha256": "54f98969ca593aec35abfd8364c4fe74621a4f9f716a227fdede8f5982c61f1d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/provider_reservation.py",
+    "sha256": "49f16c01de03f87e60acbd2bf5b222f605bad45f1037835e9ab35effe0978a7d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/queue_recovery.py",
+    "sha256": "ff8c90dc3bab0bbf7472869be44121b4e516caebc41022d29325cc37dd43f2f0",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/runner.py",
+    "sha256": "57b18cfe6389c2d3429dbf563229d1f77c5b140b36d4c446fc1e7a76b9863a9a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/scheduled_escalation.py",
+    "sha256": "0761ab003d603570f9ccc522e4ad6dd7b30142b200778fe43a404e03a6424ba5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/scheduled_exercise.py",
+    "sha256": "1578e34141ed76f0a3a736b8311de95740c3257c7d128859bb3713cf7f8c70eb",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/scheduled_intake.py",
+    "sha256": "d1ad0adfdc029cd1d8464b2457e4c6bf575b3746c7544bb6f3bedb940cd834b5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/service_identity.py",
+    "sha256": "1e7866ffac7de7ae8e81ae8e514a75125d5e21ddeab2d9fa617889e6439b77dd",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/synthetic_model.py",
+    "sha256": "cb5c018061174d66e619f2b4c72d9cfe5441b5e7651b435fd17dc709fe5a2c1b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/venture_exercise.py",
+    "sha256": "dd765fd3120bf68c225dd1a34f6ce08c0f7d27bbe4d3ef11ed2f9eb7a58851cf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/venture_workflow.py",
+    "sha256": "96024de175dec782fc204ebb0971cd09eb25f2ee115eb77a052a79f39536eb6d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/worker_inference.py",
+    "sha256": "14328f0d14eed843e8177968e157b383d78867078ae585d839c88121dcba5bef",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/synthetic_orchestration.py",
+    "sha256": "74049fdb29066700437664ba49e340336c1534394ddcdc642be5205732ea0561",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/synthetic_venture_store.py",
+    "sha256": "7a4bfa8f64832095a783aa055d49ffca056617ccea8e7e03b179130e80a2ec78",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/venture_admission.py",
+    "sha256": "71cebaca63582feb2dee28f690ed87ea67eb60dc6e6223800139a64d36de3f6f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/__init__.py",
+    "sha256": "595e428cde050fd2f99de8b45e80d74868b5d4d5ab315a046b23343859d1212c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/broker.py",
+    "sha256": "2ad8ca71177ca8dc884ed97289136b7facb117a49c4bd0c4d2006fea50901922",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/isolated_mtls.py",
+    "sha256": "b6f4ce84ff3801cf2d7e2234d3989a4959f83db149b35b52ef7018abf94f36b1",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/mtls_server.py",
+    "sha256": "09862f229bb879a80e84d1cb25a6713acfec935738e344d46d9db0dc6d41c14a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/server.py",
+    "sha256": "8352d7b0e63f7d1873db7678008ab5dde6a6c61146dd56f1ffcb37eefa834fab",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/compliance/__init__.py",
+    "sha256": "adf0569f7159062696c0cc4365dfa693a8a350258fd82f56e2f78aceccfdc99b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/compliance/compliance.py",
+    "sha256": "3c4fe943eaaf2768731944ff7af7a506bc3e36f4c726033db67cd2c72e9c7bf2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/compute/__init__.py",
+    "sha256": "e2db1772e632e45802322fb91d60edb33cdd69a710bc9cdedb745b51d836f108",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/compute/compute.py",
+    "sha256": "b63266d634e5de2896d14229fcf8ac53f24c919394cd39b853db7bca905ab09c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/constitution/__init__.py",
+    "sha256": "acdd44d6a788cf77ed49db694edea82a18ce887fa4805f3cd765a08356b07912",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/constitution/constitution.py",
+    "sha256": "76788631bc029f6327ae3688b2c98e053b90f2bb4ca1c2c2a4e9036ccc0dc09d",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/evaluation/__init__.py",
+    "sha256": "711bf23570418bf03e1dabf7cfc769d31825d24e48315c9c13f6894899d55e86",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/evaluation/evaluation.py",
+    "sha256": "256656c002e675a0691f7f7843d06f9d8d5b73441290ba12a80592921c97246f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/execution/__init__.py",
+    "sha256": "98946e448ef0c6fe45f89cd4c97534f0a7d49d84faac068250da623540680c38",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/execution/execution_service.py",
+    "sha256": "78779e864b71d3f26cbd5f2fab841a55d8b5c1053afa06374fbda567cd2f6dd2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/execution/openbao.py",
+    "sha256": "bc8017a11c3308d9bcda1e2a75110243a96f7e7c63cfde60b9d6e7d00347080b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/finance/__init__.py",
+    "sha256": "d9c40469c1f9c1768f3c9f72ec554215e14e21de795738e212c62954f9744611",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/finance/bootstrap.py",
+    "sha256": "69b1ca98c1436e2995c54dc4d3ebfbea4d34ce6c4291d95232a4dc74bfb1f64f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/finance/finance.py",
+    "sha256": "797347fc611b4c089d2335f89a6558b839dc64824997648f5e7a2eba44fb7ba5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/finance/payment_path.py",
+    "sha256": "511317175778d30dcd2c5a9dafbb1bb027a9f16d20f61c792d2300c7ff8a4227",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/kill_switch/__init__.py",
+    "sha256": "82f2cd5d930ebf26d1079bf4a57fdf46bd022b966775630620073ffd6c1cb23a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/kill_switch/kill_switch.py",
+    "sha256": "bca8e9aa6e0c1aac55b9e28efd926d62ba7186c980d6b81a2b4e3ae19c70b6b2",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/ledger/__init__.py",
+    "sha256": "0bd5a05f8011d93a67717b23a06e3f7fad15e6a947b4157fbd1ebc00c8f4780b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/ledger/ledger.py",
+    "sha256": "786d493bdc2b622119cc7854f946fbe6107e1f729681331423a1350d68999f88",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/lifecycle/__init__.py",
+    "sha256": "44103a2d059fb1b3d8df159b1e19000575d7da2177701e7b4d68ffb55b37d390",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/lifecycle/lifecycle.py",
+    "sha256": "1e1f77e0cfe2b782ae87033c9cfeb4c36a1f33cf4992879d0e74c570288aa2c5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/__init__.py",
+    "sha256": "735d5f268f7de19e635dc27fc3ec855110ec6892f5acb21e021342fdddfa0b33",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/intake.py",
+    "sha256": "103779dd52f42d596cb3897aecc46d42cdf80f7ca78bd375636766e957f4678b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/lifecycle.py",
+    "sha256": "bb86d7982bc5e02877970e113180653c0fe9c08144eaecdd44c44639ec72e6cf",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/normalization.py",
+    "sha256": "206991e6372ca4b41a33cacb9c3ab500d013600f557a75e8aa0e4934d36bd9f9",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/replay.py",
+    "sha256": "2cf21e688ad34102f72746bf7e5f014a7473cb3049ce4504c6224f4e255b0eae",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/scoring.py",
+    "sha256": "a2fc6d95d530a96dfd79a5ef67c0ea4ee26e5d63cc21d977a3e59ad9817272a8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/opportunity/thesis.py",
+    "sha256": "87b9a25e000b2e6c3d097d8e1b92bd44f1896e6c478d0695af218797c2aa9b84",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p10/__init__.py",
+    "sha256": "691253bda32e763999ce2c015fcf15276b0cac62f632e5b2d97bd541bd920855",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p10/synthetic_governance.py",
+    "sha256": "53ab35103be087967f85b3a48a336f1b9e092a36c2cc82eea58a99b782f86115",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p11/__init__.py",
+    "sha256": "60aaf8b02e42d9602072f5f10072f083a8da8a9671aee6c5dd7d37b10d1f36be",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p11/readiness_gate.py",
+    "sha256": "2c7dcbdc8f4b4abea2e7bb80e6420f15a22f0ec22662e1971058a84091c97512",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p4/__init__.py",
+    "sha256": "0ca8e2ed9ec384d660abb64efbb07578480cff4bf92dfc54d48d59ddb70e8b73",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p4/recording.py",
+    "sha256": "bc2c634ee135693316566f2e1c6c178dc4ec2430b21e5caedce3540c4c6c87f4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p5/__init__.py",
+    "sha256": "88f2298240ecdd07fc081c8d2c8980be89f7e61228bc6c4d2d1e8e56423337a9",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p5/reconciliation.py",
+    "sha256": "d5a41d4369651e84d1280526cc551a333816791165447440904ec5d699c7701f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p5/revenue.py",
+    "sha256": "39ab627a16b8dde7ae6efa52e5d2f67a6a9ba2f806767cc8a1352d4d05e47652",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p5/review.py",
+    "sha256": "7b55adabeb67ad6b40efa7c0a17d1f4ba88bce802d9329fafd24c2f557ddf156",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p5/treasury.py",
+    "sha256": "7e00c052e5e44a950ccea1d9dc17b922833e5f3274eb614da33062c10f168bec",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/__init__.py",
+    "sha256": "c89cd584bfa9e73501363971b8cdecc6454ae4bfe38944525930da384ed6ffb7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/anomaly.py",
+    "sha256": "c4d71e120329f6bf4c2712bcf135f03c4e73eac6839f1c3603bfdde84253ed46",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/certification.py",
+    "sha256": "dfbc5251d8a1672bedd108e4f300c9caf27f6cab6d30d356f5ae4b69aeaca4a5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/coordination.py",
+    "sha256": "eadac570dd1ed4a0afa79dbbc9c9c059d052a0f77ebb04dd8764e4879d0a024f",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/operations.py",
+    "sha256": "9604c01e824dcdd4df1362a1d1459187fab46012bd09933ed2ae3cf357991462",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/registry.py",
+    "sha256": "aa5bdfbf973a36e9bf00ed681924b8e960510e3a5b214f875acc95f40a01e8f7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p6/shared_service.py",
+    "sha256": "778de46f34f51b308ca0dac7e77ef0294462de32ed9e18c2bc956af04855dad4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/__init__.py",
+    "sha256": "a7d1bd28dea8fe70a11079c2ac9530d60cd2d5009cff448829ae5f9f01a81932",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/cases.py",
+    "sha256": "578ea0cd911d87c726fd5a49111256af2a3601b075cfc0f9e193299f63f5e649",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/drift.py",
+    "sha256": "dd6e7feffc3a9c283dd28c8852b8311922fd6bf68a007262ca367c95410a1b88",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/observability.py",
+    "sha256": "388dece523ef9b5c514ca860396ab878dbc18d32c439862a1d0e974e6734cdd7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/provider_boundary.py",
+    "sha256": "f138133a4ee26b4caa98fbc550697a450f69758d149db77092c0df09caf76cef",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/recovery.py",
+    "sha256": "0ac825ff322740d5752e399101989a5b5eeaa05e2c6be9bf0abcdb66438af8f5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/topology.py",
+    "sha256": "d160de6f78296b72635c405998fde453f58a503428554cf82dc0b376bfe83090",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p7/worker_boundary.py",
+    "sha256": "0801767ecc6fb6890c9a9c4959f41bd6a38376b144ec6ea09745fd8b45431e28",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/__init__.py",
+    "sha256": "a28a81535e1a80e61cb5d0fe05e6638e8687e5413eb535027dfb6b97a67af941",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/charter_registry.py",
+    "sha256": "50a13f0dcc43ce178cfa2a33e689e037472f0ce223ef906d4be62688df166830",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/p81_action_gate.py",
+    "sha256": "e9878fba8e050a08613863280a3edff85164797469b6558e71e506778a210a68",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/p82_monitor.py",
+    "sha256": "e58fbb5f1eb2763d2b3661d73e8f04df4f1c29835acf64d09c4d2b943865fd24",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/p83_recovery.py",
+    "sha256": "2569df2906fc5cbd452cf6a8dce5dee8d94d403df5ca0c206b7292fac25382a7",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/p84_certification.py",
+    "sha256": "7ebbf7a176af4e4be05b7ceb10742f530ac5b73d189ad4b7c100ed8accc6977a",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p8/pilot_gate.py",
+    "sha256": "247424a05373d2664956598029f75d02dfa9ab254220d6c94abb0cff320f6569",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p9/__init__.py",
+    "sha256": "b6c2ff8f645a24ffedec9c0169d422999d072c2130a5819b605a1b4d6a677012",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/p9/synthetic_boundary.py",
+    "sha256": "d56299b7dfce0ab69563b15688bffdc2536848c2f6c4cf19efc273c6181af741",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/policy/__init__.py",
+    "sha256": "974bd86d017cbb8303a5782cc1b9d3f8dd99b9ec2f546742027aa8eb9dd8ed66",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/policy/policy.py",
+    "sha256": "53d8d400db619713ff6898ec5dd3665c883ce5129c2399b80a5b9a4a161cc32e",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/provenance/__init__.py",
+    "sha256": "838cc7c9a150cfba37748dd9b93d9946996e2e51efdb6102df5f1ac5c71f19c8",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/provenance/provenance.py",
+    "sha256": "44074638345eae9986df9a29bf1620b4d65ca1269aae6d9f37e45008106ab199",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/scout/__init__.py",
+    "sha256": "23735f665fdafe58ad33eedeb5713ed1ffe181ce1463f5edb9a9abec7639dc66",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/scout/intake.py",
+    "sha256": "f4fb81717f4832b8c5aac318b733bb5612a5b9995bfc9466ae6dce2b03842a55",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/scout/scoring.py",
+    "sha256": "153c793e0dcf7260a2c6e136af658a6719fc4995715d8b88a47df6d214fcac05",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/shared_services/__init__.py",
+    "sha256": "77e3bda51c79e6a8ea8228d970efd0e459f395b6fad32d3d913d709b6f78afeb",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/supervisor/__init__.py",
+    "sha256": "bad8f248652abe00de8b13d1e949fa81b84fdc410d19214666be70f5530efcf5",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/supervisor/postgres_queue.py",
+    "sha256": "96d3b1150598b9f87889ed86eab488f2e625a6e05d23b8d657b022bdc780b40c",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/supervisor/supervisor.py",
+    "sha256": "32819c268fd78e16873742f76d47fcfb478e2ddb5f62e0a6c6886cb3df90c0f6",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/workers/__init__.py",
+    "sha256": "a4b10dd6cbdb8824f091a8ce8eda14912b5a733419cd1e7ffd6441c93bfc0093",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/workers/evidence.py",
+    "sha256": "4c70347adb6a31c6c02a6dddce6a61d956173266aa7bce61394781cc6ba68ff4",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/ceo_broker.py",
+    "sha256": "0e74914b0f88ce17cc8247faa3494e5f68c3341237661ebbedb84f311981bf63",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/ceo_broker.py",
+    "sha256": "0e74914b0f88ce17cc8247faa3494e5f68c3341237661ebbedb84f311981bf63",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/ceo_research_review.py",
+    "sha256": "5799e8ec9a29f671d209612b5d05b067b15a0dd81234d7a0b9e90b8a8ef58fa0",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "integrations/payment_adapter/__init__.py",
+    "sha256": "c0d332ac5bdc0ffe39c40a7e0238504fec1ad02e337ea8afaa8c9a348e3aed43",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "integrations/payment_adapter/real.py",
+    "sha256": "b02da6de884638da74b2c0280cca19b4ade5d3ed189f586c77f5ab1e7237ee22",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "integrations/payment_adapter/simulated.py",
+    "sha256": "75289d500d4fb77f0ed54d15704ad018593674959b0e337a05da805ac7585a4b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "integrations/payment_adapter/__init__.py",
+    "sha256": "c0d332ac5bdc0ffe39c40a7e0238504fec1ad02e337ea8afaa8c9a348e3aed43",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "integrations/payment_adapter/real.py",
+    "sha256": "b02da6de884638da74b2c0280cca19b4ade5d3ed189f586c77f5ab1e7237ee22",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "broker",
+    "path": "integrations/payment_adapter/simulated.py",
+    "sha256": "75289d500d4fb77f0ed54d15704ad018593674959b0e337a05da805ac7585a4b",
+    "origin": "HASH_VERIFIED_P1_03_RECORDED"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/role_maintenance.py",
+    "sha256": "bbedb6e526455da90f1157b533a41ba8a6ff98c135c63ce020e7213d15e4d167",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_service.py",
+    "sha256": "e84096c5e0155aff94a863a09bd360735bb05227210e533e8068f8413551b110",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_research_daemon.py",
+    "sha256": "fdfc09e8f42c440fe7f73d1fcc033f804d187ae0134c6b5bc6569106ef714e77",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_worker_service.py",
+    "sha256": "e1d23a4f6f3c49d35b09865483711838f98eb7daaa332d76ba2bae9ac5f0cbc6",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/ceo_research_review.py",
+    "sha256": "e3c749ff4f43af6743cdc26d074876d06eb0ce6f117f536cfc12ce17cb88d1d5",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "kernel/broker/isolated_mtls.py",
+    "sha256": "2bbf6d3c27586cad89d585ba1bca2c10e9dadccc4b4817f2d1abaafe07d84bde",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/deployment_pause.py",
+    "sha256": "d603d5529971b55d9a5204278076c78f1967dabcf8fd6036fa6383de06f151c2",
+    "origin": "EXPLICIT_COMMITTED_BASELINE_OVERLAY"
+  },
+  {
+    "profile": "ceo",
+    "path": "agents/ceo/hierarchy_model_callbacks.py",
+    "sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+    "origin": "EXPLICIT_COMMITTED_BASELINE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/role_maintenance.py",
+    "sha256": "bbedb6e526455da90f1157b533a41ba8a6ff98c135c63ce020e7213d15e4d167",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_service.py",
+    "sha256": "e84096c5e0155aff94a863a09bd360735bb05227210e533e8068f8413551b110",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_research_daemon.py",
+    "sha256": "fdfc09e8f42c440fe7f73d1fcc033f804d187ae0134c6b5bc6569106ef714e77",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_worker_service.py",
+    "sha256": "e1d23a4f6f3c49d35b09865483711838f98eb7daaa332d76ba2bae9ac5f0cbc6",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/ceo_research_review.py",
+    "sha256": "e3c749ff4f43af6743cdc26d074876d06eb0ce6f117f536cfc12ce17cb88d1d5",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "kernel/broker/isolated_mtls.py",
+    "sha256": "2bbf6d3c27586cad89d585ba1bca2c10e9dadccc4b4817f2d1abaafe07d84bde",
+    "origin": "EXPLICIT_C3A_SOURCE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/deployment_pause.py",
+    "sha256": "d603d5529971b55d9a5204278076c78f1967dabcf8fd6036fa6383de06f151c2",
+    "origin": "EXPLICIT_COMMITTED_BASELINE_OVERLAY"
+  },
+  {
+    "profile": "broker",
+    "path": "agents/ceo/hierarchy_model_callbacks.py",
+    "sha256": "a5465bec9a7e8274b99925de6998bdaa550a86fbebbdba3676a5396eb9b8c83e",
+    "origin": "EXPLICIT_COMMITTED_BASELINE_OVERLAY"
+  }
+]

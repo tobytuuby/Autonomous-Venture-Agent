@@ -16,6 +16,7 @@ from agents.ceo.hierarchy_client import HierarchyClient
 from agents.ceo.hierarchy_runner import HierarchyRunner
 from agents.ceo.hierarchy_model_callbacks import ModelRoleCallback
 from agents.ceo.hierarchy_providers import HierarchyProvider, RecoveryImpossible
+from agents.ceo.role_maintenance import admission, admitted
 
 
 class RemoteWorkflow:
@@ -41,6 +42,7 @@ def recovery_reason(exc):
     return str(exc) if isinstance(exc, RecoveryImpossible) and str(exc) in codes else "RECONCILIATION_REQUIRED"
 
 
+@admitted
 def tick_research_task(config, client, actors, private, policy, blocked=None):
     """Let the existing role service process one approved research workflow."""
     role=config["role"]
@@ -103,76 +105,78 @@ def tick_research_task(config, client, actors, private, policy, blocked=None):
 
 
 def run(config, *, once=False, poll_seconds=3):
-    role=config["role"]
-    if role not in ("ceo","manager","worker"):
-        raise ValueError("hierarchy role denied")
-    actor=config["actor_id"]
-    actors=load_trust(config["trust"])
-    if actor not in actors or actors[actor][0]!=role:
-        raise ValueError("role trust denied")
-    seed=Path(config["signing_key"]).read_bytes()
-    if len(seed)!=32:
-        raise ValueError("private role signer required")
-    private=Ed25519PrivateKey.from_private_bytes(seed)
-    public=private.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw)
-    if public!=actors[actor][1]:
-        raise ValueError("signer does not match pinned role")
-    client=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
-        client_cert=config["client_cert"],client_key=config["client_key"])
-    state_dir=Path(config["state_dir"])
-    if not state_dir.is_dir() or state_dir.is_symlink():
-        raise ValueError("preprovisioned state required")
-    policy=json.loads(Path(config["policy"]).read_text())
-    local=None
-    if role=="ceo":
-        from agents.ceo.venture_exercise import configured_provider
-        local=configured_provider(os.environ,required=True)
-        if local.model!="gpt-6-sol":
-            raise ValueError("CEO pinned reasoning model denied")
-        local.trace_path=state_dir/"provider.jsonl"
-    elif role=="manager" and policy["roles"]["manager"]["model"]!="gpt-6-sol":
-        raise ValueError("Manager reasoning model denied")
-    elif role=="worker" and policy["model"]!="gpt-6-luna":
-        raise ValueError("Worker specialized model denied")
-    provider=HierarchyProvider(role=role,actor=actor,
-        workflow_id=config["workflow_id"],client=client,policy=policy,
-        context=config.get("context"),local_provider=local,
-        state_path=state_dir/"inference.sqlite")
-    callback=ModelRoleCallback(role=role,provider=provider,
-        artifact_store=client.store,artifact_load=client.load,actor_id=actor,
-        decomposition_workers=config.get("decomposition_workers"))
-    callbacks=dict(manager=None,worker=None,ceo=None)
-    callbacks[role]=callback
-    workflow=RemoteWorkflow(client,actors)
-    runner=HierarchyRunner(workflow,**callbacks,role_filter=role,
-        signers={actor:private.sign})
-    allowed=dict(ceo={"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
-                 worker={"WORKER_PENDING"})[role]
-    last=None
-    blocked_research=set()
+    with admission(config):
+        role=config["role"]
+        if role not in ("ceo","manager","worker"):
+            raise ValueError("hierarchy role denied")
+        actor=config["actor_id"]
+        actors=load_trust(config["trust"])
+        if actor not in actors or actors[actor][0]!=role:
+            raise ValueError("role trust denied")
+        seed=Path(config["signing_key"]).read_bytes()
+        if len(seed)!=32:
+            raise ValueError("private role signer required")
+        private=Ed25519PrivateKey.from_private_bytes(seed)
+        public=private.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw)
+        if public!=actors[actor][1]:
+            raise ValueError("signer does not match pinned role")
+        client=HierarchyClient(config["endpoint"],ca_file=config["ca_file"],
+            client_cert=config["client_cert"],client_key=config["client_key"])
+        state_dir=Path(config["state_dir"])
+        if not state_dir.is_dir() or state_dir.is_symlink():
+            raise ValueError("preprovisioned state required")
+        policy=json.loads(Path(config["policy"]).read_text())
+        local=None
+        if role=="ceo":
+            from agents.ceo.venture_exercise import configured_provider
+            local=configured_provider(os.environ,required=True)
+            if local.model!="gpt-6-sol":
+                raise ValueError("CEO pinned reasoning model denied")
+            local.trace_path=state_dir/"provider.jsonl"
+        elif role=="manager" and policy["roles"]["manager"]["model"]!="gpt-6-sol":
+            raise ValueError("Manager reasoning model denied")
+        elif role=="worker" and policy["model"]!="gpt-6-luna":
+            raise ValueError("Worker specialized model denied")
+        provider=HierarchyProvider(role=role,actor=actor,
+            workflow_id=config["workflow_id"],client=client,policy=policy,
+            context=config.get("context"),local_provider=local,
+            state_path=state_dir/"inference.sqlite")
+        callback=ModelRoleCallback(role=role,provider=provider,
+            artifact_store=client.store,artifact_load=client.load,actor_id=actor,
+            decomposition_workers=config.get("decomposition_workers"))
+        callbacks=dict(manager=None,worker=None,ceo=None)
+        callbacks[role]=callback
+        workflow=RemoteWorkflow(client,actors)
+        runner=HierarchyRunner(workflow,**callbacks,role_filter=role,
+            signers={actor:private.sign})
+        allowed=dict(ceo={"CEO_REVIEW","DECOMPOSITION_REVIEW","CEO_REDIRECTION"},manager={"MANAGER_PENDING","MANAGER_REVIEW"},
+                     worker={"WORKER_PENDING"})[role]
+        last=None
+        blocked_research=set()
     while True:
-        try:
-            # The research daemon already selected and scoped one task. Queue
-            # polling here would execute other tasks under its durable directory,
-            # then tick the selected task a second time.
-            if "_research_state_root" not in config:
-                tick_research_task(config,client,actors,private,policy,blocked_research)
-            state=client.read(config["workflow_id"])
-            if state is not None and state["state"] in allowed:
-                after=runner.tick(config["workflow_id"])
-                print(json.dumps(dict(role=role,from_state=state["state"],
-                      to_state=after["state"],revision=after["revision"],
-                      operational_authority=False)),flush=True)
-            elif state is not None and state["state"]=="OWNER_REVIEW" and role=="ceo":
-                print(json.dumps(dict(role=role,status="OWNER_REVIEW_ONLY",
-                      operational_authority=False)),flush=True)
-                return 0
-            elif last != ("waiting",state["state"] if state else None):
-                last=("waiting",state["state"] if state else None)
-                print(json.dumps(dict(role=role,status="WAITING",
-                    workflow_state=last[1],operational_authority=False)),flush=True)
-        except KeyError:
-            pass
+        with admission(config):
+            try:
+                # The research daemon already selected and scoped one task. Queue
+                # polling here would execute other tasks under its durable directory,
+                # then tick the selected task a second time.
+                if "_research_state_root" not in config:
+                    tick_research_task(config,client,actors,private,policy,blocked_research)
+                state=client.read(config["workflow_id"])
+                if state is not None and state["state"] in allowed:
+                    after=runner.tick(config["workflow_id"])
+                    print(json.dumps(dict(role=role,from_state=state["state"],
+                          to_state=after["state"],revision=after["revision"],
+                          operational_authority=False)),flush=True)
+                elif state is not None and state["state"]=="OWNER_REVIEW" and role=="ceo":
+                    print(json.dumps(dict(role=role,status="OWNER_REVIEW_ONLY",
+                          operational_authority=False)),flush=True)
+                    return 0
+                elif last != ("waiting",state["state"] if state else None):
+                    last=("waiting",state["state"] if state else None)
+                    print(json.dumps(dict(role=role,status="WAITING",
+                        workflow_state=last[1],operational_authority=False)),flush=True)
+            except KeyError:
+                pass
         if once:
             return 0
         time.sleep(poll_seconds)

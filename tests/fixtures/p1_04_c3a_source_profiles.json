@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "scope": "P1-04 C3A source compatibility",
+  "deployment_authorized": false,
+  "recorded_matrix": "tests/acceptance-evidence/p1-03-installed-compatibility-20261105/source-installed-module-matrix.json",
+  "recorded_root": "artifacts/p1-03-installed-compatibility-20261105-v3",
+  "source_overlays": [
+    "agents/ceo/role_maintenance.py",
+    "agents/ceo/hierarchy_service.py",
+    "agents/ceo/hierarchy_research_daemon.py",
+    "agents/ceo/hierarchy_worker_service.py",
+    "agents/ceo/ceo_research_review.py",
+    "kernel/broker/isolated_mtls.py"
+  ],
+  "committed_baseline_overlays": [
+    "agents/ceo/deployment_pause.py",
+    "agents/ceo/hierarchy_model_callbacks.py"
+  ],
+  "baseline": "bcfcb4aeabafba2d6725ec4116d0bce4e472086d",
+  "profiles": {
+    "ceo": [
+      "tests.test_role_maintenance_c3a",
+      "tests.test_hierarchy_service_research",
+      "tests.test_research_abc_routing",
+      "tests.test_ceo_research_review"
+    ],
+    "broker": [
+      "tests.test_role_maintenance_c3a",
+      "tests.test_hierarchy_service_research",
+      "tests.test_research_abc_routing",
+      "tests.test_ceo_research_review"
+    ]
+  },
+  "overlay_notes": {
+    "agents/ceo/hierarchy_model_callbacks.py": "The recorded broker callback predates committed independent A/B/C assignments. Pin the existing baseline contract; retain the required routing regression unchanged."
+  }
+}
