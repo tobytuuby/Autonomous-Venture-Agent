@@ -1,0 +1,24 @@
+[Unit]
+Description=Level 2D autonomous hierarchy Manager (preparation only)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=venture-manager
+Group=venture-manager
+WorkingDirectory=/usr/local/lib/venture-manager-level2c
+Environment=PYTHONPATH=/usr/local/lib/venture-manager-level2c
+ExecStart=/usr/bin/python3 -B -m agents.ceo.hierarchy_service --config /var/lib/venture-manager/level2d/hierarchy-config.json
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/venture-manager/level2d
+
+[Install]
+WantedBy=multi-user.target
