@@ -17,17 +17,15 @@ SYSTEM = (
     "Unexecuted runtime tests are not absent paper-only preparation evidence. "
     "Request improvement for substantive deficiencies only while effort remains. "
     "For worker submissions include declared preparation effort units. "
-    "Return action, explanation, deliverable, units; when proposing a Manager "
-    "decomposition also return assignments selected from the supplied Worker registry. "
+    "Return exactly action, explanation, deliverable, units. "
     "Explanation must be 30-100 characters, deliverable 150-450 characters. "
     "Be concrete, concise, and finish the valid JSON object. "
     "Report pending runtime validation honestly without fabricating execution."
 )
 RESEARCH_SYSTEM = (
-    'You are an internal research role. Respond with JSON fields action, '
-    'explanation, deliverable and units. For a Manager decomposition proposal, '
-    'also include assignments using only the supplied Worker registry. No tools, '
-    'spending, customer contact, launch or fabricated citations. Evaluate the proposed customer, problem, '
+    'You are an internal research role. Respond with a JSON object with exactly '
+    'action, explanation, deliverable, units. No tools, spending, customer contact, '
+    'launch or fabricated citations. Evaluate the proposed customer, problem, '
     'competition, demand and validation plan. Identify hypotheses and evidence '
     'still needed. Manager should request revision when reasoning is weak; CEO '
     'should only approve a substantive internal desk assessment, not claim '
@@ -81,8 +79,6 @@ class ModelRoleCallback:
             assignment = ready_assignment(item, self.actor_id)
             if assignment is None:
                 raise ValueError("signed approval and ready assignment required")
-        from agents.ceo.venture_workflow import research_tasks
-        scoped_tasks = research_tasks(item)
         if state == "MANAGER_PENDING":
             if self.decomposition_workers is None:
                 allowed = allowed - {"propose_decomposition"}
@@ -90,9 +86,11 @@ class ModelRoleCallback:
                 workers = self.decomposition_workers
                 if (type(workers) is not dict or set(workers) != {"A", "B", "C"}
                         or len(set(workers.values())) != 3
-                        or any(type(v) is not str for v in workers.values())):
-                    raise ValueError("three distinct registered Workers required")
-                assignments = []
+                        or len(item["scope"]["tasks"]) != 3):
+                    raise ValueError("three scoped tasks and distinct workers required")
+                assignments = [dict(id=name, worker_id=workers[name], task=task,
+                                    depends_on=[] if name != "C" else ["A", "B"])
+                               for name, task in zip(("A", "B", "C"), item["scope"]["tasks"])]
                 allowed = frozenset({"propose_decomposition", "reject_premise"})
         allowed = HierarchyRunner.allowed_actions(item) & (allowed | {"hold"})
         # Supply bounded, signed history; no private tokens, keys, or executable tools.
@@ -117,7 +115,7 @@ class ModelRoleCallback:
         worker_refs = []
         if plan and (state in ("MANAGER_REVIEW", "CEO_REVIEW") or
                      assignment and assignment["depends_on"]):
-            needed = {a["id"] for a in plan["assignments"]} if assignment is None else set(assignment["depends_on"])
+            needed = {"A", "B", "C"} if assignment is None else set(assignment["depends_on"])
             found = {}
             for ref, sha in item["evidence"].items():
                 if not ref.startswith("preparation-"):
@@ -157,25 +155,21 @@ class ModelRoleCallback:
                 response_contract=dict(action="one permitted action",
                     explanation="concrete review reason, 30-100 characters",
                     deliverable="specific preparation evidence, 150-450 characters",
-                    units="positive integer for worker submit; zero otherwise",
-                    assignments="required only for propose_decomposition: exactly A/B/C, distinct workers, exact task, depends_on=[]")))
+                    units="positive integer for worker submit; zero otherwise")))
         opportunity = request["opportunity"]
         if self.role == "manager":
             opportunity["review_contract"] = (
-                "Consolidate the three independently completed Worker deliverables into one "
-                "Manager synthesis, then assess it against the exact preparation-only tasks. "
+                "Assess the existing evidence against the exact preparation-only tasks. "
                 "Unexecuted tests do not imply absent paper-only preparation. "
                 "At zero remaining effort, manager_approve sufficient documentation "
                 "for CEO review; hold genuinely deficient work with an explicit "
                 "budget exhausted reason. Never improve, delegate or restart Workers "
                 "at zero effort. Approval asserts preparation sufficiency only.")
         if assignments is not None:
-            opportunity["available_workers"] = sorted(set(self.decomposition_workers.values()))
-            opportunity["assignment_contract"] = (
-                "As Manager, distribute the three exact scoped tasks across Worker A, B, and C, "
-                "with a different registered Worker on each assignment. All three Workers work "
-                "independently; every depends_on list must be empty. The Manager consolidates "
-                "their results after all three finish.")
+            opportunity["proposed_assignments"] = assignments
+            opportunity["decomposition_contract"] = (
+                "A and B independently perform their exact scoped tasks; "
+                "C performs its exact scoped task after both A and B complete.")
         if state == "CEO_REDIRECTION":
             opportunity["rejection_command"] = item["last_command"]
             opportunity["revision_contract"] = (
@@ -192,13 +186,7 @@ class ModelRoleCallback:
         if type(response) is not dict or response.get("tool_call") is not None:
             raise ValueError("tool calls forbidden")
         data = strict_json(response["decision"]["content"])
-        if type(data) is not dict:
-            raise ValueError("decision object required")
-        expected_fields = (("action", "explanation", "deliverable", "units", "assignments")
-                           if (state == "MANAGER_PENDING" and assignments is not None
-                               and data.get("action") == "propose_decomposition")
-                           else ("action", "explanation", "deliverable", "units"))
-        exact(data, expected_fields)
+        exact(data, ("action", "explanation", "deliverable", "units"))
         if data["action"] not in allowed:
             raise ValueError("unauthorized model action")
         for field in ("explanation", "deliverable"):
@@ -234,7 +222,7 @@ class ModelRoleCallback:
             payload = dict(scope=json.loads(canonical(item["scope"])),
                            version=item["version"] + 1, reason=data["explanation"])
         elif data["action"] == "propose_decomposition":
-            payload = dict(assignments=data["assignments"])
+            payload = dict(assignments=assignments)
         elif data["action"] == "approve_decomposition":
             payload = dict(proposal_hash=hashed(plan["assignments"]))
         elif assignment:
