@@ -47,52 +47,6 @@ def hashed(value):
     return digest(canonical(value).encode())
 
 
-def research_identity(item):
-    """Full proposal digest from the signed genesis evidence, never a caller ID."""
-    if not item["id"].startswith("research-"):
-        return None
-    matches = [sha for ref, sha in item["evidence"].items()
-               if ref == "research-approval-" + sha[:24]
-               and re.fullmatch("[0-9a-f]{64}", sha)
-               and item["handoff"]["item_id"] == "research-" + sha[:24]]
-    if len(matches) != 1:
-        raise ValueError("authoritative research proposal required")
-    return matches[0]
-
-
-def research_rounds(item):
-    fingerprint = research_identity(item)
-    if fingerprint is None:
-        return []
-    return item.get("research_rounds") or [dict(
-        round=1, proposal_digest=fingerprint, workflow_id=item["id"],
-        venture_id=item["venture_id"],
-        objective=item["scope"]["tasks"][0], prior_evidence=[])]
-
-
-def research_session(item):
-    try:
-        rounds = research_rounds(item)
-    except ValueError:
-        # Non-research fixture workflows can share the daemon adapter, but
-        # inference authorization still calls research_identity and fails closed.
-        return item["id"]
-    return item["id"] + ("-r" + str(len(rounds)) if len(rounds) > 1 else "")
-
-
-RESEARCH_WORKERS = dict(A="worker-a", B="worker-b", C="worker-c")
-
-
-def research_tasks(item):
-    """Three bounded specialties under one CEO research objective."""
-    if research_identity(item) and len(item["scope"]["tasks"]) == 1:
-        objective = item["scope"]["tasks"][0]
-        return [prefix + objective[:500] for prefix in (
-            "Assess evidence and assumptions: ", "Assess alternatives and limitations: ",
-            "Assess validation approach and remaining questions: ")]
-    return item["scope"]["tasks"]
-
-
 def scope_check(scope):
     exact(scope, ("mode", "manager_id", "worker_id", "tasks", "budget_units", "seed_cents"))
     if scope["mode"] != "PREPARATION_ONLY":
@@ -193,32 +147,7 @@ class VentureWorkflow(EscalationInbox):
             return actor in {a["worker_id"] for a in item["decomposition"]["assignments"]}
         return role not in ("manager", "worker") or actor == item["scope"][role + "_id"]
 
-    def _legacy_worker_recovery(self, prior, command):
-        """Same-scope routing repair; replay reconstructs every retained field."""
-        if command["action"] != "recover_legacy_worker":
-            return None
-        exact(command["payload"], ("reason",))
-        bounded(command["payload"]["reason"])
-        fingerprint = research_identity(prior)
-        scope = prior["scope"]
-        if (command["role"] != "ceo" or command["actor_id"] != "service-ceo"
-                or fingerprint is None or prior["id"] != "research-" + fingerprint[:24]
-                or prior["venture_id"] != prior["id"]
-                or prior["state"] != "WORKER_PENDING" or prior.get("decomposition") is not None
-                or prior.get("research_disposition") is not None
-                or scope["manager_id"] != "service-manager"
-                or scope["worker_id"] != "service-worker" or len(scope["tasks"]) != 1
-                or scope["mode"] != "PREPARATION_ONLY"
-                or scope["seed_cents"] != 1 or scope["budget_units"] > 5
-                or scope["budget_units"] - prior["used_units"] < 3
-                or not 1 <= len(research_rounds(prior)) <= 3):
-            raise ValueError("legacy Worker recovery denied")
-        if any(self.actors.get(actor, (None,))[0] != "worker"
-               for actor in ("worker-a", "worker-b", "worker-c")):
-            raise ValueError("active research Workers required")
-        return dict(state="MANAGER_PENDING")
-
-    def _decomposition_transition(self, prior, command, signature, enforce_independent=False):
+    def _decomposition_transition(self, prior, command, signature):
         """Reconstruct assignment state from signed commands, including on restart."""
         action, role, payload = command["action"], command["role"], command["payload"]
         plan = json.loads(canonical(prior.get("decomposition")))
@@ -228,50 +157,23 @@ class VentureWorkflow(EscalationInbox):
             exact(payload, ("assignments",))
             assignments = payload["assignments"]
             if type(assignments) is not list or len(assignments) != 3:
-                raise ValueError("A, B, and C assignments required")
-            ids, workers, covered = set(), set(), []
-            valid_tasks = set(research_tasks(prior))
-            legacy_tasks = None
-            if not enforce_independent and research_identity(prior) and len(prior["scope"]["tasks"]) == 1:
-                objective = prior["scope"]["tasks"][0]
-                legacy_tasks = [prefix + objective[:500] for prefix in (
-                    "Assess evidence and assumptions: ", "Assess alternatives and limitations: ",
-                    "Synthesize A and B and unanswered questions: ")]
-            for assignment in assignments:
+                raise ValueError("three assignments required")
+            workers = set()
+            for assignment, name, dependencies in zip(assignments, ("A", "B", "C"), ([], [], ["A", "B"])):
                 exact(assignment, ("id", "worker_id", "task", "depends_on"))
-                name, worker = assignment["id"], assignment["worker_id"]
-                identifier(name)
-                identifier(worker)
-                if name not in {"A", "B", "C"} or name in ids:
-                    raise ValueError("A, B, and C assignment ids required")
-                if self.actors.get(worker, (None,))[0] != "worker" or worker in workers:
-                    raise ValueError("three distinct registered Workers required")
-                dependencies = assignment["depends_on"]
-                if type(dependencies) is not list or any(dep not in {"A", "B", "C"} for dep in dependencies):
+                if assignment["id"] != name or assignment["depends_on"] != dependencies:
                     raise ValueError("assignment dependencies denied")
-                if enforce_independent and dependencies:
-                    raise ValueError("Worker assignments must be independent")
-                if not enforce_independent and name == "C" and dependencies not in ([], ["A", "B"]):
-                    raise ValueError("historical C dependencies denied")
-                if not enforce_independent and name in {"A", "B"} and dependencies:
-                    raise ValueError("historical A/B dependencies denied")
-                allowed_tasks = valid_tasks | (set(legacy_tasks) if legacy_tasks and not enforce_independent else set())
-                if assignment["task"] not in allowed_tasks:
-                    raise ValueError("assignment scope denied")
-                ids.add(name)
+                worker = assignment["worker_id"]
+                identifier(worker)
+                if self.actors.get(worker, (None,))[0] != "worker" or worker in workers:
+                    raise ValueError("distinct assigned workers required")
                 workers.add(worker)
-                covered.append(assignment["task"])
-            coverage = set(covered)
-            valid_coverage = {frozenset(valid_tasks)}
-            if legacy_tasks and not enforce_independent:
-                valid_coverage.add(frozenset(legacy_tasks))
-            if ids != {"A", "B", "C"} or len(coverage) != 3 or frozenset(coverage) not in valid_coverage:
-                raise ValueError("A/B/C task coverage required")
-            legacy_dependent = (not enforce_independent and
-                                next(a for a in assignments if a["id"] == "C")["depends_on"] == ["A", "B"])
-            states = ({"A": "PENDING", "B": "PENDING", "C": "BLOCKED"}
-                      if legacy_dependent else {a["id"]: "READY" for a in assignments})
-            return dict(assignments=assignments, approval=None, states=states), "DECOMPOSITION_REVIEW", prior["used_units"]
+                if assignment["task"] not in prior["scope"]["tasks"]:
+                    raise ValueError("assignment scope denied")
+            if {a["task"] for a in assignments} != set(prior["scope"]["tasks"]):
+                raise ValueError("assignment scope coverage required")
+            return dict(assignments=assignments, approval=None,
+                        states=dict(A="PENDING", B="PENDING", C="BLOCKED")), "DECOMPOSITION_REVIEW", prior["used_units"]
         if action == "approve_decomposition":
             if prior["state"] != "DECOMPOSITION_REVIEW" or role != "ceo" or plan is None:
                 raise ValueError("CEO decomposition approval required")
@@ -279,11 +181,7 @@ class VentureWorkflow(EscalationInbox):
             if payload["proposal_hash"] != hashed(plan["assignments"]):
                 raise ValueError("proposal binding denied")
             plan["approval"] = dict(command=command, signature=signature)
-            legacy_dependent = (not enforce_independent and
-                                next(a for a in plan["assignments"] if a["id"] == "C")["depends_on"] == ["A", "B"])
-            for assignment in plan["assignments"]:
-                if not legacy_dependent or assignment["depends_on"] == []:
-                    plan["states"][assignment["id"]] = "READY"
+            plan["states"].update(A="READY", B="READY")
             target = ("BUDGET_EXHAUSTED" if prior["used_units"] >= prior["scope"]["budget_units"]
                       else "WORKER_PENDING")
             return plan, target, prior["used_units"]
@@ -302,8 +200,8 @@ class VentureWorkflow(EscalationInbox):
             if prior["used_units"] + units > prior["scope"]["budget_units"]:
                 return plan, "BUDGET_EXHAUSTED", prior["used_units"]
             plan["states"][assignment["id"]] = "COMPLETE"
-            if (not enforce_independent and plan["states"].get("C") == "BLOCKED"
-                    and all(plan["states"][dep] == "COMPLETE" for dep in ("A", "B"))):
+            if (all(plan["states"][dep] == "COMPLETE" for dep in ("A", "B"))
+                    and plan["states"]["C"] == "BLOCKED"):
                 plan["states"]["C"] = "READY"
             target = "MANAGER_REVIEW" if all(s == "COMPLETE" for s in plan["states"].values()) else "WORKER_PENDING"
             return plan, target, prior["used_units"] + units
@@ -314,92 +212,6 @@ class VentureWorkflow(EscalationInbox):
             bounded(payload["reason"])
             return None, "MANAGER_PENDING", prior["used_units"]
         return None
-
-    def _research_transition(self, prior, command):
-        if command["action"] not in ("continue_research", "research_disposition"):
-            return None
-        payload = command["payload"]
-        exact(payload, ("round", "objective", "unanswered_question", "review"))
-        history = research_rounds(prior)
-        continuing = command["action"] == "continue_research"
-        if (command["role"] != "ceo" or not history or (continuing and len(history) >= 3)
-                or prior.get("research_disposition") is not None
-                or prior["state"] not in {"HOLD", "CEO_REVIEW", "OWNER_REVIEW", "CEO_REDIRECTION"}
-                or type(payload["round"]) is not int
-                or payload["round"] != len(history) + int(continuing)):
-            raise ValueError("sequential bounded research continuation required")
-        bounded(payload["objective"])
-        bounded(payload["unanswered_question"])
-        if continuing and payload["objective"].strip().casefold() in {
-                r["objective"].strip().casefold() for r in history}:
-            raise ValueError("distinct research objective required")
-        signed = payload["review"]
-        exact(signed, ("state", "snapshot_hash", "packet", "signature"))
-        packet = signed["packet"]
-        if (signed["state"] != "COMPLETE" or signed["snapshot_hash"] != hashed(prior)
-                or packet.get("snapshot_hash") != hashed(prior)
-                or packet.get("workflow_id") != prior["id"]
-                or packet.get("domain") != "owner-internal-research-ceo-review-v1"
-                or packet.get("model") != "gpt-6-sol"
-                or packet.get("financial_authority") is not False
-                or packet.get("venture_admission") is not False
-                or packet.get("external_market_evidence_verified") is not False):
-            raise ValueError("signed CEO research recommendation required")
-        Ed25519PublicKey.from_public_bytes(self.actors[command["actor_id"]][1]).verify(
-            bytes.fromhex(signed["signature"]), canonical(packet).encode())
-        assessment = packet["assessment"]
-        if not continuing:
-            permitted = {"PROCEED_TO_MVP", "REJECT_OR_DEFER"} if len(history) == 3 else {"READY_FOR_OWNER_DISCUSSION", "REJECT_OR_DEFER"}
-            if assessment.get("recommendation") not in permitted:
-                raise ValueError("terminal research disposition required")
-            return dict(research_disposition=signed,
-                        state="TERMINATED" if assessment["recommendation"] == "REJECT_OR_DEFER" else "OWNER_REVIEW",
-                        owner_receipt=None, finance_request=None)
-        if (assessment.get("recommendation") != "NEEDS_MORE_RESEARCH"
-                or assessment.get("next_internal_task") != payload["objective"]
-                or assessment.get("evidence_gaps") != payload["unanswered_question"]):
-            raise ValueError("unanswered CEO research question required")
-        evidence_check(command["evidence"])
-        if not any(ref["ref"].startswith("preparation-") for ref in command["evidence"]):
-            raise ValueError("prior research artifacts required")
-        if any(prior["evidence"].get(ref["ref"]) != ref["sha256"]
-               for ref in command["evidence"]):
-            raise ValueError("prior signed research evidence required")
-        history = json.loads(canonical(history))
-        history.append(dict(round=payload["round"], proposal_digest=research_identity(prior),
-            workflow_id=prior["id"], venture_id=prior["venture_id"],
-            objective=payload["objective"], prior_evidence=command["evidence"],
-            prior_snapshot_hash=hashed(prior), review=signed,
-            unanswered_question=payload["unanswered_question"]))
-        scope = dict(prior["scope"], tasks=[payload["objective"]])
-        return dict(research_rounds=history, scope=scope, scope_hash=hashed(scope),
-                    version=prior["version"], used_units=0,
-                    decomposition=None, owner_receipt=None, finance_request=None,
-                    state="MANAGER_PENDING")
-
-    def _mvp_blocker_transition(self, prior, command):
-        """Reconstruct historical signed blockers only; never admit new records."""
-        if command["action"] != "record_mvp_blocker":
-            return None
-        exact(command["payload"], ())
-        signed = prior.get("research_disposition")
-        if (command["role"] != "ceo" or prior["state"] != "OWNER_REVIEW"
-                or not signed or prior.get("mvp_handoff") is not None
-                or signed["packet"]["assessment"]["recommendation"] != "PROCEED_TO_MVP"):
-            raise ValueError("positive signed MVP disposition required")
-        fingerprint = research_identity(prior)
-        if fingerprint is None:
-            raise ValueError("proposal-bound MVP assessment required")
-        return dict(state=prior["state"], mvp_handoff=dict(
-            status="BLOCKED", proposal_digest=fingerprint,
-            disposition_hash=hashed(signed), source_snapshot_hash=hashed(prior),
-            scope_hash=prior["scope_hash"], research_round=len(research_rounds(prior)),
-            code="MVP_EXECUTION_AUTHORITY_UNAVAILABLE",
-            required_action="Resolve existing proposal-bound internal MVP scope, resource limits "
-                            "and a safe execution path at the broker. Research approval and "
-                            "reservations grant no MVP allowance. Do not repeat approval for "
-                            "already-authorized work; do not create scope or grants.",
-            execution_authorized=False))
 
     def _verify_transition(self, prior, item, command):
         """Reconstruct security-relevant state from signed commands on restart.
@@ -428,16 +240,7 @@ class VentureWorkflow(EscalationInbox):
             if item["handoff"] != prior["handoff"]:
                 raise ValueError("handoff immutable")
             multi = self._decomposition_transition(prior, command, item["signature"])
-            research = (self._legacy_worker_recovery(prior, command)
-                        or self._research_transition(prior, command))
-            blocker = self._mvp_blocker_transition(prior, command)
-            if blocker is not None:
-                expected.update(blocker)
-                target = blocker["state"]
-            elif research is not None:
-                expected.update(research)
-                target = research["state"]
-            elif multi is not None:
+            if multi is not None:
                 expected["decomposition"], target, expected["used_units"] = multi
             elif action in ("hold", "security_hold", "terminate"):
                 allowed = {"hold": {"ceo", "manager", "owner"},
@@ -473,12 +276,6 @@ class VentureWorkflow(EscalationInbox):
             expected["state"] = target
             if target in {"HOLD", "SECURITY_HOLD", "TERMINATED", "CEO_REDIRECTION"}:
                 expected.update(owner_receipt=None, finance_request=None)
-        if item.get("mvp_handoff") != expected.get("mvp_handoff", prior.get("mvp_handoff") if prior else None):
-            raise ValueError("signed MVP blocker reconstruction denied")
-        if item.get("research_disposition") != expected.get("research_disposition", prior.get("research_disposition") if prior else None):
-            raise ValueError("signed research disposition reconstruction denied")
-        if item.get("research_rounds") != expected.get("research_rounds", prior.get("research_rounds") if prior else None):
-            raise ValueError("signed research history reconstruction denied")
         expected_plan = (expected.get("decomposition", prior.get("decomposition") if prior else None)
                          if action != "revise" else None)
         if item.get("decomposition") != expected_plan:
@@ -614,28 +411,18 @@ class VentureWorkflow(EscalationInbox):
                     or command["scope_hash"] != item["scope_hash"]):
                 raise ValueError("stale version scope or state")
             action, role, payload = command["action"], command["role"], command["payload"]
-            if action == "record_mvp_blocker":
-                raise ValueError("historical MVP blocker is replay-only")
             if not self._assigned_actor(item, command):
                 raise ValueError("assigned actor required")
             if item["state"] == "TERMINATED":
                 raise ValueError("terminated")
-            if (item.get("research_disposition") is not None
-                    and action not in {"hold", "security_hold", "terminate"}):
-                raise ValueError("research disposition immutable; no execution authority")
             # Admission is stricter than historical reconstruction: already signed
             # exhausted improvement/re-decomposition records remain immutable and
             # readable, but cannot authorize a new Worker cycle or quota increase.
             if (item["used_units"] >= item["scope"]["budget_units"]
                     and action in {"improve", "delegate", "propose_decomposition", "revise"}):
                 raise ValueError("budget exhausted: Worker cycle restart denied")
-            multi = self._decomposition_transition(item, command, signature, enforce_independent=True)
-            research = (self._legacy_worker_recovery(item, command)
-                        or self._research_transition(item, command))
-            if research is not None:
-                item.update(research)
-                target = research["state"]
-            elif multi is not None:
+            multi = self._decomposition_transition(item, command, signature)
+            if multi is not None:
                 item["decomposition"], target, item["used_units"] = multi
             elif action in ("hold", "security_hold", "terminate"):
                 allowed = {"hold": {"ceo", "manager", "owner"},
