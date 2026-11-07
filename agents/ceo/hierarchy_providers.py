@@ -11,13 +11,9 @@ from agents.ceo.escalation_inbox import canonical, digest, exact, identifier
 from agents.ceo.venture_workflow import hashed
 
 
-class RecoveryImpossible(ValueError):
-    """The durable intent cannot be safely resumed automatically."""
-
-
 class HierarchyProvider:
     def __init__(self, *, role, actor, workflow_id, client, policy, context=None,
-                 local_provider=None, state_path, ceo_broker=False):
+                 local_provider=None, state_path):
         if role not in ("ceo", "manager", "worker"):
             raise ValueError("hierarchy provider role denied")
         self.role, self.actor = role, actor
@@ -25,11 +21,7 @@ class HierarchyProvider:
         self.workflow_id, self.client = workflow_id, client
         self.policy, self.context = policy, context
         self.local_provider = local_provider
-        if type(ceo_broker) is not bool or (ceo_broker and (
-                role != "ceo" or actor != "service-ceo" or local_provider is not None)):
-            raise ValueError("CEO broker role isolation required")
-        self.ceo_broker = ceo_broker
-        if role == "ceo" and local_provider is None and not ceo_broker:
+        if role == "ceo" and local_provider is None:
             raise ValueError("CEO provider must remain on Control")
         if role != "ceo" and local_provider is not None:
             raise ValueError("role provider credential forbidden")
@@ -74,50 +66,15 @@ class HierarchyProvider:
         if self.role == "ceo":
             from agents.ceo.hierarchy_runner import automatic_revision_allowed
             if (state["state"] not in ("CEO_REVIEW", "DECOMPOSITION_REVIEW")
-                    and not (state["id"].startswith("research-") and state["state"] in ("HOLD", "OWNER_REVIEW", "CEO_REDIRECTION"))
                     and not automatic_revision_allowed(state)):
                 raise ValueError("CEO review missing")
-        if assignment is not None:
-            identity = self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
-        elif self.role == "manager" and self.workflow_id.startswith("research-"):
-            # New intents bind the exact prompt; recovery also checks historical
-            # snapshot-only keys before allowing a new intent.
-            identity = self.role + "-" + hashed(dict(snapshot=state, request=request))[:50]
-        else:
-            identity = self.role + "-" + hashed(state)[:50]
-        tracked_ceo = (self.role == "ceo" and self.workflow_id.startswith("research-")
-                       and request["opportunity"].get("research_state") == "QUOTA_HOLD")
-        if self.ceo_broker and not tracked_ceo:
-            raise RecoveryImpossible("TRACKED_CEO_REVIEW_REQUIRED")
+        identity = (self.role + "-" + assignment["id"] + "-" + hashed(state)[:50]
+                    if assignment is not None else self.role+"-"+hashed(state)[:50])
         wire = canonical(request)
-        recovering = False
         db = sqlite3.connect(self.state_path, isolation_level=None, timeout=5)
         try:
             db.execute("PRAGMA synchronous=FULL")
             db.execute("BEGIN IMMEDIATE")
-            # Older releases used snapshot-only keys. Never mint a fresh intent
-            # when any historical intent already binds this signed snapshot.
-            matches = []
-            safe_manager = (self.role == "manager"
-                and self.workflow_id.startswith("research-")
-                and state["state"] in ("MANAGER_PENDING", "MANAGER_REVIEW"))
-            if safe_manager:
-                for row in db.execute("SELECT identity,request,response,attempt FROM calls ORDER BY rowid"):
-                    try:
-                        old = json.loads(row[1])
-                    except (ValueError, TypeError) as exc:
-                        raise RecoveryImpossible("MALFORMED_DURABLE_INTENT") from exc
-                    if (type(old) is not dict or type(old.get("opportunity")) is not dict
-                            or type(old["opportunity"].get("snapshot_sha256")) is not str):
-                        raise RecoveryImpossible("MALFORMED_DURABLE_INTENT")
-                    if old["opportunity"].get("snapshot_sha256") == hashed(state):
-                        matches.append(row)
-                if len(matches) > 1:
-                    raise RecoveryImpossible("MULTIPLE_DURABLE_INTENTS")
-                if matches:
-                    if matches[0][1] != wire:
-                        raise RecoveryImpossible("PROMPT_CHANGED")
-                    identity = matches[0][0]
             prior = db.execute("SELECT request,response,attempt FROM calls WHERE identity=?",(identity,)).fetchone()
             if prior:
                 if prior[0] != wire:
@@ -126,9 +83,13 @@ class HierarchyProvider:
                     result=json.loads(prior[1])
                     db.execute("COMMIT")
                     return result
-                if not (safe_manager or tracked_ceo):
-                    raise RecoveryImpossible("LOCAL_EXECUTION_AMBIGUOUS")
-                recovering = True
+                # Owner-operator reconciliation for ONE exact manager intent, after
+                # verifying centrally that remote execution never began. The
+                # existing broker ledger makes replay idempotent even if stale.
+                import os
+                if (self.role!="manager" or not self.workflow_id.startswith("research-")
+                        or os.environ.get("VENTURE_RESEARCH_RECONCILE_ID")!=identity):
+                    raise ValueError("ambiguous provider call requires reconciliation")
                 attempt=prior[2]
                 db.execute("COMMIT")
             else:
@@ -154,8 +115,7 @@ class HierarchyProvider:
                 raise ValueError("worker budget reservation denied")
             result=self.client.worker_execute(dict(reservation=reservation,request=request))
         else:
-            from agents.ceo.venture_workflow import research_session
-            if self.context is None or self.context["session_id"] != research_session(state):
+            if self.context is None or self.context["session_id"] != self.workflow_id:
                 raise ValueError("CEO-established model context required")
             binding=self.policy["roles"][self.role]
             if binding["actor_id"] != self.actor:
@@ -163,63 +123,18 @@ class HierarchyProvider:
             reservation=dict(context=self.context,role=self.role,actor=self.actor,
                 identity=identity,attempt=attempt,request_sha256=request_sha,
                 policy=self.policy,endpoint=binding["endpoint"],model=binding["model"])
-            if self.ceo_broker:
-                reservation["execution_mode"] = "CONTROL_LEDGER_V1"
-                result = self._broker_ceo(reservation, request)
+            receipt=self.client._request("POST","/v1/inference/reservations",reservation)
+            if receipt.get("reserved") is not True:
+                raise ValueError("central inference reservation denied")
+            if self.role == "ceo":
+                self.local_provider.maximum_output_tokens=self.policy["maximum_output_tokens"]
+                result=self.local_provider(request,())
             else:
-                if tracked_ceo:
-                    reservation["execution_mode"] = "CONTROL_LEDGER_V1"
-                    if not recovering:
-                        # The local executor must observe the existing broker session.
-                        # Detect split/inaccessible authority before charging remotely.
-                        from agents.ceo.provider_reservation import require_ceo_session
-                        require_ceo_session(self.context, self.policy)
-                if tracked_ceo and recovering:
-                    # The original CEO path could execute only AFTER a committed
-                    # reservation. Under the existing atomic unique-call gate, an
-                    # absent reservation proves no execution; a legacy reservation
-                    # conflicts with the mode binding and remains blocked.
-                    from agents.ceo.provider_reservation import reserve_exchange
-                    try:
-                        receipt = reserve_exchange(reservation, actor=self.actor, role="ceo",
-                                                   existing_session_only=True)
-                    except ValueError as exc:
-                        if str(exc) == "changed or replayed reservation":
-                            raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED") from exc
-                        raise
-                else:
-                    receipt = self.client._request("POST","/v1/inference/reservations",reservation)
-                if receipt.get("reserved") is not True:
-                    raise ValueError("central inference reservation denied")
-                if tracked_ceo:
-                    from types import SimpleNamespace
-                    from agents.ceo.provider_gateway import execute_reserved
-                    payload = dict(reservation=reservation, request=request)
-                    def execute(data):
-                        return execute_reserved(data, actor=self.actor, role="ceo",
-                            provider=self.local_provider,
-                            hierarchy=SimpleNamespace(state=self.client.read))
-                    if recovering:
-                        status = execute(dict(payload, reconcile_only=True))
-                        result = reconciled_result(status, request_sha)
-                    if not recovering or status["reconciliation"] == "NOT_STARTED":
-                        result = execute(payload)
-                elif self.role == "ceo":
-                    self.local_provider.maximum_output_tokens=self.policy["maximum_output_tokens"]
-                    result=self.local_provider(request,())
-                else:
-                    payload = dict(reservation=reservation, request=request)
-                    if recovering:
-                        wrapper = self.client._request("POST", "/v1/inference/execute",
-                                                       dict(payload, reconcile_only=True))
-                        exact(wrapper, ("result",))
-                        status = wrapper["result"]
-                        result = reconciled_result(status, request_sha)
-                    if not recovering or status["reconciliation"] == "NOT_STARTED":
-                        wrapper=self.client._request("POST","/v1/inference/execute", payload)
-                        if set(wrapper) != {"result"}:
-                            raise ValueError("uncorrelated manager response")
-                        result=wrapper["result"]
+                wrapper=self.client._request("POST","/v1/inference/execute",
+                                            dict(reservation=reservation,request=request))
+                if set(wrapper) != {"result"}:
+                    raise ValueError("uncorrelated manager response")
+                result=wrapper["result"]
         if (type(result) is not dict or result.get("tool_call") is not None
                 or type(result.get("decision")) is not dict
                 or type(result["decision"].get("content")) is not str):
@@ -239,36 +154,3 @@ class HierarchyProvider:
         finally:
             db.close()
         return result
-
-
-    def _broker_ceo(self, reservation, request):
-        # The local durable identity/attempt is reused on every restart. Proof
-        # never creates a session, charges quota, or treats ambiguity as absence.
-        payload = dict(reservation=reservation, request=request)
-        proof = self.client.ceo_proof(payload)
-        if proof["execution_status"] == "PENDING":
-            raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")
-        if proof["reservation_status"] == "ABSENT":
-            from agents.ceo.cross_vm_poll_client import verify_reservation
-            receipt = self.client._request("POST", "/v1/inference/reservations", reservation)
-            verify_reservation(reservation, receipt)
-            proof = self.client.ceo_proof(payload)
-        if proof["reservation_status"] != "EXACT":
-            raise RecoveryImpossible("CEO_RESERVATION_PROOF_REQUIRED")
-        if proof["execution_status"] == "PENDING":
-            raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")
-        return self.client.ceo_execute(payload)
-
-
-def reconciled_result(status, request_sha):
-    """Only an exact broker-owned COMPLETE result or never-started intent resumes."""
-    exact(status, ("reconciliation", "request_sha256", "result"))
-    if status["request_sha256"] != request_sha:
-        raise RecoveryImpossible("RECONCILIATION_BINDING")
-    if status["reconciliation"] == "COMPLETE":
-        if type(status["result"]) is not dict:
-            raise RecoveryImpossible("RECONCILIATION_RESULT")
-        return status["result"]
-    if status["reconciliation"] == "NOT_STARTED" and status["result"] is None:
-        return None
-    raise RecoveryImpossible("PROVIDER_EXECUTION_AMBIGUOUS")
