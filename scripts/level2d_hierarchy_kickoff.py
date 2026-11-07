@@ -66,7 +66,7 @@ def run(config):
                                           receipt_signature=sign(receipt)))
         scope=dict(mode="PREPARATION_ONLY",manager_id=MANAGER,worker_id=WORKER,
             tasks=tasks,budget_units=5,
-            seed_cents=1 if flow=="level2d-multiworker-acceptance-1" else 10000)
+            seed_cents=1 if flow in ("level2d-multiworker-acceptance-1", "level2d-multiworker-acceptance-2") else 10000)
         cmd=dict(workflow_id=flow,request_id="ceo-"+flow+"-create",
             actor_id=CEO,role="ceo",origin="control_plane",action="create",
             revision=0,previous_hash="GENESIS",version=1,

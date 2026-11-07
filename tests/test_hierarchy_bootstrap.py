@@ -21,7 +21,10 @@ class HierarchyBootstrapTests(unittest.TestCase):
     def test_exact_new_multiworker_acceptance_fixture(self):
         self.check_genesis(multiworker=True, fresh=True)
 
-    def check_genesis(self, multiworker=False, fresh=False):
+    def test_second_new_multiworker_acceptance_fixture(self):
+        self.check_genesis(multiworker=True, fresh2=True)
+
+    def check_genesis(self, multiworker=False, fresh=False, fresh2=False):
         with tempfile.TemporaryDirectory(dir=ROOT) as tmp:
             keys={role:Ed25519PrivateKey.generate() for role in ("ceo","manager","worker")}
             actors={"service-"+role:(role,k.public_key().public_bytes(Encoding.Raw,PublicFormat.Raw))
@@ -38,6 +41,9 @@ class HierarchyBootstrapTests(unittest.TestCase):
             if fresh:
                 ITEM = "level2d-multiworker-acceptance"
                 FLOW = "level2d-multiworker-acceptance-1"
+            if fresh2:
+                ITEM = "level2d-multiworker-acceptance-2"
+                FLOW = "level2d-multiworker-acceptance-2"
             from scripts.level2d_hierarchy_kickoff import MULTI_TASKS
             tasks = MULTI_TASKS if multiworker else [TASK]
             issued=datetime.now(timezone.utc)-timedelta(seconds=2)
@@ -56,7 +62,7 @@ class HierarchyBootstrapTests(unittest.TestCase):
             handoff=gateway.bootstrap_prepare(payload)
             self.assertEqual(gateway.bootstrap_prepare(payload),handoff)
             scope=dict(mode="PREPARATION_ONLY",manager_id="service-manager",
-                       worker_id="service-worker",tasks=tasks,budget_units=5,seed_cents=1 if fresh else 10000)
+                       worker_id="service-worker",tasks=tasks,budget_units=5,seed_cents=1 if (fresh or fresh2) else 10000)
             now=datetime.now(timezone.utc)
             command=dict(workflow_id=FLOW,request_id="ceo-level2d-test-genesis",
                 actor_id="service-ceo",role="ceo",origin="control_plane",action="create",
@@ -65,14 +71,14 @@ class HierarchyBootstrapTests(unittest.TestCase):
                 payload=dict(venture_id=VENTURE,scope=scope,handoff_hash=hashed(handoff)),
                 issued_at=now.isoformat(),
                 expires_at=(now+timedelta(minutes=5)).isoformat(),live=False)
-            if fresh:
+            if fresh or fresh2:
                 for field, value in (("budget_units", 6), ("budget_units", 4), ("seed_cents", 10000)):
                     original_value = scope[field]
                     scope[field] = value
                     with self.subTest(field=field, value=value), self.assertRaises(ValueError):
                         gateway.bootstrap_commit(dict(command=command,signature=signer(command)))
                     scope[field] = original_value
-                other = dict(command, workflow_id="level2d-multiworker-acceptance-2")
+                other = dict(command, workflow_id="level2d-multiworker-acceptance-3")
                 with self.assertRaisesRegex(ValueError, "bounded technical"):
                     gateway.bootstrap_commit(dict(command=other,signature=signer(other)))
             if multiworker:

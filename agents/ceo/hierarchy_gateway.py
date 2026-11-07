@@ -21,6 +21,7 @@ MAX_COMMAND = 16000
 MULTI_FIXTURES = {
     "level2d-multiworker-remediation-1": "level2d-multiworker-remediation",
     "level2d-multiworker-acceptance-1": "level2d-multiworker-acceptance",
+    "level2d-multiworker-acceptance-2": "level2d-multiworker-acceptance-2",
 }
 MULTI_TASKS = [
     "Draft internal tenant-isolation denial acceptance cases; no execution.",
@@ -224,7 +225,8 @@ class HierarchyGateway:
                 or type(scope.get("seed_cents")) is not int
                 or not 1 <= scope["seed_cents"] <= 10000):
             raise ValueError("owner-approved preparation fixture required")
-        if cmd["workflow_id"] == "level2d-multiworker-acceptance-1":
+        if cmd["workflow_id"] in ("level2d-multiworker-acceptance-1",
+                                  "level2d-multiworker-acceptance-2"):
             if scope.get("budget_units") != 5 or scope.get("seed_cents") != 1:
                 raise ValueError("exact five-unit nonspendable acceptance scope required")
         if cmd["workflow_id"] in MULTI_FIXTURES:
