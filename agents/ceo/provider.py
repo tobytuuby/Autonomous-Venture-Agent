@@ -6,7 +6,6 @@ import hashlib
 import json
 import re
 import urllib.request
-from urllib.parse import urlsplit
 from pathlib import Path
 from typing import Any
 
@@ -24,35 +23,17 @@ SCHEMA_TO_TOOL_NAME = {
 TOOL_NAME_TO_SCHEMA = {value: key for key, value in SCHEMA_TO_TOOL_NAME.items()}
 
 
-class _NoRedirect(urllib.request.HTTPRedirectHandler):
-    def redirect_request(self, req, fp, code, msg, headers, newurl):
-        # Never forward the bearer credential to a redirected destination.
-        return None
-
-
 class OpenAICompatibleShadowModel:
     model_family = "openai-compatible"
 
     def __init__(self, endpoint: str, model: str, token: str, timeout: float = 30.0, trace_path: str | Path | None = None):
         if not endpoint or not model or not token:
             raise ModelProviderError("real model endpoint, model, and token are required")
-        try:
-            parsed = urlsplit(endpoint)
-            valid = (parsed.scheme == "https" and parsed.hostname and parsed.port != 0
-                     and not parsed.username and not parsed.password
-                     and not parsed.query and not parsed.fragment
-                     and not any(character.isspace() for character in endpoint))
-        except ValueError:
-            valid = False
-        if not valid:
-            raise ModelProviderError("model endpoint requires HTTPS without credentials, query or fragment")
         self.endpoint = endpoint.rstrip("/")
-        self._opener = urllib.request.build_opener(_NoRedirect())
         self.model = model
         self.token = token
         self.timeout = timeout
         self.trace_path = Path(trace_path) if trace_path else None
-        self.maximum_output_tokens = None
 
     def _record_trace(self, record: dict[str, Any]) -> None:
         if self.trace_path is None:
@@ -71,14 +52,8 @@ class OpenAICompatibleShadowModel:
                 {"role": "system", "content": request["system"]},
                 {"role": "user", "content": json.dumps(request["opportunity"], sort_keys=True)},
             ],
-        }
-        json_object_mode = request.get("json_object_mode", False)
-        if type(json_object_mode) is not bool or (json_object_mode and tool_schemas):
-            raise ModelProviderError("JSON object mode requires an explicit no-tools request")
-        if json_object_mode:
-            body["response_format"] = {"type": "json_object"}
-        if tool_schemas:
-            body["tools"] = [
+            "reasoning_effort": "none",
+            "tools": [
                 {
                     "type": "function",
                     "function": {
@@ -87,19 +62,9 @@ class OpenAICompatibleShadowModel:
                     },
                 }
                 for schema in tool_schemas
-            ]
-            body["tool_choice"] = "auto"
-        if self.maximum_output_tokens is not None:
-            if type(self.maximum_output_tokens) is not int or not 1 <= self.maximum_output_tokens <= 16384:
-                raise ModelProviderError("output token bound denied")
-            # Current GPT-6 API requires max_completion_tokens; legacy
-            # OpenAI-compatible deployments may still require max_tokens.
-            token_field = "max_completion_tokens" if self.model in ("gpt-6-sol", "gpt-6-luna") else "max_tokens"
-            body[token_field] = self.maximum_output_tokens
-        if self.model == "gpt-6-luna":
-            # Luna's default reasoning can exhaust the bounded completion
-            # budget before its small JSON artifact is complete.
-            body["reasoning_effort"] = "none"
+            ],
+            "tool_choice": "auto",
+        }
         request_bytes = json.dumps(body, sort_keys=True).encode()
         req = urllib.request.Request(
             f"{self.endpoint}/chat/completions",
@@ -108,10 +73,8 @@ class OpenAICompatibleShadowModel:
             method="POST",
         )
         try:
-            with self._opener.open(req, timeout=self.timeout) as response:
-                response_bytes = response.read(1048577)
-                if len(response_bytes) > 1048576:
-                    raise ModelProviderError("provider response byte bound")
+            with urllib.request.urlopen(req, timeout=self.timeout) as response:
+                response_bytes = response.read()
                 result = json.loads(response_bytes)
         except Exception as exc:  # pragma: no cover - provider-specific integration
             self._record_trace({
@@ -130,10 +93,6 @@ class OpenAICompatibleShadowModel:
             message = choice.get("message")
             if not isinstance(message, dict):
                 raise ModelProviderError("model returned an invalid message envelope")
-            if not tool_schemas and (message.get("tool_calls") or message.get("function_call")):
-                raise ModelProviderError("model returned forbidden advisory tools")
-            if not isinstance(message.get("content", ""), (str, type(None))):
-                raise ModelProviderError("model returned invalid content")
             tool_call = None
             calls = message.get("tool_calls") or []
             if calls:
