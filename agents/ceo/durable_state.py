@@ -180,8 +180,7 @@ class DurableDecisionStore:
                 "UPDATE shadow_decisions SET response_json = ?, updated_at = ? WHERE decision_id = ?",
                 (self._canonical(envelope), self._now(), decision_id),
             )
-            self.transition(decision_id, "response-recorded", detail="redacted response recorded")
-        return self.get(decision_id)
+        return self.transition(decision_id, "response-recorded", detail="redacted response recorded")
 
     def recover(self, decision_id: str) -> dict[str, Any]:
         row = self.get(decision_id)
